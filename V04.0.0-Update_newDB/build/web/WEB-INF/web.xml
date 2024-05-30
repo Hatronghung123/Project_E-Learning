@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <servlet>
+        <servlet-name>LoginGoogleHandler</servlet-name>
+        <servlet-class>Controller.LoginGoogleHandler</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>joinServlet</servlet-name>
+        <servlet-class>Controller.joinServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>homeServlet</servlet-name>
+        <servlet-class>Controller.homeServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>profileServlet</servlet-name>
+        <servlet-class>Controller.profileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginGoogleHandler</servlet-name>
+        <url-pattern>/google</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>joinServlet</servlet-name>
+        <url-pattern>/join</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>homeServlet</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>profileServlet</servlet-name>
+        <url-pattern>/profile</url-pattern>
+    </servlet-mapping>
+</web-app>
