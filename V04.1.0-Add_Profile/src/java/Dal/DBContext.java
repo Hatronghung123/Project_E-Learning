@@ -13,8 +13,8 @@ public class DBContext {
     protected Connection connection;
     protected PreparedStatement statement;
     protected ResultSet resultSet;
-
-    /**
+      
+       /**
      * get an connection
      *
      * @return connection or null
