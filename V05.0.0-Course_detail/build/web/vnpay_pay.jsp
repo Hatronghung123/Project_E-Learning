@@ -8,9 +8,9 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <title>Thanh toán khóa học</title>
-        <link href="/vnpay_jsp/assets/bootstrap.min.css" rel="stylesheet"/>
-        <link href="/vnpay_jsp/assets/jumbotron-narrow.css" rel="stylesheet">
-        <script src="/vnpay_jsp/assets/jquery-1.11.3.min.js"></script>
+        <link href="assets/bootstrap.min.css" rel="stylesheet"/>
+        <link href="assets/jumbotron-narrow.css" rel="stylesheet">
+        <script src="assets/jquery-1.11.3.min.js"></script>
         <style>
             body {
                 background-color: #f8f9fa;

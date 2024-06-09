@@ -3,11 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Git/V05/Project_E-Learning/V05.0.0-Course_detail/web/index.jsp</file>
-            <file>file:/D:/Git/V05/Project_E-Learning/V05.0.0-Course_detail/src/java/Dal/AccountDAO.java</file>
-            <file>file:/D:/Git/V05/Project_E-Learning/V05.0.0-Course_detail/src/java/Dal/DBContext.java</file>
-            <file>file:/D:/Git/V05/Project_E-Learning/V05.0.0-Course_detail/web/Home.jsp</file>
-            <file>file:/D:/Git/V05/Project_E-Learning/V05.0.0-Course_detail/web/detail.jsp</file>
+            <file>file:/D:/Git/V05/Project_E-Learning/V05.0.0-Course_detail/web/Login.jsp</file>
+            <file>file:/D:/Git/V05/Project_E-Learning/V05.0.0-Course_detail/src/java/Controller/joinServlet.java</file>
         </group>
     </open-files>
 </project-private>
