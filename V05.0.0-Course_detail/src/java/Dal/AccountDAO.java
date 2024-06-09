@@ -17,8 +17,8 @@ public class AccountDAO extends DBContext {
     public static void main(String[] args) {
         AccountDAO dao = new AccountDAO();
 //        Account account = new Account("cao", "123", "cao1@gmail.com",1000,"abv");
-        Account sqlTest = new Account("1234", "tuong0505ht@gmail.com");
-        System.out.println(dao.checkAccountExist("tuong0505ht123@gmail.com"));
+        Account sqlTest = new Account("tuananh2003hy@gmail.com", "12345678");
+        System.out.println(dao.getAccountByEmailPass("tuananh2003hy@gmail.com", "12345678"));
     }
 
     public Account getAccountByEmailPass(String email, String password) {

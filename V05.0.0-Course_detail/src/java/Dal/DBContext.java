@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Dal;
+
 import java.sql.*;
 
 /**
@@ -10,6 +11,7 @@ import java.sql.*;
  * @author hatro
  */
 public class DBContext {
+
     protected Connection connection;
     protected PreparedStatement statement;
     protected ResultSet resultSet;

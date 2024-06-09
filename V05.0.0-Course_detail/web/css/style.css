@@ -1,6 +1,96 @@
 /********** Template CSS **********/
 
 
+ input[type=text] {
+                width: 100%;
+                box-sizing: border-box;
+                border: 2px solid #ccc;
+                border-radius: 4px;
+                font-size: 16px;
+                background-color: white;
+                background-image: url('searchicon.png');
+                background-position: 10px 10px;
+                background-repeat: no-repeat;
+                padding: 12px 20px 12px 40px;
+                -webkit-transition: width 0.4s ease-in-out;
+                transition: width 0.4s ease-in-out;
+            }
+
+            /*            input[type=text]:focus {
+                            width: 100%;
+                        }*/
+            .ms-auto-1{
+                margin-left: 10px !important;
+            }
+
+            .mb-4, .my-4 {
+                margin-bottom: 1.5rem !important;
+            }
+
+            .w-100 {
+                width: 100% !important;
+            }
+            .rounded {
+                border-radius: false !important;
+            }
+            .img-fluid {
+                max-width: 100%;
+                height: auto;
+            }
+            img {
+                vertical-align: middle;
+                border-style: none;
+            }
+            *, *::before, *::after {
+                box-sizing: border-box;
+            }
+            user agent stylesheet
+            img {
+                overflow-clip-margin: content-box;
+                overflow: clip;
+            }
+
+            /* Tùy chỉnh cho các dots của Slick Slider */
+            .slick-dots li {
+                margin: 0 5px; /* Khoảng cách giữa các dots */
+            }
+
+            .slick-dots li button {
+                width: 15px;
+                height: 15px;
+                background-color: #fff; /* Màu nền mặc định của dot */
+                border-radius: 0; /* Đặt border-radius thành 0 để tạo hình vuông */
+                margin: 0; /* Loại bỏ margin bên trong button */
+                border: 1px solid #bcc7d1; /* Loại bỏ đường viền */
+                padding: 0; /* Loại bỏ padding */
+                outline: none; /* Loại bỏ viền outline */
+            }
+
+            .slick-dots li.slick-active button {
+                background-color: #2bc5d4; /* Màu nền của dot khi active */
+            }
+
+            .slick-dots li button::before {
+                content: ""; /* Loại bỏ nội dung mặc định của ::before pseudo-element */
+                display: block; /* Đảm bảo ::before hiển thị như một khối */
+                width: 100%; /* Đặt kích thước thành 100% */
+                height: 100%; /* Đặt kích thước thành 100% */
+                background: transparent; /* Đặt nền trong suốt */
+                border-radius: 0; /* Đảm bảo không có border-radius */
+            }
+
+            .slick-dots li button:hover {
+                background-color: #2bc5d4; /* Thay đổi màu sắc khi hover */
+            }
+
+            /* Định dạng lại dots của Slick Slider */
+            .slick-dots {
+                position: static; /* Thiết lập position là static để không bị ảnh hưởng bởi absolute từ slick-theme */
+                margin-top: 15px; /* Đẩy toàn bộ các dots xuống dưới thêm */
+
+            }
+
+
   .display-4{
                 font-size: 3.0rem;
                 font-weight: 550;

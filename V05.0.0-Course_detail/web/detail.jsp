@@ -29,6 +29,9 @@
         <!-- Font Awesome -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
 
+        <!-- Slick CSS -->
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
 
 
         <!-- Icon Font Stylesheet -->
@@ -44,57 +47,6 @@
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
 
-        <style>
-            input[type=text] {
-                width: 100%;
-                box-sizing: border-box;
-                border: 2px solid #ccc;
-                border-radius: 4px;
-                font-size: 16px;
-                background-color: white;
-                background-image: url('searchicon.png');
-                background-position: 10px 10px;
-                background-repeat: no-repeat;
-                padding: 12px 20px 12px 40px;
-                -webkit-transition: width 0.4s ease-in-out;
-                transition: width 0.4s ease-in-out;
-            }
-
-            /*            input[type=text]:focus {
-                            width: 100%;
-                        }*/
-            .ms-auto-1{
-                margin-left: 10px !important;
-            }
-
-            .mb-4, .my-4 {
-                margin-bottom: 1.5rem !important;
-            }
-
-            .w-100 {
-                width: 100% !important;
-            }
-            .rounded {
-                border-radius: false !important;
-            }
-            .img-fluid {
-                max-width: 100%;
-                height: auto;
-            }
-            img {
-                vertical-align: middle;
-                border-style: none;
-            }
-            *, *::before, *::after {
-                box-sizing: border-box;
-            }
-            user agent stylesheet
-            img {
-                overflow-clip-margin: content-box;
-                overflow: clip;
-            }
-
-        </style>
 
 
     </head>
@@ -196,7 +148,7 @@
                     <div class="col-lg-10 text-center">
                         <h1 class="display-3 text-white animated slideInDown">Course Detail</h1>
                         <div class="breadcrumb justify-content-center">
-                            <p class="breadcrumb-item"><a class="text-white" href="">Home</a></p>
+                            <p class="breadcrumb-item"><a class="text-white" href="home">Home</a></p>
                             <i class="fa fa-angle-double-right pt-1 px-3 text-white"></i>
                             <p class="breadcrumb-item text-white active">Course Detail</p>
                         </div>
@@ -231,8 +183,8 @@
 
                         <!--Relate course-->
                         <h2 class="mb-3">Related Courses</h2>
-                        <div class="owl-carousel related-carousel position-relative" >
-                            <div data-aos="fade-up" class="col-lg-11 col-md-11">
+                        <div class="related-carousel position-relative" >
+                            <div style="margin-left: 10px" data-aos="fade-up" class="col-lg-11 col-md-11">
                                 <div class="course-item bg-light">
                                     <div class="position-relative overflow-hidden">
                                         <img class="img-fluid" src="img/course-1.jpg" alt="">
@@ -260,7 +212,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div data-aos="fade-up" class="col-lg-11 col-md-11">
+                            <div style="margin-left: 10px" data-aos="fade-up" class="col-lg-11 col-md-11">
                                 <div class="course-item bg-light">
                                     <div class="position-relative overflow-hidden">
                                         <img class="img-fluid" src="img/course-1.jpg" alt="">
@@ -288,7 +240,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div data-aos="fade-up" class="col-lg-11 col-md-11">
+                            <div style="margin-left: 10px" data-aos="fade-up" class="col-lg-11 col-md-11">
                                 <div class="course-item bg-light">
                                     <div class="position-relative overflow-hidden">
                                         <img class="img-fluid" src="img/course-1.jpg" alt="">
@@ -316,7 +268,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div data-aos="fade-up" class="col-lg-11 col-md-11">
+                            <div style="margin-left: 10px" data-aos="fade-up" class="col-lg-11 col-md-11">
                                 <div class="course-item bg-light">
                                     <div class="position-relative overflow-hidden">
                                         <img class="img-fluid" src="img/course-1.jpg" alt="">
@@ -561,7 +513,7 @@
         <script src="lib/easings/easing.min.js"></script>
         <script src="lib/waypointss/waypoints.min.js"></script>
         <script src="lib/counterup/counterup.min.js"></script>
-        <script src="lib/owlcarousels/owl.carousel.min.js"></script>
+        <!--<script src="lib/owlcarousels/owl.carousel.min.js"></script>-->     
         <!-- AOS Library Javascript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
         <script>
@@ -575,6 +527,46 @@
 
         <!-- Template Javascript -->
         <script src="js/index.js"></script>
+
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- Slick JS -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('.related-carousel').slick({
+                    infinite: true,
+                    slidesToShow: 3, // Số slide hiển thị cùng lúc
+                    slidesToScroll: 1, // Số slide sẽ di chuyển mỗi khi bạn nhấn nút điều hướng
+                    autoplay: true,
+                    autoplaySpeed: 2000, // Thời gian giữa các lần tự động chuyển slide (ms)
+                    dots: true, // Hiển thị các chấm điều hướng
+                    responsive: [
+                        {
+                            breakpoint: 1024, // Dưới 1024px, số slide hiển thị là 2
+                            settings: {
+                                slidesToShow: 2,
+                                slidesToScroll: 1
+                            }
+                        },
+                        {
+                            breakpoint: 600, // Dưới 600px, số slide hiển thị là 1
+                            settings: {
+                                slidesToShow: 1,
+                                slidesToScroll: 1
+                            }
+                        }
+                    ]
+                });
+
+                // Sự kiện click cho các thẻ a bên trong carousel
+                $('.related-carousel .course-item a').on('click', function (e) {
+                    e.stopPropagation(); // Ngăn chặn sự kiện click lan sang các phần tử khác trong carousel
+                    // Xử lý các hành động khi click vào phần tử trong carousel
+                });
+            });
+
+        </script>
     </body>
 
 </html>
