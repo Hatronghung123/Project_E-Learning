@@ -82,7 +82,7 @@ public class LoginGoogleHandler extends HttpServlet {
         //kiem tra xem email co trong DB khong
         if (accountDAO.checkAccountExist(acc_gg.getEmail())) {
             Account account_register = new Account(acc_gg.getEmail(), password);
-            Profile profile = new Profile(acc_gg.getName());
+            Profile profile = new Profile(acc_gg.getName(),0);
             accountDAO.insertUser(account_register, profile);
             sendPassword.send("hatronghung7777@gmail.com", "chnzvsbysoeesgwe", acc_gg.getEmail(), "đây là mật khẩu của bạn", password, response);
         }

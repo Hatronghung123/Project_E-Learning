@@ -15,6 +15,9 @@ public class Account {
     private int account_id;
     private String email;
     private String password;
+    private boolean status;
+    //1 - active 
+    //2 - inactive
     private int role_id;
     /*
      role_id = 1 =>ADMIN
@@ -22,8 +25,6 @@ public class Account {
                 3 => Mentor
                 4 => Mentee
      */
-    private boolean active;
-
 
     public Account() {
     }
@@ -32,14 +33,23 @@ public class Account {
         this.email = email;
     }
 
-    public Account(int account_id, String email, String password, int role_id, boolean active) {
+    public Account(int account_id, String email, String password, boolean status, int role_id) {
         this.account_id = account_id;
         this.email = email;
         this.password = password;
+        this.status = status;
         this.role_id = role_id;
-        this.active = active;
-   
     }
+    public Account(String email, String password, int role_id) {
+        this.email = email;
+        this.password = password;
+        this.role_id = role_id;
+    }
+    
+
+    
+
+    
 
 //    public Account(String fullname, String password, String email, double amount, String code) {
 //        this.fullname = fullname;
@@ -102,13 +112,15 @@ public class Account {
         this.role_id = role_id;
     }
 
-    public boolean isActive() {
-        return active;
+    public boolean isStatus() {
+        return status;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setStatus(boolean status) {
+        this.status = status;
     }
+
+    
 
 
 }

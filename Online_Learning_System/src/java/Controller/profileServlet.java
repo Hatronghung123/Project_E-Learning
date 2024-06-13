@@ -67,6 +67,7 @@ public class profileServlet extends HttpServlet {
 
         session.setAttribute("profile", profile);
         session.setAttribute("account", account);
+        out.print(profile.isGender());
         request.getRequestDispatcher("Profile.jsp").forward(request, response);
     }
 
@@ -87,7 +88,7 @@ public class profileServlet extends HttpServlet {
         String fullname = request.getParameter("fullname") == null ? "" : request.getParameter("fullname");
         String email = request.getParameter("email") == null ? "" : request.getParameter("email");
         String gender = request.getParameter("gender") == null ? "" : request.getParameter("gender");
-        boolean bool_gender = gender.equals("male") ? true : false;
+        boolean bool_gender = gender.equals("male");
 
         String password = ((Account) session.getAttribute("account")).getPassword();
         String old_password = request.getParameter("old_password") == null ? "" : request.getParameter("old_password");
@@ -106,24 +107,24 @@ public class profileServlet extends HttpServlet {
             accountDAO.updateFullName_ByAccId(fullname, account.getAccount_id());
             new_profile.setFullname(fullname);
         }
-        if (email.isBlank()) {
-            request.setAttribute("error", "You must have an email!");
-
-        } else if (!email.matches("[a-zA-Z0-9]+@([a-zA-Z]+.){1,2}[a-zA-Z]+")) {
-            request.setAttribute("error", "Please Enter Email matches with fomat email@domain.com");
-            request.setAttribute("email", email);
-
-        } else {
-            //update email vao db account
-            AccountDAO accountDAO = new AccountDAO();
-            Account account = (Account) session.getAttribute("account");
-            accountDAO.updateEmail_ByAccId(email, account.getAccount_id());
-            new_account.setEmail(email);
-
-            Cookie email_remember = new Cookie("email", email);
-            email_remember.setMaxAge(60 * 60 * 24);
-            response.addCookie(email_remember);
-        }
+//        if (email.isBlank()) {
+//            request.setAttribute("error", "You must have an email!");
+//
+//        } else if (!email.matches("[a-zA-Z0-9]+@([a-zA-Z]+.){1,2}[a-zA-Z]+")) {
+//            request.setAttribute("error", "Please Enter Email matches with fomat email@domain.com");
+//            request.setAttribute("email", email);
+//
+//        } else {
+//            //update email vao db account
+//            AccountDAO accountDAO = new AccountDAO();
+//            Account account = (Account) session.getAttribute("account");
+//            accountDAO.updateEmail_ByAccId(email, account.getAccount_id());
+//            new_account.setEmail(email);
+//
+//            Cookie email_remember = new Cookie("email", email);
+//            email_remember.setMaxAge(60 * 60 * 24);
+//            response.addCookie(email_remember);
+//        }
 
         if (!gender.equals("")) {
             //update gender vao db profile

@@ -88,6 +88,19 @@
             .text-right{
                 text-align: right!important;
             }
+            input.form-control{
+                padding: 12px
+            }
+            .btn-outline-danger:hover {
+                color: #fff;
+                background-color: #dc3545;
+                border-color: #dc3545
+            }
+            .btn-outline-primary:hover {
+                color: #000;
+                background-color: #06BBCC;
+                border-color: #06BBCC
+            }
 
         </style>
     </head>
@@ -225,7 +238,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="form-label">E-mail</label>
-                                                <input name="email" type="text" class="form-control mb-1" value="${sessionScope.account.email}">
+                                                <input readonly="" name="email" type="text" class="form-control mb-1" value="${sessionScope.account.email}">
                                                 <div class="alert alert-warning mt-3">
                                                     Your email is not confirmed. Please check your inbox.<br>
                                                     <a href="javascript:void(0)">Resend confirmation</a>

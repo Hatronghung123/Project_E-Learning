@@ -94,10 +94,6 @@ public class joinServlet extends HttpServlet {
                 case "logout":
                     logOutDoGet(request, response);
                     break;
-                case "hello":
-                    out.print("Hello World!");
-                    out.print(session.getMaxInactiveInterval());
-                    break;
                 case "forgot":
                     forgotPasswordDoGet(request, response);
                     break;
@@ -388,7 +384,7 @@ public class joinServlet extends HttpServlet {
             return;
         } else {
             Account account = new Account(email, password);
-            Profile profile_register = new Profile(fullname);
+            Profile profile_register = new Profile(fullname,0);
             // nếu chưa thì inser vào trong db, chuyển dến trang home
             accountDAO.insertUser(account, profile_register);
             Account account_login = accountDAO.getAccountByEmailPass(email, password);

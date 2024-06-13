@@ -36,8 +36,9 @@ public class Profile {
     }
 
 
-    public Profile(String fullname) {
+    public Profile(String fullname, int managed_by) {
         this.fullname = fullname;
+        this.managed_by = managed_by;
     }
     
 
