@@ -145,7 +145,7 @@
 
         <script>
             function rePay(money, cid, acc, ndck) {
-                window.location.href = '/WebApplication_LETEPE/vnpay_pay.jsp?price=' + money + '&cid=' + cid + '&acc=' + acc + '&ndck=' + ndck;
+                window.location.href = '/Project_E-Learning/vnpay_pay.jsp?price=' + money + '&cid=' + cid + '&acc=' + acc + '&ndck=' + ndck;
             }
 
         </script>

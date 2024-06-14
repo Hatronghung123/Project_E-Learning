@@ -53,11 +53,41 @@ public class AccountDAO extends DBContext {
         }
         return null;
     }
+    
+    // login with google
+    public Account getAccountGoogle(String email) {
+        connection = getConnection();
+        String sql = """
+                     SELECT [AccountId]
+                           ,[Email]
+                           ,[Password]
+                           ,[Status]
+                           ,[RoleId]
+                       FROM [dbo].[Account]  where Email like ?""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, email);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int account_id = resultSet.getInt(1);
+                String email_in_db = resultSet.getString(2);
+                String password_in_db = resultSet.getString(3);
+                int role_id = resultSet.getInt(5);
+                boolean status = resultSet.getBoolean(4);
+
+                return new Account(account_id, email_in_db, password_in_db, status, role_id);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+    
 
     public void insertUser(Account account, Profile profile) {
         insertAccount(account);
-        Account insert_account = getAccountByEmailPass(account.getEmail(), account.getPassword());
-        insertProfile(profile, insert_account.getAccount_id());
+        Account new_insert_account = getAccountByEmailPass(account.getEmail(), account.getPassword());
+        insertProfile(profile, new_insert_account.getAccount_id());
     }
 
     public void insertAccount(Account account) {
