@@ -93,6 +93,10 @@ public class AijaxServlet extends HttpServlet {
         String courseId = req.getParameter("courseId");
         String accId = req.getParameter("accId");
 
+        
+        // Lưu accId và courseId vào session
+        req.getSession().setAttribute("accId", accId);
+        req.getSession().setAttribute("courseId", courseId);
         //noi dung chuyen khoan
         String ndck = req.getParameter("ndck");
         String vnp_TxnRef = Config.getRandomNumber(8);
@@ -121,9 +125,9 @@ public class AijaxServlet extends HttpServlet {
             vnp_Params.put("vnp_Locale", "vn");
         }
         
-        //vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
-        vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl + "?accId=" + URLEncoder.encode(accId, "UTF-8")
-                + "&courseId=" + URLEncoder.encode(courseId, "UTF-8"));
+        vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
+        //vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl + "?accId=" + URLEncoder.encode(accId, "UTF-8")
+        //        + "&courseId=" + URLEncoder.encode(courseId, "UTF-8"));
         
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
