@@ -79,9 +79,15 @@
                                                     </div>
                                                     <div class="col-lg-8">
                                                         <label class="form-label" style="color: black; font-size: 15px">Course | ${c.create_by}</label><br>                                                        
-                                                        <label class="form-label" style="color: #06BBCC; font-size: 20px ">${c.course_name}</label><br>
-                                                        <label class="form-label" style="color: black; font-size: 17px">${c.progress}%</label><br>   
-                                                        <label class="form-label" style="color: black; font-size: 15px">Overall Progress</label><br>   
+                                                        <label class="form-label" style="color: #06BBCC; font-size: 27px ">${c.course_name}</label><br>
+                                                        <div>
+                                                            <progress style="
+                                                                      width: 80%;
+                                                                      height: 15px;
+                                                                      " max="100" value="${c.progress}"></progress>&nbsp;&nbsp;
+                                                            <label style="color: black; font-size: 15px;">${c.progress}%</label>
+                                                        </div>
+                                                        <label class="form-label" style="color: #666666; font-size: 13px">Overall Progress</label><br>   
                                                     </div>
                                                     <div class="col-lg-2">
                                                         <a href="CourseDetail?cid=${c.course_id}" class="btn btn-outline-primary">Go to Course</a>
