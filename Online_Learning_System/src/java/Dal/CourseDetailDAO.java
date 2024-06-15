@@ -6,6 +6,7 @@ package Dal;
 
 import Model.Category;
 import Model.Course;
+import Model.Enrollment;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +19,7 @@ import java.sql.Date;
  * @author Tuan Anh(Gia Truong)
  */
 public class CourseDetailDAO {
-
+    
     Connection con = null; // Kết nối với sql server
     PreparedStatement ps = null; // Ném câu lệnh query sang sql server
     ResultSet rs = null; // Nhận kết quả trả về
@@ -60,7 +61,7 @@ public class CourseDetailDAO {
             ps = con.prepareStatement(sql);
             ps.setInt(1, courseId);
             ps.setInt(2, courseId);
-
+            
             rs = ps.executeQuery();
             while (rs.next()) {
                 int course_id = rs.getInt(1);
@@ -80,11 +81,11 @@ public class CourseDetailDAO {
             e.printStackTrace();
             System.out.println("Lỗi");
         }
-
+        
         return list;
     }
 
-    //Lấy ra tất cả category
+    //Lấy ra  category theo id
     public ArrayList<Category> getCategoryById(int courseId) throws SQLException {
         ArrayList<Category> list = new ArrayList<>();
         String sql = " SELECT  cate.[CourseCateroryId]\n"
@@ -98,17 +99,50 @@ public class CourseDetailDAO {
             ps.setInt(1, courseId);
             rs = ps.executeQuery();
             while (rs.next()) {
-
+                
                 String cate_id = rs.getString(1);
                 String cate_name = rs.getString(2);
-
+                
                 list.add(new Category(cate_id, cate_name));
             }
         } catch (Exception e) {
             e.printStackTrace();  // In chi tiết lỗi ra console
 
         }
+        
+        return list;
+    }
 
+    //Lấy ra list enrollment để kiểm tra người dùng đã mua khóa học này hay chưa
+    public ArrayList<Enrollment> getEnrollmentByAccountId(int courseId) throws SQLException {
+        ArrayList<Enrollment> list = new ArrayList<>();
+        String sql = " SELECT [EnrollmentId]\n"
+                + "      ,[AccountId]\n"
+                + "      ,[CourseId]\n"
+                + "      ,[EnrollmentDate]\n"
+                + "      ,[Progress]\n"
+                + "  FROM [dbo].[Enrollment]\n"
+                + "  WHERE [AccountId] = ?";
+        try {
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, courseId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                
+                int enrollId = rs.getInt(1);
+                int accId = rs.getInt(2);
+                int courseid = rs.getInt(3);
+                Date enrollmentDate = rs.getDate(4);
+                int progress = rs.getInt(5);
+                
+                list.add(new Enrollment(enrollId, accId, courseid, enrollmentDate, progress));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();  // In chi tiết lỗi ra console
+
+        }
+        
         return list;
     }
 
@@ -133,7 +167,7 @@ public class CourseDetailDAO {
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             ps.setInt(1, courseId);
-
+            
             rs = ps.executeQuery();
             while (rs.next()) {
                 int course_id = rs.getInt(1);
@@ -147,20 +181,20 @@ public class CourseDetailDAO {
                 String studyTime = rs.getString(9);
                 int status = rs.getInt(10);
                 String instructor = rs.getString(11);
-
+                
                 return new Course(course_id, course_name, description, instructor, image, price, cate_id, create_by, date, studyTime, status);
             }
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Lỗi");
         }
-
+        
         return null;
     }
-
+    
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         CourseDetailDAO dao = new CourseDetailDAO();
         System.out.println(dao.getCourseById(2));
     }
-
+    
 }

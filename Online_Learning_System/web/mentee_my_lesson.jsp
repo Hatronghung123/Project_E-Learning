@@ -3,6 +3,9 @@
     Created on : Jun 10, 2024, 12:53:18 AM
     Author     : Tuan Anh(Gia Truong)
 --%>
+<%@page import="Model.Enrollment"%>
+<%@page import="java.util.ArrayList"%>
+
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -59,9 +62,35 @@
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
     <!-- Vendor CSS -->
-    <link rel="stylesheet" href="../cdn.jsdelivr.net/fontawesome/4.5.0/css/font-awesome.min.css">
 
 
+    <style>
+        .module-content {
+            display: none; /* Initially hide module contents */
+        }
+        .btnn {
+            background-color: #2bc5d4;
+            border-radius: 4px;
+        }
+        .btnn:hover {
+            background-color: #32e8fa;
+        }
+
+        .module-content a {
+            text-align: left;
+            display: block;
+            color: #2bc5d4 !important;
+        }
+
+        .active-lesson {
+            font-weight: bold; /* Làm cho văn bản đậm hơn */
+            color: #007bff;    /* Đổi màu chữ */
+            background-color: black; /* Thay đổi nền */
+            border-left: 3px solid #007bff; /* Thêm viền bên trái */
+        }
+
+
+    </style>
 
 </head>
 
@@ -72,115 +101,46 @@
     <jsp:include page="common/menu.jsp"></jsp:include>
 
 
-    <div class="mdk-drawer-layout js-mdk-drawer-layout flex" data-fullbleed data-push data-has-scrolling-region>
-        <div class="mdk-drawer-layout__content mdk-drawer-layout__content--scrollable">
-            <div class="container-fluid">
+        <div class="mdk-drawer-layout js-mdk-drawer-layout flex" data-fullbleed data-push data-has-scrolling-region>
+            <div class="mdk-drawer-layout__content mdk-drawer-layout__content--scrollable">
+                <div class="container-fluid">
 
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="home">Home</a></li>
-                    <li class="breadcrumb-item"><a href="student-browse-courses.html">Courses</a></li>
-                    <li class="breadcrumb-item active">The MVC architectural pattern</li>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="home">Home</a></li>
+                        <li class="breadcrumb-item"><a href="student-browse-courses.html">Courses</a></li>
+                        <li class="breadcrumb-item active">${lesson.getCoursename()}</li>
                 </ol>
-                <h1 class="page-heading h2">The MVC architectural pattern</h1>
+                <h1 class="page-heading h2">${lesson.getCoursename()}</h1>
 
 
                 <div class="row">
                     <div class="col-md-8">
                         <div class="card">
                             <div class="embed-responsive embed-responsive-16by9">
-                                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/XSajnOeOZz0?si=IuGYtUK9ILbI1_o8" title="0" frameborder="0" allowfullscreen></iframe>
+                                <iframe class="embed-responsive-item" src="${lesson.getLessonvideo()}"title="0" frameborder="0" allow="0"  allowfullscreen></iframe>
                             </div>
                             <div class="card-body">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum dicta eius enim inventoreus optio ratione veritatis. Beatae deserunt illum ipsam magniima mollitia officiis quia tempora!
+                                ${lesson.getLessoncontent()}
                             </div>
                         </div>
 
+                        <!--comment-->
+                        <form action="lesson?action=comment" method="POST">
+                            <div class="card list-group list-group-fit">
+                                <textarea id="content" class="form-control" name="ndck" required placeholder="Comment here"></textarea>
+                            </div>
+                            <button class="btnn" type="submit" name="comment" >Comment</button>
+                        </form>
+
 
                         <!-- Lessons -->
-                        <ul class="card list-group list-group-fit">
-                            <li class="list-group-item">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <div class="text-muted">1.</div>
-                                    </div>
-                                    <div class="media-body">
-                                        <a href="#">Installation</a>
-                                    </div>
-                                    <div class="media-right">
-                                        <small class="text-muted-light">2:03</small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item active">
-                                <div class="media">
-                                    <div class="media-left">
-                                        2.
-                                    </div>
-                                    <div  class="media-body">
-                                        <a class="content-body" href="#">The MVC architectural pattern</a>
-                                    </div>
-                                    <div class="media-right">
-                                        <small>25:01</small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <div class="text-muted">3.</div>
-                                    </div>
-                                    <div class="media-body">
-                                        <a href="#">Database Models</a>
-                                    </div>
-                                    <div class="media-right">
-                                        <small class="text-muted-light">12:10</small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <div class="text-muted">4.</div>
-                                    </div>
-                                    <div class="media-body">
-                                        <a href="#">Database Access</a>
-                                    </div>
-                                    <div class="media-right">
-                                        <small class="text-muted-light">1:25</small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <div class="text-muted">5.</div>
-                                    </div>
-                                    <div class="media-body">
-                                        <a href="#">Eloquent Basics</a>
-                                    </div>
-                                    <div class="media-right">
-                                        <small class="text-muted-light">22:30</small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="media">
-                                    <div class="media-left">
-                                        <div class="text-muted">6.</div>
-                                    </div>
-                                    <div class="media-body">
-                                        <a href="#">Take Quiz</a>
-                                    </div>
-                                    <div class="media-right">
-                                        <small class="text-muted-light">10:00</small>
-                                    </div>
-                                </div>
-                            </li>
+                        <ul class="">
+
                         </ul>
                     </div>
 
-                    <!--download-->
 
+                    <!--list lesson-->
                     <div  class="col-md-4">
                         <div class="card">
 
@@ -190,127 +150,45 @@
                                     <i style="margin-right: 4px; " class="fa fa-fw fa-list text-inherit"></i>
                                     <h3 class="block-title font-w800 text-inherit ">   DANH SÁCH BÀI HỌC</h3>
 
-<!--                                    <div class="block-options">
-                                        <button type="button" class="btn-block-option " data-toggle="block-option" data-action="content_toggle">
-                                            <i class="fa fa-fw fa-chevron-up"></i>
-                                        </button>
-                                    </div>-->
+                                    <!--                                    <div class="block-options">
+                                                                            <button type="button" class="btn-block-option " data-toggle="block-option" data-action="content_toggle">
+                                                                                <i class="fa fa-fw fa-chevron-up"></i>
+                                                                            </button>
+                                                                        </div>-->
                                 </div>
+
                                 <div class="child-hai">
+                                    <c:forEach items="${moduleList}" var="o" varStatus="status">
 
+                                        <div class="dev" >
 
-                                    <div class="dev" >
+                                            <div style="background-color: #edeff1" class="block-header block-header-default">
+                                                <h3 class="block-title font-w800 text-black ">${status.index + 1}. ${o.getModulename()}</h3>
 
-                                        <div style="background-color: #edeff1" class="block-header block-header-default">
-                                            <i style="margin-right: 4px; " class="fa fa-fw fa-list text-black"></i>
-                                            <h3 class="block-title font-w800 text-black ">Module 1</h3>
-
-                                            <div class="block-options">
-                                                <button type="button" class="btn-block-option " data-toggle="block-option" data-action="content_toggle">
-                                                    <i class="fa fa-fw fa-chevron-up"></i>
-                                                </button>
+                                                <div class="block-options">
+                                                    <button type="button" class="btn-block-option " data-toggle="block-option" data-action="content_toggle">
+                                                        <i class="fa fa-fw fa-chevron-up"></i>
+                                                    </button>
+                                                </div>
                                             </div>
+                                            <c:forEach items="${lessonList}" var="i" varStatus="status">
+                                                <div class="module-content">
+
+
+                                                    <a href="lesson?cid=${i.getCourseid()}&lessonid=${i.getLessonid()}" class="btn btn-block btn--col module-lesson" data-lessonid="${i.getLessonid()}">
+                                                        ${status.index + 1}. ${i.getLessonname()}
+                                                    </a>
+
+
+
+                                                </div>
+                                            </c:forEach>
+
                                         </div>
-                                        <div id="module1-content" class="module-content1">
 
-                                           
-                                            <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>
-
-                                            <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn btn-primary btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn btn-primary btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn btn-primary btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn btn-primary btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn btn-primary btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn btn-primary btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="dev" >
-
-                                        <div style="background-color: #edeff1" class="block-header block-header-default">
-                                            <i style="margin-right: 4px; " class="fa fa-fw fa-list text-black"></i>
-                                            <h3 class="block-title font-w800 text-black ">Module 2</h3>
-
-                                            <div class="block-options">
-                                                <button type="button" class="btn-block-option " data-toggle="block-option" data-action="content_toggle">
-                                                    <i class="fa fa-fw fa-chevron-up"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div id="module2-content" class="module-content2" >
-                                            <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>
-
-                                            <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn  btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn btn-primary btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn btn-primary btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn btn-primary btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn btn-primary btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn btn-primary btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>    <a href="#" class="btn btn-primary btn-block btn--col">
-                                                <i class="material-icons">get_app</i> Download Files
-                                            </a>
-                                        </div>
-                                    </div>
+                                    </c:forEach>
                                 </div>
+
                             </div>
                         </div>
                         <div class="card">
@@ -320,7 +198,7 @@
                                         <img src="assets/images/people/110/guy-6.jpg" alt="About Adrian" width="50" class="rounded-circle">
                                     </div>
                                     <div class="media-body media-middle">
-                                        <h4 class="card-title"><a href="instructor-profile.html">Adrian Demian</a></h4>
+                                        <h4 class="card-title"><a href="instructor-profile.html">${lesson.getMentorname()}</a></h4>
                                         <p class="card-subtitle">Instructor</p>
                                     </div>
                                 </div>
@@ -387,78 +265,52 @@
 
 
     </div>
-</div>
-
-<!-- jQuery -->
-<script src="assets/vendor/jquery.min.js"></script>
-
-<!-- Bootstrap -->
-<script src="assets/vendor/popper.min.js"></script>
-<script src="assets/vendor/bootstrap.min.js"></script>
-
-<!-- Simplebar -->
-<!-- Used for adding a custom scrollbar to the drawer -->
-<script src="assets/vendor/simplebar.js"></script>
-
-<!-- MDK -->
-<script src="assets/vendor/dom-factory.js"></script>
-<script src="assets/vendor/material-design-kit.js"></script>
-
-<!-- Sidebar Collapse -->
-<script src="assets/vendor/sidebar-collapse.js"></script>
-
-<!-- App JS -->
-<script src="assets/js/main.js"></script>
 
 
+    <!-- jQuery -->
+    <script src="assets/vendor/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="assets/vendor/popper.min.js"></script>
+    <script src="assets/vendor/bootstrap.min.js"></script>
+
+    <!-- Simplebar -->
+    <!-- Used for adding a custom scrollbar to the drawer -->
+    <script src="assets/vendor/simplebar.js"></script>
+
+    <!-- MDK -->
+    <script src="assets/vendor/dom-factory.js"></script>
+    <script src="assets/vendor/material-design-kit.js"></script>
+
+    <!-- Sidebar Collapse -->
+    <script src="assets/vendor/sidebar-collapse.js"></script>
+
+    <!-- App JS -->
+    <script src="assets/js/main.js"></script>
+
+    <script src="js/module-toggle.js"></script>
 
 
 
 
-<!-- JavaScript Libraries -->
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-<script src="lib/easings/easing.min.js"></script>
-<script src="lib/waypointss/waypoints.min.js"></script>
-<script src="lib/counterup/counterup.min.js"></script>
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easings/easing.min.js"></script>
+    <script src="lib/waypointss/waypoints.min.js"></script>
+    <script src="lib/counterup/counterup.min.js"></script>
 
-<script src="lib/wow/wow.min.js"></script>
-
-
-<!-- Template Javascript -->
-<script src="js/index.js"></script>
-<!-- Template Javascript -->
-<script src="js/main.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
 
 
-<script>
-$(document).ready(function () {
-    $(".btn-block-option").click(function () {
-        // Tìm đến phần tử cha gần nhất chứa cả nút và nội dung cần đóng/mở
-        var parentBlock = $(this).closest('.dev');
-        
-        // Tìm đến phần tử con trực tiếp chứa các thẻ <a> để đóng/mở
-        var moduleContent = parentBlock.find('.module-content1, .module-content2');
-        
-        // Toggle để ẩn hoặc hiện các thẻ a
-        moduleContent.toggle();
-        
-        // Kiểm tra trạng thái hiện tại của nút
-        var icon = $(this).find('i');
-        if (icon.hasClass('fa-chevron-up')) {
-            // Nếu nút đang hiển thị biểu tượng chevron lên, thì chuyển sang biểu tượng chevron xuống
-            icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
-        } else {
-            // Nếu nút đang hiển thị biểu tượng chevron xuống, thì chuyển sang biểu tượng chevron lên
-            icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
-        }
-    });
-});
+    <!-- Template Javascript -->
+    <script src="js/index.js"></script>
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
 
-</script>
 
 
 </body>

@@ -13,6 +13,7 @@
 
 
     <div class="collapse navbar-collapse" id="navbarCollapse">
+
         <!--        search by category-->
         <div class="navbar-nav ms-auto p-4 p-lg-0">
             <div class="nav-item dropdown">
@@ -28,6 +29,7 @@
                 </div>
             </div>
         </div>
+
         <!--        search by name-->
         <form action="search" method="post" class="navbar-nav ms-auto-1 p-4 p-lg-0">
             <input style="padding: 12px 20px 12px 12px;" type="text" name="search" placeholder="Search Courses">
