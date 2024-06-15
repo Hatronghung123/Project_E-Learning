@@ -28,19 +28,17 @@
         <servlet-name>CourseDetailServelet</servlet-name>
         <servlet-class>Controller.CourseDetailServelet</servlet-class>
     </servlet>
-    <servlet>
-<<<<<<< HEAD
-        <servlet-name>LessonServlet</servlet-name>
-        <servlet-class>Controller.LessonServlet</servlet-class>
-    </servlet>
+        
     <servlet>
         <servlet-name>lessonServlet</servlet-name>
         <servlet-class>Controller.lessonServlet</servlet-class>
-=======
+    </servlet>
+
+    <servlet>
         <servlet-name>abc</servlet-name>
         <servlet-class>Controller.User.abc</servlet-class>
->>>>>>> 0e007763f2637dd05ce07b229f0521340cac7891
     </servlet>
+    
     <servlet-mapping>
         <servlet-name>LoginGoogleHandler</servlet-name>
         <url-pattern>/google</url-pattern>
@@ -70,13 +68,13 @@
         <url-pattern>/CourseDetail</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-<<<<<<< HEAD
         <servlet-name>lessonServlet</servlet-name>
-        <url-pattern>/lesson</url-pattern>
-=======
+        <url-pattern>/lesson</url-pattern>    </servlet-mapping>
+
+<servlet-mapping>
         <servlet-name>abc</servlet-name>
         <url-pattern>/user/abc</url-pattern>
->>>>>>> 0e007763f2637dd05ce07b229f0521340cac7891
+
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>

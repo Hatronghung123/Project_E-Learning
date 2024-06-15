@@ -13,14 +13,9 @@
 
 
     <div class="collapse navbar-collapse" id="navbarCollapse">
-<<<<<<< HEAD
 
-        
-         <div class="navbar-nav ms-auto p-4 p-lg-0">
-=======
         <!--        search by category-->
         <div class="navbar-nav ms-auto p-4 p-lg-0">
->>>>>>> 0e007763f2637dd05ce07b229f0521340cac7891
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" style="
                    border-style: solid;
@@ -34,12 +29,8 @@
                 </div>
             </div>
         </div>
-<<<<<<< HEAD
-        
-        
-=======
+
         <!--        search by name-->
->>>>>>> 0e007763f2637dd05ce07b229f0521340cac7891
         <form action="search" method="post" class="navbar-nav ms-auto-1 p-4 p-lg-0">
             <input style="padding: 12px 20px 12px 12px;" type="text" name="search" placeholder="Search Courses">
             <input style="border-radius: 4px;" class="btn btn-primary" type="submit" value="Search">
