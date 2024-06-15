@@ -52,7 +52,7 @@ values
 
 
 create table CourseCategory(
-	CourseCateroryId varchar(10) primary key,
+	CourseCategoryId varchar(10) primary key,
 	CategoryName nvarchar(255)
 );
 insert into CourseCategory
@@ -69,7 +69,7 @@ create table Course(
 	Image nvarchar(500),
 	Price float,
 	Discount float,
-	CourseCateroryId varchar(10) foreign key references CourseCategory(CourseCateroryId),
+	CourseCateroryId varchar(10) foreign key references CourseCategory(CourseCategoryId),
 	CreatedBy int references Account(AccountId),
 	DateCreated date,
 	StudyTime varchar(50),
