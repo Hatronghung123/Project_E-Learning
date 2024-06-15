@@ -149,7 +149,7 @@ $rfs-mq-property-height: if($rfs-mode == max-media-query, max-height, min-height
 // Helper function to get the formatted non-responsive value
 @function rfs-value($values) {
   // Convert to list
-  $values: if(type-of($values) != list, ($values,), $values);
+/*  $values: if(type-of($values) != list, ($values,), $values);*/
 
   $val: '';
 
@@ -184,7 +184,7 @@ $rfs-mq-property-height: if($rfs-mode == max-media-query, max-height, min-height
 // Helper function to get the responsive value calculated by RFS
 @function rfs-fluid-value($values) {
   // Convert to list
-  $values: if(type-of($values) != list, ($values,), $values);
+/*  $values: if(type-of($values) != list, ($values,), $values);*/
 
   $val: '';
 

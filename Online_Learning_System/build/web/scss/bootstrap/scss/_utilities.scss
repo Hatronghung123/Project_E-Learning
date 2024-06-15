@@ -4,7 +4,7 @@
 
 $utilities: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
-$utilities: map-merge(
+/*$utilities: map-merge(
   (
     // scss-docs-start utils-vertical-align
     "align": (
@@ -591,4 +591,4 @@ $utilities: map-merge(
     // scss-docs-end utils-visibility
   ),
   $utilities
-);
+);*/
