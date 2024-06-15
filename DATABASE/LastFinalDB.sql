@@ -218,6 +218,13 @@ create table Enrollment(
 	EnrollmentDate date,
 	Progress int --per 100%
 );
+ 
+  insert into Enrollment
+  values
+  (1,1,'2024-06-07',0),
+  (1,2,'2024-06-09',50),
+  (1,3,'2024-06-13',20),
+  (1,4,'2024-05-20',80);
 
 create table PaymentMethod(
 	PaymentMethodId varchar(10) primary key,

@@ -37,7 +37,7 @@
 
 
 
-        
+
         <div class="main-1">
             <!-- Sing in  Form -->
             <section class="sign-in">
@@ -46,7 +46,6 @@
                         <div class="signin-image">
                             <figure><img src="images_login/signin-image.jpg" alt="sing up image"></figure>
                             <a href="join?action=signup" class="signup-image-link">Create an account</a>
-                            <a href="join?action=forgot" class="signup-image-link">Forgot Password ?</a>
                         </div>
 
                         <div class="signin-form">
@@ -77,6 +76,8 @@
 
                                 <div class="form-group form-button">
                                     <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
+                                    <br><br>
+                                    <a href="join?action=forgot" style="color: black">Forgot Password</a>
                                 </div>
                             </form>
                             <div class="social-login">
