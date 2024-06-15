@@ -21,6 +21,23 @@
 
     <div class="collapse navbar-collapse" id="navbarCollapse">
 
+        
+         <div class="navbar-nav ms-auto p-4 p-lg-0">
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" style="
+                   border-style: solid;
+                   border-width: thin;
+                   border-radius: 10px;
+                   padding: 10px;
+                   color: #06BBCC;
+                   ">Explore</a>
+                <div class="dropdown-menu fade-down m-0">
+                    <a href="team.html" class="dropdown-item">Our Team</a>
+                </div>
+            </div>
+        </div>
+        
+        
         <form action="search" method="post" class="navbar-nav ms-auto-1 p-4 p-lg-0">
             <input type="text" name="search" placeholder="Search Courses">
             <input style="border-radius: 4px" class="btn btn-primary" type="submit" value="Search">

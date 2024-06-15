@@ -200,9 +200,9 @@ create table Teaching(
 );
 
 
-insert into Teaching
-values (5, 1), (5, 2), (5,5) ,
-(3, 3), (3, 4)
+insert into Teaching 
+values (5, 1),  (5,5) ,
+(3, 3), (3, 4),(3,2)
 
 
 create table WishList(
@@ -218,6 +218,8 @@ create table Enrollment(
 	EnrollmentDate date,
 	Progress int --per 100%
 );
+
+
 
 create table PaymentMethod(
 	PaymentMethodId varchar(10) primary key,
@@ -241,21 +243,25 @@ create table Payment(
 );
 
 
+
 create table Module(
 	ModuleId int primary key identity(1,1),
-	ModuleName varchar(255),
+	ModuleName nvarchar(255),
 	CourseId int foreign key references Course(CourseId),
 
 );
 
 insert into Module 
-values('Kiến thức cơ bản về C#',2)
+values(N'Kiến thức cơ bản về C#',2),
+(N'Loop in C#', 2),
+(N'Ref and out in C#',2),
+(N'Struct and enum in C#', 2)
 
 create table Lesson(
 	LessonId int primary key identity(1,1),
 	ModuleId int foreign key references Module(ModuleId),
-	LessonName varchar(255),
-	LessonContent text,
+	LessonName nvarchar(255),
+	LessonContent nvarchar(1000),
 	LessonVideo text,
 );
 
@@ -263,23 +269,23 @@ create table Lesson(
 
 
 insert into Lesson
-values(1, 'C# la gi?','Trong bài học này, chúng ta sẽ cùng tìm hiểu các vấn đề:
+values(1, N'C# la gi?',N'Trong bài học này, chúng ta sẽ cùng tìm hiểu các vấn đề:
 Sơ lược về ngôn ngữ C#.
 Những đặc trưng của ngôn ngữ C#.
 Tại sao lại lựa chọn ngôn ngữ C#' ,'https://www.youtube.com/embed/9kohr6pMwag?si=U9sJEvQTUKLxvHHx'),
-(1, 'Cấu trúc lệnh cơ bản trong C# Console Application', 'Trong bài học này, chúng ta sẽ cùng tìm hiểu các vấn đề:
+(1, N'Cấu trúc lệnh cơ bản trong C# Console Application', N'Trong bài học này, chúng ta sẽ cùng tìm hiểu các vấn đề:
 
 Cấu trúc cơ bản của một chương trình trong C#.
 Giải thích ý nghĩa một số từ khóa được sử dụng trong chương trình đầu tiên.
 Cách viết comment trong C#.
 Ví dụ chương trình đầu tiên bằng C#.','https://www.youtube.com/embed/FhAIc0tlyaQ?si=c5ClSGle5mNg1fNw'),
-(1,'Nhập xuất cơ bản trong C# Console Application
-','Trong bài học này, chúng ta sẽ cùng tìm hiểu các vấn đề:
+(1,N'Nhập xuất cơ bản trong C# Console Application
+',N'Trong bài học này, chúng ta sẽ cùng tìm hiểu các vấn đề:
 
 Cấu trúc cơ bản của các lệnh nhập xuất và ý nghĩa của chúng trong C#.
 Ví dụ demo chương trình nhập xuất bằng C#.','https://www.youtube.com/embed/BAscPWPtCD8?si=-hrRHd1obZIIp2vy'),
 
-(1,'Biến trong C#','Để đọc hiểu bài này tốt nhất các bạn nên có kiến thức cơ bản về các phần:
+(1,N'Biến trong C#',N'Để đọc hiểu bài này tốt nhất các bạn nên có kiến thức cơ bản về các phần:
 
 Cấu trúc lệnh của C# viết trên nền Console Application.
 Cấu trúc nhập xuất của C# trên nền Console Application.
@@ -288,7 +294,7 @@ Cấu trúc nhập xuất của C# trên nền Console Application.
 Biến là gì? Tại sao phải sử dụng biến?
 Khai báo và sử dụng biến.
 Quy tắc đặt tên biến.','https://www.youtube.com/embed/IEz7uMSHitM?si=D_FhSF4eWfGE4Qok'),
-(1,'Kiểu dữ liệu trong C#','Để đọc hiểu bài này tốt nhất các bạn nên có kiến thức cơ bản về các phần:
+(1,N'Kiểu dữ liệu trong C#',N'Để đọc hiểu bài này tốt nhất các bạn nên có kiến thức cơ bản về các phần:
 
 Cấu trúc lệnh của C# viết trên nền Console Application.
 Cấu trúc nhập xuất của C# trên nền Console Application.
@@ -298,8 +304,8 @@ Biến trong C#.
 Kiểu dữ liệu là gì? Tại sao phải có kiểu dữ liệu?
 Phân loại kiểu dữ liệu và ý nghĩa của từng kiểu dữ liệu.
 Ví dụ chương trình sử dụng một số kiểu dữ liệu.
-','"https://www.youtube.com/embed/yrH7Qe8FXqE?si=lC8OMRwzNwPpJvU3'),
-(1,'Toán tử trong C#','Để đọc hiểu bài này tốt nhất các bạn nên có kiến thức cơ bản về các phần:
+','https://www.youtube.com/embed/yrH7Qe8FXqE?si=lC8OMRwzNwPpJvU3'),
+(1,N'Toán tử trong C#',N'Để đọc hiểu bài này tốt nhất các bạn nên có kiến thức cơ bản về các phần:
 
 CẤU TRÚC LỆNH CỦA C# VIẾT TRÊN NỀN CONSOLE APPLICATION.
 CẤU TRÚC NHẬP XUẤT CỦA C# TRÊN NỀN CONSOLE APPLICATION.

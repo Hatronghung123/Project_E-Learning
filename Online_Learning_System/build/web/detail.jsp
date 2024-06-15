@@ -4,6 +4,8 @@
     Author     : Tuan Anh(Gia Truong)
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -125,17 +127,40 @@
                                             <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
                                                 <a href="CourseDetail?cid=${o.getCourse_id()}" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end" style="border-radius: 30px 0 0 30px;">Read More</a>
 
-                                                <c:if test="${sessionScope.account == null}">
-                                                  
-                                                        <a href="join?action=login" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
-                                                   
-                                                </c:if>
 
-                                                <c:if test="${sessionScope.account != null}">
-                                                 
-                                                        <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+
+                                                <c:choose>
                                                   
-                                                </c:if>
+                                                    <c:when test="${sessionScope.account == null}">
+                                                        <!--nguoi dung chua dang nhap-->
+                                                        <a href="join?action=login" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+
+                                                    </c:when>
+                                                    
+                                                    <c:otherwise><!--Nguoi dung da dang nhap-->
+                                                        <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
+                                                        <c:set var="isPaid" value="false"/>
+                                                        <c:if test="${fn:length(listEnrollment) > 0}">
+                                                            <c:forEach items="${listEnrollment}" var="i">
+                                                                <c:if test="${currentCourseId == i.getCourseid()}">                   
+                                                                    <c:set var="isPaid" value="true"/>
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </c:if>
+                                                        <c:choose>
+                                                            <c:when test="${isPaid == true}">
+                                                                <a href="lesson?cid=${o.getCourse_id()}&lessonid=1" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                            </c:otherwise>
+
+                                                        </c:choose> 
+
+                                                    </c:otherwise>
+
+                                                </c:choose>
+
                                             </div>
                                         </div>
                                         <div class="text-center p-4 pb-0">
@@ -201,10 +226,37 @@
                             </c:if>
 
                             <c:if test="${sessionScope.account != null}">
-                                <div class="py-3 px-4">
-                                    <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="vnpay_pay.jsp?price=${getCourseByID.getPrice()}&cid=${getCourseByID.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}" >Enroll Now</a>
-                                </div>
+                                <c:set var="currentCourseId" value="${getCourseByID.getCourse_id()}"/>
+                                <c:choose>
+
+                                    <c:when test="${fn:length(listEnrollment) > 0}">
+                                        <c:forEach items="${listEnrollment}" var="o">
+                                            <c:if test="${currentCourseId == o.getCourseid()}">
+                                                <div class="py-3 px-4">
+                                                    <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="lesson?cid=${currentCourseId}&lessonid=1" >Enroll Now</a>
+                                                </div>
+                                                <c:set var="isPaid" value="true"/>
+                                            </c:if>
+                                        </c:forEach>
+
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:set var="isPaid" value="false"/>
+                                    </c:otherwise>
+
+
+
+
+                                </c:choose> 
+
+                                <c:if test="${isPaid != true}">
+                                    <div class="py-3 px-4">
+                                        <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="vnpay_pay.jsp?price=${getCourseByID.getPrice()}&cid=${getCourseByID.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}" >Enroll Now</a>
+                                    </div>
+                                </c:if>
                             </c:if>
+
+
                         </div>
 
                         <div class="mb-5 wow animate__animated animate__fadeInUp" data-wow-delay="0.1s">

@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package Controller;
-
+import Dal.LessonDAO;
+import Model.Enrollment;
+import Model.Payment;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.Date;
 
 /**
  *
@@ -82,9 +85,16 @@ public class getBillServlet extends HttpServlet {
         if(accId.isBlank() || coureId.isBlank() || date.isBlank() || money.isBlank() || ndtt.isBlank()) {
             err = "Loi roi! Chua Nhap gi dung khong";
         } else {
+            
             String dateFormat = formaDate(date);
+            Payment payment = new Payment(Integer.parseInt(accId), Integer.parseInt(coureId), Date.valueOf(dateFormat), "VNPAY",Integer.parseInt(money) / 100);
+            Enrollment enrollment = new Enrollment(Integer.parseInt(accId), Integer.parseInt(coureId), Date.valueOf(dateFormat), 100);
+            LessonDAO dao = new LessonDAO();
+            dao.insertBillPayment(payment);
+            dao.insertEnrollment(enrollment);
+            response.sendRedirect("lesson?cid="+coureId+"&lessonid=1");
         }
-        response.sendRedirect("mentee_my_lesson.jsp");
+
         
         
 
@@ -114,7 +124,8 @@ public class getBillServlet extends HttpServlet {
                 second += Date.charAt(i);
             }
         }
-        return year +"-"+month+"-"+day+" "+hour+":"+munite+":"+second;
+        return year +"-"+month+"-"+day;
+//        +" "+hour+":"+munite+":"+second
     }
 
     /**

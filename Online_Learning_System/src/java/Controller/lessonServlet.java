@@ -4,11 +4,11 @@
  */
 package Controller;
 
-import Dal.CourseDetailDAO;
+import Dal.LessonDAO;
 import Model.Account;
-import Model.Category;
 import Model.Course;
 import Model.Enrollment;
+import Model.Lesson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -20,15 +20,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.NumberFormat;
-import java.util.Locale;
-import javax.mail.Session;
 
 /**
  *
  * @author Tuan Anh(Gia Truong)
  */
-public class CourseDetailServelet extends HttpServlet {
+public class lessonServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -47,10 +44,10 @@ public class CourseDetailServelet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CourseDetailServelet</title>");
+            out.println("<title>Servlet lessonServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CourseDetailServelet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet lessonServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -68,42 +65,47 @@ public class CourseDetailServelet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-        HttpSession session =request.getSession();
+        LessonDAO dao = new LessonDAO();
+        HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("account");
-        
-        try {
-            String course_Id_str = request.getParameter("cid");
-            int course_Id = 0;
-            if (!course_Id_str.isBlank() && course_Id_str != null) {
-                course_Id = Integer.parseInt(course_Id_str);
-            }
-            CourseDetailDAO cdDao = new CourseDetailDAO();
-            ArrayList<Course> listCourst_Relate = cdDao.getRelateCourse(course_Id);
-            ArrayList<Category> listAllCategory = cdDao.getCategoryById(course_Id);
-            Course getCourseByID = cdDao.getCourseById(course_Id);
-            if(acc != null) {
-            ArrayList<Enrollment> listEnrollment = cdDao.getEnrollmentByAccountId(acc.getAccount_id()); 
-            request.setAttribute("listEnrollment", listEnrollment);
-            }
-            //Định dạng khóa học theo giá tiền Việt Nam
-            for(Course course : listCourst_Relate) {
-                course.setFormattedPrice(formartPrice(course.getPrice()));
-            }
-            
-            getCourseByID.setFormattedPrice(formartPrice(getCourseByID.getPrice()));
-            
-            request.setAttribute("listCourse_relate", listCourst_Relate);
-            request.setAttribute("listAllCategory", listAllCategory);
-            request.setAttribute("getCourseByID", getCourseByID);
+        String courseid_str = request.getParameter("cid");
+        String lessonid_str = request.getParameter("lessonid");
+        int course_id = 0;
+        int lesson_id = 0;
+        if (courseid_str != null && lessonid_str != null) {
+            course_id = Integer.parseInt(courseid_str);
+            lesson_id = Integer.parseInt(lessonid_str);
+        }
+        // Kiểm tra nếu session không có thuộc tính 'user' thì chuyển hướng về trang đăng nhập
+        if (acc == null) {
+            response.sendRedirect("join?action=login");
+            return;
+        } else {
            
-//            out.print(getCourseByID.getImage());
+            
 
-        } catch (SQLException ex) {
-            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                ArrayList<Enrollment> listEnrollment = dao.getEnrollmentByAccountId(acc.getAccount_id());
+               if(!isPaid(course_id, listEnrollment)) {
+                   response.sendRedirect("home");
+                   return;
+               }
+
+                ArrayList<Model.Module> moduleList = dao.getListModulByCid(course_id);
+                Lesson lesson = dao.getlessonByCid(course_id, lesson_id);
+                ArrayList<Lesson> lessonList = dao.getListModulByCidd(course_id);
+
+                request.setAttribute("lesson", lesson);
+                request.setAttribute("moduleList", moduleList);
+                request.setAttribute("lessonList", lessonList);
+                request.setAttribute("listEnrollment", listEnrollment);
+            } catch (SQLException ex) {
+                Logger.getLogger(lessonServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
-        request.getRequestDispatcher("detail.jsp").forward(request, response);
+        request.getRequestDispatcher("mentee_my_lesson.jsp").forward(request, response);
+
     }
 
     /**
@@ -117,8 +119,7 @@ public class CourseDetailServelet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String cid = request.getParameter("cid");
-
+        processRequest(request, response);
     }
 
     /**
@@ -131,11 +132,15 @@ public class CourseDetailServelet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    
-    public String formartPrice (int price) {
-        NumberFormat formatTer = NumberFormat.getInstance(new Locale("vi", "VN"));
-        return formatTer.format(price);
+    //Kiểm tra xem người dùng đã mua khóa học này hay chưa nếu chưa thì chuyển về home
+    private boolean isPaid(int cid, ArrayList<Enrollment> enrollmentList) {
+        for (Enrollment e : enrollmentList) {
+            if (cid == e.getCourseid()) {
+                return true;
+            }
+        }
+
+        return false;
     }
-    
-    
+
 }
