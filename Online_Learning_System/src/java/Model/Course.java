@@ -43,6 +43,13 @@ public class Course {
         this.is_active = is_active;
     }
 
+    public Course(String course_name, String image, int create_by) {
+        this.course_name = course_name;
+        this.image = image;
+        this.create_by = create_by;
+    }
+    
+
    
 
     public int getCourse_id() {

@@ -114,8 +114,8 @@
     $validation-messages: $validation-messages + ":not(." + unquote($state) + "-tooltip)" + ":not(." + unquote($state) + "-feedback)";
   }
 
-  > :not(:first-child):not(.dropdown-menu)#{$validation-messages} {
+/*  > :not(:first-child):not(.dropdown-menu)#{$validation-messages} {
     margin-left: -$input-border-width;
     @include border-start-radius(0);
-  }
+  }*/
 }

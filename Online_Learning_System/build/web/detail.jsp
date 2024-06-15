@@ -103,7 +103,8 @@
                                  height: 480px; /* Chiều cao mong muốn */; /* Đảm bảo tỷ lệ khung hình bảo toàn */
                                  border: 2px solid #ccc; /* Định dạng viền với độ dày và màu sắc tùy chọn */
                                  border-radius: 10px; /* Định dạng viền cong (nếu bạn muốn) */
-                                 box-sizing: border-box; /* Đảm bảo rằng kích thước của viền được tính vào kích thước của phần tử */ "data-aos="fade-up" class="img-fluid rounded w-100 mb-4 " src="${getCourseByID.getImage()}" alt="Image">
+                                 box-sizing: border-box; /* Đảm bảo rằng kích thước của viền được tính vào kích thước của phần tử */ 
+                                 "data-aos="fade-up" class="img-fluid rounded w-100 mb-4 " src="${getCourseByID.getImage()}" alt="Image">
 
                             <p data-aos="fade-up" >${getCourseByID.getDescription()}</p>
                         </div>

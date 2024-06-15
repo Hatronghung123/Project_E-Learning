@@ -1,16 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!-- Spinner Start -->
-<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-        <span class="sr-only">Loading...</span>
-    </div>
-</div>
-<!-- Spinner End -->
 
 
 <!-- Navbar Start -->
 <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
-    <a href="home" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+    <a href="home" class="navbar-brand d-flex align-items-center px-4 px-lg-5" style="text-decoration: none;">
         <h2 class="m-0 text-primary"><i class="fa fa-book me-3"></i>OLS</h2>
     </a>
 
@@ -20,9 +13,14 @@
 
 
     <div class="collapse navbar-collapse" id="navbarCollapse">
+<<<<<<< HEAD
 
         
          <div class="navbar-nav ms-auto p-4 p-lg-0">
+=======
+        <!--        search by category-->
+        <div class="navbar-nav ms-auto p-4 p-lg-0">
+>>>>>>> 0e007763f2637dd05ce07b229f0521340cac7891
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" style="
                    border-style: solid;
@@ -36,18 +34,22 @@
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
         
         
+=======
+        <!--        search by name-->
+>>>>>>> 0e007763f2637dd05ce07b229f0521340cac7891
         <form action="search" method="post" class="navbar-nav ms-auto-1 p-4 p-lg-0">
-            <input type="text" name="search" placeholder="Search Courses">
-            <input style="border-radius: 4px" class="btn btn-primary" type="submit" value="Search">
+            <input style="padding: 12px 20px 12px 12px;" type="text" name="search" placeholder="Search Courses">
+            <input style="border-radius: 4px;" class="btn btn-primary" type="submit" value="Search">
         </form>
 
 
         <div class="navbar-nav ms-auto p-4 p-lg-0">
             <a href="home" class="nav-item nav-link active">Home</a>
             <a href="about.jsp" class="nav-item nav-link">About</a>
-            <a href="courses_1.jsp" class="nav-item nav-link">Courses</a>
+            <a href="Courses.jsp" class="nav-item nav-link">Courses</a>
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                 <div class="dropdown-menu fade-down m-0">
@@ -68,7 +70,7 @@
                                                                         </div>
                                                                     </div>  -->
         </div>
-                                                                       
+
         <c:if test="${sessionScope.account != null}">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <div class="nav-item dropdown">
@@ -77,7 +79,8 @@
                     </a>
                     <div class="dropdown-menu fade-down m-0">
                         <a class="dropdown-item" href="profile">My Profile</a>
-                        <a class="dropdown-item" href="courses">My Courses</a>
+                        <a class="dropdown-item" href="my-courses">My Courses</a>
+                        <a class="dropdown-item" href="user/abc">Abc</a>
                         <a class="dropdown-item" href="join?action=logout">Log Out</a>
                     </div>
                 </div>
@@ -96,9 +99,6 @@
                 </div>
             </div>
         </c:if>
-
-
-
     </div>
 </nav>
 <!-- Navbar End -->

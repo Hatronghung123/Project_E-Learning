@@ -52,7 +52,7 @@ values
 
 
 create table CourseCategory(
-	CourseCateroryId varchar(10) primary key,
+	CourseCategoryId varchar(10) primary key,
 	CategoryName nvarchar(255)
 );
 insert into CourseCategory
@@ -69,7 +69,7 @@ create table Course(
 	Image nvarchar(500),
 	Price float,
 	Discount float,
-	CourseCateroryId varchar(10) foreign key references CourseCategory(CourseCateroryId),
+	CourseCateroryId varchar(10) foreign key references CourseCategory(CourseCategoryId),
 	CreatedBy int references Account(AccountId),
 	DateCreated date,
 	StudyTime varchar(50),
@@ -218,6 +218,13 @@ create table Enrollment(
 	EnrollmentDate date,
 	Progress int --per 100%
 );
+ 
+  insert into Enrollment
+  values
+  (1,1,'2024-06-07',0),
+  (1,2,'2024-06-09',50),
+  (1,3,'2024-06-13',20),
+  (1,4,'2024-05-20',80);
 
 
 

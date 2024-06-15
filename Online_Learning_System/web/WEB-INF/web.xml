@@ -14,7 +14,7 @@
     </servlet>
     <servlet>
         <servlet-name>profileServlet</servlet-name>
-        <servlet-class>Controller.profileServlet</servlet-class>
+        <servlet-class>Controller.User.profileServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>searchServlet</servlet-name>
@@ -22,19 +22,24 @@
     </servlet>
     <servlet>
         <servlet-name>courseServlet</servlet-name>
-        <servlet-class>Controller.courseServlet</servlet-class>
+        <servlet-class>Controller.User.courseServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>CourseDetailServelet</servlet-name>
         <servlet-class>Controller.CourseDetailServelet</servlet-class>
     </servlet>
     <servlet>
+<<<<<<< HEAD
         <servlet-name>LessonServlet</servlet-name>
         <servlet-class>Controller.LessonServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>lessonServlet</servlet-name>
         <servlet-class>Controller.lessonServlet</servlet-class>
+=======
+        <servlet-name>abc</servlet-name>
+        <servlet-class>Controller.User.abc</servlet-class>
+>>>>>>> 0e007763f2637dd05ce07b229f0521340cac7891
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginGoogleHandler</servlet-name>
@@ -58,15 +63,20 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>courseServlet</servlet-name>
-        <url-pattern>/courses</url-pattern>
+        <url-pattern>/my-courses</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CourseDetailServelet</servlet-name>
         <url-pattern>/CourseDetail</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+<<<<<<< HEAD
         <servlet-name>lessonServlet</servlet-name>
         <url-pattern>/lesson</url-pattern>
+=======
+        <servlet-name>abc</servlet-name>
+        <url-pattern>/user/abc</url-pattern>
+>>>>>>> 0e007763f2637dd05ce07b229f0521340cac7891
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>
