@@ -70,30 +70,30 @@
 
 
                                     <div class="tab-pane fade show" id="MyCouses-courses">
-
-                                        <c:forEach items="">
-                                            <div class="card-body pb-2">
+                                        <div class="card-body pb-2">
+                                            <c:forEach items="${course_list}" var="c">
                                                 <div class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
                                                     <div class="col-lg-2">
-                                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Golden_tabby_and_white_kitten_n01.jpg/1200px-Golden_tabby_and_white_kitten_n01.jpg" 
+                                                        <img src="${c.image}"
                                                              width="100px" height="100px" alt="alt"/>
                                                     </div>
                                                     <div class="col-lg-8">
-                                                        <label class="form-label" style="color: #06BBCC; font-size: 20px ">Course Name</label><br>
-                                                        <label class="form-label" style="color: black; font-size: 13px">Manager</label><br>
+                                                        <label class="form-label" style="color: black; font-size: 15px">Course | ${c.create_by}</label><br>                                                        
+                                                        <label class="form-label" style="color: #06BBCC; font-size: 20px ">${c.course_name}</label><br>
+                                                        <label class="form-label" style="color: black; font-size: 17px">${c.progress}%</label><br>   
+                                                        <label class="form-label" style="color: black; font-size: 15px">Overall Progress</label><br>   
                                                     </div>
                                                     <div class="col-lg-2">
-                                                        <a href="" class="btn btn-outline-primary" ">Go to Course</a>
+                                                        <a href="CourseDetail?cid=${c.course_id}" class="btn btn-outline-primary">Go to Course</a>
                                                     </div>
                                                 </div>
-                                                <br>
-                                                <hr class="border-light m-0">
-                                            </div>
-                                        </c:forEach>
+                                            </c:forEach>
+                                            <br>
+                                            <hr class="border-light m-0">
+                                        </div>
                                     </div>
 
                                 </div>
-
 
 
 
