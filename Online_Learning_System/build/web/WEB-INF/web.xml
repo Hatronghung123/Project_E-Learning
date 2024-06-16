@@ -10,7 +10,7 @@
     </servlet>
     <servlet>
         <servlet-name>homeServlet</servlet-name>
-        <servlet-class>Controller.homeServlet</servlet-class>
+        <servlet-class>Controller.Home.homeServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>profileServlet</servlet-name>
@@ -28,17 +28,14 @@
         <servlet-name>CourseDetailServelet</servlet-name>
         <servlet-class>Controller.CourseDetailServelet</servlet-class>
     </servlet>
-        
     <servlet>
         <servlet-name>lessonServlet</servlet-name>
         <servlet-class>Controller.lessonServlet</servlet-class>
     </servlet>
-
     <servlet>
         <servlet-name>abc</servlet-name>
         <servlet-class>Controller.User.abc</servlet-class>
     </servlet>
-    
     <servlet-mapping>
         <servlet-name>LoginGoogleHandler</servlet-name>
         <url-pattern>/google</url-pattern>
@@ -69,12 +66,11 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>lessonServlet</servlet-name>
-        <url-pattern>/lesson</url-pattern>    </servlet-mapping>
-
-<servlet-mapping>
+        <url-pattern>/lesson</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>abc</servlet-name>
         <url-pattern>/user/abc</url-pattern>
-
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>

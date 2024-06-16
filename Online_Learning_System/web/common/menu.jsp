@@ -22,17 +22,20 @@
                    border-width: thin;
                    border-radius: 10px;
                    padding: 10px;
+                   margin: 15px;
                    color: #06BBCC;
                    ">Explore</a>
                 <div class="dropdown-menu fade-down m-0">
-                    <a href="team.html" class="dropdown-item">Our Team</a>
+                    <c:forEach items="${listCategory}" var="o">
+                    <a href="team.html" class="dropdown-item">${o.getCategory_name()}</a>
+                   </c:forEach>
                 </div>
             </div>
         </div>
 
         <!--        search by name-->
-        <form action="search" method="post" class="navbar-nav ms-auto-1 p-4 p-lg-0">
-            <input style="padding: 12px 20px 12px 12px;" type="text" name="search" placeholder="Search Courses">
+        <form action="search" method="post" class="navbar-nav ">
+            <input class="search-input" style="width: 300px;" type="text" name="search"  placeholder="Search in course">
             <input style="border-radius: 4px;" class="btn btn-primary" type="submit" value="Search">
         </form>
 

@@ -174,11 +174,11 @@
                                             <c:forEach items="${lessonList}" var="i" varStatus="status">
                                                 <div class="module-content">
 
-
+                                                    <c:if test="${o.getModulename() == i.getModulname()}">
                                                     <a href="lesson?cid=${i.getCourseid()}&lessonid=${i.getLessonid()}" class="btn btn-block btn--col module-lesson" data-lessonid="${i.getLessonid()}">
                                                         ${status.index + 1}. ${i.getLessonname()}
                                                     </a>
-
+                                                    </c:if>
 
 
                                                 </div>

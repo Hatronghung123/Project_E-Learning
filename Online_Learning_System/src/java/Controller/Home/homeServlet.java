@@ -2,10 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller;
+package Controller.Home;
 
 import Dal.AccountDAO;
+import Dal.CourseDetailDAO;
+import Dal.HomeDAO;
 import Model.Account;
+import Model.Category;
+import Model.Course;
+import Model.Enrollment;
 import Model.Profile;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,6 +20,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -60,49 +69,28 @@ public class homeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-        Cookie cookie[] = request.getCookies();
-        if (cookie == null) {
-            request.getRequestDispatcher("index.jsp").forward(request, response);
-            return;
-        }
-        //check xem trong cookie co luu email va password ko
-        boolean check_remember_email = false;
-        boolean check_remember_password = false;
+        HttpSession session = request.getSession();
+        Account acc = (Account) session.getAttribute("account");
 
-        String email = "";
-        String password = "";
+        try {
+            PrintWriter out = response.getWriter();
+            HomeDAO dao = new HomeDAO();
+            CourseDetailDAO cdDao = new CourseDetailDAO();
+            ArrayList<Category> listCategory = dao.getAllCategory();
+            ArrayList<Course> listNewCourse = dao.getNewCourse();
 
-        for (Cookie c : cookie) {
-            if (c.getName().equals("email")) {
-                request.setAttribute("email", c.getValue());
-                email = c.getValue();
-                check_remember_email = true;
-            }
-            if (c.getName().equals("password")) {
-                check_remember_password = true;
-                password = c.getValue();
-                request.setAttribute("password", c.getValue());
-            }
-        }
-
-        // Neu trong cookie da luu tai khoan roi thi tu dong dang nhap luon
-        if (check_remember_email && check_remember_password) {
-            AccountDAO accountDAO = new AccountDAO();
-            HttpSession session = request.getSession();
-            Account account_login = accountDAO.getAccountByEmailPass(email, password);
-
-            if (account_login != null) {
-                Profile profile = accountDAO.getProfile(account_login);
-                session.setAttribute("profile", profile);
+            if (acc != null) {
+                ArrayList<Enrollment> listEnrollment = cdDao.getEnrollmentByAccountId(acc.getAccount_id());
+                request.setAttribute("listEnrollment", listEnrollment);
             }
 
-            session.setAttribute("account", account_login);
-            session.setMaxInactiveInterval(60 * 30);
-            request.getRequestDispatcher("index.jsp").forward(request, response);
-            return;
+            request.setAttribute("listNewCourse", listNewCourse);
+            request.setAttribute("listCategory", listCategory);
 
+        } catch (SQLException ex) {
+            Logger.getLogger(homeServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 
