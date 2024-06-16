@@ -5,10 +5,12 @@
 package Controller.User;
 
 import Dal.EnrollmentDAO;
+import Dal.WishlistDAO;
 import Model.Account;
 import Model.Course;
 import Model.EnrollmentDTO;
 import Model.Profile;
+import Model.WishlistDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -71,7 +73,12 @@ public class courseServlet extends HttpServlet {
         
         ArrayList<EnrollmentDTO> course_list = enrollDAO.getCourseByAccId(my_account.getAccount_id());
         request.setAttribute("course_list", course_list);
-        out.print(course_list.get(0).getEnrollment_date());
+        //out.print(course_list.get(0).getEnrollment_date());
+        
+        WishlistDAO wishlistDAO = new WishlistDAO();
+        ArrayList<WishlistDTO> wish_list = wishlistDAO.getWishListByAccId(my_account.getAccount_id());
+        request.setAttribute("wish_list", wish_list);
+        
         request.getRequestDispatcher("MyCourses.jsp").forward(request, response);
     }
 

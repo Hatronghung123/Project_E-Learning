@@ -102,47 +102,44 @@
                 border-color: #06BBCC
             }
 
+
         </style>
     </head>
     <body>
         <jsp:include page="common/menu.jsp"></jsp:include>
 
-        <!-- Header Start -->
-        <div class="container-fluid">
-            <div class="container py-5">
-                <div class="row">
-                    <div class="col-lg-10">
-                        <h1 class="display-3 text-dark animated slideInDown">My Profile</h1>
+            <!-- Header Start -->
+            <div class="container-fluid">
+                <div class="container py-5">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <h1 class="display-3 text-dark animated slideInDown">My Profile</h1>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <form action="profile" method="post">
-                <div class="container light-style flex-grow-1 container-p-y">
+                <form action="profile" method="post" enctype="multipart/form-data">
+                    <div class="container light-style flex-grow-1 container-p-y">
 
-                    <div class=" overflow-hidden">
-                        <div class="row no-gutters row-bordered row-border-light">
-                            <div class="col-md-3 pt-0">
-                                <div class="list-group list-group-flush account-settings-links">
-                                    <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-general">General</a>
-                                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">Change password</a>
-                                    <!-- <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-info">Information</a>-->
-                                    <!--                                <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-social-links">Social links</a>
-                                                                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-connections">Connections</a>-->
-                                    <!--                                <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-notifications">Notifications</a>-->
+                        <div class=" overflow-hidden">
+                            <div class="row no-gutters row-bordered row-border-light">
+                                <div class="col-md-3 pt-0">
+                                    <div class="list-group list-group-flush account-settings-links">
+                                        <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-general">General</a>
+                                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">Change password</a>
+                                        <!-- <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-info">Information</a>-->
+                                        <!--                                <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-social-links">Social links</a>
+                                                                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-connections">Connections</a>-->
+                                        <!--                                <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-notifications">Notifications</a>-->
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-9 card_mine">
-                                <div class="tab-content">
-                                    <div class="tab-pane fade active show" id="account-general">
-                                        <h3 style="color: red">${requestScope.error}</h3>
+                                <div class="col-md-9 card_mine">
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade active show" id="account-general">
+                                            <h3 style="color: red">${requestScope.error}</h3>
                                         <div class="card-body media align-items-center">
                                             <img src="${sessionScope.profile.avt}" alt="avatar" class="d-block ui-w-80">
                                             <div class="media-body ml-4">
-                                                <label class="btn btn-outline-primary">
-                                                    Upload new photo
-                                                    <input type="file" class="account-settings-fileinput" name="avt">
-                                                </label> &nbsp;
-                                                <button type="button" class="btn btn-outline-danger md-btn-flat">Reset</button>
+                                                <input type="file" class="" name="avt">
                                                 <div class="text-black-50 small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
                                             </div>
                                         </div>
@@ -379,6 +376,7 @@
                         </div>
                     </div>
                     <div class="text-right mt-3">
+                        <button type="reset" class="btn btn-outline-danger md-btn-flat">Reset</button>
                         <button type="submit" class="btn btn-primary">Save changes</button>&nbsp;
                         <!--                    <button type="button" class="btn btn-secondary">Cancel</button>-->
                     </div>

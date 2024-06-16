@@ -109,22 +109,25 @@
 
                                     <div class="tab-pane fade show" id="MyCouses-wishlist">
                                         <div class="card-body pb-2">
-
-                                            <div class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
-                                                <div class="col-lg-2">
-                                                    <img src="" 
-                                                         width="100px" height="100px" alt="alt"/>
+                                            <c:forEach items="${wish_list}" var="w">
+                                                <div class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
+                                                    <div class="col-lg-2">
+                                                        <img src="${w.image}"
+                                                             width="100px" height="100px" alt="alt"/>
+                                                    </div>
+                                                    <div class="col-lg-8">
+                                                        <label class="form-label" style="color: black; font-size: 15px">Course | ${w.create_by}</label>&nbsp;&nbsp;
+                                                        <label class="form-label" style="color: black; font-size: 15px ">${w.star} Star</label><br>
+                                                        <br>                                                        
+                                                        <label class="form-label" style="color: #06BBCC; font-size: 27px ">${w.course_name}</label><br>
+                                                        <label class="form-label" style="color: #06BBCC; font-size: 17px; text-decoration: line-through">${w.price} vnd</label><br>
+                                                        <label class="form-label" style="color: #06BBCC; font-size: 15px ">${w.price - (w.price * w.discount)/100} vnd</label>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <a href="CourseDetail?cid=${w.course_id}" class="btn btn-outline-primary">Go to Course</a>
+                                                    </div>
                                                 </div>
-                                                <div class="col-lg-8">
-                                                    <label class="form-label" style="color: #06BBCC; font-size: 20px ">Course Name</label><br>
-                                                    <label class="form-label" style="color: black; font-size: 13px">Manager</label><br>
-                                                </div>
-                                                <div class="col-lg-2">
-                                                    <a href="" class="btn btn-outline-primary" ">Go to Course</a>
-                                                </div>
-                                            </div>
-
-
+                                            </c:forEach>
                                             <br>
                                             <hr class="border-light m-0">
 

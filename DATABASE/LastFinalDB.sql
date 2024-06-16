@@ -37,7 +37,7 @@ create table Profile(
 	foreign key (ProfileId) references Account(AccountId),
 	FullName nvarchar(255),
 	Gender int, -- 0 Female, 1 Male, 2 Other
-	Avatar image,
+	Avatar varchar(2000),
 	Money money,
 	ManagedBy int foreign key references Account(AccountId),
 );
@@ -192,6 +192,14 @@ create table CourseRating(
 	CourseId int references Course(CourseId),
 	AccountId int references Account(AccountId)
 );
+insert into CourseRating
+  values
+  (4,'Cung oke','2024-06-01',1,2),
+  (5,'Huu ich!','2024-05-29',1,3),
+  (3,'Tam duoc thoi','2024-06-01',1,4),
+  (5,'Very good','2024-06-10',1,5),
+  (1,'Khoa hoc chan','2024-05-05',2,4),
+  (5,'Khoa hoc hay nhi!','2024-06-07',1,1);
 
 create table Teaching(
 	MentorId int references Account(AccountId),
@@ -210,6 +218,13 @@ create table WishList(
 	CourseId int references Course(CourseId),
 	primary key(AccountId,CourseId)
 );
+
+
+insert into WishList
+values
+(1,1),
+(1,3),
+(1,5);
 
 create table Enrollment(
 	EnrollmentId int primary key identity(1,1),

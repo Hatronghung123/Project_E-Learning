@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/D:/New%20folder/V07/Project_E-Learning/Online_Learning_System/src/java/Model/Lesson.java</file>
             <file>file:/D:/New%20folder/V07/Project_E-Learning/Online_Learning_System/web/index.jsp</file>
             <file>file:/D:/New%20folder/V07/Project_E-Learning/Online_Learning_System/web/mentee_my_lesson.jsp</file>
@@ -11,6 +12,10 @@
             <file>file:/D:/New%20folder/V07/Project_E-Learning/Online_Learning_System/web/common/menu.jsp</file>
             <file>file:/D:/New%20folder/V07/Project_E-Learning/Online_Learning_System/src/java/Dal/HomeDAO.java</file>
             <file>file:/D:/New%20folder/V07/Project_E-Learning/Online_Learning_System/src/java/Dal/CourseDetailDAO.java</file>
+=======
+            <file>file:/E:/Project_E-Learning/Online_Learning_System/web/Profile.jsp</file>
+            <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Controller/User/profileServlet.java</file>
+>>>>>>> bfe2a7614c11554cba50647492ed043709dcbdfe
         </group>
     </open-files>
 </project-private>

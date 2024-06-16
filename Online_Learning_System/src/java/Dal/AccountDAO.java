@@ -53,7 +53,7 @@ public class AccountDAO extends DBContext {
         }
         return null;
     }
-    
+
     // login with google
     public Account getAccountGoogle(String email) {
         connection = getConnection();
@@ -82,7 +82,6 @@ public class AccountDAO extends DBContext {
         }
         return null;
     }
-    
 
     public void insertUser(Account account, Profile profile) {
         insertAccount(account);
@@ -301,6 +300,23 @@ public class AccountDAO extends DBContext {
         try {
             statement = connection.prepareStatement(sql);
             statement.setBoolean(1, gender);
+            statement.setInt(2, account_id);
+            // thực thi câu lệnh
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void updateAvatar_ByAccId(String avt_path_in_server, int account_id) {
+        connection = getConnection();
+        String sql = """
+                      update Profile
+                      set Avatar = ?
+                      where ProfileId = ?""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, avt_path_in_server);
             statement.setInt(2, account_id);
             // thực thi câu lệnh
             statement.executeUpdate();
