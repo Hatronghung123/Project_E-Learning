@@ -37,7 +37,7 @@ create table Profile(
 	foreign key (ProfileId) references Account(AccountId),
 	FullName nvarchar(255),
 	Gender int, -- 0 Female, 1 Male, 2 Other
-	Avatar image,
+	Avatar varchar(2000),
 	Money money,
 	ManagedBy int foreign key references Account(AccountId),
 );
