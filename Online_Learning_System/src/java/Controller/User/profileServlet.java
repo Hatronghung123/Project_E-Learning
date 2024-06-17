@@ -75,7 +75,7 @@ public class profileServlet extends HttpServlet {
 
         session.setAttribute("profile", profile);
         session.setAttribute("account", account);
-        out.print(profile.isGender());
+        //out.print(profile.isGender());
         request.getRequestDispatcher("Profile.jsp").forward(request, response);
     }
 

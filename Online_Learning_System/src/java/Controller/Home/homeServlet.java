@@ -71,9 +71,9 @@ public class homeServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("account");
+        PrintWriter out = response.getWriter();
 
         try {
-            PrintWriter out = response.getWriter();
             HomeDAO dao = new HomeDAO();
             CourseDetailDAO cdDao = new CourseDetailDAO();
             ArrayList<Category> listCategory = dao.getAllCategory();
@@ -91,6 +91,9 @@ public class homeServlet extends HttpServlet {
             Logger.getLogger(homeServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        //get acc profile to show
+        getProfile(request, response);
+
         request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 
@@ -106,6 +109,21 @@ public class homeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
+        getProfile(request, response);
+        request.getRequestDispatcher("index.jsp").forward(request, response);
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }
+
+    private void getProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Cookie cookie[] = request.getCookies();
         if (cookie == null) {
             request.getRequestDispatcher("index.jsp").forward(request, response);
@@ -147,17 +165,6 @@ public class homeServlet extends HttpServlet {
             return;
 
         }
-        request.getRequestDispatcher("index.jsp").forward(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 
 }
