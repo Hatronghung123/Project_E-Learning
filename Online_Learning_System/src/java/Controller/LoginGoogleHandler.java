@@ -8,7 +8,7 @@ import Dal.AccountDAO;
 import Model.Account;
 import Model.AccountGoogle;
 import Model.Profile;
-import Until.SendEmail;
+import Util.SendEmail;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
