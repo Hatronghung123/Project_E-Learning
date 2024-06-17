@@ -168,6 +168,7 @@ public class joinServlet extends HttpServlet {
         response.addCookie(password_remember);
 
         session.removeAttribute("account");
+        session.removeAttribute("profile");
         response.sendRedirect("home");
     }
 

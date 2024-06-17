@@ -35,7 +35,7 @@
 
         <!--        search by name-->
         <form action="search" method="post" class="navbar-nav ">
-            <input class="search-input" style="width: 300px;" type="text" name="search"  placeholder="Search in course">
+            <input class="search-input" style="width: 300px;" type="text" name="search"  placeholder="Search courses">
             <input style="border-radius: 4px;" class="btn btn-primary" type="submit" value="Search">
         </form>
 
@@ -73,8 +73,10 @@
                     </a>
                     <div class="dropdown-menu fade-down m-0">
                         <a class="dropdown-item" href="profile">My Profile</a>
+                        <c:if test="${sessionScope.account.role_id == 2 || sessionScope.account.role_id == 3}">
+                            <a class="dropdown-item" href="course-manage">Manager</a>
+                        </c:if>
                         <a class="dropdown-item" href="my-courses">My Courses</a>
-                        <a class="dropdown-item" href="user/abc">Abc</a>
                         <a class="dropdown-item" href="join?action=logout">Log Out</a>
                     </div>
                 </div>

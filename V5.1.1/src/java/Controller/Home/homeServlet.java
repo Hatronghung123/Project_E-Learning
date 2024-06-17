@@ -101,7 +101,9 @@ public class homeServlet extends HttpServlet {
             Logger.getLogger(homeServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-
+        //insert profile into session
+        getProfile(request, response);
+        
         request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 

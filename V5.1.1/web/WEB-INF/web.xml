@@ -36,6 +36,10 @@
         <servlet-name>abc</servlet-name>
         <servlet-class>Controller.User.abc</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CourseManageServlet</servlet-name>
+        <servlet-class>Controller.User.Manager.CourseManageServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginGoogleHandler</servlet-name>
         <url-pattern>/google</url-pattern>
@@ -71,6 +75,10 @@
     <servlet-mapping>
         <servlet-name>abc</servlet-name>
         <url-pattern>/user/abc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CourseManageServlet</servlet-name>
+        <url-pattern>/course-manage</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>
