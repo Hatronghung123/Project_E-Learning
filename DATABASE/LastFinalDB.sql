@@ -69,7 +69,7 @@ create table Course(
 	Image nvarchar(500),
 	Price float,
 	Discount float,
-	CourseCateroryId varchar(10) foreign key references CourseCategory(CourseCategoryId),
+	CourseCategoryId varchar(10) foreign key references CourseCategory(CourseCategoryId),
 	CreatedBy int references Account(AccountId),
 	DateCreated date,
 	StudyTime varchar(50),
