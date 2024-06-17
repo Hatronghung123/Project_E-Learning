@@ -161,8 +161,7 @@ public class homeServlet extends HttpServlet {
 
             session.setAttribute("account", account_login);
             session.setMaxInactiveInterval(60 * 30);
-            request.getRequestDispatcher("index.jsp").forward(request, response);
-            return;
+            
 
         }
     }
