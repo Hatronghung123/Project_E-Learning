@@ -1,6 +1,6 @@
 <%-- 
-    Document   : CourseManage
-    Created on : Jun 17, 2024, 11:47:51 PM
+    Document   : MentorManage.jsp
+    Created on : Jun 18, 2024, 8:10:00 PM
     Author     : tuong
 --%>
 
@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Manage Courses</title>
+        <title>Manage Mentors</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -125,39 +125,34 @@
                                     <!--                                <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-social-links">Social links</a>
                                                                     <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-connections">Connections</a>-->
                                     <!--                                <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-notifications">Notifications</a>-->
-                                    <a class="list-group-item list-group-item-action active" data-toggle="list" href="#Courses">Courses </a>
-                                    <a class="list-group-item list-group-item-action" href="mentor-manage">Mentors</a>
+                                    <a class="list-group-item list-group-item-action" href="course-manage">Courses </a>
+                                    <a class="list-group-item list-group-item-action active" href="mentor-manage">Mentors</a>
                                 </div>
                             </div>
 
 
                             <div class="col-md-9 card_mine">
                                 <div class="tab-content">
-                                    <div class="tab-pane fade active show" id="Courses">
+                                    <div class="tab-pane fade active show" id="mentor-manage">
                                         <h3 style="color: red">${requestScope.error}</h3>
 
 
-                                    <div class="tab-pane fade show" id="Courses">
+                                    <div class="tab-pane fade show" id="mentor-manage">
                                         <div class="card-body pb-2">
-                                            <c:forEach items="${list_managed_couse}" var="c">
+                                            <c:forEach items="${list_managed_mentor}" var="m">
                                                 <div class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
                                                     <div class="col-lg-2">
-                                                        <img src="${c.image}"
+                                                        <img src="${m.avt}"
                                                              width="100px" height="100px" alt="alt"/>
                                                     </div>
                                                     <div class="col-lg-8">
-                                                        <label class="form-label" style="color: black; font-size: 15px">Mentor: ${c.mentor_name}</label><br>                                                        
-                                                        <label class="form-label" style="color: #06BBCC; font-size: 25px ">${c.course_name}</label><br>
-                                                        <label class="form-label" style="color: #000; font-size: 15px ">Category: ${c.course_category_id}</label><br>
-                                                        <label class="form-label" style="color: #000; font-size: 15px ">Create On: ${c.create_date}</label><br>
-                                                        <label class="form-label" style="color: #000; font-size: 15px ">Status: ${c.status?'Active':'Unactive'}</label><br>
-                                                        <label class="form-label" style="color: #000; font-size: 15px ">Number of enrollment: ${c.number_enrollment}</label><br>
+                                                        <label class="form-label" style="color: black; font-size: 20px">Mentor Name: ${m.fullname}</label>&nbsp;&nbsp;<br>
+                                                        <label class="form-label" style="color: black; font-size: 17px">Mentor Email: ${m.email}</label><br>
+                                                        <label class="form-label" style="color: black; font-size: 15px">Mentor Gender: ${m.gender?'Male':'Female'}</label>&nbsp;&nbsp;
+
                                                     </div>
-                                                    <div class="col-lg-1">
-                                                        <a href="course-manage?cid=${c.course_id}&action=delete" class="btn btn-outline-danger">Delete</a>
-                                                    </div>
-                                                    <div class="col-lg-1">
-                                                        <a href="course-manage?cid=${c.course_id}&action=edit" class="btn btn-outline-primary">Edit</a>
+                                                    <div class="col-lg-2">
+<!--                                                        <a href="CourseDetail?cid=${w.course_id}" class="btn btn-outline-primary">Go to Course</a>-->
                                                     </div>
                                                 </div>
                                             </c:forEach>
@@ -168,40 +163,6 @@
 
                                 </div>
 
-
-
-                                <div class="tab-pane fade active" id="Mentors">
-                                    <h3 style="color: red">${requestScope.error}</h3>
-
-
-                                    <div class="tab-pane fade show" id="Mentors">
-                                        <!--                                        <div class="card-body pb-2">
-                                        <c:forEach items="${wish_list}" var="w">
-                                            <div class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
-                                                <div class="col-lg-2">
-                                                    <img src="${w.image}"
-                                                         width="100px" height="100px" alt="alt"/>
-                                                </div>
-                                                <div class="col-lg-8">
-                                                    <label class="form-label" style="color: black; font-size: 15px">Course | ${w.create_by}</label>&nbsp;&nbsp;
-                                                    <label class="form-label" style="color: black; font-size: 15px ">${w.star} Star</label><br>
-                                                    <br>                                                        
-                                                    <label class="form-label" style="color: #06BBCC; font-size: 27px ">${w.course_name}</label><br>
-                                                    <label class="form-label" style="color: #06BBCC; font-size: 17px; text-decoration: line-through">${w.price} vnd</label><br>
-                                                    <label class="form-label" style="color: #06BBCC; font-size: 15px ">${w.price - (w.price * w.discount)/100} vnd</label>
-                                                </div>
-                                                <div class="col-lg-2">
-                                                    <a href="CourseDetail?cid=${w.course_id}" class="btn btn-outline-primary">Go to Course</a>
-                                                </div>
-                                            </div>
-                                        </c:forEach>
-                                        <br>
-                                        <hr class="border-light m-0">
-
-                                    </div>-->
-                                    </div>
-
-                                </div>
                             </div>
                         </div>
                     </div>

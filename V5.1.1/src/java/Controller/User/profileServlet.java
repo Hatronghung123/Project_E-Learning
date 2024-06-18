@@ -6,7 +6,7 @@ package Controller.User;
 
 import Dal.AccountDAO;
 import Model.Account;
-import Model.Profile;
+import Model.ProfileDTO;
 import com.oracle.wls.shaded.org.apache.xalan.templates.AVT;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -70,7 +70,7 @@ public class profileServlet extends HttpServlet {
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
-        Profile profile = (Profile) session.getAttribute("profile");
+        ProfileDTO profile = (ProfileDTO) session.getAttribute("profile");
         Account account = (Account) session.getAttribute("account");
 
         session.setAttribute("profile", profile);
@@ -106,7 +106,7 @@ public class profileServlet extends HttpServlet {
 //end get data from Profile.jsp
 
         AccountDAO accountDAO = new AccountDAO();
-        Profile new_profile = (Profile) session.getAttribute("profile");
+        ProfileDTO new_profile = (ProfileDTO) session.getAttribute("profile");
         Account new_account = (Account) session.getAttribute("account");
 
         if (file_avt != null && file_avt.getSize() > 0) {
