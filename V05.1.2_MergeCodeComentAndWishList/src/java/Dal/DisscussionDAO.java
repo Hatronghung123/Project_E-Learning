@@ -13,7 +13,6 @@ import Model.DiscussionLesson;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 
 /**
  *
@@ -25,12 +24,20 @@ public class DisscussionDAO {
     PreparedStatement ps = null; // Ném câu lệnh query sang sql server
     ResultSet rs = null; // Nhận kết quả trả về
 
-    public void InsertComment(int accountId, int lessonId, String comment) {
-        String sql = "INSERT INTO DiscussionLesson (AccountId, LessonId, Comment) VALUES (?, ?, ?)";
+    public void InsertComment(DiscussionLesson lesson) {
+        String sql = "INSERT INTO DiscussionLesson (ParentCommentID,[CreatedAt],Comment, AccountId, LessonId) \n" +
+"	VALUES (?, ?, ?, ?, ?)";
         try (Connection con = new DBContext().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, accountId);
-            ps.setInt(2, lessonId);
-            ps.setString(3, comment);
+             // Đặt các tham số vào câu lệnh PreparedStatement
+            if (lesson.getParentId()!= null) {
+                ps.setInt(1, lesson.getParentId());
+            } else {
+                ps.setNull(1, java.sql.Types.INTEGER);
+            }
+            ps.setTimestamp(2, lesson.getCreateAt());
+            ps.setString(3, lesson.getComment());
+            ps.setInt(4, lesson.getAcccountId());
+            ps.setInt(5, lesson.getLessonId());
             ps.executeUpdate();
             System.out.println("Chèn dữ liệu thành công");
         } catch (Exception e) {
@@ -38,7 +45,7 @@ public class DisscussionDAO {
         }
     }
 
-    public void deleteComment(int discussionId) {
+    public void deleteMainComment(int discussionId) {
         String sql = "DELETE FROM DiscussionLesson WHERE DisscussionId = ?";
         try (Connection con = new DBContext().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, discussionId);
@@ -49,80 +56,97 @@ public class DisscussionDAO {
         }
     }
 
-// public ArrayList<DiscussionLesson> getCommentsFromDatabase(int lessonId) {
-//    ArrayList<DiscussionLesson> comments = new ArrayList<>();
-//    String sql = "SELECT d.DisscussionId, d.AccountId, d.LessonId, d.Comment, p.FullName, p.Avatar " +
-//                 "FROM DiscussionLesson d " +
-//                 "INNER JOIN Profile p ON d.AccountId = p.ProfileId " +
-//                 "WHERE d.LessonId = ?";
-//    try (Connection con = new DBContext().getConnection();
-//         PreparedStatement ps = con.prepareStatement(sql)) {
-//        ps.setInt(1, lessonId);
-//        try (ResultSet rs = ps.executeQuery()) {
-//            while (rs.next()) {
-//                int discussionId = rs.getInt("DisscussionId");
-//                int accountId = rs.getInt("AccountId");
-//                String comment = rs.getString("Comment");
-//                String fullName = rs.getString("FullName");
-//                String avatar = rs.getString("Avatar");
-//                DiscussionLesson discussion = new DiscussionLesson(discussionId, accountId, lessonId, comment, fullName, avatar);
-//                comments.add(discussion);
-//            }
-//        }
-//    } catch (SQLException e) {
-//        e.printStackTrace();
-//    }
-//    return comments;
-//}
-public ArrayList<DiscussionLesson> getCommentsFromDatabase(int lessonID) {
-    ArrayList<DiscussionLesson> listComment = new ArrayList<>();
-    String sql = "SELECT \n"
-            + "    d.DisscussionId, \n"
-            + "    d.LessonId, \n"
-            + "    d.AccountId, \n"
-            + "    d.Comment, \n"
-            + "    p.FullName, \n"
-            + "    p.Avatar \n"
-            + "FROM \n"
-            + "    DiscussionLesson d \n"
-            + "INNER JOIN \n"
-            + "    Account a ON d.AccountId = a.AccountId \n"
-            + "LEFT JOIN \n"
-            + "    Profile p ON d.AccountId = p.ProfileId \n"
-            + "WHERE \n"
-            + "    d.LessonId = ? \n"
-            + "ORDER BY \n"
-            + "    d.DisscussionId DESC;";
-
-    try (Connection con = new DBContext().getConnection(); 
-         PreparedStatement ps = con.prepareStatement(sql)) {
-
-        ps.setInt(1, lessonID);
-
-        try (ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                int commentId = rs.getInt(1); 
-                int userId = rs.getInt(2);
-                int lessonId = rs.getInt(3);
-               
-                String content = rs.getString(4);
-                String name = rs.getString(5);
-                String avatar = rs.getString(6);
-
-                DiscussionLesson comment = new DiscussionLesson(commentId, lessonId, userId, content, name, avatar);
-                listComment.add(comment);
-            }
-        }
-    } catch (SQLException e) {
+    public void deleteComent(int discussionId) {
+    deleteComentReplies(discussionId); // Xóa tất cả các comment reply
+    
+    String sql = "DELETE FROM DiscussionLesson WHERE DisscussionId = ?";
+    try (Connection con = new DBContext().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+        ps.setInt(1, discussionId);
+        ps.executeUpdate();
+        System.out.println("Xóa dữ liệu của comment cha thành công");
+    } catch (Exception e) {
         e.printStackTrace();
     }
-
-    return listComment;
 }
 
+    
+       public void deleteComentReplies(int commentId) {
+        //xóa tất cả các reply liên quan
+        String sql = "	DELETE FROM DiscussionLesson WHERE ParentCommentID = ?";
+        try (Connection con = new DBContext().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, commentId);
+            ps.executeUpdate();
+            System.out.println("Xóa dữ liệu thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    
+    public ArrayList<DiscussionLesson> getCommentsByLesson(int lessonID) {
+        ArrayList<DiscussionLesson> listComment = new ArrayList<>();
+        String sql = " SELECT \n"
+                + "    d.DisscussionId,\n"
+                + "	d.ParentCommentID,\n"
+                + "    d.LessonId,\n"
+                + "    d.AccountId,\n"
+                + "    d.Comment,\n"
+                + "    p.FullName,\n"
+                + "    p.Avatar,\n"
+                + "	d.CreatedAt\n"
+                + "	\n"
+                + "\n"
+                + "FROM \n"
+                + "    DiscussionLesson d\n"
+                + "INNER JOIN \n"
+                + "    Account a ON d.AccountId = a.AccountId\n"
+                + "LEFT JOIN \n"
+                + "    Profile p ON d.AccountId = p.ProfileId\n"
+                + "WHERE d.LessonId = ?\n"
+                + "ORDER BY \n"
+                + "    CreatedAt DESC;";
+
+        try (Connection con = new DBContext().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, lessonID);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int commentId = rs.getInt(1);
+                    Integer parentId = rs.getInt(2);
+                    int lessonId = rs.getInt(3);
+                    int accid = rs.getInt(4);
+                    String comment = rs.getString(5);
+                    String fullname = rs.getString(6);
+                    String avatar = rs.getString(7);
+                    Timestamp createAt = rs.getTimestamp(8);
+
+                    DiscussionLesson comments = new DiscussionLesson(commentId, parentId, accid, lessonId, comment, fullname, avatar, createAt);
+                    listComment.add(comments);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listComment;
+    }
+
+
+ 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         DisscussionDAO dao = new DisscussionDAO();
-        System.out.println(dao.getCommentsFromDatabase(2));
+         DiscussionLesson comment = new DiscussionLesson();
+        comment.setParentId(null); // Đây là comment chính, không phải reply
+        comment.setAcccountId(1); // Giả sử AccountId là 1
+        comment.setLessonId(1); // Giả sử LessonId là 101
+        comment.setComment("This is a test comment");
+        comment.setCreateAt(new Timestamp(System.currentTimeMillis())); // Thời gian hiện tại
+
+        // Tạo đối tượng DAO và chèn vào cơ sở dữ liệu
+//        dao.InsertComment(comment);
+       
+            dao.deleteComent(25);
         //    dao.deleteComment(1);
     }
 }

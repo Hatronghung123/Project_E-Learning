@@ -379,9 +379,12 @@ create table ScoreQuiz(
 
 create table DiscussionLesson(
 	DisscussionId int primary key identity(1,1),
+	ParentCommentID int, -- null nếu là comment chính, có id là comment của reply
+	CreatedAt DATETIME DEFAULT GETDATE(), -- Sử dụng kiểu DATETIME và thiết lập giá trị mặc định là thời gian hiện tại
+	Comment nvarchar(2000),
 	AccountId int foreign key references Account(AccountId),
 	LessonId int foreign key references Lesson(LessonId),
-	Comment text,
+	FOREIGN KEY (ParentCommentID) REFERENCES DiscussionLesson(DisscussionId)
 );
 
 create table Message(
@@ -391,6 +394,13 @@ create table Message(
 	MessageText text,
 	MessageTime datetime,
 );
+
+
+
+
+
+
+
 
 create table Certificate(
 	CertificateId int primary key identity(1,1),

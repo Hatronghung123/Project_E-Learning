@@ -186,7 +186,7 @@ public class CourseDetailDAO {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         CourseDetailDAO dao = new CourseDetailDAO();
-        System.out.println(dao.getRelateCourse(2));
+        System.out.println(dao.getEnrollmentByAccountId(5));
     }
 
 }

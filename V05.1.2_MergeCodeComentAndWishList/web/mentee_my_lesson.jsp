@@ -63,7 +63,277 @@
     <link href="css/style.css" rel="stylesheet">
     <!-- Vendor CSS -->
 
+    <style>
 
+
+        .comments {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .comments h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .comment-input {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .comment-input img.avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .comment-input textarea {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .comment-input button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #2bc5d4;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .comment-input button:hover {
+            background-color: #36f1ff;
+        }
+
+        .comment-list {
+            margin-top: 20px;
+        }
+
+        .comment {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .comment img.avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .comment-content {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+            flex-grow: 1;
+        }
+
+        .comment-content p {
+            margin: 5px 0;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 10px;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .comment-actions span {
+            cursor: pointer;
+        }
+
+        .comment-actions span:hover {
+            text-decoration: underline;
+        }
+
+        .timestamp {
+            font-size: 0.8em;
+            color: #888;
+        }
+
+        .comment-menu {
+            position: absolute;
+            right: 0;
+            top: 10px;
+        }
+
+        .comment-menu-button {
+            cursor: pointer;
+            font-size: 1.5em;
+            padding: 5px;
+        }
+
+        .comment-menu-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .comment-dropdown {
+            padding: 5px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .comment-menu-button:hover+.comment-menu-content,
+        .comment-menu-content:hover {
+            display: block;
+        }
+
+
+        .comment-content {
+            flex-grow: 1; /* Cho phép nội dung bình luận chiếm không gian còn lại */
+        }
+
+        .comment-actions {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin-top: 5px;
+        }
+
+        .reply-btn, .submit-reply-btn, .delete-btn {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 5px 10px;
+            margin-right: 5px;
+        }
+
+        .reply-textarea {
+            display: none; /* Ẩn ban đầu */
+            width: 100%;
+            padding: 5px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .replies {
+            margin-left: 50px; /* Thụt lề các reply để phân cấp */
+            padding-left: 10px;
+            border-left: 2px solid #ddd; /* Đường kẻ dọc để phân biệt các reply */
+        }
+
+        .replies .comment-content {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .replies img.avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .module-content a {
+            text-align: left;
+            display: block;
+            color: black;
+        }
+
+        .comment {
+            position: relative;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            margin-bottom: 1px;
+        }
+
+        .comment .comment-content {
+            margin-left: 50px;
+        }
+
+        .comment-actions {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin-top: 5px;
+        }
+
+        .reply-btn, .submit-reply-btn, .delete-btn {
+            background-color: #2bc5d4;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 5px 10px;
+            margin-right: 5px;
+
+        }
+        .reply-form{
+            margin-bottom: 30px;
+        }
+
+        .reply-textarea {
+            display: none;
+            width: 100%;
+            padding: 5px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .reply-textarea {
+            display: none; /* Ẩn ban đầu */
+        }
+
+
+        .replies {
+            margin-left: 50px; /* Giữ nguyên thụt lề bên trái */
+            padding-left: 20px;
+
+            border-left: 2px solid #ddd; /* Đường kẻ dọc để phân biệt các reply */
+        }
+
+
+        .replies img.avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+
+        }
+
+
+        .comment-content {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+            flex-grow: 1;
+            display: flex; /* Sử dụng flexbox */
+            flex-direction: column; /* Hiển thị các phần tử con theo chiều dọc */
+        }
+
+        .comment-content p {
+            margin: 5px 0;
+        }
+
+
+
+
+    </style>
 
 
 </head>
@@ -102,35 +372,155 @@
 
                         <div class="comments">
                             <h2>Comments</h2>
-                            <form action="lesson" method="post">
+                            <!-- Thêm comment mới -->
+                            <form action="lesson?status=insert" method="post">
                                 <div class="comment-input">
                                     <img src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png" alt="User Avatar" class="avatar">
-                                    <textarea  name="content" rows="1" placeholder="Add a comment..."></textarea>
-                                    <input type="hidden" name="status" value="0">
+                                    <textarea required="" name="content" rows="1" placeholder="Add a comment..."></textarea>
                                     <input type="hidden" name="cid" value="${lesson.getCourseid()}">
                                     <input type="hidden" name="lessonid" value="${lesson.getLessonid()}">
-
-                                    <button type="submit" >Submit</button>
+                                    <input type="hidden" name="parentCommentID" value="">
+                                    <button type="submit">Submit</button>
                                 </div>
                             </form>
 
 
+
+
+
+                            <!-- Hiển thị comment và reply -->
                             <div class="comment-list">
-                                <c:forEach var="o" items="${comment}"> 
+                                <c:forEach var="o" items="${mainComments}"> 
                                     <c:if test="${o.getLessonId() == lesson.getLessonid()}">
                                         <div class="comment">
                                             <img src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png" alt="User1 Avatar" class="avatar">    
                                             <div class="comment-content">
-                                                <p><strong>${o.getName()}</strong></p>
-                                                <p>${o.getComment()}</p>
+                                                <p><strong>${o.getName()}</strong>  <span class="timestamp">${o.getTimeAgo()}</span></p>
+                                                <p>${o.getComment()}</p> 
+
+
+
+
                                             </div> 
+                                            <!-- Nút xóa comment -->
+                                            <c:if test="${sessionScope.account.getAccount_id() == o.getAcccountId()}">
+                                                <form action="lesson?status=delete" method="post" class="delete-form">
+                                                    <input type="hidden" name="cid" value="${lesson.getCourseid()}">
+                                                    <input type="hidden" name="lessonid" value="${lesson.getLessonid()}">
+                                                    <input type="hidden" name="disscussID" value="${o.getDisscussionID()}">
+                                                    <input type="hidden" name="parent" value="null">
+                                                    <button type="submit">Delete</button>
+                                                </form>
+                                            </c:if>
 
                                         </div>
+
+                                        <div class="comment-list replies">
+                                            <!-- Hiển thị các reply -->
+                                            <c:forEach var="reply" items="${repliesMap[o.getDisscussionID()]}">
+                                                <div class="comment replies">
+                                                    <img src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png" alt="User Avatar" class="avatar">
+                                                    <div class="comment-content">
+                                                        <p><strong>${reply.getName()}</strong><span class="timestamp">${reply.getTimeAgo()}</span></p>
+                                                        <p>${reply.getComment()}</p>
+
+
+                                                    </div>          
+                                                    <!--    Nút xóa reply 
+                                                    -->  
+                                                    <c:if test="${sessionScope.account.getAccount_id() == reply.getAcccountId()}">
+                                                        <form action="lesson?status=delete" method="post" class="delete-form">
+                                                            <input type="hidden" name="cid" value="${lesson.getCourseid()}">
+                                                            <input type="hidden" name="lessonid" value="${lesson.getLessonid()}">
+                                                            <input type="hidden" name="disscussID" value="${reply.getDisscussionID()}">
+                                                            <input type="hidden" name="parent" value="${reply.getParentId()}">
+                                                            <button type="submit">Delete</button>
+                                                        </form>
+                                                    </c:if>
+                                                </div>
+                                            </c:forEach>
+                                        </div> 
+
+
+                                        <!-- Form để thêm reply -->
+                                        <form action="lesson?status=insert" method="post" class="reply-form">
+                                            <input type="hidden" name="lessonid" value="${lesson.getLessonid()}">
+                                            <input type="hidden" name="parent" value="${o.getDisscussionID()}">
+                                            <!--Chuyển lai trang có cid hiện tại-->
+                                            <input type="hidden" name="cid" value="${lesson.getCourseid()}">
+
+                                            <!-- Thêm class `reply-textarea` vào textarea để dễ dàng chọn từ JavaScript -->
+                                            <textarea required="" name="content" rows="1" placeholder="Reply to this comment..." class="reply-textarea" style="display: none;"></textarea>
+                                            <button type="button" class="reply-btn">Reply</button>
+                                            <button type="submit" style="display: none;">Submit Reply</button>
+                                            <button type="button" onclick="cancelReply(this)">Cancel</button>
+                                        </form>
+
+
+
                                     </c:if>
-                                </c:forEach> 
+                                </c:forEach>
                             </div>
 
                         </div>
+
+
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
+                                var replyButtons = document.querySelectorAll('.reply-btn');
+
+                                replyButtons.forEach(function (button) {
+                                    button.addEventListener('click', function () {
+                                        // Tìm ô textarea trong form reply hiện tại và hiển thị nó
+                                        var textarea = this.parentNode.querySelector('.reply-textarea');
+                                        textarea.style.display = 'block';
+                                        // Ẩn nút "Reply" và hiển thị nút "Submit Reply"
+                                        this.style.display = 'none';
+                                        this.parentNode.querySelector('button[type="submit"]').style.display = 'inline-block';
+                                    });
+                                });
+                            });
+
+                            document.addEventListener("DOMContentLoaded", function () {
+                                var replyButtons = document.querySelectorAll('.reply-btn');
+
+                                replyButtons.forEach(function (button) {
+                                    button.addEventListener('click', function () {
+                                        var form = this.parentNode;
+                                        var textarea = form.querySelector('.reply-textarea');
+                                        var submitButton = form.querySelector('.submit-reply-btn');
+                                        var cancelButton = form.querySelector('.cancel-btn');
+
+                                        // Hiển thị textarea và các nút liên quan
+                                        textarea.style.display = 'block';
+                                        submitButton.style.display = 'inline-block';
+                                        cancelButton.style.display = 'inline-block';
+                                        // Ẩn nút "Reply"
+                                        this.style.display = 'none';
+                                    });
+                                });
+                            });
+
+                            function cancelReply(button) {
+                                var form = button.parentNode;
+                                var textarea = form.querySelector('.reply-textarea');
+                                var replyButton = form.querySelector('.reply-btn');
+                                var submitButton = form.querySelector('.submit-reply-btn');
+
+                                // Ẩn textarea và các nút liên quan
+                                textarea.style.display = 'none';
+                                submitButton.style.display = 'none';
+                                button.style.display = 'none';
+                                // Hiển thị nút "Reply"
+                                replyButton.style.display = 'inline-block';
+                            }
+
+
+
+
+
+                        </script>
 
 
                         <!-- Lessons -->

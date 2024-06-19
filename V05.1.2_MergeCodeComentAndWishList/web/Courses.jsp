@@ -118,7 +118,7 @@
                                         </c:choose>
                                     </div>
                                 </div>
-
+                                        <!--ADD to wishlist-->
                                 <div class="wishlist"> 
 
                                     <div class="bi bi-suit-heart"></div>
@@ -157,11 +157,12 @@
                                          " class="img-fluid"  src="${o.getImage()}"  alt="">
                                     <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
                                         <a href="CourseDetail?cid=${o.getCourse_id()}" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end" style="border-radius: 30px 0 0 30px;">Read More</a>
-                                        <c:choose>
+                                       <c:choose>
 
                                             <c:when test="${sessionScope.account == null}">
                                                 <!--nguoi dung chua dang nhap-->
-                                                <a href="join?action=login" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a>
+                                                <a href="join?action=login" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+
                                             </c:when>
 
                                             <c:otherwise><!--Nguoi dung da dang nhap-->
@@ -176,10 +177,10 @@
                                                 </c:if>
                                                 <c:choose>
                                                     <c:when test="${isPaid == true}">
-                                                        <a href="lesson?cid=${o.getCourse_id()}&lessonid=1" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a>
+                                                        <a href="lesson?cid=${o.getCourse_id()}&lessonid=1" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan"" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a>
+                                                        <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
                                                     </c:otherwise>
 
                                                 </c:choose> 
@@ -187,6 +188,7 @@
                                             </c:otherwise>
 
                                         </c:choose>
+
 
                                     </div>
                                 </div>

@@ -19,7 +19,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -67,18 +71,24 @@ public class lessonServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
         LessonDAO dao = new LessonDAO();
         DisscussionDAO discussDao = new DisscussionDAO();
         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("account");
+
+        
         String courseid_str = request.getParameter("cid");
         String lessonid_str = request.getParameter("lessonid");
+
         int course_id = 0;
         int lesson_id = 0;
+
         if (courseid_str != null && lessonid_str != null) {
             course_id = Integer.parseInt(courseid_str);
             lesson_id = Integer.parseInt(lessonid_str);
         }
+
         // Kiểm tra nếu session không có thuộc tính 'user' thì chuyển hướng về trang đăng nhập
         if (acc == null) {
             response.sendRedirect("join?action=login");
@@ -86,6 +96,8 @@ public class lessonServlet extends HttpServlet {
         } else {
 
             try {
+
+                //Kiểm tra người dùng nếu chưa mua khóa học mà truy cập đường link thì chuyển về home
                 ArrayList<Enrollment> listEnrollment = dao.getEnrollmentByAccountId(acc.getAccount_id());
                 if (!isPaid(course_id, listEnrollment)) {
                     response.sendRedirect("home");
@@ -96,10 +108,45 @@ public class lessonServlet extends HttpServlet {
                 Lesson lesson = dao.getlessonByCid(course_id, lesson_id);
                 ArrayList<Lesson> lessonList = dao.getListModulByCidd(course_id);
 
-                
-                ArrayList<DiscussionLesson> listComment = discussDao.getCommentsFromDatabase(lesson_id);
-                request.setAttribute("comment", listComment);
+//                List all comment 
+                ArrayList<DiscussionLesson> allComments = discussDao.getCommentsByLesson(lesson_id);
+//                    // Phân tách comments chính và các replies
+                ArrayList<DiscussionLesson> mainComments = new ArrayList<>();
+                Map<Integer, List<DiscussionLesson>> repliesMap = new HashMap<>();
 
+                for (DiscussionLesson comment : allComments) {
+                    if (comment.getParentId() == null || comment.getParentId() == 0) {
+                        mainComments.add(comment);
+                    } else {
+                        int parentId = comment.getParentId();
+                        if (!repliesMap.containsKey(parentId)) {
+                            repliesMap.put(parentId, new ArrayList<>());
+                        }
+                        repliesMap.get(parentId).add(comment);
+                    }
+                }
+//
+//                // Debug: Print out the contents of repliesMap
+//                if (repliesMap.isEmpty()) {
+//                    out.print("repliesMap is empty.");
+//                } else {
+//                    out.print("repliesMap has data:");
+//                    for (Map.Entry<Integer, List<DiscussionLesson>> entry : repliesMap.entrySet()) {
+//                        Integer parentId = entry.getKey();
+//                        List<DiscussionLesson> replies = entry.getValue();
+//                        out.print("Parent ID: " + parentId + ", Number of replies: " + replies.size());
+//
+//                        for (DiscussionLesson reply : replies) {
+//                            out.print("Reply ID: " + reply.getDisscussionID()+ ", Content: " + reply.getComment());
+//                        }
+//                    }
+//                }
+
+                // Đặt các thuộc tính cho JSP
+                request.setAttribute("mainComments", mainComments);
+                request.setAttribute("repliesMap", repliesMap);
+
+//                out.print(parentCommentid);
                 request.setAttribute("lesson", lesson);
                 request.setAttribute("moduleList", moduleList);
                 request.setAttribute("lessonList", lessonList);
@@ -124,21 +171,66 @@ public class lessonServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            insertComent(request, response);
-            
        
+        String status = (request.getParameter("status") == null) ? "" : request.getParameter("status");
+        
+        switch (status) {
+            case "insert":
+                 insertComent(request, response);
+                break;
+            case "delete":
+                deleteComent(request, response);
+                break;
+            default:
+                throw new AssertionError();
+        }
+        
     }
 
-    protected void insertComent(HttpServletRequest request, HttpServletResponse response)
+    public void deleteComent(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        String parentCommentId = request.getParameter("parent");
+        String disscusionId = request.getParameter("disscussID");
+        String cid = request.getParameter("cid");
+        String lessonid= request.getParameter("lessonid");
+        
+//        out.print(parentCommentId);
+        DisscussionDAO dao = new DisscussionDAO();
+        if(parentCommentId.equals("null")) {
+            //delete comment cha và delete tất comment reply
+            
+            dao.deleteComent(Integer.parseInt(disscusionId));
+           
+            response.sendRedirect("lesson?cid=" + cid + "&lessonid=" + lessonid);
+        } else {
+            //delete 1 comment repy
+            dao.deleteMainComment(Integer.parseInt(disscusionId));
+            response.sendRedirect("lesson?cid=" + cid + "&lessonid=" + lessonid);
+        }
+        
+        
+    }
+
+    public void insertComent(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
+        String parentComentId_str = request.getParameter("parent");
+
+        Integer parentCommentId = null;
+        if (parentComentId_str != null && !parentComentId_str.isEmpty() && !"null".equals(parentComentId_str)) {
+            parentCommentId = Integer.parseInt(parentComentId_str);
+        }
+
         String comment = request.getParameter("content");
         String cid = request.getParameter("cid");
         Account acc = (Account) session.getAttribute("account");
         String lession_id = request.getParameter("lessonid");
+
         DisscussionDAO dao = new DisscussionDAO();
-        dao.InsertComment(acc.getAccount_id(), Integer.parseInt(lession_id), comment);
-        response.sendRedirect("lesson?cid="+cid+"&lessonid="+lession_id);
+        DiscussionLesson discuss = new DiscussionLesson(parentCommentId, acc.getAccount_id(), Integer.parseInt(lession_id), comment, new Timestamp(System.currentTimeMillis()));
+        dao.InsertComment(discuss);
+        response.sendRedirect("lesson?cid=" + cid + "&lessonid=" + lession_id);
     }
 
     /**
