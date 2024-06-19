@@ -9,7 +9,7 @@ import Dal.WishlistDAO;
 import Model.Account;
 import Model.Course;
 import Model.EnrollmentDTO;
-import Model.Profile;
+import Model.ProfileDTO;
 import Model.WishlistDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -68,7 +68,7 @@ public class courseServlet extends HttpServlet {
         EnrollmentDAO enrollDAO = new EnrollmentDAO();
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
-        Profile my_profile = (Profile) session.getAttribute("profile");
+        ProfileDTO my_profile = (ProfileDTO) session.getAttribute("profile");
         Account my_account = (Account) session.getAttribute("account");
         
         ArrayList<EnrollmentDTO> course_list = enrollDAO.getCourseByAccId(my_account.getAccount_id());

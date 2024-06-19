@@ -6,7 +6,7 @@ package Controller;
 
 import Dal.AccountDAO;
 import Model.Account;
-import Model.Profile;
+import Model.ProfileDTO;
 import Util.SendEmail;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -290,7 +290,7 @@ public class joinServlet extends HttpServlet {
                 session.setAttribute("account", account_login);
 
                 if (account_login != null) {
-                    Profile profile = accountDAO.getProfile(account_login);
+                    ProfileDTO profile = accountDAO.getProfile(account_login);
                     session.setAttribute("profile", profile);
                 }
 
@@ -385,14 +385,14 @@ public class joinServlet extends HttpServlet {
             return;
         } else {
             Account account = new Account(email, password);
-            Profile profile_register = new Profile(fullname,0);
+            ProfileDTO profile_register = new ProfileDTO(fullname,0);
             // nếu chưa thì inser vào trong db, chuyển dến trang home
             accountDAO.insertUser(account, profile_register);
             Account account_login = accountDAO.getAccountByEmailPass(email, password);
             session.setAttribute("account", account_login);
 
             if (account_login != null) {
-                Profile profile = accountDAO.getProfile(account_login);
+                ProfileDTO profile = accountDAO.getProfile(account_login);
                 session.setAttribute("profile", profile);
             }
 

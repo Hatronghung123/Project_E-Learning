@@ -106,6 +106,7 @@
     <body>
         <jsp:include page="common/menu.jsp"></jsp:include>
 
+
             <div class="container-fluid">
                 <div class="container py-5">
                     <div class="row">
@@ -125,7 +126,7 @@
                                                                     <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-connections">Connections</a>-->
                                     <!--                                <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-notifications">Notifications</a>-->
                                     <a class="list-group-item list-group-item-action active" data-toggle="list" href="#Courses">Courses </a>
-                                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#Mentors">Mentors</a>
+                                    <a class="list-group-item list-group-item-action" href="mentor-manage">Mentors</a>
                                 </div>
                             </div>
 
@@ -138,26 +139,25 @@
 
                                     <div class="tab-pane fade show" id="Courses">
                                         <div class="card-body pb-2">
-                                            <c:forEach items="${course_list}" var="c">
+                                            <c:forEach items="${list_managed_couse}" var="c">
                                                 <div class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
                                                     <div class="col-lg-2">
                                                         <img src="${c.image}"
                                                              width="100px" height="100px" alt="alt"/>
                                                     </div>
                                                     <div class="col-lg-8">
-                                                        <label class="form-label" style="color: black; font-size: 15px">Course | ${c.create_by}</label><br>                                                        
-                                                        <label class="form-label" style="color: #06BBCC; font-size: 27px ">${c.course_name}</label><br>
-                                                        <div>
-                                                            <progress style="
-                                                                      width: 80%;
-                                                                      height: 15px;
-                                                                      " max="100" value="${c.progress}"></progress>&nbsp;&nbsp;
-                                                            <label style="color: black; font-size: 15px;">${c.progress}%</label>
-                                                        </div>
-                                                        <label class="form-label" style="color: #666666; font-size: 13px">Overall Progress</label><br>   
+                                                        <label class="form-label" style="color: black; font-size: 15px">Mentor: ${c.mentor_name}</label><br>                                                        
+                                                        <label class="form-label" style="color: #06BBCC; font-size: 25px ">${c.course_name}</label><br>
+                                                        <label class="form-label" style="color: #000; font-size: 15px ">Category: ${c.course_category_id}</label><br>
+                                                        <label class="form-label" style="color: #000; font-size: 15px ">Create On: ${c.create_date}</label><br>
+                                                        <label class="form-label" style="color: #000; font-size: 15px ">Status: ${c.status?'Active':'Unactive'}</label><br>
+                                                        <label class="form-label" style="color: #000; font-size: 15px ">Number of enrollment: ${c.number_enrollment}</label><br>
                                                     </div>
-                                                    <div class="col-lg-2">
-                                                        <a href="CourseDetail?cid=${c.course_id}" class="btn btn-outline-primary">Go to Course</a>
+                                                    <div class="col-lg-1">
+                                                        <a href="course-manage?cid=${c.course_id}&action=delete" class="btn btn-outline-danger">Delete</a>
+                                                    </div>
+                                                    <div class="col-lg-1">
+                                                        <a href="course-manage?cid=${c.course_id}&action=edit" class="btn btn-outline-primary">Edit</a>
                                                     </div>
                                                 </div>
                                             </c:forEach>
@@ -175,30 +175,30 @@
 
 
                                     <div class="tab-pane fade show" id="Mentors">
-                                        <div class="card-body pb-2">
-                                            <c:forEach items="${wish_list}" var="w">
-                                                <div class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
-                                                    <div class="col-lg-2">
-                                                        <img src="${w.image}"
-                                                             width="100px" height="100px" alt="alt"/>
-                                                    </div>
-                                                    <div class="col-lg-8">
-                                                        <label class="form-label" style="color: black; font-size: 15px">Course | ${w.create_by}</label>&nbsp;&nbsp;
-                                                        <label class="form-label" style="color: black; font-size: 15px ">${w.star} Star</label><br>
-                                                        <br>                                                        
-                                                        <label class="form-label" style="color: #06BBCC; font-size: 27px ">${w.course_name}</label><br>
-                                                        <label class="form-label" style="color: #06BBCC; font-size: 17px; text-decoration: line-through">${w.price} vnd</label><br>
-                                                        <label class="form-label" style="color: #06BBCC; font-size: 15px ">${w.price - (w.price * w.discount)/100} vnd</label>
-                                                    </div>
-                                                    <div class="col-lg-2">
-                                                        <a href="CourseDetail?cid=${w.course_id}" class="btn btn-outline-primary">Go to Course</a>
-                                                    </div>
+                                        <!--                                        <div class="card-body pb-2">
+                                        <c:forEach items="${wish_list}" var="w">
+                                            <div class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
+                                                <div class="col-lg-2">
+                                                    <img src="${w.image}"
+                                                         width="100px" height="100px" alt="alt"/>
                                                 </div>
-                                            </c:forEach>
-                                            <br>
-                                            <hr class="border-light m-0">
+                                                <div class="col-lg-8">
+                                                    <label class="form-label" style="color: black; font-size: 15px">Course | ${w.create_by}</label>&nbsp;&nbsp;
+                                                    <label class="form-label" style="color: black; font-size: 15px ">${w.star} Star</label><br>
+                                                    <br>                                                        
+                                                    <label class="form-label" style="color: #06BBCC; font-size: 27px ">${w.course_name}</label><br>
+                                                    <label class="form-label" style="color: #06BBCC; font-size: 17px; text-decoration: line-through">${w.price} vnd</label><br>
+                                                    <label class="form-label" style="color: #06BBCC; font-size: 15px ">${w.price - (w.price * w.discount)/100} vnd</label>
+                                                </div>
+                                                <div class="col-lg-2">
+                                                    <a href="CourseDetail?cid=${w.course_id}" class="btn btn-outline-primary">Go to Course</a>
+                                                </div>
+                                            </div>
+                                        </c:forEach>
+                                        <br>
+                                        <hr class="border-light m-0">
 
-                                        </div>
+                                    </div>-->
                                     </div>
 
                                 </div>
