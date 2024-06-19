@@ -36,6 +36,14 @@
         <servlet-name>abc</servlet-name>
         <servlet-class>Controller.User.abc</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CreateQuizServlet</servlet-name>
+        <servlet-class>Controller.CreateQuizServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateQuestionsServlet</servlet-name>
+        <servlet-class>Controller.CreateQuestionsServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginGoogleHandler</servlet-name>
         <url-pattern>/google</url-pattern>
@@ -71,6 +79,14 @@
     <servlet-mapping>
         <servlet-name>abc</servlet-name>
         <url-pattern>/user/abc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateQuizServlet</servlet-name>
+        <url-pattern>/createquiz</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateQuestionsServlet</servlet-name>
+        <url-pattern>/createquestions</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>

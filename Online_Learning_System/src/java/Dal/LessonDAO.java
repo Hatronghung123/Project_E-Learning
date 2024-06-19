@@ -8,7 +8,7 @@ import Model.Course;
 import Model.Enrollment;
 import Model.Lesson;
 import Model.Payment;
-import Model.Module;
+import Model.Modules;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -162,8 +162,8 @@ public class LessonDAO {
     }
 
     //Lấy course theo course ID
-    public ArrayList<Module> getListModulByCid(int courseId) throws SQLException {
-        ArrayList<Module> list = new ArrayList<>();
+    public ArrayList<Modules> getListModulByCid(int courseId) throws SQLException {
+        ArrayList<Modules> list = new ArrayList<>();
         String sql = "SELECT  [ModuleId]\n"
                 + "      ,[ModuleName]\n"
                 + "      ,[CourseId]\n"
@@ -179,7 +179,7 @@ public class LessonDAO {
                 int moduleid = rs.getInt(1);
                 String modulename = rs.getString(2);
                 int course_id = rs.getInt(3);
-                list.add(new Module(moduleid, modulename, courseId));
+                list.add(new Modules(moduleid, modulename, courseId));
             }
         } catch (Exception e) {
             e.printStackTrace();

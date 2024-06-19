@@ -8,15 +8,15 @@ package Model;
  *
  * @author Tuan Anh(Gia Truong)
  */
-public class Module {
+public class Modules {
     private int moduleid;
     private String modulename;
     private int courseid;
 
-    public Module() {
+    public Modules() {
     }
 
-    public Module(int moduleid, String modulename, int courseid) {
+    public Modules(int moduleid, String modulename, int courseid) {
         this.moduleid = moduleid;
         this.modulename = modulename;
         this.courseid = courseid;

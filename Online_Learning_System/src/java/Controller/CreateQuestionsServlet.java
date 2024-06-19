@@ -4,11 +4,10 @@
  */
 package Controller;
 
-import Dal.LessonDAO;
-import Model.Account;
-import Model.Course;
-import Model.Enrollment;
-import Model.Lesson;
+import Dal.QuizDAO;
+import Model.Answer;
+import Model.Questions;
+import Model.Quiz;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,16 +15,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
- * @author Tuan Anh(Gia Truong)
+ * @author hatro
  */
-public class lessonServlet extends HttpServlet {
+public class CreateQuestionsServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,10 +43,10 @@ public class lessonServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet lessonServlet</title>");
+            out.println("<title>Servlet CreateQuestionsServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet lessonServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CreateQuestionsServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -65,47 +64,11 @@ public class lessonServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        LessonDAO dao = new LessonDAO();
-        HttpSession session = request.getSession();
-        Account acc = (Account) session.getAttribute("account");
-        String courseid_str = request.getParameter("cid");
-        String lessonid_str = request.getParameter("lessonid");
-        int course_id = 0;
-        int lesson_id = 0;
-        if (courseid_str != null && lessonid_str != null) {
-            course_id = Integer.parseInt(courseid_str);
-            lesson_id = Integer.parseInt(lessonid_str);
-        }
-        // Kiểm tra nếu session không có thuộc tính 'user' thì chuyển hướng về trang đăng nhập
-        if (acc == null) {
-            response.sendRedirect("join?action=login");
-            return;
-        } else {
-           
-            
+//        HttpSession session = request.getSession();
+//        int quizId = (int) session.getAttribute("quizId");
+//        response.sendRedirect("create_quiz/cquestions?quizId=" + quizId);
 
-            try {
-                ArrayList<Enrollment> listEnrollment = dao.getEnrollmentByAccountId(acc.getAccount_id());
-               if(!isPaid(course_id, listEnrollment)) {
-                   response.sendRedirect("home");
-                   return;
-               }
-
-                ArrayList<Model.Modules> moduleList = dao.getListModulByCid(course_id);
-                Lesson lesson = dao.getlessonByCid(course_id, lesson_id);
-                ArrayList<Lesson> lessonList = dao.getListModulByCidd(course_id);
-
-                request.setAttribute("lesson", lesson);
-                request.setAttribute("moduleList", moduleList);
-                request.setAttribute("lessonList", lessonList);
-                request.setAttribute("listEnrollment", listEnrollment);
-            } catch (SQLException ex) {
-                Logger.getLogger(lessonServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        request.getRequestDispatcher("mentee_my_lesson.jsp").forward(request, response);
-
+        request.getRequestDispatcher("create_quiz/cquestions.jsp").forward(request, response);
     }
 
     /**
@@ -119,7 +82,29 @@ public class lessonServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        PrintWriter o = response.getWriter();
+        HttpSession session = request.getSession();
+        int quizId = (int) session.getAttribute("quizId");
+        String questionNumber_str = request.getParameter("questionNumber");
+        String titleQuestion = request.getParameter("titleQuestion");
+        String typeQuestion_str = request.getParameter("typeQuestion");
+        String[] choices = request.getParameterValues("answer");
+
+
+        int questionNumber = Integer.parseInt(questionNumber_str);
+        boolean typeQuestion = false;
+        typeQuestion = typeQuestion_str.equalsIgnoreCase("radioBox");
+
+        QuizDAO quizDAO = new QuizDAO();
+        Questions questions = quizDAO.insertQuestions(new Questions(questionNumber, quizId, titleQuestion, typeQuestion));
+        ArrayList<Answer> answers = new ArrayList<>();
+        for(int i = 1 ; i <= choices.length; i++){
+            boolean correctAnswer = request.getParameter("correctAnswer" + i)==null?false:true;
+            answers.add(new Answer(questions.getQuestionId(), choices[i-1], correctAnswer));
+        }
+        
+        quizDAO.insertAnswers(answers);
+        request.getRequestDispatcher("create_quiz/cquestions.jsp").forward(request, response);
     }
 
     /**
@@ -131,16 +116,5 @@ public class lessonServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-    //Kiểm tra xem người dùng đã mua khóa học này hay chưa nếu chưa thì chuyển về home
-    private boolean isPaid(int cid, ArrayList<Enrollment> enrollmentList) {
-        for (Enrollment e : enrollmentList) {
-            if (cid == e.getCourseid()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
 }
