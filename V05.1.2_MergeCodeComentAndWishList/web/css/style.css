@@ -3,13 +3,7 @@
 
 /*ADD TO WISHLIST*/
 
-            .wishlist {
-                position: relative;
-                display: inline-block;
-                cursor: pointer;
-                padding-left: 10px;
-                padding-top: 10px;
-            }
+            
 
             .bi.bi-suit-heart {
                 width: 24px;
@@ -29,7 +23,7 @@
                 visibility: hidden;
                 transition: opacity 0.3s, visibility 0.3s;
                 position: absolute;
-                left: 110%;
+                left: 70%;
                 top: 50%;
                 transform: translateY(-50%);
                 background-color: #555;

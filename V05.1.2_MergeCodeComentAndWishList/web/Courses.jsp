@@ -37,7 +37,53 @@
 
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
+        <style>
+            @import url('https://fonts.googleapis.com/css?family=Dosis:400,600,700,800');
 
+
+
+            .product-slider__fav {
+                color: #888e94;
+                background: none;
+                border: none;
+                position: relative;
+                outline: none;
+                cursor: pointer;
+                transition: all .3s;
+                font-family: 'Dosis', sans-serif;
+                font-weight: 600;
+                text-transform: uppercase;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 40px;
+                text-decoration: none;
+
+            }
+
+
+            .heart {
+                margin-top :15px;
+                margin-left: -20px;
+                display: block;
+                position: absolute;
+                top: 10%;
+                left: 10%;
+                transform: translate(-50%, -50%) scale(0.7);
+                pointer-events: none;
+                width: 100px;
+                height: 100px;
+                background: url("https://res.cloudinary.com/muhammederdem/image/upload/v1536405215/starwars/heart.png") no-repeat;
+                background-position: 0 0;
+                transition: background-position 1s steps(28);
+                transition-duration: 0s;
+            }
+            .heart.is-active {
+                transition-duration: 1s;
+                background-position: -2800px 0;
+            }
+
+        </style>
 
     </head>
 
@@ -118,13 +164,21 @@
                                         </c:choose>
                                     </div>
                                 </div>
-                                        <!--ADD to wishlist-->
-                                <div class="wishlist"> 
-
-                                    <div class="bi bi-suit-heart"></div>
-                                    <a class="wishlist-text" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">ADD TO WISHLIST</a>
+                                <!--ADD to wishlist-->
+                                <c:if test="${sessionScope.account != null}">
+                                                <!--nguoi dung chua dang nhap-->
+                                                <div class ="wishlist">
+                                    <div class="product-slider">
+                                        <a class="product-slider__fav js-fav" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">
+                                            <div class="heart">
+                                                <div class ="wishlist-text">ADD TO WISHLIST </div>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
-                                <div class="text-center p-4 pb-0">
+
+                                            </c:if>
+                                <div class="text-center pb-0" style ="padding-left: 12px;padding-right: 12px;padding-bottom: 12px;padding-top: 7px;">
                                     <h3 class="mb-0">${o.getFormattedPrice()}₫</h3>
                                     <div class="mb-3">
                                         <small class="fa fa-star text-primary"></small>
@@ -232,7 +286,7 @@
                                          " class="img-fluid"  src="${o.getImage()}"  alt="">
                                     <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
                                         <a href="CourseDetail?cid=${o.getCourse_id()}" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end" style="border-radius: 30px 0 0 30px;">Read More</a>
-                                       <c:choose>
+                                        <c:choose>
 
                                             <c:when test="${sessionScope.account == null}">
                                                 <!--nguoi dung chua dang nhap-->
@@ -267,13 +321,25 @@
 
                                     </div>
                                 </div>
+                                         
 
-                                <div class="wishlist"> 
-
-                                    <div class="bi bi-suit-heart"></div>
-                                    <a class="wishlist-text" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">Add to wish list</a>
+                                            <c:if test="${sessionScope.account != null}">
+                                                <!--nguoi dung chua dang nhap-->
+                                                <div class ="wishlist">
+                                    <div class="product-slider">
+                                        <a class="product-slider__fav js-fav" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">
+                                            <div class="heart">
+                                                <div class ="wishlist-text">ADD TO WISHLIST </div>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
-                                <div class="text-center p-4 pb-0">
+
+                                            </c:if>
+
+                                            
+                                
+                                <div class="text-center pb-0" style ="padding-left: 12px;padding-right: 12px;padding-bottom: 12px; padding-top: 5px;">
                                     <h3 class="mb-0">${o.getFormattedPrice()}₫</h3>
                                     <div class="mb-3">
                                         <small class="fa fa-star text-primary"></small>
@@ -515,6 +581,34 @@
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
+        <script>      document.addEventListener('DOMContentLoaded', function () {
+                var favButtons = document.querySelectorAll(".js-fav");
+                favButtons.forEach(function (favButton) {
+                    favButton.addEventListener("click", function (event) {
+                        event.preventDefault(); // Ngăn chặn hành động mặc định của thẻ <a> (chuyển hướng)
+
+                        // Thực hiện ngầm hành động thêm vào wishlist
+                        var href = this.getAttribute("href");
+                        console.log("Adding to wishlist: " + href);
+
+                        // Thực hiện thêm vào wishlist (Ví dụ: gửi yêu cầu AJAX)
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("GET", href, true);
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                console.log("Added to wishlist");
+                            }
+                        };
+                        xhr.send();
+
+                        // Thay đổi trạng thái của icon trái tim
+                        var heartIcon = this.querySelector('.heart');
+                        if (heartIcon) {
+                            heartIcon.classList.toggle("is-active");
+                        }
+                    });
+                });
+            });</script>
     </body>
 
 
