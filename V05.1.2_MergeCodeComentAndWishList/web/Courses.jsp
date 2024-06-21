@@ -144,6 +144,81 @@
                             </div>
                         </div>
                     </c:forEach>
+                        
+                        
+                        <c:forEach var="o" items="${listCourseBySearch}">
+                        <div class="col-lg-4 col-md-6 wow fadeInUp"  data-wow-delay="0.3s" style="padding-bottom: 20px;">
+                            <div class="course-item bg-light"   >
+                                <div class="position-relative overflow-hidden">
+                                    <img style="width: 100%; /* Đảm bảo rằng ảnh sẽ rộng hết phần tử cha */
+                                         height: 260px; /* Chiều cao mong muốn */; /* Đảm bảo tỷ lệ khung hình bảo toàn */
+                                         border: 2px solid #ccc; /* Định dạng viền với độ dày và màu sắc tùy chọn */
+                                         border-radius: 10px; /* Định dạng viền cong (nếu bạn muốn) */
+                                         box-sizing: border-box;
+                                         " class="img-fluid"  src="${o.getImage()}"  alt="">
+                                    <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+                                        <a href="CourseDetail?cid=${o.getCourse_id()}" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end" style="border-radius: 30px 0 0 30px;">Read More</a>
+
+                                        <c:choose>
+
+                                            <c:when test="${sessionScope.account == null}">
+                                                <!--nguoi dung chua dang nhap-->
+                                                <a href="join?action=login" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+
+                                            </c:when>
+
+                                            <c:otherwise><!--Nguoi dung da dang nhap-->
+                                                <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
+                                                <c:set var="isPaid" value="false"/>
+                                                <c:if test="${fn:length(listEnrollment) > 0}">
+                                                    <c:forEach items="${listEnrollment}" var="i">
+                                                        <c:if test="${currentCourseId == i.getCourseid()}">                   
+                                                            <c:set var="isPaid" value="true"/>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </c:if>
+                                                <c:choose>
+                                                    <c:when test="${isPaid == true}">
+                                                        <a href="lesson?cid=${o.getCourse_id()}&lessonid=1" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                    </c:otherwise>
+
+                                                </c:choose> 
+
+                                            </c:otherwise>
+
+                                        </c:choose>
+                                    </div>
+                                </div>
+                                        <!--ADD to wishlist-->
+                                <div class="wishlist"> 
+
+                                    <div class="bi bi-suit-heart"></div>
+                                    <a class="wishlist-text" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">ADD TO WISHLIST</a>
+                                </div>
+                                <div class="text-center p-4 pb-0">
+                                    <h3 class="mb-0">${o.getFormattedPrice()}₫</h3>
+                                    <div class="mb-3">
+                                        <small class="fa fa-star text-primary"></small>
+                                        <small class="fa fa-star text-primary"></small>
+                                        <small class="fa fa-star text-primary"></small>
+                                        <small class="fa fa-star text-primary"></small>
+                                        <small class="fa fa-star text-primary"></small>
+                                        <small>(123)</small>
+                                    </div>
+                                    <h5 class="mb-4">${o.getCourse_name()}</h5>
+                                </div>
+                                <div class="d-flex border-top">
+                                    <small class="flex-fill text-center border-end py-2"><i class="fa fa-user-tie text-primary me-2"></i>${o.getInstructor()}</small>
+                                    <small class="flex-fill text-center border-end py-2"><i class="fa fa-clock text-primary me-2"></i>${o.getStudy_time()}</small>
+                                    <small class="flex-fill text-center py-2"><i class="fa fa-user text-primary me-2"></i>${o.getAmountSudentJoin()} Students</small>
+                                </div>
+                            </div>
+                        </div>
+                    </c:forEach>
+
 
                     <c:forEach var="o" items="${listAllCourse}">
                         <div class="col-lg-4 col-md-6 wow fadeInUp"  data-wow-delay="0.3s" style="padding-bottom: 20px;">
@@ -422,86 +497,8 @@
         <!-- Testimonial End -->
 
 
-        <!-- Footer Start -->
-        <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
-            <div class="container py-5">
-                <div class="row g-5">
-                    <div class="col-lg-3 col-md-6">
-                        <h4 class="text-white mb-3">Quick Link</h4>
-                        <a class="btn btn-link" href="">About Us</a>
-                        <a class="btn btn-link" href="">Contact Us</a>
-                        <a class="btn btn-link" href="">Privacy Policy</a>
-                        <a class="btn btn-link" href="">Terms & Condition</a>
-                        <a class="btn btn-link" href="">FAQs & Help</a>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <h4 class="text-white mb-3">Contact</h4>
-                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
-                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
-                        <div class="d-flex pt-2">
-                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
-                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <h4 class="text-white mb-3">Gallery</h4>
-                        <div class="row g-2 pt-2">
-                            <div class="col-4">
-                                <img class="img-fluid bg-light p-1" src="img/course-1.jpg" alt="">
-                            </div>
-                            <div class="col-4">
-                                <img class="img-fluid bg-light p-1" src="img/course-2.jpg" alt="">
-                            </div>
-                            <div class="col-4">
-                                <img class="img-fluid bg-light p-1" src="img/course-3.jpg" alt="">
-                            </div>
-                            <div class="col-4">
-                                <img class="img-fluid bg-light p-1" src="img/course-2.jpg" alt="">
-                            </div>
-                            <div class="col-4">
-                                <img class="img-fluid bg-light p-1" src="img/course-3.jpg" alt="">
-                            </div>
-                            <div class="col-4">
-                                <img class="img-fluid bg-light p-1" src="img/course-1.jpg" alt="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <h4 class="text-white mb-3">Newsletter</h4>
-                        <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
-                        <div class="position-relative mx-auto" style="max-width: 400px;">
-                            <input class="form-control border-0 w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
-                            <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="copyright">
-                    <div class="row">
-                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                            &copy; <a class="border-bottom" href="#">Your Site Name</a>, All Right Reserved.
 
-                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                            Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a><br><br>
-                            Distributed By <a class="border-bottom" href="https://themewagon.com">ThemeWagon</a>
-                        </div>
-                        <div class="col-md-6 text-center text-md-end">
-                            <div class="footer-menu">
-                                <a href="">Home</a>
-                                <a href="">Cookies</a>
-                                <a href="">Help</a>
-                                <a href="">FQAs</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Footer End -->
+        <jsp:include page="common/footer.jsp"></jsp:include>
 
 
         <!-- Back to Top -->

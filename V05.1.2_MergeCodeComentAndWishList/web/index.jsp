@@ -41,6 +41,10 @@
             .ms-auto-1{
                 margin-left: 10px !important;
             }
+
+
+
+
         </style>    
     </head>
     <body>
@@ -113,7 +117,14 @@
                             <div class="p-4">
                                 <i class="fa fa-3x fa-graduation-cap text-primary mb-4"></i>
                                 <h5 class="mb-3">Skilled Instructors</h5>
-                                <p>Diam elitr kasd sed at elitr sed ipsum justo dolor sed clita amet diam</p>
+                                <p>Advanced skill
+
+                                    1. Extensive Professional Knowledge
+
+                                    2.Practical Applicability</p>
+                                <!--                                <p>   1.Kiến Thức Sâu Rộng về Chuyên Môn:</p>
+                                                                <p>   2.Khả Năng Áp Dụng Thực Tiễn:</p>-->
+
                             </div>
                         </div>
                     </div>
@@ -163,9 +174,10 @@
                     </div>
                     <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
                         <h6 class="section-title bg-white text-start text-primary pe-3">About Us</h6>
-                        <h1 class="mb-4">Welcome to eLEARNING</h1>
-                        <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
-                        <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet</p>
+                        <h1 class="mb-4">Welcome to OLS</h1>
+                        <p class="mb-4">With the desire to bring quality, free knowledge to everyone, We - OLS created this website to provide flexible, affordable, and job-appropriate online learning programs for students. individuals and organizations worldwide. 
+                        </p>
+                        <p class="mb-4">We offer a variety of learning opportunities—from hands-on projects and courses to job-ready certificates and degree programs.</p>
                         <div class="row gy-2 gx-4 mb-4">
                             <div class="col-sm-6">
                                 <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Skilled Instructors</p>
@@ -176,17 +188,17 @@
                             <div class="col-sm-6">
                                 <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>International Certificate</p>
                             </div>
-                            <div class="col-sm-6">
-                                <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Skilled Instructors</p>
-                            </div>
-                            <div class="col-sm-6">
-                                <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Online Classes</p>
-                            </div>
-                            <div class="col-sm-6">
-                                <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>International Certificate</p>
-                            </div>
+                            <!--                            <div class="col-sm-6">
+                                                            <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Skilled Instructors</p>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Online Classes</p>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>International Certificate</p>
+                                                        </div>-->
                         </div>
-                        <a class="btn btn-primary py-3 px-5 mt-2" href="">Read More</a>
+                        <a class="btn btn-primary py-3 px-5 mt-2" href="about.jsp">Read More</a>
                     </div>
                 </div>
             </div>
@@ -305,7 +317,7 @@
 
                                     </div>
                                 </div>
-                                         <!--ADD TO WISHLIST-->
+                                <!--ADD TO WISHLIST-->
                                 <div class="wishlist"> 
 
                                     <div class="bi bi-suit-heart"></div>
@@ -338,136 +350,136 @@
         <!-- Courses End -->
 
 
-        <!-- Team Start -->
-        <div class="container-xxl py-5">
-            <div class="container">
-                <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                    <h6 class="section-title bg-white text-center text-primary px-3">Instructors</h6>
-                    <h1 class="mb-5">Expert Instructors</h1>
-                </div>
-                <div class="row g-4">
-                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="team-item bg-light">
-                            <div class="overflow-hidden">
-                                <img class="img-fluid" src="img/team-1.jpg" alt="">
-                            </div>
-                            <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                                <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                    <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
+        <!--         Team Start 
+                <div class="container-xxl py-5">
+                    <div class="container">
+                        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                            <h6 class="section-title bg-white text-center text-primary px-3">Instructors</h6>
+                            <h1 class="mb-5">Expert Instructors</h1>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                <div class="team-item bg-light">
+                                    <div class="overflow-hidden">
+                                        <img class="img-fluid" src="img/team-1.jpg" alt="">
+                                    </div>
+                                    <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
+                                        <div class="bg-light d-flex justify-content-center pt-2 px-1">
+                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
+                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
+                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="text-center p-4">
+                                        <h5 class="mb-0">Instructor Name</h5>
+                                        <small>Designation</small>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="text-center p-4">
-                                <h5 class="mb-0">Instructor Name</h5>
-                                <small>Designation</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="team-item bg-light">
-                            <div class="overflow-hidden">
-                                <img class="img-fluid" src="img/team-2.jpg" alt="">
-                            </div>
-                            <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                                <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                    <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
+                            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                                <div class="team-item bg-light">
+                                    <div class="overflow-hidden">
+                                        <img class="img-fluid" src="img/team-2.jpg" alt="">
+                                    </div>
+                                    <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
+                                        <div class="bg-light d-flex justify-content-center pt-2 px-1">
+                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
+                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
+                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="text-center p-4">
+                                        <h5 class="mb-0">Instructor Name</h5>
+                                        <small>Designation</small>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="text-center p-4">
-                                <h5 class="mb-0">Instructor Name</h5>
-                                <small>Designation</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                        <div class="team-item bg-light">
-                            <div class="overflow-hidden">
-                                <img class="img-fluid" src="img/team-3.jpg" alt="">
-                            </div>
-                            <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                                <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                    <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
+                            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+                                <div class="team-item bg-light">
+                                    <div class="overflow-hidden">
+                                        <img class="img-fluid" src="img/team-3.jpg" alt="">
+                                    </div>
+                                    <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
+                                        <div class="bg-light d-flex justify-content-center pt-2 px-1">
+                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
+                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
+                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="text-center p-4">
+                                        <h5 class="mb-0">Instructor Name</h5>
+                                        <small>Designation</small>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="text-center p-4">
-                                <h5 class="mb-0">Instructor Name</h5>
-                                <small>Designation</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
-                        <div class="team-item bg-light">
-                            <div class="overflow-hidden">
-                                <img class="img-fluid" src="img/team-4.jpg" alt="">
-                            </div>
-                            <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                                <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                    <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
+                            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
+                                <div class="team-item bg-light">
+                                    <div class="overflow-hidden">
+                                        <img class="img-fluid" src="img/team-4.jpg" alt="">
+                                    </div>
+                                    <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
+                                        <div class="bg-light d-flex justify-content-center pt-2 px-1">
+                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
+                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
+                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="text-center p-4">
+                                        <h5 class="mb-0">Instructor Name</h5>
+                                        <small>Designation</small>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="text-center p-4">
-                                <h5 class="mb-0">Instructor Name</h5>
-                                <small>Designation</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Team End -->
-
-
-        <!-- Testimonial Start -->
-        <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
-            <div class="container">
-                <div class="text-center">
-                    <h6 class="section-title bg-white text-center text-primary px-3">Testimonial</h6>
-                    <h1 class="mb-5">Our Students Say!</h1>
-                </div>
-                <div class="owl-carousel testimonial-carousel position-relative">
-                    <div class="testimonial-item text-center">
-                        <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-1.jpg" style="width: 80px; height: 80px;">
-                        <h5 class="mb-0">Client Name</h5>
-                        <p>Profession</p>
-                        <div class="testimonial-text bg-light text-center p-4">
-                            <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-item text-center">
-                        <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-2.jpg" style="width: 80px; height: 80px;">
-                        <h5 class="mb-0">Client Name</h5>
-                        <p>Profession</p>
-                        <div class="testimonial-text bg-light text-center p-4">
-                            <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-item text-center">
-                        <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-3.jpg" style="width: 80px; height: 80px;">
-                        <h5 class="mb-0">Client Name</h5>
-                        <p>Profession</p>
-                        <div class="testimonial-text bg-light text-center p-4">
-                            <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-item text-center">
-                        <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-4.jpg" style="width: 80px; height: 80px;">
-                        <h5 class="mb-0">Client Name</h5>
-                        <p>Profession</p>
-                        <div class="testimonial-text bg-light text-center p-4">
-                            <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <!-- Testimonial End -->
+                 Team End 
+        
+        
+                 Testimonial Start 
+                <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="container">
+                        <div class="text-center">
+                            <h6 class="section-title bg-white text-center text-primary px-3">Testimonial</h6>
+                            <h1 class="mb-5">Our Students Say!</h1>
+                        </div>
+                        <div class="owl-carousel testimonial-carousel position-relative">
+                            <div class="testimonial-item text-center">
+                                <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-1.jpg" style="width: 80px; height: 80px;">
+                                <h5 class="mb-0">Client Name</h5>
+                                <p>Profession</p>
+                                <div class="testimonial-text bg-light text-center p-4">
+                                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
+                                </div>
+                            </div>
+                            <div class="testimonial-item text-center">
+                                <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-2.jpg" style="width: 80px; height: 80px;">
+                                <h5 class="mb-0">Client Name</h5>
+                                <p>Profession</p>
+                                <div class="testimonial-text bg-light text-center p-4">
+                                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
+                                </div>
+                            </div>
+                            <div class="testimonial-item text-center">
+                                <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-3.jpg" style="width: 80px; height: 80px;">
+                                <h5 class="mb-0">Client Name</h5>
+                                <p>Profession</p>
+                                <div class="testimonial-text bg-light text-center p-4">
+                                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
+                                </div>
+                            </div>
+                            <div class="testimonial-item text-center">
+                                <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-4.jpg" style="width: 80px; height: 80px;">
+                                <h5 class="mb-0">Client Name</h5>
+                                <p>Profession</p>
+                                <div class="testimonial-text bg-light text-center p-4">
+                                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 Testimonial End -->
 
 
         <jsp:include page="common/footer.jsp"></jsp:include>

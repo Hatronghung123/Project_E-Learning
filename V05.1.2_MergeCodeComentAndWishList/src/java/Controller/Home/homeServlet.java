@@ -11,7 +11,7 @@ import Model.Account;
 import Model.Category;
 import Model.Course;
 import Model.Enrollment;
-import Model.Profile;
+import Model.ProfileDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -73,6 +73,7 @@ public class homeServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("account");
+        String action = request.getParameter("action");
         PrintWriter out = response.getWriter();
 
         try {
@@ -91,7 +92,7 @@ public class homeServlet extends HttpServlet {
                 course.setFormattedPrice(formartPrice(course.getPrice()));
             }
             
-            
+            request.setAttribute("action", action);
             request.setAttribute("listPopulerCourse", listPopulerCourse);
             request.setAttribute("listNewCourse", listNewCourse);
             request.setAttribute("listCategory", listCategory);
@@ -163,7 +164,7 @@ public class homeServlet extends HttpServlet {
             HttpSession session = request.getSession();
             Account account_login = accountDAO.getAccountByEmailPass(email, password);
             if (account_login != null) {
-                Profile profile = accountDAO.getProfile(account_login);
+                ProfileDTO profile = accountDAO.getProfile(account_login);
                 session.setAttribute("profile", profile);
             }
 

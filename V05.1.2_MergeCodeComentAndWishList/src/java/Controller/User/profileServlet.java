@@ -6,7 +6,8 @@ package Controller.User;
 
 import Dal.AccountDAO;
 import Model.Account;
-import Model.Profile;
+import Model.ProfileDTO;
+import Util.ServerPath;
 import com.oracle.wls.shaded.org.apache.xalan.templates.AVT;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -70,7 +71,7 @@ public class profileServlet extends HttpServlet {
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
-        Profile profile = (Profile) session.getAttribute("profile");
+        ProfileDTO profile = (ProfileDTO) session.getAttribute("profile");
         Account account = (Account) session.getAttribute("account");
 
         session.setAttribute("profile", profile);
@@ -106,7 +107,7 @@ public class profileServlet extends HttpServlet {
 //end get data from Profile.jsp
 
         AccountDAO accountDAO = new AccountDAO();
-        Profile new_profile = (Profile) session.getAttribute("profile");
+        ProfileDTO new_profile = (ProfileDTO) session.getAttribute("profile");
         Account new_account = (Account) session.getAttribute("account");
 
         if (file_avt != null && file_avt.getSize() > 0) {
@@ -117,7 +118,7 @@ public class profileServlet extends HttpServlet {
             String avt_path_in_server = "images/" + avt_file_name;
             new_profile.setAvt(avt_path_in_server);
             accountDAO.updateAvatar_ByAccId(avt_path_in_server, new_account.getAccount_id());
-            //o.print(test_path);
+            //o.print();
         }
 
         if (fullname.isBlank()) {
@@ -217,9 +218,14 @@ public class profileServlet extends HttpServlet {
     private String insertImageIntoServer(HttpServletRequest request, String avt_file_name, Part file_avt) {
         String upload_directory = "/images"; // folder goc cua web khi builded
         //tra ve folder khi not_build
-        String upload_path = request.getServletContext().getRealPath(upload_directory).replaceFirst("build", "") + File.separator + avt_file_name;
-        String replacedPath = upload_path.replace("\\", "/");
+        String upload_path_to_project = ServerPath.getPathImage() + File.separator + avt_file_name;
+        String upload_path_to_server = request.getServletContext().getRealPath(upload_directory).replaceFirst("build", "") + File.separator + avt_file_name;
+        
+        String replacedPath = upload_path_to_project.replace("\\", "/");
         String replacePath_not_build = replacedPath.replaceFirst("//", "/");
+        
+        String replacedPath_server = upload_path_to_server.replace("\\", "/");
+        String replacePath_server_not_build = upload_path_to_server.replaceFirst("//", "/");
         try {
             FileOutputStream fos = new FileOutputStream(replacePath_not_build);
             InputStream is = file_avt.getInputStream();
@@ -231,6 +237,18 @@ public class profileServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        try {
+            FileOutputStream fos = new FileOutputStream(replacePath_server_not_build);
+            InputStream is = file_avt.getInputStream();
+
+            byte[] data = new byte[is.available()];
+            is.read(data);
+            fos.write(data);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return replacePath_not_build;
     }
 

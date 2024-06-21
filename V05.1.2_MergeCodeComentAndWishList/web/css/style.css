@@ -84,6 +84,7 @@
                 line-height: 1.5em; /* Thiết lập chiều cao của dòng để tính toán chính xác chiều cao tối đa */
             }
 
+            
 /* Style for the search input */
 .search-input {
     width: 300px;
@@ -172,6 +173,37 @@
     overflow: clip;
     }
 
+    
+    
+    /*Footer*/
+    
+    
+
+            .footer {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .footer .container {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+    .copyright .col-md-6 {
+        white-space: nowrap;
+
+        text-overflow: ellipsis;
+    }
+
+
+    
+    
+    
+    /*relatecourse*/
     /* Tùy chỉnh cho các dots của Slick Slider */
     .slick-dots li {
     margin: 0 5px; /* Khoảng cách giữa các dots */

@@ -4,10 +4,12 @@
  */
 package Controller.Home;
 
+import Dal.CourseDetailDAO;
 import Dal.HomeDAO;
 import Model.Account;
 import Model.Category;
 import Model.Course;
+import Model.Enrollment;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
@@ -18,8 +20,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -68,31 +73,39 @@ public class listCourseSeverlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         HomeDAO dao = new HomeDAO();
+        CourseDetailDAO cdDao = new CourseDetailDAO();
+        String action = request.getParameter("action");
+        Account acc = (Account) session.getAttribute("account");
         String cid = request.getParameter("cateid");
 
         try {
             ArrayList<Course> listAllCourse = dao.getAllCourses();
             ArrayList<Category> listCategory = dao.getAllCategory();
             ArrayList<Course> listCourseByCategory = dao.getCourseByCategoryId(cid);
-
+            if (acc != null) {
+                ArrayList<Enrollment> listEnrollment = cdDao.getEnrollmentByAccountId(acc.getAccount_id());
+                request.setAttribute("listEnrollment", listEnrollment);
+            }
 
             //Định dạng khóa học theo giá tiền Việt Nam
             for (Course course : listCourseByCategory) {
                 course.setFormattedPrice(formartPrice(course.getPrice()));
             }
-            
-//            để phòng
+
             for (Course course : listAllCourse) {
                 course.setFormattedPrice(formartPrice(course.getPrice()));
-            }  
-            
+            }
+
+            //list All course
             if (cid.equals("all")) {
                 request.setAttribute("listAllCourse", listAllCourse);
 
             } else {
+                // List course by category
                 request.setAttribute("listCourseByCategory", listCourseByCategory);
             }
 
+            request.setAttribute("action", action);
             request.setAttribute("listCategory", listCategory);
 
         } catch (Exception e) {
@@ -114,7 +127,35 @@ public class listCourseSeverlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            HttpSession session = request.getSession();
+            Account acc = (Account) session.getAttribute("account");
+
+            String search = request.getParameter("search");
+            if (search == null || search.isBlank()) {
+                response.sendRedirect("home");
+                return;
+            }
+            HomeDAO dao = new HomeDAO();
+            CourseDetailDAO cdDao = new CourseDetailDAO();
+            ArrayList<Course> listCourseBySearch = dao.searchByName(search);
+            if (acc != null) {
+                ArrayList<Enrollment> listEnrollment = cdDao.getEnrollmentByAccountId(acc.getAccount_id());
+                request.setAttribute("listEnrollment", listEnrollment);
+            }
+
+            //Định dạng khóa học theo giá tiền Việt Nam
+            for (Course course : listCourseBySearch) {
+                course.setFormattedPrice(formartPrice(course.getPrice()));
+            }
+
+            request.setAttribute("listCourseBySearch", listCourseBySearch);
+            request.setAttribute("searchValue", search);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(listCourseSeverlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        request.getRequestDispatcher("Courses.jsp").forward(request, response);
     }
 
     /**
