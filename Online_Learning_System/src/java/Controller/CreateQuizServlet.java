@@ -114,7 +114,9 @@ public class CreateQuizServlet extends HttpServlet {
         }
         HttpSession session = request.getSession();
         session.setAttribute("quizId", quiz.getQuizId());
-        request.getRequestDispatcher("create_quiz/cquestions.jsp").forward(request, response);
+        session.setAttribute("quiz", quiz);
+//        request.getRequestDispatcher("create_quiz/cquestions.jsp").forward(request, response);
+        response.sendRedirect("createquestions?quizId="+quiz.getQuizId() );
     }
 
     /**

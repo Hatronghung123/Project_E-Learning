@@ -97,13 +97,20 @@ public class CreateQuestionsServlet extends HttpServlet {
 
         QuizDAO quizDAO = new QuizDAO();
         Questions questions = quizDAO.insertQuestions(new Questions(questionNumber, quizId, titleQuestion, typeQuestion));
+        ArrayList<Questions> listQuestions = quizDAO.getListQuestions(questions);
+        
+        
         ArrayList<Answer> answers = new ArrayList<>();
         for(int i = 1 ; i <= choices.length; i++){
             boolean correctAnswer = request.getParameter("correctAnswer" + i)==null?false:true;
             answers.add(new Answer(questions.getQuestionId(), choices[i-1], correctAnswer));
         }
-        
         quizDAO.insertAnswers(answers);
+        
+        ArrayList<Answer> listAnswers = quizDAO.getListAnswers(questions);
+        request.setAttribute("listQuestions", listQuestions);
+        request.setAttribute("listAnswers", listAnswers);
+        
         request.getRequestDispatcher("create_quiz/cquestions.jsp").forward(request, response);
     }
 
@@ -116,5 +123,8 @@ public class CreateQuestionsServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    public static void main(String[] args) {
+        
+    }
 
 }
