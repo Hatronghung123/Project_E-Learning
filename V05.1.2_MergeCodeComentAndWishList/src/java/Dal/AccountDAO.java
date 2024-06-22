@@ -16,14 +16,40 @@ public class AccountDAO extends DBContext {
 
     public static void main(String[] args) {
         AccountDAO dao = new AccountDAO();
-        System.out.println((dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010")).getEmail());
-        System.out.println(dao.checkAccountExist("tuong0505ht@gmail.com"));
-//        dao.insertUser(new Account("tuongdeptrai@gmail.com", "67676767", 4), new Profile("Pham Cat Tuong", 0));
-        Account a = dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010");
-        System.out.println(dao.getProfile(a).getFullname());
-        System.out.println("Succesfully");
+//        System.out.println((dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010")).getEmail());
+//        System.out.println(dao.checkAccountExist("tuong0505ht@gmail.com"));
+////        dao.insertUser(new Account("tuongdeptrai@gmail.com", "67676767", 4), new Profile("Pham Cat Tuong", 0));
+//        Account a = dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010");
+//        System.out.println(dao.getProfile(a).getFullname());
+//        System.out.println("Succesfully");
+      
+System.out.println(dao.getAccountById(1));
     }
-
+    
+    
+public Account getAccountById(int accid) {
+        connection = getConnection();
+        String sql = """
+                    SELECT [AccountId], [Email], [Password], [RoleId]
+                       FROM [Project Online Learning].[dbo].[Account]
+                       WHERE [AccountId] = ?;""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, accid);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int account_id = resultSet.getInt(1);
+                String email = resultSet.getString(2);
+                String pass = resultSet.getString(3);
+                int role_id = resultSet.getInt(4);
+                
+                return new Account(email, pass, role_id);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
     //tra ve account theo EMAIL & PASS
     public Account getAccountByEmailPass(String email, String password) {
         connection = getConnection();
