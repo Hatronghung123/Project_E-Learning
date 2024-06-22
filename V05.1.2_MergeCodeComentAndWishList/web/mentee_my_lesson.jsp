@@ -221,7 +221,7 @@
         }
 
         .reply-textarea {
-
+            display: none; /* Ẩn ban đầu */
             width: 100%;
             padding: 5px;
             margin-top: 5px;
@@ -287,10 +287,16 @@
             margin-bottom: 30px;
         }
 
+        .reply-textarea {
+            display: none;
+            width: 100%;
+            padding: 5px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
 
-        .reply-textarea,
-        .submit-reply-btn,
-        .cancel-reply-btn {
+        .reply-textarea {
             display: none; /* Ẩn ban đầu */
         }
 
@@ -325,11 +331,7 @@
         }
 
 
-        .del {
-            background-color: orangered;
-            color: #fff;
-            border-color: #ccc;
-        }
+
 
     </style>
 
@@ -373,7 +375,7 @@
                             <!-- Thêm comment mới -->
                             <form action="lesson?status=insert" method="post">
                                 <div class="comment-input">
-                                    <img src="${sessionScope.profile.getAvt()}" alt="User Avatar" class="avatar">
+                                    <img src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png" alt="User Avatar" class="avatar">
                                     <textarea required="" name="content" rows="1" placeholder="Add a comment..."></textarea>
                                     <input type="hidden" name="cid" value="${lesson.getCourseid()}">
                                     <input type="hidden" name="lessonid" value="${lesson.getLessonid()}">
@@ -391,9 +393,7 @@
                                 <c:forEach var="o" items="${mainComments}"> 
                                     <c:if test="${o.getLessonId() == lesson.getLessonid()}">
                                         <div class="comment">
-                                             
-                                            <img src="${o.getAvatar()}" alt="User1 Avatar" class="avatar">    
-                                             
+                                            <img src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png" alt="User1 Avatar" class="avatar">    
                                             <div class="comment-content">
                                                 <p><strong>${o.getName()}</strong>  <span class="timestamp">${o.getTimeAgo()}</span></p>
                                                 <p>${o.getComment()}</p> 
@@ -404,12 +404,12 @@
                                             </div> 
                                             <!-- Nút xóa comment -->
                                             <c:if test="${sessionScope.account.getAccount_id() == o.getAcccountId()}">
-                                                <form action="lesson?status=delete" method="post" class="delete-form" onsubmit="return confirmDelete(this);">
+                                                <form action="lesson?status=delete" method="post" class="delete-form">
                                                     <input type="hidden" name="cid" value="${lesson.getCourseid()}">
                                                     <input type="hidden" name="lessonid" value="${lesson.getLessonid()}">
                                                     <input type="hidden" name="disscussID" value="${o.getDisscussionID()}">
                                                     <input type="hidden" name="parent" value="null">
-                                                    <button type="submit" class="del">Delete</button>
+                                                    <button type="submit">Delete</button>
                                                 </form>
                                             </c:if>
 
@@ -418,9 +418,8 @@
                                         <div class="comment-list replies">
                                             <!-- Hiển thị các reply -->
                                             <c:forEach var="reply" items="${repliesMap[o.getDisscussionID()]}">
-                                                <div class="comment replies">                    
-                                                    <img src="${reply.getAvatar()}" alt="User Avatar" class="avatar">
-                                              
+                                                <div class="comment replies">
+                                                    <img src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png" alt="User Avatar" class="avatar">
                                                     <div class="comment-content">
                                                         <p><strong>${reply.getName()}</strong><span class="timestamp">${reply.getTimeAgo()}</span></p>
                                                         <p>${reply.getComment()}</p>
@@ -430,12 +429,12 @@
                                                     <!--    Nút xóa reply 
                                                     -->  
                                                     <c:if test="${sessionScope.account.getAccount_id() == reply.getAcccountId()}">
-                                                        <form action="lesson?status=delete" method="post" class="delete-form" onsubmit="return confirmDelete(this);">
+                                                        <form action="lesson?status=delete" method="post" class="delete-form">
                                                             <input type="hidden" name="cid" value="${lesson.getCourseid()}">
                                                             <input type="hidden" name="lessonid" value="${lesson.getLessonid()}">
                                                             <input type="hidden" name="disscussID" value="${reply.getDisscussionID()}">
                                                             <input type="hidden" name="parent" value="${reply.getParentId()}">
-                                                            <button type="submit" class="del">Delete</button>
+                                                            <button type="submit">Delete</button>
                                                         </form>
                                                     </c:if>
                                                 </div>
@@ -453,8 +452,8 @@
                                             <!-- Thêm class `reply-textarea` vào textarea để dễ dàng chọn từ JavaScript -->
                                             <textarea required="" name="content" rows="1" placeholder="Reply to this comment..." class="reply-textarea" style="display: none;"></textarea>
                                             <button type="button" class="reply-btn">Reply</button>
-                                            <button type="submit"  class="submit-reply-btn">Submit Reply</button>
-                                            <button type="button" class="cancel-reply-btn">Cancel</button>
+                                            <button type="submit" style="display: none;">Submit Reply</button>
+                                            <button type="button" onclick="cancelReply(this)">Cancel</button>
                                         </form>
 
 
@@ -465,45 +464,63 @@
 
                         </div>
 
-                        <script>
-                            function confirmDelete(form) {
-                                return confirm("Are you sure you want to delete this comment?");
-                            }
-                        </script>
+
 
                         <script>
                             document.addEventListener("DOMContentLoaded", function () {
                                 var replyButtons = document.querySelectorAll('.reply-btn');
-                                var cancelReplyButtons = document.querySelectorAll('.cancel-reply-btn');
 
                                 replyButtons.forEach(function (button) {
                                     button.addEventListener('click', function () {
-                                        // Hiển thị ô textarea, nút Submit và nút Cancel
-                                        var form = this.parentElement;
-                                        form.querySelector('.reply-textarea').style.display = 'block';
-                                        form.querySelector('.submit-reply-btn').style.display = 'inline-block';
-                                        form.querySelector('.cancel-reply-btn').style.display = 'inline-block';
-
-                                        // Ẩn nút Reply
+                                        // Tìm ô textarea trong form reply hiện tại và hiển thị nó
+                                        var textarea = this.parentNode.querySelector('.reply-textarea');
+                                        textarea.style.display = 'block';
+                                        // Ẩn nút "Reply" và hiển thị nút "Submit Reply"
                                         this.style.display = 'none';
-                                    });
-                                });
-
-                                cancelReplyButtons.forEach(function (button) {
-                                    button.addEventListener('click', function () {
-                                        // Ẩn ô textarea, nút Submit và nút Cancel
-                                        var form = this.parentElement;
-                                        form.querySelector('.reply-textarea').style.display = 'none';
-                                        form.querySelector('.submit-reply-btn').style.display = 'none';
-                                        this.style.display = 'none';
-
-                                        // Hiển thị lại nút Reply
-                                        form.querySelector('.reply-btn').style.display = 'inline-block';
+                                        this.parentNode.querySelector('button[type="submit"]').style.display = 'inline-block';
                                     });
                                 });
                             });
-                        </script>
 
+                            document.addEventListener("DOMContentLoaded", function () {
+                                var replyButtons = document.querySelectorAll('.reply-btn');
+
+                                replyButtons.forEach(function (button) {
+                                    button.addEventListener('click', function () {
+                                        var form = this.parentNode;
+                                        var textarea = form.querySelector('.reply-textarea');
+                                        var submitButton = form.querySelector('.submit-reply-btn');
+                                        var cancelButton = form.querySelector('.cancel-btn');
+
+                                        // Hiển thị textarea và các nút liên quan
+                                        textarea.style.display = 'block';
+                                        submitButton.style.display = 'inline-block';
+                                        cancelButton.style.display = 'inline-block';
+                                        // Ẩn nút "Reply"
+                                        this.style.display = 'none';
+                                    });
+                                });
+                            });
+
+                            function cancelReply(button) {
+                                var form = button.parentNode;
+                                var textarea = form.querySelector('.reply-textarea');
+                                var replyButton = form.querySelector('.reply-btn');
+                                var submitButton = form.querySelector('.submit-reply-btn');
+
+                                // Ẩn textarea và các nút liên quan
+                                textarea.style.display = 'none';
+                                submitButton.style.display = 'none';
+                                button.style.display = 'none';
+                                // Hiển thị nút "Reply"
+                                replyButton.style.display = 'inline-block';
+                            }
+
+
+
+
+
+                        </script>
 
 
                         <!-- Lessons -->
@@ -576,12 +593,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--                            <div class="card-body">
-                                                            <p>Having over 12 years exp. Adrian is one of the lead UI designers in the industry Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, aut.</p>
-                                                            <a href="#" class="btn btn-default"><i class="fa fa-facebook"></i></a>
-                                                            <a href="#" class="btn btn-default"><i class="fa fa-twitter"></i></a>
-                                                            <a href="#" class="btn btn-default"><i class="fa fa-github"></i></a>
-                                                        </div>-->
+                            <div class="card-body">
+                                <p>Having over 12 years exp. Adrian is one of the lead UI designers in the industry Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, aut.</p>
+                                <a href="#" class="btn btn-default"><i class="fa fa-facebook"></i></a>
+                                <a href="#" class="btn btn-default"><i class="fa fa-twitter"></i></a>
+                                <a href="#" class="btn btn-default"><i class="fa fa-github"></i></a>
+                            </div>
                         </div>
 
                         <div class="card">

@@ -9,7 +9,7 @@ import Dal.WishlistDAO;
 import Model.Account;
 import Model.Course;
 import Model.EnrollmentDTO;
-import Model.ProfileDTO;
+import Model.Profile;
 import Model.WishlistDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -73,7 +73,7 @@ public class courseServlet extends HttpServlet {
         EnrollmentDAO enrollDAO = new EnrollmentDAO();
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
-        ProfileDTO my_profile = (ProfileDTO) session.getAttribute("profile");
+        Profile my_profile = (Profile) session.getAttribute("profile");
         Account my_account = (Account) session.getAttribute("account");
 
         if (my_account == null) {

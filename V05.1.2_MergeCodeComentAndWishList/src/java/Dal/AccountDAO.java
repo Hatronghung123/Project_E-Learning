@@ -5,7 +5,7 @@
 package Dal;
 
 import Model.Account;
-import Model.ProfileDTO;
+import Model.Profile;
 import java.sql.SQLException;
 
 /**
@@ -16,14 +16,40 @@ public class AccountDAO extends DBContext {
 
     public static void main(String[] args) {
         AccountDAO dao = new AccountDAO();
-        System.out.println((dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010")).getEmail());
-        System.out.println(dao.checkAccountExist("tuong0505ht@gmail.com"));
-//        dao.insertUser(new Account("tuongdeptrai@gmail.com", "67676767", 4), new Profile("Pham Cat Tuong", 0));
-        Account a = dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010");
-        System.out.println(dao.getProfile(a).getFullname());
-        System.out.println("Succesfully");
+//        System.out.println((dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010")).getEmail());
+//        System.out.println(dao.checkAccountExist("tuong0505ht@gmail.com"));
+////        dao.insertUser(new Account("tuongdeptrai@gmail.com", "67676767", 4), new Profile("Pham Cat Tuong", 0));
+//        Account a = dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010");
+//        System.out.println(dao.getProfile(a).getFullname());
+//        System.out.println("Succesfully");
+      
+System.out.println(dao.getAccountById(1));
     }
-
+    
+    
+public Account getAccountById(int accid) {
+        connection = getConnection();
+        String sql = """
+                    SELECT [AccountId], [Email], [Password], [RoleId]
+                       FROM [Project Online Learning].[dbo].[Account]
+                       WHERE [AccountId] = ?;""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, accid);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int account_id = resultSet.getInt(1);
+                String email = resultSet.getString(2);
+                String pass = resultSet.getString(3);
+                int role_id = resultSet.getInt(4);
+                
+                return new Account(email, pass, role_id);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
     //tra ve account theo EMAIL & PASS
     public Account getAccountByEmailPass(String email, String password) {
         connection = getConnection();
@@ -83,7 +109,7 @@ public class AccountDAO extends DBContext {
         return null;
     }
 
-    public void insertUser(Account account, ProfileDTO profile) {
+    public void insertUser(Account account, Profile profile) {
         insertAccount(account);
         Account new_insert_account = getAccountByEmailPass(account.getEmail(), account.getPassword());
         insertProfile(profile, new_insert_account.getAccount_id());
@@ -112,7 +138,7 @@ public class AccountDAO extends DBContext {
         }
     }
 
-    public void insertProfile(ProfileDTO profile, int account_id) {
+    public void insertProfile(Profile profile, int account_id) {
         connection = getConnection();
         String sql_profile = """
                              INSERT INTO [dbo].[Profile]
@@ -141,7 +167,7 @@ public class AccountDAO extends DBContext {
         }
     }
 
-    public ProfileDTO getProfile(Account account_login) {
+    public Profile getProfile(Account account_login) {
         connection = getConnection();
         String sql = """
                      SELECT [ProfileId]
@@ -163,7 +189,7 @@ public class AccountDAO extends DBContext {
                 String avt = resultSet.getString(4);
                 double money = resultSet.getDouble(5);
                 int manageBy = resultSet.getInt(6);
-                return new ProfileDTO(profile_id, fullname, gender, avt, money, manageBy);
+                return new Profile(profile_id, fullname, gender, avt, money, manageBy);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
