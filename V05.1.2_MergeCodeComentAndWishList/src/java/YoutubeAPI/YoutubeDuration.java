@@ -26,41 +26,31 @@ public class YoutubeDuration {
     private static final String APPLICATION_NAME = "YouTubeDuration";
     private static final long MAX_RESULTS = 50L;
 
-    public static void main(String[] args) {
-//        try {
-     //     YouTube youtubeService = getService();
-//
-//            // Lấy thời lượng của video cụ thể
-//            String videoId = "VrZoEKDwr6M";
-//            long videoDuration = getVideoDuration(youtubeService, videoId);
-//            System.out.println("Video Duration: " + videoDuration + " seconds");
-//            System.out.println(convertToMinutesAndSeconds(videoDuration));
-//
-//            // Lấy tổng thời lượng của danh sách video
-//            String playlistId = "PL8ApS86kTh2PkRyOJX0RfdxLlW4kjRPxn";
-//            long playlistDuration = getPlaylistDuration(youtubeService, playlistId);
-//            System.out.println("Playlist Duration: " + playlistDuration + " seconds");
-//            System.out.println(convertToHoursAndMinutes(playlistDuration));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-       // System.out.println(getVideoDuration(youtubeService, API_KEY));
-        //System.out.println(getListVideoDuration("PL8ApS86kTh2PkRyOJX0RfdxLlW4kjRPxns"));
+
+    
+      public static String extractVideoId(String url) {
+        // Tách phần sau cùng của URL sử dụng dấu "/"
+        String[] parts = url.split("/");
+        // Phần cuối cùng sẽ chứa ID video và có thể có query string
+        String idWithQuery = parts[parts.length - 1];
+        
+        // Nếu có query string, tách phần ID trước dấu ?
+        if (idWithQuery.contains("?")) {
+            idWithQuery = idWithQuery.split("\\?")[0];
+        }
+        
+        return idWithQuery;
     }
 
-//    public static String getListVideoDuration(String listId) {
-//        long playlistDuration = 0;
-//        try {
-//            YouTube youtubeService = getService();
-//
-//            String playlistId = listId;
-//            playlistDuration = getPlaylistDuration(youtubeService, playlistId);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return convertToHoursAndMinutes(playlistDuration);
-//    }
+    public static void main(String[] args) {
+        String url = "https://www.youtube.com/embed/abPmZCZZrFA?si=QJN6533FHvva6NQ3";
+        String videoId = extractVideoId(url);
+        System.out.println("Video ID: " + videoId);
+
+        // Bây giờ bạn có thể gọi hàm getVideoDuration với videoId
+        long duration = getVideoDuration(videoId);
+        System.out.println("Video Duration: " + duration + " seconds");
+    }
 
     public static long getVideoDuration(String video) {
         long videoDuration = 0;

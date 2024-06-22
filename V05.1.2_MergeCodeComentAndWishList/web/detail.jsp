@@ -26,14 +26,10 @@
         <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"> 
         <!-- AOS Library Stylesheet -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-
-
-
-
-
         <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
 
         <!-- Font Awesome -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
 
         <!-- Slick CSS -->
@@ -55,54 +51,62 @@
         <link href="css/style.css" rel="stylesheet">
 
         <style>
-            /* Parent container for wishlist button */
-            .add-to-wishlist {
-                position: relative;
+
+            img.avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+
+
+            /*Rating star*/
+ 
+
+            .class {
+                width: 100%;
+                max-width: 1270px;
+                margin: 20px auto;
+                padding: 20px;
+
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+
+            .name{
                 display: inline-block;
-                cursor: pointer;
-                text-align: center; /* Để căn giữa nội dung */
-                margin-left: 48px;
+            }
+            .date{
+                margin-left: 53px;
+            }
+            .review-rating{
+                margin-left: 53px;
+                margin-bottom: 20px;
+            }
+            .review-body{
+                width: 70%;
+                margin-top: 16px;
+            }
+            .review-heading{
+                width: 30%;
             }
 
-            /* Styling for the heart icon */
-            .add-to-wishlist i {
-                font-size: 18px;
-                color: #2bc5d4;
-                transition: color 0.2s;
+            .material-icons{
+                font-size: 19px;
+                color:#ffa726;
+            }
+            .review-item{
+                border-top: 1px solid #ccc;
+                margin-top: 30px;
+                padding-top: 30px;
             }
 
-            /* Change icon color when hovered */
-            .add-to-wishlist:hover i {
-                color: darkred;
+            .rating-avg {
+                display: flex;
+                align-items: center;
+
             }
-
-            /* Tooltip styling */
-            .add-to-wishlist .tooltipp {
-                visibility: hidden;
-                opacity: 0;
-                transition: visibility 0.2s, opacity 0.2s ease-in-out;
-                position: absolute;
-                background-color: #333;
-                color: #fff;
-                text-align: center;
-                padding: 5px;
-                border-radius: 4px;
-                z-index: 10;
-                font-size: 14px;
-                top: -30px; /* Điều chỉnh vị trí tooltip lên trên hình trái tim */
-                left: 50%;
-                transform: translateX(-50%);
-                white-space: nowrap;
-                pointer-events: none;
-            }
-
-            /* Show tooltip on hover */
-            .add-to-wishlist:hover .tooltipp {
-                visibility: visible;
-                opacity: 1;
-            }
-
-
 
 
         </style>
@@ -147,24 +151,23 @@
                 </div>
 
                 <!--        search by name-->
-                <form action="search" method="post" class="navbar-nav ">
-                    <input class="search-input" style="width: 300px;" type="text" name="search"  placeholder="Search in course">
-                    <input style="border-radius: 4px; margin-right: 5px" class="btn btn-primary" type="submit" value="Search">
+                <form action="listCourseSeverlet" method="post" class="navbar-nav ">
+                    <input class="search-input" style="width: 300px;" type="text" value="${searchValue}" name="search"  placeholder="Search in course">
+                    <input style="border-radius: 4px;" class="btn btn-primary" type="submit" value="Search">
                 </form>
-
 
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
                     <a href="home" class="nav-item nav-link active">Home</a>
                     <a href="about.jsp" class="nav-item nav-link">About</a>
                     <a href="Courses.jsp" class="nav-item nav-link">Courses</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                        <div class="dropdown-menu fade-down m-0">
-                            <a href="team.html" class="dropdown-item">Our Team</a>
-                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                            <a href="404.html" class="dropdown-item">404 Page</a>
-                        </div>
-                    </div>
+                    <!--                    <div class="nav-item dropdown">
+                                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                                            <div class="dropdown-menu fade-down m-0">
+                                                <a href="team.html" class="dropdown-item">Our Team</a>
+                                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                                                <a href="404.html" class="dropdown-item">404 Page</a>
+                                            </div>
+                                        </div>-->
                     <a href="contact.html" class="nav-item nav-link">Contact</a>
 
                     <!--                
@@ -295,7 +298,7 @@
 
                                                     <c:when test="${sessionScope.account == null}">
                                                         <!--nguoi dung chua dang nhap-->
-                                                        <a href="join?action=login" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                        <a href="join?action=login&cid=${o.getCourse_id()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
 
                                                     </c:when>
 
@@ -325,15 +328,32 @@
 
                                             </div>
 
-
-
                                         </div>
-                                                <!--ADD TO WISHLIST-->
-                                        <div class="wishlist"> 
+                                        <!--ADD TO WISHLIST-->
+                                        <c:if test="${sessionScope.account != null}">
+                                           
+                                                <!--nguoi dung chua dang nhap-->
+                                                <div class ="wishlist">
+                                                    <div class="product-slider">
+                                                        <a class="product-slider__fav js-fav" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">
+                                                            <c:choose>
+                                                                <c:when test="${CourseIdList.contains(o.getCourse_id())}">
+                                                                    <div class="heart is-active">
+                                                                        <div class ="wishlist-text">ADD TO WISHLIST </div>
+                                                                    </div>
+                                                                </c:when>
 
-                                            <div class="bi bi-suit-heart"></div>
-                                            <a class="wishlist-text" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">ADD TO WISHLIST</a>
-                                        </div>
+                                                                <c:otherwise>
+                                                                    <div class="heart ">
+                                                                        <div class ="wishlist-text">ADD TO WISHLIST </div>
+                                                                    </div> 
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                  
+                                        </c:if>
                                         <div class="text-center p-4 pb-0">     
 
                                             <h3 class="mb-0">${o.getFormattedPrice()}₫</h3>
@@ -348,7 +368,7 @@
                                             </div>
                                             <h5 class="mb-4">${o.getCourse_name()}</h5>
                                         </div>
-                                    
+
                                         <div class="d-flex border-top">
                                             <small class="flex-fill text-center border-end py-2"><i class="fa fa-user-tie text-primary me-2"></i>${o.getInstructor()}</small>
                                             <small class="flex-fill text-center border-end py-2"><i class="fa fa-clock text-primary me-2"></i>${o.getStudy_time()}</small>
@@ -441,7 +461,7 @@
                                     <li class="list-group-item d-flex justify-content-between align-items-center px-0 wow animate__animated animate__fadeInUp" data-wow-delay="0.2s">
                                         <a href="listCourseSeverlet?cid=${o.getCategory_id()}" class="text-decoration-none h6 m-0">${o.getCategory_name()}</a>
                                         <span style="background-color: #06bbcc;
-                                              border-radius: 4px;" class="badge badge-primary badge-pill">150</span>
+                                              border-radius: 4px;" class="badge badge-primary badge-pill">${o.getNumberofCate()}</span>
                                     </li>
 
                                 </c:forEach>
@@ -450,55 +470,60 @@
                         </div>
 
 
-                        <!--                        <div class="mb-5 wow animate__animated animate__fadeInUp" data-wow-delay="0.1s">
-                                                    <h2 class="mb-4">Recent Courses</h2>
-                                                    <a class="d-flex align-items-center text-decoration-none mb-4 wow animate__animated animate__fadeInUp" href="" data-wow-delay="0.2s">
-                                                        <img class="img-fluid rounded" src="img/courses-80x80.jpg" alt="">
-                                                        <div class="pl-3">
-                                                            <h6>Web design & development courses for beginners</h6>
-                                                            <div class="d-flex">
-                                                                <small class="text-body mr-3"><i class="fa fa-user text-primary mr-2"></i>Jhon Doe</small>
-                                                                <small class="text-body"><i class="fa fa-star text-primary mr-2"></i>4.5 (250)</small>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                    <a class="d-flex align-items-center text-decoration-none mb-4 wow animate__animated animate__fadeInUp" href="" data-wow-delay="0.3s">
-                                                        <img class="img-fluid rounded" src="img/courses-80x80.jpg" alt="">
-                                                        <div class="pl-3">
-                                                            <h6>Web design & development courses for beginners</h6>
-                                                            <div class="d-flex">
-                                                                <small class="text-body mr-3"><i class="fa fa-user text-primary mr-2"></i>Jhon Doe</small>
-                                                                <small class="text-body"><i class="fa fa-star text-primary mr-2"></i>4.5 (250)</small>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                    <a class="d-flex align-items-center text-decoration-none mb-4 wow animate__animated animate__fadeInUp" href="" data-wow-delay="0.4s">
-                                                        <img class="img-fluid rounded" src="img/courses-80x80.jpg" alt="">
-                                                        <div class="pl-3">
-                                                            <h6>Web design & development courses for beginners</h6>
-                                                            <div class="d-flex">
-                                                                <small class="text-body mr-3"><i class="fa fa-user text-primary mr-2"></i>Jhon Doe</small>
-                                                                <small class="text-body"><i class="fa fa-star text-primary mr-2"></i>4.5 (250)</small>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                    <a class="d-flex align-items-center text-decoration-none wow animate__animated animate__fadeInUp" href="" data-wow-delay="0.5s">
-                                                        <img class="img-fluid rounded" src="img/courses-80x80.jpg" alt="">
-                                                        <div class="pl-3">
-                                                            <h6>Web design & development courses for beginners</h6>
-                                                            <div class="d-flex">
-                                                                <small class="text-body mr-3"><i class="fa fa-user text-primary mr-2"></i>Jhon Doe</small>
-                                                                <small class="text-body"><i class="fa fa-star text-primary mr-2"></i>4.5 (250)</small>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </div>-->
-
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Detail End -->
+
+
+        <!--Ratting star about course-->
+        <!--Ratting star about course-->
+        <div class="class">
+            <div style="margin-bottom: 26px;font-size: 35px">
+                <h3>PRODUCT REVIEWS</h3>
+            </div>
+            <div class="rating-avg" >
+                <span style="font-size: 30px; margin-right:20px">${avgRatingCourse}/5</span>
+                <div class="rating-stars">
+                    <c:forEach var="i" begin="1" end="${avgRatingCourse}">
+                        <i class="material-icons" style="font-size: 30px">star</i>
+                    </c:forEach>
+                    <c:forEach var="i" begin="${avgRatingCourse +1}" end="5">
+                        <i class="material-icons" style="font-size: 30px">star_border</i>
+                    </c:forEach>
+                </div>
+
+            </div>
+            <small class="text-muted">${amountRatingCourse} ratings</small>
+            <!-- Reviews -->
+
+            <div id="reviews">
+                <ul class="reviews">
+                    <c:forEach items="${listRatings}" var="o">
+                        <li class="review-item" style="display: flex;">
+                            <div class="review-heading">
+                                <img src="${o.getAvatar()}" alt="" class="avatar">
+                                <h5 class="name">${o.getFullname()}</h5>
+                                <p class="date">${o.getDatecreate()}</p>
+                                <div class="review-rating" style="margin-left: 51px;">
+                                    <c:forEach var="i" begin="1" end="5">
+                                        <i class="material-icons">
+                                            <c:choose>
+                                                <c:when test="${i <= o.getStar()}">star</c:when>
+                                                <c:otherwise>star_border</c:otherwise>
+                                            </c:choose>
+                                        </i>
+                                    </c:forEach>
+                                </div>
+                            </div>
+                            <div class="review-body">
+                                <p>${o.getComment()}</p>
+                            </div>
+                        </li>
+                    </c:forEach>
+                </ul>
+            </div>
+        </div>
 
         <jsp:include page="common/footer.jsp"></jsp:include>
 
@@ -539,39 +564,70 @@
         <!-- JavaScript Libraries -->
 
 
-        <script>
-                                    $(document).ready(function () {
-                                        $('.related-carousel').slick({
-                                            infinite: true,
-                                            slidesToShow: 3, // Số slide hiển thị cùng lúc
-                                            slidesToScroll: 1, // Số slide sẽ di chuyển mỗi khi bạn nhấn nút điều hướng
-                                            autoplay: true,
-                                            autoplaySpeed: 2000, // Thời gian giữa các lần tự động chuyển slide (ms)
-                                            dots: true, // Hiển thị các chấm điều hướng
-                                            responsive: [
-                                                {
-                                                    breakpoint: 1024, // Dưới 1024px, số slide hiển thị là 2
-                                                    settings: {
-                                                        slidesToShow: 2,
-                                                        slidesToScroll: 1
-                                                    }
-                                                },
-                                                {
-                                                    breakpoint: 600, // Dưới 600px, số slide hiển thị là 1
-                                                    settings: {
-                                                        slidesToShow: 1,
-                                                        slidesToScroll: 1
-                                                    }
-                                                }
-                                            ]
-                                        });
+        <script>      document.addEventListener('DOMContentLoaded', function () {
+                                        var favButtons = document.querySelectorAll(".js-fav");
+                                        favButtons.forEach(function (favButton) {
+                                            favButton.addEventListener("click", function (event) {
+                                                event.preventDefault(); // Ngăn chặn hành động mặc định của thẻ <a> (chuyển hướng)
 
-                                        // Sự kiện click cho các thẻ a bên trong carousel
-                                        $('.related-carousel .course-item a').on('click', function (e) {
-                                            e.stopPropagation(); // Ngăn chặn sự kiện click lan sang các phần tử khác trong carousel
-                                            // Xử lý các hành động khi click vào phần tử trong carousel
+                                                // Thực hiện ngầm hành động thêm vào wishlist
+                                                var href = this.getAttribute("href");
+                                                console.log("Adding to wishlist: " + href);
+
+                                                // Thực hiện thêm vào wishlist (Ví dụ: gửi yêu cầu AJAX)
+                                                var xhr = new XMLHttpRequest();
+                                                xhr.open("GET", href, true);
+                                                xhr.onreadystatechange = function () {
+                                                    if (xhr.readyState === 4 && xhr.status === 200) {
+                                                        console.log("Added to wishlist");
+                                                    }
+                                                };
+                                                xhr.send();
+
+                                                // Thay đổi trạng thái của icon trái tim
+                                                var heartIcon = this.querySelector('.heart');
+                                                if (heartIcon) {
+                                                    heartIcon.classList.toggle("is-active");
+                                                }
+                                            });
                                         });
-                                    });
+                                    });</script>
+
+
+
+        <script>
+            $(document).ready(function () {
+                $('.related-carousel').slick({
+                    infinite: true,
+                    slidesToShow: 3, // Số slide hiển thị cùng lúc
+                    slidesToScroll: 1, // Số slide sẽ di chuyển mỗi khi bạn nhấn nút điều hướng
+                    autoplay: true,
+                    autoplaySpeed: 2000, // Thời gian giữa các lần tự động chuyển slide (ms)
+                    dots: true, // Hiển thị các chấm điều hướng
+                    responsive: [
+                        {
+                            breakpoint: 1024, // Dưới 1024px, số slide hiển thị là 2
+                            settings: {
+                                slidesToShow: 2,
+                                slidesToScroll: 1
+                            }
+                        },
+                        {
+                            breakpoint: 600, // Dưới 600px, số slide hiển thị là 1
+                            settings: {
+                                slidesToShow: 1,
+                                slidesToScroll: 1
+                            }
+                        }
+                    ]
+                });
+
+                // Sự kiện click cho các thẻ a bên trong carousel
+                $('.related-carousel .course-item a').on('click', function (e) {
+                    e.stopPropagation(); // Ngăn chặn sự kiện click lan sang các phần tử khác trong carousel
+                    // Xử lý các hành động khi click vào phần tử trong carousel
+                });
+            });
 
         </script>
     </body>

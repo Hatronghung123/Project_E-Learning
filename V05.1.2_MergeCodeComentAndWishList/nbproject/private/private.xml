@@ -3,10 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/SWP391/V05.1.2_MergeCodeComentAndWishList/src/java/Dal/MessengerDAO.java</file>
-            <file>file:/D:/SWP391/V05.1.2_MergeCodeComentAndWishList/src/java/Controller/joinServlet.java</file>
-            <file>file:/D:/SWP391/V05.1.2_MergeCodeComentAndWishList/src/java/Controller/MessengerSeverlet.java</file>
-            <file>file:/D:/SWP391/V05.1.2_MergeCodeComentAndWishList/src/java/Dal/AccountDAO.java</file>
+            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Controller/StarRatingServelet.java</file>
+            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Dal/WishlistDAO.java</file>
+            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Dal/CourseDetailDAO.java</file>
+            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Controller/CourseDetailServelet.java</file>
+            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/web/mentee_my_lesson.jsp</file>
+            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Controller/lessonServlet.java</file>
+            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Model/StarRatingDTO.java</file>
+            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Dal/StarRatingDAO.java</file>
+            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/web/detail.jsp</file>
+            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Util/AVGOfRaing.java</file>
         </group>
     </open-files>
 </project-private>

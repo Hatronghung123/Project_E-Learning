@@ -7,11 +7,13 @@ package Controller.Home;
 import Dal.AccountDAO;
 import Dal.CourseDetailDAO;
 import Dal.HomeDAO;
+import Dal.WishlistDAO;
 import Model.Account;
 import Model.Category;
 import Model.Course;
 import Model.Enrollment;
-import Model.Profile;
+import Model.ProfileDTO;
+import Model.WishlistDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -73,6 +75,7 @@ public class homeServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("account");
+        String action = request.getParameter("action");
         PrintWriter out = response.getWriter();
 
         try {
@@ -84,6 +87,10 @@ public class homeServlet extends HttpServlet {
             if (acc != null) {
                 ArrayList<Enrollment> listEnrollment = cdDao.getEnrollmentByAccountId(acc.getAccount_id());
                 request.setAttribute("listEnrollment", listEnrollment);
+                
+                 //Lấy ra list wishList để check is active icon
+                getCidFromWishlistByAccId(request, response, acc.getAccount_id());
+               
             }
             
             //Định dạng khóa học theo giá tiền Việt Nam
@@ -92,6 +99,9 @@ public class homeServlet extends HttpServlet {
             }
             
             
+            
+            
+            request.setAttribute("action", action);
             request.setAttribute("listPopulerCourse", listPopulerCourse);
             request.setAttribute("listNewCourse", listNewCourse);
             request.setAttribute("listCategory", listCategory);
@@ -163,7 +173,7 @@ public class homeServlet extends HttpServlet {
             HttpSession session = request.getSession();
             Account account_login = accountDAO.getAccountByEmailPass(email, password);
             if (account_login != null) {
-                Profile profile = accountDAO.getProfile(account_login);
+                ProfileDTO profile = accountDAO.getProfile(account_login);
                 session.setAttribute("profile", profile);
             }
 
@@ -178,5 +188,20 @@ public class homeServlet extends HttpServlet {
         NumberFormat formatTer = NumberFormat.getInstance(new Locale("vi", "VN"));
         return formatTer.format(price);
     }
+          
+          
+              public void getCidFromWishlistByAccId(HttpServletRequest request, HttpServletResponse response, int acc_id)
+            throws ServletException, IOException {
+        WishlistDAO dao = new WishlistDAO();
+        ArrayList<WishlistDTO> listWishListCoursId = dao.getCidFromWishListByAccId(acc_id);
+        ArrayList<Integer> CourseIdList = new ArrayList<>();
+        for (WishlistDTO wishlist : listWishListCoursId) {
+            CourseIdList.add(wishlist.getCourse_id());
+        }
+        //response.getWriter().print(listWishListCoursId);
+
+        request.setAttribute("CourseIdList", CourseIdList);
+    }
+
 
 }

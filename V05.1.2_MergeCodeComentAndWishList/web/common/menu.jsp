@@ -27,32 +27,32 @@
                    ">Explore</a>
                 <div class="dropdown-menu fade-down m-0">
                     <c:forEach items="${listCategory}" var="o">
-                    <a href="listCourseSeverlet?cateid=${o.getCategory_id()}" class="dropdown-item">${o.getCategory_name()}</a>
+                    <a href="listCourseSeverlet?cateid=${o.getCategory_id()}&action=course" class="dropdown-item">${o.getCategory_name()}</a>
                    </c:forEach>
                 </div>
             </div>
         </div>
 
         <!--        search by name-->
-        <form action="search" method="post" class="navbar-nav ">
-            <input class="search-input" style="width: 300px;" type="text" name="search"  placeholder="Search in course">
+        <form action="listCourseSeverlet" method="post" class="navbar-nav ">
+            <input class="search-input" style="width: 300px;" type="text" value="${searchValue}" name="search"  placeholder="Search in course">
             <input style="border-radius: 4px;" class="btn btn-primary" type="submit" value="Search">
         </form>
 
 
         <div class="navbar-nav ms-auto p-4 p-lg-0">
-            <a href="home" class="nav-item nav-link active">Home</a>
-            <a href="about.jsp" class="nav-item nav-link">About</a>
-            <a href="listCourseSeverlet?cateid=all" class="nav-item nav-link">Courses</a>
-            <div class="nav-item dropdown">
+            <a href="home" class="nav-item nav-link  ${action == null ? "active" : ""}">Home</a>
+            <a href="about.jsp?action=about" class="nav-item nav-link  ${action == "about" ? "active" : ""}">About</a>
+            <a href="listCourseSeverlet?cateid=all&action=course" class="nav-item nav-link  ${action == "course" ? "active" : ""}">Courses</a>
+<!--            <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                 <div class="dropdown-menu fade-down m-0">
                     <a href="team.html" class="dropdown-item">Our Team</a>
                     <a href="testimonial.html" class="dropdown-item">Testimonial</a>
                     <a href="404.html" class="dropdown-item">404 Page</a>
                 </div>
-            </div>
-            <a href="contact.html" class="nav-item nav-link">Contact</a>
+            </div>-->
+            <a href="contact.jsp?action=contact" class="nav-item nav-link ${action == "contact" ? "active" : ""}">Contact</a>
 
             <!--                
                                                                     <div class="nav-item dropdown">

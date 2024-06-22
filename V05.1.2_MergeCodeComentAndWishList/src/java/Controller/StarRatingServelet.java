@@ -2,30 +2,33 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller.User;
+package Controller;
 
-import Dal.EnrollmentDAO;
-import Dal.WishlistDAO;
+import Dal.CourseDetailDAO;
+import Dal.StarRatingDAO;
 import Model.Account;
 import Model.Course;
-import Model.EnrollmentDTO;
-import Model.ProfileDTO;
-import Model.WishlistDTO;
+import Model.StarRatingDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
-import javax.mail.Session;
+import java.sql.SQLException;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
- * @author tuong
+ * @author Tuan Anh(Gia Truong)
  */
-public class courseServlet extends HttpServlet {
+@WebServlet(name = "StarRatingServelet", urlPatterns = {"/StarRating"})
+public class StarRatingServelet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,10 +47,10 @@ public class courseServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet courseServlet</title>");
+            out.println("<title>Servlet StarRatingServelet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet courseServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet StarRatingServelet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -65,36 +68,21 @@ public class courseServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        try {
+            String cid = request.getParameter("cid");
+            CourseDetailDAO dao = new CourseDetailDAO();
+            
+            Course course = dao.getCourseById(Integer.parseInt(cid));
 
-        String cid_str = request.getParameter("cid");
-        String accid_str = request.getParameter("accid");
-
-        WishlistDAO wishlistDAO = new WishlistDAO();
-        EnrollmentDAO enrollDAO = new EnrollmentDAO();
-        PrintWriter out = response.getWriter();
-        HttpSession session = request.getSession();
-        ProfileDTO my_profile = (ProfileDTO) session.getAttribute("profile");
-        Account my_account = (Account) session.getAttribute("account");
-
-        if (my_account == null) {
-            response.sendRedirect("join?action=login");
-            return;
-        } else {
-            if (cid_str != null && !cid_str.isBlank() && accid_str != null && !accid_str.isBlank()) {
-                int cid_int = Integer.parseInt(cid_str);
-                int accd_int = Integer.parseInt(accid_str);
-                wishlistDAO.insetWishList(accd_int, cid_int);
-
-            }
+            request.setAttribute("course", course);
+            request.setAttribute("cid", cid);
+            request.getRequestDispatcher("StarRating.jsp").forward(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(StarRatingServelet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        ArrayList<EnrollmentDTO> course_list = enrollDAO.getCourseByAccId(my_account.getAccount_id());
-        request.setAttribute("course_list", course_list);
-        //out.print(course_list.get(0).getEnrollment_date());
 
-        ArrayList<WishlistDTO> wish_list = wishlistDAO.getWishListByAccId(my_account.getAccount_id());
-        request.setAttribute("wish_list", wish_list);
-
-        request.getRequestDispatcher("MyCourses.jsp").forward(request, response);
     }
 
     /**
@@ -108,7 +96,25 @@ public class courseServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        HttpSession session = request.getSession();
+        String cid = request.getParameter("cid");
+        String star = request.getParameter("rating");
+        String comment = request.getParameter("comment");
+        Account account = (Account) session.getAttribute("account");
+        StarRatingDAO dao = new StarRatingDAO();
+
+        String msg = "";
+
+   
+            try {
+                StarRatingDTO rating = new StarRatingDTO(Integer.parseInt(star), comment, Date.valueOf(LocalDate.now()), Integer.parseInt(cid), account.getAccount_id());
+//             Chèn dữ liệu vào db
+                dao.insertRating(rating);
+                response.sendRedirect("CourseDetail?cid="+cid);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 
     /**
@@ -121,4 +127,6 @@ public class courseServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    
+    
 }
