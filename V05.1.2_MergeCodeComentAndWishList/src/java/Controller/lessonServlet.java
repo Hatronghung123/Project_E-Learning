@@ -6,8 +6,10 @@ package Controller;
 
 import Dal.CourseDetailDAO;
 import Dal.DisscussionDAO;
+import Dal.HomeDAO;
 import Dal.LessonDAO;
 import Model.Account;
+import Model.Category;
 import Model.Course;
 import Model.DiscussionLesson;
 import Model.Enrollment;
@@ -128,6 +130,10 @@ public class lessonServlet extends HttpServlet {
                     }
                 }
 
+                //hiện thị ra các category trên header
+                displaycategory(request, response);
+                
+                //hiện thị số lượng sao của khóa học đó
                 displayRatingCourse(request, response, course_id);
                 // Đặt các thuộc tính cho JSP
                 request.setAttribute("mainComments", mainComments);
@@ -252,6 +258,17 @@ public class lessonServlet extends HttpServlet {
             request.setAttribute("amountRatingCourse", avgRatingCourse.get(1));
         } catch (SQLException ex) {
             Logger.getLogger(lessonServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+        public void displaycategory(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            HomeDAO dao = new HomeDAO();
+            ArrayList<Category> listCategory = dao.getAllCategory();
+            request.setAttribute("listCategory", listCategory);
+        } catch (SQLException ex) {
+            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -61,7 +61,7 @@
 
 
             /*Rating star*/
- 
+
 
             .class {
                 width: 100%;
@@ -106,6 +106,11 @@
                 display: flex;
                 align-items: center;
 
+            }
+
+            /* CSS để tùy chỉnh màu sắc của sao rỗng */
+            .empty-star {
+                color: #ccc; /* Đổi màu sao rỗng thành màu mong muốn */
             }
 
 
@@ -331,40 +336,43 @@
                                         </div>
                                         <!--ADD TO WISHLIST-->
                                         <c:if test="${sessionScope.account != null}">
-                                           
-                                                <!--nguoi dung chua dang nhap-->
-                                                <div class ="wishlist">
-                                                    <div class="product-slider">
-                                                        <a class="product-slider__fav js-fav" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">
-                                                            <c:choose>
-                                                                <c:when test="${CourseIdList.contains(o.getCourse_id())}">
-                                                                    <div class="heart is-active">
-                                                                        <div class ="wishlist-text">ADD TO WISHLIST </div>
-                                                                    </div>
-                                                                </c:when>
 
-                                                                <c:otherwise>
-                                                                    <div class="heart ">
-                                                                        <div class ="wishlist-text">ADD TO WISHLIST </div>
-                                                                    </div> 
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </a>
-                                                    </div>
+                                            <!--nguoi dung chua dang nhap-->
+                                            <div class ="wishlist">
+                                                <div class="product-slider">
+                                                    <a class="product-slider__fav js-fav" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">
+                                                        <c:choose>
+                                                            <c:when test="${CourseIdList.contains(o.getCourse_id())}">
+                                                                <div class="heart is-active">
+                                                                    <div class ="wishlist-text">ADD TO WISHLIST </div>
+                                                                </div>
+                                                            </c:when>
+
+                                                            <c:otherwise>
+                                                                <div class="heart ">
+                                                                    <div class ="wishlist-text">ADD TO WISHLIST </div>
+                                                                </div> 
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </a>
                                                 </div>
-                                                  
+                                            </div>
+
                                         </c:if>
                                         <div class="text-center p-4 pb-0">     
 
                                             <h3 class="mb-0">${o.getFormattedPrice()}₫</h3>
+                                            <!--Star-->
                                             <div class="mb-3">
 
-                                                <small class="fa fa-star text-primary"></small>
-                                                <small class="fa fa-star text-primary"></small>
-                                                <small class="fa fa-star text-primary"></small>
-                                                <small class="fa fa-star text-primary"></small>
-                                                <small class="fa fa-star text-primary"></small>
-                                                <small>(123)</small>
+                                                <c:forEach var="i" begin="1" end="${o.getStar()}">
+                                                    <small class="fa fa-star text-primary"></small>
+                                                </c:forEach>
+                                                <c:forEach var="i" begin="${o.getStar() +1}" end="5">
+                                                    <small class="fa fa-star empty-star"></small>
+                                                </c:forEach>
+                                                
+                                                <small>(${o.getSumOfRating()})</small>
                                             </div>
                                             <h5 class="mb-4">${o.getCourse_name()}</h5>
                                         </div>

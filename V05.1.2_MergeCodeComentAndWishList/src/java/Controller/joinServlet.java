@@ -84,6 +84,14 @@ public class joinServlet extends HttpServlet {
             String action = request.getParameter("action") == null
                     ? ""
                     : request.getParameter("action");
+
+            //Lưu thông tin khóa học lên session để chuyển hướng tới đó
+            String cid = request.getParameter("cid");
+            if (action.equals("login") && cid != null) {
+                session.setAttribute("cid", cid);
+                
+            }
+
             switch (action) {
                 case "login":
                     logInDoGet(request, response);
@@ -236,6 +244,7 @@ public class joinServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String remember_me = request.getParameter("remember-me") == null ? "" : "on";
+
         if (email.isBlank() || password.isBlank()) {
             request.setAttribute("message", "Please input all the fields!");
             request.setAttribute("email", email);
@@ -269,33 +278,42 @@ public class joinServlet extends HttpServlet {
             Cookie email_remember = new Cookie("email", email);
             Cookie password_remember = new Cookie("password", password);
             //check xem co tich vao remember me ko de luu vao cookie
+
             if (remember_me.equals("on")) {
                 email_remember.setMaxAge(60 * 60 * 24); //1 day
                 password_remember.setMaxAge(60 * 60 * 24);
-
-                session.setAttribute("account", account_login);
-                session.setMaxInactiveInterval(60 * 30);
-
+//                session.setAttribute("account", account_login);
+//                session.setMaxInactiveInterval(60 * 30);
                 response.addCookie(email_remember);
                 response.addCookie(password_remember);
-                response.sendRedirect("home");
-                return;
+//                response.sendRedirect("home");
+//                return;
             } else {
                 email_remember.setMaxAge(0);
                 password_remember.setMaxAge(0);
                 response.addCookie(email_remember);
                 response.addCookie(password_remember);
 
-                session.setAttribute("account", account_login);
-
-                if (account_login != null) {
-                    ProfileDTO profile = accountDAO.getProfile(account_login);
-                    session.setAttribute("profile", profile);
-                }
-
                 //session chi ton tai duoc trong 1800s
-                session.setMaxInactiveInterval(60 * 30);   //set time account exist in session 10 hours
+                  //set time account exist in session 10 hours
                 //request.getRequestDispatcher("home").forward(request, response);
+
+//                response.sendRedirect("home");
+//                return;
+            }
+            session.setAttribute("account", account_login);
+            ProfileDTO profile = accountDAO.getProfile(account_login);
+            session.setAttribute("profile", profile);
+            session.setMaxInactiveInterval(60 * 30);
+            
+            //CHuyển hướng đến màn hình mong muốn
+            String redireactAfter_Login = (String) session.getAttribute("cid");
+            //response.getWriter().print(redireactAfter_Login);
+            if (redireactAfter_Login != null) {
+                session.removeAttribute("cid");
+                response.sendRedirect("CourseDetail?cid=" + redireactAfter_Login);
+                return;
+            } else {
                 response.sendRedirect("home");
                 return;
             }
@@ -307,6 +325,7 @@ public class joinServlet extends HttpServlet {
             request.getRequestDispatcher("Login.jsp").forward(request, response);
         }
     }
+
 
     private void signUpDoPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         AccountDAO accountDAO = new AccountDAO();
@@ -384,7 +403,7 @@ public class joinServlet extends HttpServlet {
             return;
         } else {
             Account account = new Account(email, password);
-            ProfileDTO profile_register = new ProfileDTO(fullname,0);
+            ProfileDTO profile_register = new ProfileDTO(fullname, 0);
             // nếu chưa thì inser vào trong db, chuyển dến trang home
             accountDAO.insertUser(account, profile_register);
             Account account_login = accountDAO.getAccountByEmailPass(email, password);

@@ -384,12 +384,14 @@
                                  <div class="text-center pb-0" style ="padding-left: 12px;padding-right: 12px;padding-bottom: 12px;padding-top: 7px">
                                     <h3 class="mb-0">${o.getFormattedPrice()}₫</h3>
                                     <div class="mb-3">
-                                        <small class="fa fa-star text-primary"></small>
-                                        <small class="fa fa-star text-primary"></small>
-                                        <small class="fa fa-star text-primary"></small>
-                                        <small class="fa fa-star text-primary"></small>
-                                        <small class="fa fa-star text-primary"></small>
-                                        <small>(123)</small>
+                                         <c:forEach var="i" begin="1" end="${o.getStar()}">
+                                                    <small class="fa fa-star text-primary"></small>
+                                                </c:forEach>
+                                                <c:forEach var="i" begin="${o.getStar() +1}" end="5">
+                                                    <small class="fa fa-star empty-star"></small>
+                                                </c:forEach>
+                                                
+                                                <small>(${o.getSumOfRating()})</small>
                                     </div>
                                     <h5 class="mb-4">${o.getCourse_name()}</h5>
                                 </div>

@@ -13,7 +13,9 @@ import Model.Category;
 import Model.Course;
 import Model.Enrollment;
 import Model.ProfileDTO;
+import Model.StarRatingDTO;
 import Model.WishlistDTO;
+import Util.AVGOfRaing;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -98,7 +100,12 @@ public class homeServlet extends HttpServlet {
                 course.setFormattedPrice(formartPrice(course.getPrice()));
             }
             
-            
+              //Set số sao và lượt đánh giá cho từng khóa học
+                for (Course course : listPopulerCourse) {
+                    ArrayList<StarRatingDTO> listRating = cdDao.getRatings(course.getCourse_id());
+                    course.setStar(AVGOfRaing.AvgRatingCourse(listRating).get(0));
+                    course.setSumOfRating(AVGOfRaing.AvgRatingCourse(listRating).get(1));
+                }
             
             
             request.setAttribute("action", action);

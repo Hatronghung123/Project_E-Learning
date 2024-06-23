@@ -4,9 +4,12 @@
  */
 package Controller.User;
 
+import Controller.CourseDetailServelet;
 import Dal.EnrollmentDAO;
+import Dal.HomeDAO;
 import Dal.WishlistDAO;
 import Model.Account;
+import Model.Category;
 import Model.Course;
 import Model.EnrollmentDTO;
 import Model.ProfileDTO;
@@ -18,7 +21,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.mail.Session;
 
 /**
@@ -94,6 +100,9 @@ public class courseServlet extends HttpServlet {
         ArrayList<WishlistDTO> wish_list = wishlistDAO.getWishListByAccId(my_account.getAccount_id());
         request.setAttribute("wish_list", wish_list);
 
+         //hiện thị ra các category trên header
+                displaycategory(request, response);
+        
         request.getRequestDispatcher("MyCourses.jsp").forward(request, response);
     }
 
@@ -121,4 +130,16 @@ public class courseServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    
+    
+        public void displaycategory(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            HomeDAO dao = new HomeDAO();
+            ArrayList<Category> listCategory = dao.getAllCategory();
+            request.setAttribute("listCategory", listCategory);
+        } catch (SQLException ex) {
+            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

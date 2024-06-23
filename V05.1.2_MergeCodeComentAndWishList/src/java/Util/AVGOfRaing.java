@@ -16,12 +16,18 @@ public class AVGOfRaing {
         ArrayList<Double> list = new ArrayList<>();
         double avg = 0;
         double count = 0;
-        for (StarRatingDTO starRatingDTO : listRatingCourse) {
-            avg += starRatingDTO.getStar();
-            count++;
+            if (!listRatingCourse.isEmpty()) {
+            for (StarRatingDTO starRatingDTO : listRatingCourse) {
+                avg += starRatingDTO.getStar();
+                count++;
+            }
+            list.add(Math.floor(avg / count));
+            list.add(count);
+        } else {
+            // Xử lý khi danh sách rỗng
+            list.add(0.0); // Hoặc có thể là Double.NaN tùy vào yêu cầu của bạn
+            list.add(0.0); // Số lượng đánh giá là 0
         }
-        list.add(Math.floor(avg / count));
-        list.add(count);
         return list;
         
     }

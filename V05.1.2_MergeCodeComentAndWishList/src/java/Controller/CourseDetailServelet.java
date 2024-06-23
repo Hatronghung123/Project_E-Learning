@@ -5,6 +5,7 @@
 package Controller;
 
 import Dal.CourseDetailDAO;
+import Dal.HomeDAO;
 import Dal.WishlistDAO;
 import Model.Account;
 import Model.Category;
@@ -92,7 +93,7 @@ public class CourseDetailServelet extends HttpServlet {
             if (acc != null) {
                 //Kiểm tra đã mua khóa học này hay chưa
                 ArrayList<Enrollment> listEnrollment = cdDao.getEnrollmentByAccountId(acc.getAccount_id());
-                
+
                 //Lấy ra list wishList để check is active icon
                 getCidFromWishlistByAccId(request, response, acc.getAccount_id());
                 request.setAttribute("listEnrollment", listEnrollment);
@@ -104,15 +105,24 @@ public class CourseDetailServelet extends HttpServlet {
             }
             getCourseByID.setFormattedPrice(formartPrice(getCourseByID.getPrice()));
 
+            //Set số sao và lượt đánh giá cho từng khóa học
+            for (Course course : listCourst_Relate) {
+                ArrayList<StarRatingDTO> listRating = cdDao.getRatings(course.getCourse_id());
+                course.setStar(AVGOfRaing.AvgRatingCourse(listRating).get(0));
+                course.setSumOfRating(AVGOfRaing.AvgRatingCourse(listRating).get(1));
+            }
+
+            //hiện thì category in header
+            displaycategory(request, response);
             //lấy ra số lượng sao trung bình và tổng số lượng đánh giá của khóa học
-            displayRatingCourse(request, response, course_Id);
-            
+            displayRatingCourse(request, response, listRatings, course_Id);
+
             request.setAttribute("listRatings", listRatings);
             request.setAttribute("listCourse_relate", listCourst_Relate);
             request.setAttribute("listAllCategory", listAllCategory);
             request.setAttribute("getCourseByID", getCourseByID);
 
-   //         out.print(getCourseByID.getImage());
+            //         out.print(getCourseByID.getImage());
         } catch (SQLException ex) {
             Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -150,21 +160,18 @@ public class CourseDetailServelet extends HttpServlet {
         return formatTer.format(price);
     }
 
-    public void displayRatingCourse(HttpServletRequest request, HttpServletResponse response, int course_id)
+    public void displayRatingCourse(HttpServletRequest request, HttpServletResponse response, ArrayList<StarRatingDTO> listRatings, int course_id)
             throws ServletException, IOException {
-        try {
-            CourseDetailDAO cdDao = new CourseDetailDAO();
-            ArrayList<StarRatingDTO> listRatings = cdDao.getRatings(course_id);
-            //lấy ra số lượng sao trung bình và tổng số lượng đánh giá của khóa học
-            ArrayList<Double> avgRatingCourse = AVGOfRaing.AvgRatingCourse(listRatings);
 
-            request.setAttribute("avgRatingCourse", avgRatingCourse.get(0));
-            request.setAttribute("amountRatingCourse", avgRatingCourse.get(1));
-        } catch (SQLException ex) {
-            Logger.getLogger(lessonServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        //lấy ra số lượng sao trung bình và tổng số lượng đánh giá của khóa học
+        ArrayList<Double> avgRatingCourse = AVGOfRaing.AvgRatingCourse(listRatings);
+
+        request.setAttribute("avgRatingCourse", avgRatingCourse.get(0));
+        request.setAttribute("amountRatingCourse", avgRatingCourse.get(1));
+
     }
 
+    //Lấy courseId từ bảng wish List theo account id để xem tài khoản này đã thêm khóa học này vào wish  list hay chưa
     public void getCidFromWishlistByAccId(HttpServletRequest request, HttpServletResponse response, int acc_id)
             throws ServletException, IOException {
         WishlistDAO dao = new WishlistDAO();
@@ -178,4 +185,14 @@ public class CourseDetailServelet extends HttpServlet {
         request.setAttribute("CourseIdList", CourseIdList);
     }
 
+    public void displaycategory(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            HomeDAO dao = new HomeDAO();
+            ArrayList<Category> listCategory = dao.getAllCategory();
+            request.setAttribute("listCategory", listCategory);
+        } catch (SQLException ex) {
+            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
