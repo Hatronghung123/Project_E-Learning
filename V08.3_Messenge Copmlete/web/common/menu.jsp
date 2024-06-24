@@ -74,7 +74,9 @@
                     <div class="dropdown-menu fade-down m-0">
                         <a class="dropdown-item" href="profile">My Profile</a>
                         <a class="dropdown-item" href="my-courses">My Courses</a>
+                        <c:if test="${sessionScope.account.role_id == 3}">
                         <a class="dropdown-item" href="messenger?sender_id=${sessionScope.account.getAccount_id()}&receiver_id=${sessionScope.account.getAccount_id()}">Messenger</a>
+                        </c:if>
                         <a class="dropdown-item" href="join?action=logout">Log Out</a>
                     </div>
                 </div>
@@ -97,3 +99,6 @@
 </nav>
 <!-- Navbar End -->
 
+
+
+ 

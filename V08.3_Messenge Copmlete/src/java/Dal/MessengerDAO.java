@@ -19,14 +19,14 @@ public class MessengerDAO extends DBContext {
 
     public static void main(String[] args) {
         MessengerDAO test = new MessengerDAO();
-        test.insertNewMessenger(new Messenger(1, 3, "test1"));
-        
-        try {
-//            System.out.println(test.getUsersWhoMessaged(1));
-            System.out.println(test.getListMessengerBetween2User(1, 3));
-        } catch (SQLException ex) {
-            Logger.getLogger(MessengerDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        test.insertNewMessenger(new Messenger(1, 3, "test1"));
+
+//        try {
+//            System.out.println(test.getUsersWhoMessaged(3));
+////            System.out.println(test.getListMessengerBetween2User(1, 3));
+//        } catch (SQLException ex) {
+//            Logger.getLogger(MessengerDAO.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
     }
 
@@ -114,36 +114,82 @@ public class MessengerDAO extends DBContext {
         return list;
     }
 
-    public ArrayList<Messenger> getUsersWhoMessaged(int pid) throws SQLException {
+    public ArrayList<Messenger> getUsersWhoReceived (int pid) throws SQLException {
         ArrayList<Messenger> list = new ArrayList<>();
         String sql = """
-           SELECT   
-                 m.[ReceiverId],
-                 p.[FullName],
-                 p.[Avatar]
-             FROM 
-                 [Project Online Learning].[dbo].[Message] m
-             JOIN 
-                [Project Online Learning].[dbo].[Profile] p ON p.ProfileId = m.ReceiverId
-                     JOIN Account a ON a.AccountId = p.ProfileId
-             WHERE 
-                 m.SenderId = ?
-             GROUP BY 
-                 m.ReceiverId,
-                 p.[FullName],
-                 p.[Avatar];
+          SELECT   
+                                            m.[ReceiverId],
+          								  m.SenderId,
+                                            p.[FullName],
+                                            p.[Avatar]
+                                        FROM 
+                                            [Project Online Learning].[dbo].[Message] m
+                                        JOIN 
+                                           [Project Online Learning].[dbo].[Profile] p ON p.ProfileId = m.ReceiverId
+                                            JOIN Account a ON a.AccountId = p.ProfileId
+                                        WHERE 
+                                            m.SenderId = ?
+                                        GROUP BY                   
+                                            m.[ReceiverId],
+          								  m.SenderId,
+                                            p.[FullName],
+                                            p.[Avatar];
     """;
 
         try {
             Connection con = new DBContext().getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, pid);
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                int receiver_id = rs.getInt(1);
-                String avt = rs.getString(2);
-                String full_name = rs.getString(3);
-                list.add(new Messenger(receiver_id, avt, full_name));
+                 int sender_id = rs.getInt("SenderId");
+                int receiver_id = rs.getInt("ReceiverId");
+                String avt = rs.getString("Avatar");
+                String fullname = rs.getString("FullName");
+                list.add(new Messenger(sender_id, receiver_id, fullname, avt));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Lỗi");
+        }
+        return list;
+    }
+
+    public ArrayList<Messenger> getUsersWhoSent(int pid) throws SQLException {
+        ArrayList<Messenger> list = new ArrayList<>();
+        String sql = """
+          SELECT                     m.[ReceiverId],
+                                      m.SenderId,
+                                    p.[FullName],
+                                      p.[Avatar]
+                                       FROM 
+                                          [Project Online Learning].[dbo].[Message] m
+                                      JOIN 
+                                       [Project Online Learning].[dbo].[Profile] p ON p.ProfileId = m.SenderId
+                                      JOIN Account a ON a.AccountId = p.ProfileId
+                                       WHERE 
+                                          m.ReceiverId = ?
+                                          GROUP BY 
+                                            m.[ReceiverId],
+                                           m.SenderId,
+                                            p.[FullName],
+                                             p.[Avatar];
+                                  	
+    """;
+
+        try {
+            Connection con = new DBContext().getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, pid);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int sender_id = rs.getInt("SenderId");
+                int receiver_id = rs.getInt("ReceiverId");
+                String avt = rs.getString("Avatar");
+                String fullname = rs.getString("FullName");
+                list.add(new Messenger(sender_id, receiver_id, fullname, avt));
             }
         } catch (Exception e) {
             e.printStackTrace();

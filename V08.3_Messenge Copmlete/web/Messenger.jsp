@@ -68,23 +68,28 @@
                 <div class="wrapper"> 
 
                     <div class="conversation-area">
-                        <c:if test="${listProfile.getProfile_id() == sessionScope.account.getAccount_id()}">
-                            <a class="msg active">
-                                <div class="msg-profile group">
-                                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
-                                    <path d="M12 2l10 6.5v7L12 22 2 15.5v-7L12 2zM12 22v-6.5"/>
-                                    <path d="M22 8.5l-10 7-10-7"/>
-                                    <path d="M2 15.5l10-7 10 7M12 2v6.5"/>
-                                    </svg>
-                                    <img class="msg-profile" src="https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/87/7d/39/877d3907-b948-63b8-2bf0-e7010749ef3f/OneDrive.png/1200x630bb.png" alt="" />
-                                </div>
-                                <div class="msg-detail">
-                                    <div class="msg-username">My Cloud</div>
-                                </div>
-                            </a>
+                    <c:if test="${sessionScope.account.role_id == 3}">
+                        <c:forEach items="${listUserWhoSent}" var="o">
+                      
+                            <c:if test="${listProfile.getProfile_id() != null && listProfile.getProfile_id() == o.getSender_id()}">
+                                <a class="msg active">
+                                    <div class="msg-profile group">
+                                        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">
+                                        <path d="M12 2l10 6.5v7L12 22 2 15.5v-7L12 2zM12 22v-6.5"/>
+                                        <path d="M22 8.5l-10 7-10-7"/>
+                                        <path d="M2 15.5l10-7 10 7M12 2v6.5"/>
+                                        </svg>
+                                        <img class="msg-profile" src="${o.getAvt()}" alt="" />
+                                    </div>
+                                    <div class="msg-detail">
+                                        <div class="msg-username">${o.getFullname()}</div>
+                                    </div>
+                                </a>
+                            </c:if>
+ 
+                    </c:forEach>
                         </c:if>
-                    <c:forEach items="${listUser}" var="o">
-                        
+                    <c:forEach items="${listUserWhoReceiver}" var="o">
                         <c:choose>
                             <c:when test="${listProfile.getProfile_id() != null && listProfile.getProfile_id() == o.getReceiver_id()}">
                                 <a class="msg active">

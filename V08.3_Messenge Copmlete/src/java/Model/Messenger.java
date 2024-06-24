@@ -37,12 +37,15 @@ public class Messenger {
         this.message_text = message_text;
     }
 
-    public Messenger(int receiver_id, String fullname, String avt) {
+    public Messenger(int sender_id, int receiver_id, String fullname, String avt) {
+        this.sender_id = sender_id;
         this.receiver_id = receiver_id;
         this.fullname = fullname;
         this.avt = avt;
     }
     
+    
+
 
     public int getMessenger_id() {
         return messenger_id;
@@ -102,8 +105,12 @@ public class Messenger {
 
     @Override
     public String toString() {
-        return "Messenger{" + "messenger_id=" + messenger_id + ", sender_id=" + sender_id + ", receiver_id=" + receiver_id + ", message_text=" + message_text + ", message_time=" + message_time + ", avt=" + avt + '}';
+        return "Messenger{" + "receiver_id=" + receiver_id + ", fullname=" + fullname + ", avt=" + avt + '}';
     }
+
+    
+
+   
 
    
 
