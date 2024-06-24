@@ -77,7 +77,7 @@ public class lessonServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         LessonDAO dao = new LessonDAO();
         DisscussionDAO discussDao = new DisscussionDAO();
-        MessengerDAO messDAO = new MessengerDAO();
+     
         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("account");
         

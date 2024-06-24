@@ -74,29 +74,22 @@ public class MessengerSeverlet extends HttpServlet {
        
         HttpSession session = request.getSession();
         MessengerDAO messDAO = new MessengerDAO();
-        int receiver_id = Integer.parseInt(request.getParameter("pid"));
+        int receiver_id = Integer.parseInt(request.getParameter("receiver_id"));
+        int sender_id = Integer.parseInt(request.getParameter("sender_id"));
         Account account_exist_session = (Account) session.getAttribute("account");
-
-        // Redirect to login page if no user is logged in
-        if (account_exist_session == null) {
-            response.sendRedirect("join?action=login");
-            return;
-        }
+//        if (account_exist_session == null ) {
+//            response.sendRedirect("join?action=login");
+//            return;
+//        }
         
-        try {
+        try {   
             
-            int send_id = account_exist_session.getAccount_id();
-            
-//            String selectedUserIdParam = request.getParameter("selectedUserId");
-//            Integer selectedUserId = selectedUserIdParam != null ? Integer.parseInt(selectedUserIdParam) : null;
             Profile listProfile = messDAO.getProfileById(receiver_id);
-            ArrayList<Messenger> listMessages = messDAO.getListMessengerBetween2User(send_id, receiver_id);
-            ArrayList<Messenger> listUser = messDAO.getUsersWhoMessaged(send_id);
-           // response.getWriter().print(listProfile);
+            ArrayList<Messenger> listMessages = messDAO.getListMessengerBetween2User(sender_id, receiver_id);
+            ArrayList<Messenger> listUser = messDAO.getUsersWhoMessaged(sender_id);
             request.setAttribute("listUser", listUser);
             request.setAttribute("listMessages", listMessages);
             request.setAttribute("listProfile", listProfile);
-            //System.out.println(listUser);
         } catch (SQLException ex) {
             Logger.getLogger(Messenger.class.getName()).log(Level.SEVERE, null, ex);
             response.sendRedirect("errorPage");
@@ -113,44 +106,44 @@ public class MessengerSeverlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-//        response.setContentType("text/html;charset=UTF-8");
-//        
-//        HttpSession session = request.getSession();
-//        Account accountInSession = (Account) session.getAttribute("account");
-//
-//        // Redirect to login if no user is in session
-//        if (accountInSession == null) {
-//            response.sendRedirect("join?action=login");
-//            return;
-//        }
-//        
-//        try (PrintWriter out = response.getWriter()) {
-//            
-//            String receiverIdParam = request.getParameter("receiver_id");
-//            String messageText = request.getParameter("message_text");
-//            if (receiverIdParam == null || messageText == null || messageText.trim().isEmpty()) {
-//                request.setAttribute("errorMessage", "Message text or receiver ID is missing.");
-//                request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
-//                return;
-//            }
-//            
-//            int receiverId = Integer.parseInt(receiverIdParam);
-//            int senderId = accountInSession.getAccount_id();
-//            
-//            Messenger message = new Messenger(senderId, receiverId, messageText, new Timestamp(System.currentTimeMillis()));
-//            MessengerDAO messageDAO = new MessengerDAO();
-//            messageDAO.insertNewMessenger(message);
-//
-//            // Redirect to the messenger page with the receiver's ID to continue the conversation
-//            response.sendRedirect("messenger?receiver_id=" + receiverId);
-//        } catch (NumberFormatException e) {
-//            // If 'receiver_id' is not an integer
-//            request.setAttribute("errorMessage", "Invalid receiver ID.");
-//            request.getRequestDispatcher("/errorPage.jsp").forward(request, response);
-//        }
+   protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+
+    HttpSession session = request.getSession();
+    Account accountInSession = (Account) session.getAttribute("account");
+
+    // Kiểm tra nếu account không tồn tại trong session, chuyển hướng người dùng đi đăng nhập.
+    if (accountInSession == null) {
+       response.sendRedirect("join?action=login");
+        return;
     }
+    
+    try {
+        String receiverIdParam = request.getParameter("receiver_id");
+        String messageText = request.getParameter("message_text");
+        // Kiểm tra dữ liệu đầu vào
+        if (receiverIdParam == null || receiverIdParam.isEmpty() || messageText == null || messageText.trim().isEmpty()) {
+            request.setAttribute("errorMessage", "Message text or receiver ID is missing.");
+            request.getRequestDispatcher("/A.jsp").forward(request, response);
+            return;
+        }
+        
+        int receiver_id = Integer.parseInt(receiverIdParam);
+        int sender_id = accountInSession.getAccount_id();
+
+        // Tạo và gửi tin nhắn
+        Messenger message = new Messenger(sender_id, receiver_id, messageText);
+        MessengerDAO messageDAO = new MessengerDAO();
+        messageDAO.insertNewMessenger(message);
+
+         
+        response.sendRedirect("messenger?sender_id=" + sender_id + "&receiver_id=" + receiver_id);          
+    } catch (NumberFormatException e) {
+        // Log lỗi và hiển thị trang lỗi
+        request.setAttribute("errorMessage", "Invalid receiver ID.");
+        request.getRequestDispatcher("/B.jsp").forward(request, response);
+    }
+}
 
     /**
      * Returns a short description of the servlet.

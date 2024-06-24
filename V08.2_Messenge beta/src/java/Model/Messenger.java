@@ -22,13 +22,19 @@ public class Messenger {
     public Messenger(int sender_id1, int receiver_id1, String message_text1, Timestamp timestamp) {
     }
 
-  
- public Messenger(int messenger_id, int sender_id, int receiver_id, String message_text, Timestamp message_time) {
+    public Messenger(int messenger_id, int sender_id, int receiver_id, String message_text, Timestamp message_time, String avt) {
         this.messenger_id = messenger_id;
         this.sender_id = sender_id;
         this.receiver_id = receiver_id;
         this.message_text = message_text;
         this.message_time = message_time;
+        this.avt = avt;
+    }
+
+    public Messenger(int sender_id, int receiver_id, String message_text) {
+        this.sender_id = sender_id;
+        this.receiver_id = receiver_id;
+        this.message_text = message_text;
     }
 
     public Messenger(int receiver_id, String fullname, String avt) {
@@ -96,8 +102,10 @@ public class Messenger {
 
     @Override
     public String toString() {
-        return "Messenger{" + "messenger_id=" + messenger_id + ", sender_id=" + sender_id + ", receiver_id=" + receiver_id + ", message_text=" + message_text + ", message_time=" + message_time + '}';
+        return "Messenger{" + "messenger_id=" + messenger_id + ", sender_id=" + sender_id + ", receiver_id=" + receiver_id + ", message_text=" + message_text + ", message_time=" + message_time + ", avt=" + avt + '}';
     }
+
+   
 
     
 

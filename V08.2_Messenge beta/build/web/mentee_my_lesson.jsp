@@ -594,7 +594,7 @@
                                         <p class="card-subtitle">Instructor</p>
                                     </div>
                                     
-                                        <a class="buttons" href="messenger?pid=${lesson.getProfile_id()}">Chat Now</a>
+                                        <a class="buttons" href="messenger?sender_id=${sessionScope.account.getAccount_id()}&receiver_id=${lesson.getProfile_id()}">Chat Now</a>
                                      
                                 </div>
                             </div>
