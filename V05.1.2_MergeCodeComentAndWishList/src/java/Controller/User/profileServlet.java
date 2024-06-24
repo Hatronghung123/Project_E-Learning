@@ -218,7 +218,7 @@ public class profileServlet extends HttpServlet {
     private String insertImageIntoServer(HttpServletRequest request, String avt_file_name, Part file_avt) {
         String upload_directory = "/images"; // folder goc cua web khi builded
         //tra ve folder khi not_build
-        String upload_path_to_project = ServerPath.getPathImage() + File.separator + avt_file_name;
+        String upload_path_to_project = ServerPath.getPathAvatar()+ File.separator + avt_file_name;
         String upload_path_to_server = request.getServletContext().getRealPath(upload_directory).replaceFirst("build", "") + File.separator + avt_file_name;
         
         String replacedPath = upload_path_to_project.replace("\\", "/");

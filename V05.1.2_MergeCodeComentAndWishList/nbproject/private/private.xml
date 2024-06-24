@@ -3,22 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Controller/User/courseServlet.java</file>
-            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Model/DiscussionLesson.java</file>
-            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Dal/DisscussionDAO.java</file>
-            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Controller/Home/homeServlet.java</file>
-            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Dal/DBContext.java</file>
-            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/nbproject/project.xml</file>
-            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/web/StarRating.jsp</file>
-            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/nbproject/project.properties</file>
-            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/nbproject/genfiles.properties</file>
-            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/web/mentee_my_lesson.jsp</file>
-            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/nbproject/build-impl.xml~</file>
-            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Dal/EnrollmentDAO.java</file>
-            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/web/WEB-INF/web.xml</file>
-            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Controller/User/profileServlet.java</file>
-            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Util/SendEmail.java</file>
-            <file>file:/D:/New%20folder/V09/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/web/index.jsp</file>
+            <file>file:/E:/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/web/AddNewCourse.jsp</file>
+            <file>file:/E:/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/web/CourseManage.jsp</file>
+            <file>file:/E:/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Controller/User/Manager/CourseManageServlet.java</file>
+            <file>file:/E:/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Dal/CourseManageDAO.java</file>
+            <file>file:/E:/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Model/CourseManageDTO.java</file>
         </group>
     </open-files>
 </project-private>
