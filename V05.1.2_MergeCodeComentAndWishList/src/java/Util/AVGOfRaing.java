@@ -21,7 +21,7 @@ public class AVGOfRaing {
                 avg += starRatingDTO.getStar();
                 count++;
             }
-            list.add(Math.floor(avg / count));
+            list.add(Math.ceil((avg / count) * 2) / 2.0);
             list.add(count);
         } else {
             // Xử lý khi danh sách rỗng

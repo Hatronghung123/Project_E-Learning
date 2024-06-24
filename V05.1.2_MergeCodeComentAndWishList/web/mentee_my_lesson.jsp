@@ -8,7 +8,10 @@
 
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="YoutubeAPI.YoutubeDuration" %>
+
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
@@ -64,7 +67,7 @@
     <!-- Vendor CSS -->
 
     <style>
-
+        
 
     </style>
 
@@ -283,10 +286,11 @@
                                                 <div class="module-content">
 
                                                     <c:if test="${o.getModulename() == i.getModulname()}">
-                                                        <a href="lesson?cid=${i.getCourseid()}&lessonid=${i.getLessonid()}" class="btn btn-block btn--col module-lesson" data-lessonid="${i.getLessonid()}">
+                                                        <a style="color: black" href="lesson?cid=${i.getCourseid()}&lessonid=${i.getLessonid()}" class="btn btn-block btn--col module-lesson" data-lessonid="${i.getLessonid()}">
                                                             ${status.index + 1}. ${i.getLessonname()}
                                                             <div>
-                                                                <small class="text-muted-light">1:25</small>
+
+                                                                <small class="text-muted module-lesson" style="color: black">${ YoutubeDuration.convertToMinutesAndSeconds(i.getDuration())}</small>
                                                             </div>
                                                         </a> 
 
@@ -360,7 +364,9 @@
                                         <i class="material-icons" >star_border</i>
                                     </c:forEach>
                                 </div>
-                                <small class="text-muted">${amountRatingCourse} ratings</small>
+                                <small class="text-muted">
+                                    <fmt:formatNumber value="${amountRatingCourse}" type="number" maxFractionDigits="0" /> ratings
+                                </small>
                             </div>
                         </div>
 

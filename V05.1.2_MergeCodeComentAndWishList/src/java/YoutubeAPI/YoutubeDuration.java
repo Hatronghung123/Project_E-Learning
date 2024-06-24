@@ -43,13 +43,14 @@ public class YoutubeDuration {
     }
 
     public static void main(String[] args) {
-        String url = "https://www.youtube.com/embed/abPmZCZZrFA?si=QJN6533FHvva6NQ3";
+        String url = "https://www.youtube.com/embed/niz7Gg8uB-k?si=bnm5v5MPvW2tE1ls";
         String videoId = extractVideoId(url);
         System.out.println("Video ID: " + videoId);
 
         // Bây giờ bạn có thể gọi hàm getVideoDuration với videoId
         long duration = getVideoDuration(videoId);
         System.out.println("Video Duration: " + duration + " seconds");
+        System.out.println(convertToMinutesAndSeconds(duration));
     }
 
     public static long getVideoDuration(String video) {

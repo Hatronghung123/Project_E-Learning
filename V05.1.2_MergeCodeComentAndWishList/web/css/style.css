@@ -84,6 +84,8 @@
             }
 
 
+            
+            /*List Module*/
 
 
         .module-content {
@@ -123,7 +125,10 @@
                 line-height: 1.5em; /* Thiết lập chiều cao của dòng để tính toán chính xác chiều cao tối đa */
             }     
 
-     /*Comment*/
+    
+            
+            
+            /*Comment*/
      
      
 
@@ -510,7 +515,7 @@
     
     
     
-    /*relatecourse*/
+  /*relatecourse*/
     /* Tùy chỉnh cho các dots của Slick Slider */
     .slick-dots li {
     margin: 0 5px; /* Khoảng cách giữa các dots */

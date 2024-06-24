@@ -14,6 +14,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.Date;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -86,13 +89,19 @@ public class getBillServlet extends HttpServlet {
             err = "Loi roi! Chua Nhap gi dung khong";
         } else {
             
-            String dateFormat = formaDate(date);
-            Payment payment = new Payment(Integer.parseInt(accId), Integer.parseInt(coureId), Date.valueOf(dateFormat), "VNPAY",Integer.parseInt(money) / 100);
-            Enrollment enrollment = new Enrollment(Integer.parseInt(accId), Integer.parseInt(coureId), Date.valueOf(dateFormat), 100);
-            LessonDAO dao = new LessonDAO();
-            dao.insertBillPayment(payment);
-            dao.insertEnrollment(enrollment);
-            response.sendRedirect("lesson?cid="+coureId+"&lessonid=1");
+            try {
+                String dateFormat = formaDate(date);
+                Payment payment = new Payment(Integer.parseInt(accId), Integer.parseInt(coureId), Date.valueOf(dateFormat), "VNPAY",Integer.parseInt(money) / 100);
+                Enrollment enrollment = new Enrollment(Integer.parseInt(accId), Integer.parseInt(coureId), Date.valueOf(dateFormat), 100);
+                LessonDAO dao = new LessonDAO();
+                dao.insertBillPayment(payment);
+                dao.insertEnrollment(enrollment);
+                long lessonid = dao.getLessonIdByCourseId(Integer.parseInt(coureId));
+                response.sendRedirect("lesson?cid="+coureId+"&lessonid="+lessonid);
+            } catch (SQLException ex) {
+                Logger.getLogger(getBillServlet.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception e) {
+            }
         }
 
         

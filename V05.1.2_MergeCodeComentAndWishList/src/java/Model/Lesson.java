@@ -21,10 +21,11 @@ public class Lesson {
     private String mentorname;
     private String avatar;
     private int courseid;
+    private int duration;
     public Lesson() {
     }
 
-    public Lesson(int lessonid, String modulname, String lessonname, String lessoncontent, String lessonvideo, String coursename, String mentorname, String avatar, int courseid) {
+    public Lesson(int lessonid, String modulname, String lessonname, String lessoncontent, String lessonvideo, String coursename, String mentorname, String avatar, int courseid, int duration) {
         this.lessonid = lessonid;
         this.modulname = modulname;
         this.lessonname = lessonname;
@@ -34,6 +35,7 @@ public class Lesson {
         this.mentorname = mentorname;
         this.avatar = avatar;
         this.courseid = courseid;
+        this.duration = duration;
     }
 
 
@@ -112,10 +114,21 @@ public class Lesson {
         this.courseid = courseid;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
     @Override
     public String toString() {
-        return "Lesson{" + "lessonid=" + lessonid + ", modulname=" + modulname + ", lessonname=" + lessonname + ", lessoncontent=" + lessoncontent + ", lessonvideo=" + lessonvideo + ", coursename=" + coursename + ", mentorname=" + mentorname + ", avatar=" + avatar + ", courseid=" + courseid + '}';
+        return "Lesson{" + "lessonid=" + lessonid + ", modulname=" + modulname + ", lessonname=" + lessonname + ", lessoncontent=" + lessoncontent + ", lessonvideo=" + lessonvideo + ", coursename=" + coursename + ", mentorname=" + mentorname + ", avatar=" + avatar + ", courseid=" + courseid + ", duration=" + duration + '}';
     }
+
+    
+     
 
 
     

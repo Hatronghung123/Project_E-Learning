@@ -144,6 +144,7 @@ public class lessonServlet extends HttpServlet {
                 request.setAttribute("moduleList", moduleList);
                 request.setAttribute("lessonList", lessonList);
                 request.setAttribute("listEnrollment", listEnrollment);
+                //response.getWriter().print(lessonList);
             } catch (SQLException ex) {
                 Logger.getLogger(lessonServlet.class.getName()).log(Level.SEVERE, null, ex);
             }

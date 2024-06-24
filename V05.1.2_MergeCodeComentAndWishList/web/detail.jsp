@@ -423,7 +423,7 @@
                             <h5 class="text-white py-3 px-4 m-0">Course Price: ${getCourseByID.getFormattedPrice()}₫</h5>
                             <c:if test="${sessionScope.account == null}">
                                 <div class="py-3 px-4">
-                                    <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5" href="join?action=login">Enroll Now</a>
+                                    <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5" href="join?action=login&cid=${getCourseByID.getCourse_id()}">Enroll Now</a>
                                 </div>
                             </c:if>
 
