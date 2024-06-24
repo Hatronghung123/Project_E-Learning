@@ -4,13 +4,18 @@
  */
 package Controller;
 
+import Dal.CourseDetailDAO;
 import Dal.DisscussionDAO;
+import Dal.HomeDAO;
 import Dal.LessonDAO;
 import Model.Account;
+import Model.Category;
 import Model.Course;
 import Model.DiscussionLesson;
 import Model.Enrollment;
 import Model.Lesson;
+import Model.StarRatingDTO;
+import Util.AVGOfRaing;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -77,7 +82,6 @@ public class lessonServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("account");
 
-        
         String courseid_str = request.getParameter("cid");
         String lessonid_str = request.getParameter("lessonid");
 
@@ -108,7 +112,6 @@ public class lessonServlet extends HttpServlet {
                 Lesson lesson = dao.getlessonByCid(course_id, lesson_id);
                 ArrayList<Lesson> lessonList = dao.getListModulByCidd(course_id);
 
-                
 //                List all comment 
                 ArrayList<DiscussionLesson> allComments = discussDao.getCommentsByLesson(lesson_id);
 //                    // Phân tách comments chính và các replies
@@ -126,23 +129,12 @@ public class lessonServlet extends HttpServlet {
                         repliesMap.get(parentId).add(comment);
                     }
                 }
-//
-//                // Debug: Print out the contents of repliesMap
-//                if (repliesMap.isEmpty()) {
-//                    out.print("repliesMap is empty.");
-//                } else {
-//                    out.print("repliesMap has data:");
-//                    for (Map.Entry<Integer, List<DiscussionLesson>> entry : repliesMap.entrySet()) {
-//                        Integer parentId = entry.getKey();
-//                        List<DiscussionLesson> replies = entry.getValue();
-//                        out.print("Parent ID: " + parentId + ", Number of replies: " + replies.size());
-//
-//                        for (DiscussionLesson reply : replies) {
-//                            out.print("Reply ID: " + reply.getDisscussionID()+ ", Content: " + reply.getComment());
-//                        }
-//                    }
-//                }
 
+                //hiện thị ra các category trên header
+                displaycategory(request, response);
+                
+                //hiện thị số lượng sao của khóa học đó
+                displayRatingCourse(request, response, course_id);
                 // Đặt các thuộc tính cho JSP
                 request.setAttribute("mainComments", mainComments);
                 request.setAttribute("repliesMap", repliesMap);
@@ -172,12 +164,12 @@ public class lessonServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       
+
         String status = (request.getParameter("status") == null) ? "" : request.getParameter("status");
-        
+
         switch (status) {
             case "insert":
-                 insertComent(request, response);
+                insertComent(request, response);
                 break;
             case "delete":
                 deleteComent(request, response);
@@ -185,7 +177,7 @@ public class lessonServlet extends HttpServlet {
             default:
                 throw new AssertionError();
         }
-        
+
     }
 
     public void deleteComent(HttpServletRequest request, HttpServletResponse response)
@@ -194,23 +186,22 @@ public class lessonServlet extends HttpServlet {
         String parentCommentId = request.getParameter("parent");
         String disscusionId = request.getParameter("disscussID");
         String cid = request.getParameter("cid");
-        String lessonid= request.getParameter("lessonid");
-        
+        String lessonid = request.getParameter("lessonid");
+
 //        out.print(parentCommentId);
         DisscussionDAO dao = new DisscussionDAO();
-        if(parentCommentId.equals("null")) {
+        if (parentCommentId.equals("null")) {
             //delete comment cha và delete tất comment reply
-            
+
             dao.deleteComent(Integer.parseInt(disscusionId));
-           
+
             response.sendRedirect("lesson?cid=" + cid + "&lessonid=" + lessonid);
         } else {
             //delete 1 comment repy
             dao.deleteMainComment(Integer.parseInt(disscusionId));
             response.sendRedirect("lesson?cid=" + cid + "&lessonid=" + lessonid);
         }
-        
-        
+
     }
 
     public void insertComent(HttpServletRequest request, HttpServletResponse response)
@@ -253,6 +244,32 @@ public class lessonServlet extends HttpServlet {
         }
 
         return false;
+    }
+
+    public void displayRatingCourse(HttpServletRequest request, HttpServletResponse response, int course_id)
+            throws ServletException, IOException {
+        try {
+            CourseDetailDAO cdDao = new CourseDetailDAO();
+            ArrayList<StarRatingDTO> listRatings = cdDao.getRatings(course_id);
+            //lấy ra số lượng sao trung bình và tổng số lượng đánh giá của khóa học
+            ArrayList<Double> avgRatingCourse = AVGOfRaing.AvgRatingCourse(listRatings);
+            
+            request.setAttribute("avgRatingCourse", avgRatingCourse.get(0));
+            request.setAttribute("amountRatingCourse", avgRatingCourse.get(1));
+        } catch (SQLException ex) {
+            Logger.getLogger(lessonServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+        public void displaycategory(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            HomeDAO dao = new HomeDAO();
+            ArrayList<Category> listCategory = dao.getAllCategory();
+            request.setAttribute("listCategory", listCategory);
+        } catch (SQLException ex) {
+            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

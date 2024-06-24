@@ -113,16 +113,6 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group row">
-                                <label for="quizTitle" class="col-sm-3 col-form-label">Quiz Number:</label>
-                                <div class="col-sm-9">
-                                    <div class="form-inline">
-                                        <div class="form-group" style="margin-right: 10px; margin-top: 10px">
-                                            <input type="number" readonly="" class="form-control text-center" name="quizNumber" style="width: 70px;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
                                 <label for="quizTitle" class="col-sm-3 col-form-label">Quiz Title:</label>
                                 <div class="col-sm-9 col-md-4">
                                     <div class="input-group">
@@ -142,6 +132,16 @@
                                                 <option value="hour" selected>Hours</option>
                                                 <option value="minutes">Minutes</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="quizScore" class="col-sm-3 col-form-label">Quiz Score:</label>
+                                <div class="col-sm-9">
+                                    <div class="form-inline">
+                                        <div class="form-group" style="margin-right: 10px; margin-top: 10px">
+                                            <input type="number" class="form-control text-center" name="quizScore" style="width: 70px;">
                                         </div>
                                     </div>
                                 </div>

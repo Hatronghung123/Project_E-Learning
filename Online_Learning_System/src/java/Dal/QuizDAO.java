@@ -114,12 +114,97 @@ public class QuizDAO extends DBContext {
     public static void main(String[] args) {
         QuizDAO dao = new QuizDAO();
 
-        List<Answer> answers = new ArrayList<>();
-        answers.add(new Answer(10, "Choice A", true));
-        answers.add(new Answer(10, "Choice B", false));
-        answers.add(new Answer(10, "Choice C", false));
-        answers.add(new Answer(10, "Choice D", false));
+        dao.deleteQuestionById(174, 173);
+    }
 
-        dao.insertAnswers(answers);
+    public ArrayList<Questions> getListQuestions(Questions questions) {
+        ArrayList<Questions> listFound = new ArrayList<>();
+        // connect with DB
+        connection = getConnection();
+        // viết câu lệnh sql
+        String sql = "SELECT *\n"
+                + "  FROM [dbo].[Question] q\n"
+                + "  join Quiz qz on q.QuizId = qz.QuizId\n"
+                + "  where q.QuizId = ?";
+        try {
+            // tạo đối tượng preparestatement
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, questions.getQuizId());
+            // thực thi câu lệnh
+            resultSet = statement.executeQuery();
+            // trả về kết quả
+            while (resultSet.next()) {
+                int questionId = resultSet.getInt("questionId");
+                int questionNum = resultSet.getInt("questionNum");
+                int quizId = resultSet.getInt("quizId");
+                String questionName = resultSet.getString("questionName");
+                Boolean type = resultSet.getBoolean("type");
+                Questions question = new Questions(questionId, questionNum, quizId, questionName, type);
+                listFound.add(question);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return listFound;
+    }
+
+    public ArrayList<Answer> getListAnswers(Questions questions) {
+        ArrayList<Answer> listFound = new ArrayList<>();
+        // connect with DB
+        connection = getConnection();
+        // viết câu lệnh sql
+        String sql = "SELECT [QuestionId]\n"
+                + "      ,[Choices]\n"
+                + "      ,[IsCorrect]\n"
+                + "  FROM [dbo].[QuestionChoices]";
+        try {
+            // tạo đối tượng preparestatement
+            statement = connection.prepareStatement(sql);
+            // thực thi câu lệnh
+            resultSet = statement.executeQuery();
+            // trả về kết quả
+            while (resultSet.next()) {
+                int questionId = resultSet.getInt("questionId");
+                String choices = resultSet.getString("choices");
+                Boolean isCorrect = resultSet.getBoolean("isCorrect");
+
+                Answer answer = new Answer(questionId, choices, isCorrect);
+                listFound.add(answer);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return listFound;
+
+    }
+
+    public void deleteQuestionById(int questionId, int quizId) {
+        connection = getConnection();
+        String sql = "BEGIN TRANSACTION;\n"
+                + "\n"
+                + "\n"
+                + "DELETE FROM QuestionChoices\n"
+                + "WHERE QuestionId IN (\n"
+                + "    SELECT QuestionId FROM Question\n"
+                + "    WHERE QuestionId = ?\n"
+                + ");\n"
+                + "\n"
+                + "\n"
+                + "DELETE FROM Question\n"
+                + "WHERE QuizId = ? and QuestionId =?;\n"
+                + "\n"
+                + "\n"
+                + "COMMIT TRANSACTION;";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, questionId);
+            statement.setInt(2, quizId);
+            statement.setInt(3, questionId);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 }

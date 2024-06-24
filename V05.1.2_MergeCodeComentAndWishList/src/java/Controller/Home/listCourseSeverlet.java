@@ -6,10 +6,14 @@ package Controller.Home;
 
 import Dal.CourseDetailDAO;
 import Dal.HomeDAO;
+import Dal.WishlistDAO;
 import Model.Account;
 import Model.Category;
 import Model.Course;
 import Model.Enrollment;
+import Model.StarRatingDTO;
+import Model.WishlistDTO;
+import Util.AVGOfRaing;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
@@ -83,8 +87,13 @@ public class listCourseSeverlet extends HttpServlet {
             ArrayList<Category> listCategory = dao.getAllCategory();
             ArrayList<Course> listCourseByCategory = dao.getCourseByCategoryId(cid);
             if (acc != null) {
+//                kiểm tra xem người dùng đã join vào khóa học hay chưa 
                 ArrayList<Enrollment> listEnrollment = cdDao.getEnrollmentByAccountId(acc.getAccount_id());
                 request.setAttribute("listEnrollment", listEnrollment);
+
+                //Lấy ra list wishList để check is active icon
+                getCidFromWishlistByAccId(request, response, acc.getAccount_id());
+
             }
 
             //Định dạng khóa học theo giá tiền Việt Nam
@@ -96,11 +105,25 @@ public class listCourseSeverlet extends HttpServlet {
                 course.setFormattedPrice(formartPrice(course.getPrice()));
             }
 
+             
+//            có thể viết hàm riêng
             //list All course
             if (cid.equals("all")) {
+                //Set số sao và lượt đánh giá cho từng khóa học
+                for (Course course : listAllCourse) {
+                    ArrayList<StarRatingDTO> listRating = cdDao.getRatings(course.getCourse_id());
+                    course.setStar(AVGOfRaing.AvgRatingCourse(listRating).get(0));
+                    course.setSumOfRating(AVGOfRaing.AvgRatingCourse(listRating).get(1));
+                }
                 request.setAttribute("listAllCourse", listAllCourse);
 
             } else {
+                //Set số sao và lượt đánh giá cho từng khóa học
+                for (Course course : listCourseByCategory) {
+                    ArrayList<StarRatingDTO> listRating = cdDao.getRatings(course.getCourse_id());
+                    course.setStar(AVGOfRaing.AvgRatingCourse(listRating).get(0));
+                    course.setSumOfRating(AVGOfRaing.AvgRatingCourse(listRating).get(1));
+                }
                 // List course by category
                 request.setAttribute("listCourseByCategory", listCourseByCategory);
             }
@@ -115,6 +138,8 @@ public class listCourseSeverlet extends HttpServlet {
         request.getRequestDispatcher("Courses.jsp").forward(request, response);
 
     }
+
+
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -148,6 +173,13 @@ public class listCourseSeverlet extends HttpServlet {
             for (Course course : listCourseBySearch) {
                 course.setFormattedPrice(formartPrice(course.getPrice()));
             }
+            
+             //Set số sao và lượt đánh giá cho từng khóa học
+                for (Course course : listCourseBySearch) {
+                    ArrayList<StarRatingDTO> listRating = cdDao.getRatings(course.getCourse_id());
+                    course.setStar(AVGOfRaing.AvgRatingCourse(listRating).get(0));
+                    course.setSumOfRating(AVGOfRaing.AvgRatingCourse(listRating).get(1));
+                }
 
             request.setAttribute("listCourseBySearch", listCourseBySearch);
             request.setAttribute("searchValue", search);
@@ -171,6 +203,19 @@ public class listCourseSeverlet extends HttpServlet {
     public String formartPrice(int price) {
         NumberFormat formatTer = NumberFormat.getInstance(new Locale("vi", "VN"));
         return formatTer.format(price);
+    }
+
+    public void getCidFromWishlistByAccId(HttpServletRequest request, HttpServletResponse response, int acc_id)
+            throws ServletException, IOException {
+        WishlistDAO dao = new WishlistDAO();
+        ArrayList<WishlistDTO> listWishListCoursId = dao.getCidFromWishListByAccId(acc_id);
+        ArrayList<Integer> CourseIdList = new ArrayList<>();
+        for (WishlistDTO wishlist : listWishListCoursId) {
+            CourseIdList.add(wishlist.getCourse_id());
+        }
+        //response.getWriter().print(listWishListCoursId);
+
+        request.setAttribute("CourseIdList", CourseIdList);
     }
 
 }

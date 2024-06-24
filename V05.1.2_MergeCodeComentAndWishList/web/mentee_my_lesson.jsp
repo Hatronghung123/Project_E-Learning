@@ -66,271 +66,6 @@
     <style>
 
 
-        .comments {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .comments h2 {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-
-        .comment-input {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 20px;
-        }
-
-        .comment-input img.avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-
-        .comment-input textarea {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-
-        .comment-input button {
-            margin-left: 10px;
-            padding: 10px 20px;
-            background-color: #2bc5d4;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .comment-input button:hover {
-            background-color: #36f1ff;
-        }
-
-        .comment-list {
-            margin-top: 20px;
-        }
-
-        .comment {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .comment img.avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-
-        .comment-content {
-            background-color: #f1f1f1;
-            padding: 10px;
-            border-radius: 5px;
-            flex-grow: 1;
-        }
-
-        .comment-content p {
-            margin: 5px 0;
-        }
-
-        .comment-actions {
-            display: flex;
-            gap: 10px;
-            font-size: 0.9em;
-            color: #555;
-        }
-
-        .comment-actions span {
-            cursor: pointer;
-        }
-
-        .comment-actions span:hover {
-            text-decoration: underline;
-        }
-
-        .timestamp {
-            font-size: 0.8em;
-            color: #888;
-        }
-
-        .comment-menu {
-            position: absolute;
-            right: 0;
-            top: 10px;
-        }
-
-        .comment-menu-button {
-            cursor: pointer;
-            font-size: 1.5em;
-            padding: 5px;
-        }
-
-        .comment-menu-content {
-            display: none;
-            position: absolute;
-            right: 0;
-            top: 20px;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            z-index: 10;
-        }
-
-        .comment-dropdown {
-            padding: 5px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            font-size: 1em;
-        }
-
-        .comment-menu-button:hover+.comment-menu-content,
-        .comment-menu-content:hover {
-            display: block;
-        }
-
-
-        .comment-content {
-            flex-grow: 1; /* Cho phép nội dung bình luận chiếm không gian còn lại */
-        }
-
-        .comment-actions {
-            position: absolute;
-            top: 0;
-            right: 0;
-            margin-top: 5px;
-        }
-
-        .reply-btn, .submit-reply-btn, .delete-btn {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-            padding: 5px 10px;
-            margin-right: 5px;
-        }
-
-        .reply-textarea {
-
-            width: 100%;
-            padding: 5px;
-            margin-top: 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .replies {
-            margin-left: 50px; /* Thụt lề các reply để phân cấp */
-            padding-left: 10px;
-            border-left: 2px solid #ddd; /* Đường kẻ dọc để phân biệt các reply */
-        }
-
-        .replies .comment-content {
-            display: flex;
-            align-items: flex-start;
-        }
-
-        .replies img.avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-
-        .module-content a {
-            text-align: left;
-            display: block;
-            color: black;
-        }
-
-        .comment {
-            position: relative;
-            margin-bottom: 15px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-            margin-bottom: 1px;
-        }
-
-        .comment .comment-content {
-            margin-left: 50px;
-        }
-
-        .comment-actions {
-            position: absolute;
-            top: 0;
-            right: 0;
-            margin-top: 5px;
-        }
-
-        .reply-btn, .submit-reply-btn, .delete-btn {
-            background-color: #2bc5d4;
-            color: white;
-            border: none;
-            cursor: pointer;
-            padding: 5px 10px;
-            margin-right: 5px;
-
-        }
-        .reply-form{
-            margin-bottom: 30px;
-        }
-
-
-        .reply-textarea,
-        .submit-reply-btn,
-        .cancel-reply-btn {
-            display: none; /* Ẩn ban đầu */
-        }
-
-
-        .replies {
-            margin-left: 50px; /* Giữ nguyên thụt lề bên trái */
-            padding-left: 20px;
-
-            border-left: 2px solid #ddd; /* Đường kẻ dọc để phân biệt các reply */
-        }
-
-
-        .replies img.avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-
-        }
-
-
-        .comment-content {
-            background-color: #f1f1f1;
-            padding: 10px;
-            border-radius: 5px;
-            flex-grow: 1;
-            display: flex; /* Sử dụng flexbox */
-            flex-direction: column; /* Hiển thị các phần tử con theo chiều dọc */
-        }
-
-        .comment-content p {
-            margin: 5px 0;
-        }
-
-
-        .del {
-            background-color: orangered;
-            color: #fff;
-            border-color: #ccc;
-        }
-
     </style>
 
 
@@ -391,9 +126,9 @@
                                 <c:forEach var="o" items="${mainComments}"> 
                                     <c:if test="${o.getLessonId() == lesson.getLessonid()}">
                                         <div class="comment">
-                                             
+
                                             <img src="${o.getAvatar()}" alt="User1 Avatar" class="avatar">    
-                                             
+
                                             <div class="comment-content">
                                                 <p><strong>${o.getName()}</strong>  <span class="timestamp">${o.getTimeAgo()}</span></p>
                                                 <p>${o.getComment()}</p> 
@@ -420,7 +155,7 @@
                                             <c:forEach var="reply" items="${repliesMap[o.getDisscussionID()]}">
                                                 <div class="comment replies">                    
                                                     <img src="${reply.getAvatar()}" alt="User Avatar" class="avatar">
-                                              
+
                                                     <div class="comment-content">
                                                         <p><strong>${reply.getName()}</strong><span class="timestamp">${reply.getTimeAgo()}</span></p>
                                                         <p>${reply.getComment()}</p>
@@ -550,11 +285,16 @@
                                                     <c:if test="${o.getModulename() == i.getModulname()}">
                                                         <a href="lesson?cid=${i.getCourseid()}&lessonid=${i.getLessonid()}" class="btn btn-block btn--col module-lesson" data-lessonid="${i.getLessonid()}">
                                                             ${status.index + 1}. ${i.getLessonname()}
-                                                        </a>
+                                                            <div>
+                                                                <small class="text-muted-light">1:25</small>
+                                                            </div>
+                                                        </a> 
+
                                                     </c:if>
 
 
                                                 </div>
+
                                             </c:forEach>
 
                                         </div>
@@ -613,13 +353,14 @@
                             </div>
                             <div class="card-body">
                                 <div class="rating">
-                                    <i class="material-icons">star</i>
-                                    <i class="material-icons">star</i>
-                                    <i class="material-icons">star</i>
-                                    <i class="material-icons">star</i>
-                                    <i class="material-icons">star_border</i>
+                                    <c:forEach var="i" begin="1" end="${avgRatingCourse}">
+                                        <i class="material-icons" >star</i>
+                                    </c:forEach>
+                                    <c:forEach var="i" begin="${avgRatingCourse +1}" end="5">
+                                        <i class="material-icons" >star_border</i>
+                                    </c:forEach>
                                 </div>
-                                <small class="text-muted">20 ratings</small>
+                                <small class="text-muted">${amountRatingCourse} ratings</small>
                             </div>
                         </div>
 

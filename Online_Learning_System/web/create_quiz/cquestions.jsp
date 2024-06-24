@@ -93,61 +93,73 @@
             .delete-button:focus {
                 outline: none; /* Remove the default focus outline */
             }
-
+            .question-number {
+                font-weight: bold;
+                margin-bottom: 10px;
+                font-size: 1.2em;
+                color: #333;
+            }
+            .answer {
+                padding: 5px;
+                margin-bottom: 5px;
+                border-radius: 4px;
+            }
+            .answer.correct {
+                color: #ffffff;
+                background-color: #28a745;
+            }
+            .answer.incorrect {
+                color: #333333;
+                background-color: #f8f9fa;
+            }
         </style>
     </head>
     <body>
         <jsp:include page="../common/menu.jsp"></jsp:include>
+
             <div class="container">
-                <!-- Breadcrumbs 
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="fixed-instructor-dashboard.html">Home</a></li>
-                    <li class="breadcrumb-item"><a href="fixed-instructor-quizzes.html">Quiz Manager</a></li>
-                    <li class="breadcrumb-item active">Edit Quiz</li>
-                </ol> -->
                 <h1 class="page-heading h2" style="margin-top: 10px;">Create Questions</h1>
-                <form id="addQuizForm" action="createQuestion" method="post">
+                <form id="addQuizForm">
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Questions</h4>
                         </div>
-
+                    <c:forEach items="${listQuestions}" var="question">
                         <div class="nestable" id="nestable">
                             <ul class="list-group list-group-fit nestable-list-plain mb-0">
                                 <li class="list-group-item nestable-item">
                                     <div class="media">
-                                        <div class="media-left media-middle">
-                                            <a href="#" class="btn btn-default nestable-handle"><i class="material-icons">menu</i></a>
-                                        </div>
                                         <div class="media-body media-middle">
-                                            Installation
+                                            <p class="question-number">${question.questionNum}. ${question.getQuestionName()}</p>
+                                            <c:forEach items="${listAnswers}" var="answer">
+                                                <c:if test="${question.getQuestionId() == answer.getQuestionId()}">
+                                                    <div class="answer ${answer.isCorrect ? 'correct' : 'incorrect'}">
+                                                        ${answer.getChoices()}<br>
+                                                    </div>
+                                                </c:if>
+                                            </c:forEach>
                                         </div>
                                         <div class="media-right text-right">
                                             <div>
-                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editQuestionModal" onclick="editProductModal(this)">Edit</button>
-                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-question-modal" onclick="deleteProductModal(this)">Delete</button>
+                                                <a class="btn btn-primary" data-toggle="modal" data-target="#editQuestionModal" 
+                                                   onclick="editQuestionModal(${question.getQuestionId()}, '${question.getQuestionName()}', ${question.questionNum})">Edit</a>
+                                                <a class="btn btn-danger" data-toggle="modal" data-target="#delete-question-modal" 
+                                                   onclick="deleteProductModal(${question.getQuestionId()})">Delete</a>
                                             </div>
                                         </div>
                                     </div>
                                 </li>
                             </ul>
                         </div>
-                        <div class="card-header bg-white">
-                            <a href="#" data-toggle="modal" data-target="#editQuiz" class="btn btn-success">Add Question </a>
-                        </div>
+                    </c:forEach>
+                    <div class="card-header bg-white">
+                        <a href="#" data-toggle="modal" data-target="#editQuiz" class="btn btn-success">Add Question</a>
                     </div>
-
-                    <!--                    <div class="card">
-                                            <div class="card-header bg-white">
-                                                <input type="submit" name="AddQuestion" value="Add Question" class="btn btn-success" style="width: 127.6px;">
-                                            </div>
-                                        </div>
-                    -->
-                </form>
-            </div>
-
-            <!-- jQuery -->
-            <script src="${pageContext.request.contextPath}/assets/vendor/jquery.min.js"></script>
+                </div>
+            </form>
+        </div>
+        <!-- jQuery -->
+        <script src="${pageContext.request.contextPath}/assets/vendor/jquery.min.js"></script>
 
         <!-- Bootstrap -->
         <script src="${pageContext.request.contextPath}/assets/vendor/popper.min.js"></script>
@@ -167,25 +179,19 @@
         <!-- App JS -->
         <script src="${pageContext.request.contextPath}/assets/js/main.js"></script>
 
-
         <!-- Vendor JS -->
         <script src="${pageContext.request.contextPath}/assets/vendor/jquery.nestable.js"></script>
         <script src="${pageContext.request.contextPath}/assets/vendor/jquery.bootstrap-touchspin.js"></script>
-
-
 
         <!-- Initialize -->
         <script src="${pageContext.request.contextPath}/assets/js/nestable.js"></script>
         <script src="${pageContext.request.contextPath}/assets/js/touchspin.js"></script>
 
-
-
-
         <script src="${pageContext.request.contextPath}/lib/wow/wow.min.js"></script>
         <script src="${pageContext.request.contextPath}/lib/easing/easing.min.js"></script>
-        <!-- JavaScript -->
-        
-        <jsp:include page="canswer.jsp"></jsp:include>
 
+        <jsp:include page="canswer.jsp"></jsp:include>
+        <jsp:include page="deletequestion.jsp"></jsp:include>
+        <jsp:include page="editquestion.jsp"></jsp:include>
     </body>
 </html>

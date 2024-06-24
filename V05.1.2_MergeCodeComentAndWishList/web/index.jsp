@@ -324,7 +324,7 @@
 
                                             <c:when test="${sessionScope.account == null}">
                                                 <!--nguoi dung chua dang nhap-->
-                                                <a href="join?action=login" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                <a href="join?action=login&cid=${o.getCourse_id()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
 
                                             </c:when>
 
@@ -355,29 +355,43 @@
                                     </div>
                                 </div>
 
-                                         <!--ADD TO WISHLIST-->
-                                <c:if test="${sessionScope.account != null}">
+                                        
+                                <!--ADD TO WISHLIST-->
+                                        <c:if test="${sessionScope.account != null}">
+                                           
                                                 <!--nguoi dung chua dang nhap-->
                                                 <div class ="wishlist">
-                                    <div class="product-slider">
-                                        <a class="product-slider__fav js-fav" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">
-                                            <div class="heart">
-                                                <div class ="wishlist-text">ADD TO WISHLIST </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
+                                                    <div class="product-slider">
+                                                        <a class="product-slider__fav js-fav" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">
+                                                            <c:choose>
+                                                                <c:when test="${CourseIdList.contains(o.getCourse_id())}">
+                                                                    <div class="heart is-active">
+                                                                        <div class ="wishlist-text">ADD TO WISHLIST </div>
+                                                                    </div>
+                                                                </c:when>
 
-                                            </c:if>
+                                                                <c:otherwise>
+                                                                    <div class="heart ">
+                                                                        <div class ="wishlist-text">ADD TO WISHLIST </div>
+                                                                    </div> 
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                  
+                                        </c:if>
                                  <div class="text-center pb-0" style ="padding-left: 12px;padding-right: 12px;padding-bottom: 12px;padding-top: 7px">
                                     <h3 class="mb-0">${o.getFormattedPrice()}₫</h3>
                                     <div class="mb-3">
-                                        <small class="fa fa-star text-primary"></small>
-                                        <small class="fa fa-star text-primary"></small>
-                                        <small class="fa fa-star text-primary"></small>
-                                        <small class="fa fa-star text-primary"></small>
-                                        <small class="fa fa-star text-primary"></small>
-                                        <small>(123)</small>
+                                         <c:forEach var="i" begin="1" end="${o.getStar()}">
+                                                    <small class="fa fa-star text-primary"></small>
+                                                </c:forEach>
+                                                <c:forEach var="i" begin="${o.getStar() +1}" end="5">
+                                                    <small class="fa fa-star empty-star"></small>
+                                                </c:forEach>
+                                                
+                                                <small>(${o.getSumOfRating()})</small>
                                     </div>
                                     <h5 class="mb-4">${o.getCourse_name()}</h5>
                                 </div>

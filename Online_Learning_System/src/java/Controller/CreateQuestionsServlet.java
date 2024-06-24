@@ -26,31 +26,7 @@ import java.util.List;
  */
 public class CreateQuestionsServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CreateQuestionsServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CreateQuestionsServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
+    QuizDAO quizDAO = new QuizDAO();
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -64,11 +40,7 @@ public class CreateQuestionsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        HttpSession session = request.getSession();
-//        int quizId = (int) session.getAttribute("quizId");
-//        response.sendRedirect("create_quiz/cquestions?quizId=" + quizId);
 
-        request.getRequestDispatcher("create_quiz/cquestions.jsp").forward(request, response);
     }
 
     /**
@@ -82,29 +54,24 @@ public class CreateQuestionsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PrintWriter o = response.getWriter();
+        //get sesstion
         HttpSession session = request.getSession();
-        int quizId = (int) session.getAttribute("quizId");
-        String questionNumber_str = request.getParameter("questionNumber");
-        String titleQuestion = request.getParameter("titleQuestion");
-        String typeQuestion_str = request.getParameter("typeQuestion");
-        String[] choices = request.getParameterValues("answer");
-
-
-        int questionNumber = Integer.parseInt(questionNumber_str);
-        boolean typeQuestion = false;
-        typeQuestion = typeQuestion_str.equalsIgnoreCase("radioBox");
-
-        QuizDAO quizDAO = new QuizDAO();
-        Questions questions = quizDAO.insertQuestions(new Questions(questionNumber, quizId, titleQuestion, typeQuestion));
-        ArrayList<Answer> answers = new ArrayList<>();
-        for(int i = 1 ; i <= choices.length; i++){
-            boolean correctAnswer = request.getParameter("correctAnswer" + i)==null?false:true;
-            answers.add(new Answer(questions.getQuestionId(), choices[i-1], correctAnswer));
+        //get action
+        String action = request.getParameter("action") == null
+                ? ""
+                : request.getParameter("action");
+        switch (action) {
+            case "create":
+                createQuestion(request);
+                break;
+            case "delete":
+                deleteQuestion(request, response);
+                break;
+            case "edit":
+                editQuestion(request);
+            default:
         }
-        
-        quizDAO.insertAnswers(answers);
-        request.getRequestDispatcher("create_quiz/cquestions.jsp").forward(request, response);
+        response.sendRedirect("controller");
     }
 
     /**
@@ -117,4 +84,39 @@ public class CreateQuestionsServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    private void createQuestion(HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+        int quizId = (int) session.getAttribute("quizId");
+        String questionNumber_str = request.getParameter("questionNumber");
+        String titleQuestion = request.getParameter("titleQuestion");
+        String typeQuestion_str = request.getParameter("typeQuestion");
+        String[] choices = request.getParameterValues("answer");
+
+        int questionNumber = Integer.parseInt(questionNumber_str);
+        boolean typeQuestion = false;
+        typeQuestion = typeQuestion_str.equalsIgnoreCase("radioBox");
+
+        Questions questions = quizDAO.insertQuestions(new Questions(questionNumber, quizId, titleQuestion, typeQuestion));
+
+        ArrayList<Answer> answers = new ArrayList<>();
+        for (int i = 1; i <= choices.length; i++) {
+            boolean correctAnswer = request.getParameter("correctAnswer" + i) == null ? false : true;
+            answers.add(new Answer(questions.getQuestionId(), choices[i - 1], correctAnswer));
+        }
+        quizDAO.insertAnswers(answers);
+        session.setAttribute("questions", questions);
+
+    }
+
+    private void deleteQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession();
+        int quizId = (int) session.getAttribute("quizId");
+        int questionId = Integer.parseInt(request.getParameter("id"));
+        quizDAO.deleteQuestionById(questionId, quizId);
+    }
+
+    private void editQuestion(HttpServletRequest request) {
+        
+    }
 }

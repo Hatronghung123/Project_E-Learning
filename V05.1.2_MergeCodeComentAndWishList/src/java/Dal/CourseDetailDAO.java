@@ -7,6 +7,7 @@ package Dal;
 import Model.Category;
 import Model.Course;
 import Model.Enrollment;
+import Model.StarRatingDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -80,11 +81,15 @@ public class CourseDetailDAO {
     //Lấy ra  category theo id
     public ArrayList<Category> getCategoryById(int courseId) throws SQLException {
         ArrayList<Category> list = new ArrayList<>();
-        String sql = " SELECT  cate.[CourseCategoryId]\n"
-                + "        ,[CategoryName]\n"
-                + " FROM [dbo].[CourseCategory] cate\n"
-                + " Join [dbo].[Course] cr on cr.[CourseCategoryId] = cate.[CourseCategoryId]\n"
-                + " Where cr.[CourseId] = ?";
+        String sql ="""
+                    SELECT cate.[CourseCategoryId],
+                           cate.[CategoryName],
+                    	   count(cr.[CourseId]) as numberCourseInCategory
+                    FROM [dbo].[CourseCategory] cate
+                    JOIN [dbo].[Course] cr ON cr.[CourseCategoryId] = cate.[CourseCategoryId]
+                    Where  cate.[CourseCategoryId] = (Select [CourseCategoryId] from Course where CourseId = ? )
+                    Group By cate.[CourseCategoryId],cate.[CategoryName]
+                    """;
         try {
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
@@ -94,8 +99,8 @@ public class CourseDetailDAO {
 
                 String cate_id = rs.getString(1);
                 String cate_name = rs.getString(2);
-
-                list.add(new Category(cate_id, cate_name));
+                int numberCourseInCate = rs.getInt(3);
+                list.add(new Category(cate_id, cate_name, numberCourseInCate));
             }
         } catch (Exception e) {
             e.printStackTrace();  // In chi tiết lỗi ra console
@@ -183,10 +188,56 @@ public class CourseDetailDAO {
 
         return null;
     }
+    
+    
+    
+    //Lấy ra thông tin các đánh giá của khóa học 
+    
+        public ArrayList<StarRatingDTO> getRatings(int courseId) throws SQLException {
+        ArrayList<StarRatingDTO> list = new ArrayList<>();
+        String sql = """
+                     SELECT [RatingId]
+              ,[Star]
+              ,[Comment]
+              ,[DateCreated]
+              ,[CourseId]
+              ,cr.[AccountId]
+        	  ,p.Avatar
+        	  ,p.FullName
+          FROM [dbo].[CourseRating] cr
+          Join Profile p on p.ProfileId = cr.[AccountId]
+          Where cr.[CourseId] = ?
+                     """;
+        try {
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, courseId);
+
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int ratingid = rs.getInt(1);
+                int star  = rs.getInt(2);
+                String comment = rs.getString(3);
+                Date datecreate = rs.getDate(4);
+                int courseid = rs.getInt(5);
+                int accountid = rs.getInt(6);  // Nếu giá trị là "IT", dùng getString để tránh lỗi
+                String avatar = rs.getString(7);
+                String fullname = rs.getString(8);
+              
+                list.add(new StarRatingDTO(ratingid, star, comment, datecreate, courseid, accountid, avatar, fullname));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Lỗi");
+        }
+
+        return list;
+    }
+    
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         CourseDetailDAO dao = new CourseDetailDAO();
-        System.out.println(dao.getEnrollmentByAccountId(5));
+        System.out.println(dao.getRatings(1));
     }
 
 }

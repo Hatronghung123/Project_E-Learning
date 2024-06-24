@@ -4,8 +4,11 @@
  */
 package Controller.User;
 
+import Controller.CourseDetailServelet;
 import Dal.AccountDAO;
+import Dal.HomeDAO;
 import Model.Account;
+import Model.Category;
 import Model.ProfileDTO;
 import Util.ServerPath;
 
@@ -22,6 +25,10 @@ import jakarta.servlet.http.Part;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.http.client.fluent.Response;
 
 /**
@@ -74,6 +81,9 @@ public class profileServlet extends HttpServlet {
         ProfileDTO profile = (ProfileDTO) session.getAttribute("profile");
         Account account = (Account) session.getAttribute("account");
 
+         //hiện thị ra các category trên header
+                displaycategory(request, response);
+        
         session.setAttribute("profile", profile);
         session.setAttribute("account", account);
         //out.print(profile.isGender());
@@ -252,4 +262,16 @@ public class profileServlet extends HttpServlet {
         return replacePath_not_build;
     }
 
+    
+        public void displaycategory(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            HomeDAO dao = new HomeDAO();
+            ArrayList<Category> listCategory = dao.getAllCategory();
+            request.setAttribute("listCategory", listCategory);
+        } catch (SQLException ex) {
+            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }
