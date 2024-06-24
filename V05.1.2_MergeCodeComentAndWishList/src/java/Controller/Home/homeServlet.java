@@ -94,30 +94,27 @@ public class homeServlet extends HttpServlet {
                 getCidFromWishlistByAccId(request, response, acc.getAccount_id());
                
             }
-            
+
             //Định dạng khóa học theo giá tiền Việt Nam
-            for(Course course : listPopulerCourse) {
+            for (Course course : listPopulerCourse) {
                 course.setFormattedPrice(formartPrice(course.getPrice()));
             }
-            
               //Set số sao và lượt đánh giá cho từng khóa học
                 for (Course course : listPopulerCourse) {
                     ArrayList<StarRatingDTO> listRating = cdDao.getRatings(course.getCourse_id());
                     course.setStar(AVGOfRaing.AvgRatingCourse(listRating).get(0));
                     course.setSumOfRating(AVGOfRaing.AvgRatingCourse(listRating).get(1));
                 }
-            
-            
+
             request.setAttribute("action", action);
             request.setAttribute("listPopulerCourse", listPopulerCourse);
             request.setAttribute("listNewCourse", listNewCourse);
             request.setAttribute("listCategory", listCategory);
 
-
         } catch (SQLException ex) {
             Logger.getLogger(homeServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-//        getProfile(request, response);
+        getProfile(request, response);
 
         request.getRequestDispatcher("index.jsp").forward(request, response);
     }
@@ -186,12 +183,10 @@ public class homeServlet extends HttpServlet {
 
             session.setAttribute("account", account_login);
             session.setMaxInactiveInterval(60 * 30);
-           
-
         }
     }
-    
-          public String formartPrice (int price) {
+
+    public String formartPrice(int price) {
         NumberFormat formatTer = NumberFormat.getInstance(new Locale("vi", "VN"));
         return formatTer.format(price);
     }

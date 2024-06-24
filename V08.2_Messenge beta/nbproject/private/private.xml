@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/SWP391/V05.1.2_MergeCodeComentAndWishList/src/java/Model/Messenger.java</file>
+            <file>file:/D:/SWP391/V05.1.2_MergeCodeComentAndWishList/src/java/Dal/MessengerDAO.java</file>
+            <file>file:/D:/SWP391/V05.1.2_MergeCodeComentAndWishList/src/java/Dal/LessonDAO.java</file>
+            <file>file:/D:/SWP391/V05.1.2_MergeCodeComentAndWishList/web/detail.jsp</file>
+            <file>file:/D:/SWP391/V05.1.2_MergeCodeComentAndWishList/src/java/Model/Profile.java</file>
+            <file>file:/D:/SWP391/V05.1.2_MergeCodeComentAndWishList/web/Messenger.jsp</file>
+            <file>file:/D:/SWP391/V05.1.2_MergeCodeComentAndWishList/src/java/Controller/MessengerSeverlet.java</file>
+            <file>file:/D:/SWP391/V05.1.2_MergeCodeComentAndWishList/src/java/Controller/lessonServlet.java</file>
+            <file>file:/D:/SWP391/V05.1.2_MergeCodeComentAndWishList/web/mentee_my_lesson.jsp</file>
+            <file>file:/D:/SWP391/V05.1.2_MergeCodeComentAndWishList/src/java/Dal/WishlistDAO.java</file>
+            <file>file:/D:/SWP391/V05.1.2_MergeCodeComentAndWishList/src/java/Model/Account.java</file>
+            <file>file:/D:/SWP391/V05.1.2_MergeCodeComentAndWishList/src/java/Model/Lesson.java</file>
+        </group>
+    </open-files>
+</project-private>

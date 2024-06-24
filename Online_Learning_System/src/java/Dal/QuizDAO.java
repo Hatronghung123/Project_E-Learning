@@ -114,13 +114,7 @@ public class QuizDAO extends DBContext {
     public static void main(String[] args) {
         QuizDAO dao = new QuizDAO();
 
-        List<Answer> answers = new ArrayList<>();
-        answers.add(new Answer(10, "Choice A", true));
-        answers.add(new Answer(10, "Choice B", false));
-        answers.add(new Answer(10, "Choice C", false));
-        answers.add(new Answer(10, "Choice D", false));
-
-        dao.insertAnswers(answers);
+        dao.deleteQuestionById(174, 173);
     }
 
     public ArrayList<Questions> getListQuestions(Questions questions) {
@@ -184,5 +178,33 @@ public class QuizDAO extends DBContext {
         }
         return listFound;
 
+    }
+
+    public void deleteQuestionById(int questionId, int quizId) {
+        connection = getConnection();
+        String sql = "BEGIN TRANSACTION;\n"
+                + "\n"
+                + "\n"
+                + "DELETE FROM QuestionChoices\n"
+                + "WHERE QuestionId IN (\n"
+                + "    SELECT QuestionId FROM Question\n"
+                + "    WHERE QuestionId = ?\n"
+                + ");\n"
+                + "\n"
+                + "\n"
+                + "DELETE FROM Question\n"
+                + "WHERE QuizId = ? and QuestionId =?;\n"
+                + "\n"
+                + "\n"
+                + "COMMIT TRANSACTION;";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, questionId);
+            statement.setInt(2, quizId);
+            statement.setInt(3, questionId);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 }
