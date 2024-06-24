@@ -118,28 +118,21 @@
         <jsp:include page="../common/menu.jsp"></jsp:include>
 
             <div class="container">
-                <!-- Breadcrumbs 
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="fixed-instructor-dashboard.html">Home</a></li>
-                    <li class="breadcrumb-item"><a href="fixed-instructor-quizzes.html">Quiz Manager</a></li>
-                    <li class="breadcrumb-item active">Edit Quiz</li>
-                </ol> -->
                 <h1 class="page-heading h2" style="margin-top: 10px;">Create Questions</h1>
-                <form id="addQuizForm" action="createQuestion" method="post">
+                <form id="addQuizForm">
                     <div class="card">
                         <div class="card-header">
                             <h4 class="card-title">Questions</h4>
                         </div>
-
-                    <c:forEach items="${listQuestions}" var="listQuestions">
+                    <c:forEach items="${listQuestions}" var="question">
                         <div class="nestable" id="nestable">
                             <ul class="list-group list-group-fit nestable-list-plain mb-0">
                                 <li class="list-group-item nestable-item">
                                     <div class="media">
                                         <div class="media-body media-middle">
-                                            <p class="question-number">${listQuestions.questionNum}. ${listQuestions.getQuestionName()}</p>
+                                            <p class="question-number">${question.questionNum}. ${question.getQuestionName()}</p>
                                             <c:forEach items="${listAnswers}" var="answer">
-                                                <c:if test="${listQuestions.getQuestionId() == answer.getQuestionId()}">
+                                                <c:if test="${question.getQuestionId() == answer.getQuestionId()}">
                                                     <div class="answer ${answer.isCorrect ? 'correct' : 'incorrect'}">
                                                         ${answer.getChoices()}<br>
                                                     </div>
@@ -148,8 +141,10 @@
                                         </div>
                                         <div class="media-right text-right">
                                             <div>
-                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editQuestionModal" onclick="editProductModal(this)">Edit</button>
-                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-question-modal" onclick="deleteProductModal(this)">Delete</button>
+                                                <a class="btn btn-primary" data-toggle="modal" data-target="#editQuestionModal" 
+                                                   onclick="editQuestionModal(${question.getQuestionId()}, '${question.getQuestionName()}', ${question.questionNum})">Edit</a>
+                                                <a class="btn btn-danger" data-toggle="modal" data-target="#delete-question-modal" 
+                                                   onclick="deleteProductModal(${question.getQuestionId()})">Delete</a>
                                             </div>
                                         </div>
                                     </div>
@@ -158,19 +153,11 @@
                         </div>
                     </c:forEach>
                     <div class="card-header bg-white">
-                        <a href="#" data-toggle="modal" data-target="#editQuiz" class="btn btn-success">Add Question </a>
+                        <a href="#" data-toggle="modal" data-target="#editQuiz" class="btn btn-success">Add Question</a>
                     </div>
                 </div>
-
-                <!--                    <div class="card">
-                                        <div class="card-header bg-white">
-                                            <input type="submit" name="AddQuestion" value="Add Question" class="btn btn-success" style="width: 127.6px;">
-                                        </div>
-                                    </div>
-                -->
             </form>
         </div>
-
         <!-- jQuery -->
         <script src="${pageContext.request.contextPath}/assets/vendor/jquery.min.js"></script>
 
@@ -192,25 +179,19 @@
         <!-- App JS -->
         <script src="${pageContext.request.contextPath}/assets/js/main.js"></script>
 
-
         <!-- Vendor JS -->
         <script src="${pageContext.request.contextPath}/assets/vendor/jquery.nestable.js"></script>
         <script src="${pageContext.request.contextPath}/assets/vendor/jquery.bootstrap-touchspin.js"></script>
-
-
 
         <!-- Initialize -->
         <script src="${pageContext.request.contextPath}/assets/js/nestable.js"></script>
         <script src="${pageContext.request.contextPath}/assets/js/touchspin.js"></script>
 
-
-
-
         <script src="${pageContext.request.contextPath}/lib/wow/wow.min.js"></script>
         <script src="${pageContext.request.contextPath}/lib/easing/easing.min.js"></script>
-        <!-- JavaScript -->
 
         <jsp:include page="canswer.jsp"></jsp:include>
-
+        <jsp:include page="deletequestion.jsp"></jsp:include>
+        <jsp:include page="editquestion.jsp"></jsp:include>
     </body>
 </html>
