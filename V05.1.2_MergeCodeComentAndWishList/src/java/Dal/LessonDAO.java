@@ -106,7 +106,7 @@ public class LessonDAO {
                 String mentor_name = rs.getString(7);
                 String Avatar = rs.getString(8);
                 int course_id = rs.getInt(9);
-                int duration = rs.getInt("Duration");
+                long duration = rs.getInt("Duration");
 
                 list.add(new Lesson(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration));
             }
@@ -154,7 +154,7 @@ public class LessonDAO {
                 String mentor_name = rs.getString(7);
                 String Avatar = rs.getString(8);
                 int course_id = rs.getInt(9);
-                int duration = rs.getInt("Duration");
+                long duration = rs.getInt("Duration");
 
                 return new Lesson(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration);
             }
