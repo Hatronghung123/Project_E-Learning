@@ -54,10 +54,9 @@ public class LessonManageDAO {
             e.printStackTrace();
         }
     }
-    
-    
+
     //UPDATE LESSON
-        public void updateLesson(Lesson lesson) {
+    public void updateLesson(Lesson lesson) {
         String sql = """
                         UPDATE [Lesson]
                          SET [ModuleId] = ?
@@ -81,7 +80,6 @@ public class LessonManageDAO {
             e.printStackTrace();
         }
     }
-    
 
     //Lấy lisst module theo course ID để mentor chọn để tạo thêm lesson
     public ArrayList<Module> getListModuleByCid(int courseId) throws SQLException {
@@ -113,21 +111,25 @@ public class LessonManageDAO {
     }
 
     //Lấy ra tất cả lesson của course by cid
-    public ArrayList<Lesson> getListlessonByCid() throws SQLException {
+    public ArrayList<Lesson> getListlessonByCid(int courseid) throws SQLException {
         ArrayList<Lesson> list = new ArrayList<>();
         String sql = """
-                      SELECT  [LessonId]
-                             ,[ModuleId]
-                             ,[LessonName]
-                             ,[LessonContent]
-                             ,[LessonVideo]
-                             ,[Duration]
-                         FROM [Project Online Learning].[dbo].[Lesson]
+                      SELECT  
+                      [LessonId]
+                      ,l.[ModuleId]
+                      ,[LessonName]
+                      ,[LessonContent]
+                      ,[LessonVideo]
+                      ,[Duration]
+                      FROM [Project Online Learning].[dbo].[Lesson] l 
+                      join [dbo].[Module] m on m.ModuleId = l.ModuleId
+                      Join [dbo].[Course] c on c.CourseId = m.CourseId
+                      where  c.CourseId = ?
                      """;
         try {
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
-         
+            ps.setInt(1, courseid);
 
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -187,6 +189,6 @@ public class LessonManageDAO {
 
     public static void main(String[] args) throws SQLException {
         LessonManageDAO dao = new LessonManageDAO();
-        System.out.println(dao.getlessonByLessonid(1));
+        System.out.println(dao.getListlessonByCid(2));
     }
 }

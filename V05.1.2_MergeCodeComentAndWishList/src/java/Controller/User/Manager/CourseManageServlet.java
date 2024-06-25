@@ -93,10 +93,12 @@ public class CourseManageServlet extends HttpServlet {
         LessonManageDAO dao = new LessonManageDAO();
         ArrayList<Lesson> lessonList = null;
         try {
-            lessonList = dao.getListlessonByCid();
+            lessonList = dao.getListlessonByCid(Integer.parseInt(cid));
             //o.print(lessonList);
         } catch (SQLException ex) {
             Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }catch (Exception e) {
+            
         }
         
 

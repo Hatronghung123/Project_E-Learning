@@ -302,7 +302,7 @@
                             </div>
                             <div class="d-flex justify-content-between border-bottom px-4">
                                 <h6 class="text-white my-3">Rating</h6>
-                                <h6 class="text-white my-3">4.5 <small>(250)</small></h6>
+                                <h6 class="text-white my-3">${avgRatingCourse} <small>(${amountRatingCourse})</small></h6>
                             </div>
                             <div class="d-flex justify-content-between border-bottom px-4">
                                 <h6 class="text-white my-3">Lectures</h6>

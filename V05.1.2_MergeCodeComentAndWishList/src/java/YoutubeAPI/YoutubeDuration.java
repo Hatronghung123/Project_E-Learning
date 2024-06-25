@@ -11,7 +11,6 @@ import com.google.api.services.youtube.model.PlaylistItemListResponse;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoListResponse;
 
-
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
@@ -21,24 +20,22 @@ import java.util.List;
  * @author Tuan Anh(Gia Truong)
  */
 public class YoutubeDuration {
-    
+
     private static final String API_KEY = "AIzaSyA3MF0f8VzHvVsmJoHkyJN2D3AaAHBDgDs";
     private static final String APPLICATION_NAME = "YouTubeDuration";
     private static final long MAX_RESULTS = 50L;
 
-
-    
-      public static String extractVideoId(String url) {
+    public static String extractVideoId(String url) {
         // Tách phần sau cùng của URL sử dụng dấu "/"
         String[] parts = url.split("/");
         // Phần cuối cùng sẽ chứa ID video và có thể có query string
         String idWithQuery = parts[parts.length - 1];
-        
+
         // Nếu có query string, tách phần ID trước dấu ?
         if (idWithQuery.contains("?")) {
             idWithQuery = idWithQuery.split("\\?")[0];
         }
-        
+
         return idWithQuery;
     }
 
@@ -67,9 +64,6 @@ public class YoutubeDuration {
         }
         return videoDuration;
     }
-    
-    
-
 
     public static YouTube getService() throws GeneralSecurityException, IOException {
         return new YouTube.Builder(GoogleNetHttpTransport.newTrustedTransport(), JacksonFactory.getDefaultInstance(), null)
@@ -133,13 +127,27 @@ public class YoutubeDuration {
         return d.getSeconds();
     }
 
-    public static String convertToHoursAndMinutes(long totalSeconds) {
+    public static String SumConvertToHoursAndMinutesLesson(long totalSeconds) {
+        // Tính số giờ
         long hours = totalSeconds / 3600;
+        // Tính số phút
         long minutes = (totalSeconds % 3600) / 60;
+        // Tính số giây còn lại
+        long seconds = totalSeconds % 60;
         String strHours = (hours < 10) ? "0" + hours : String.valueOf(hours);
         String strMinutes = (minutes < 10) ? "0" + minutes : String.valueOf(minutes);
-        return strHours + "h" + strMinutes + "m";
+        String strSecconds = (seconds < 10) ? "0" + seconds : String.valueOf(seconds);
+        return strHours + " hrs " + strMinutes + " min "+ strSecconds +"sec";
     }
+    
+        public static String SumConvertToMinutesAndSecondsLesson(long totalSeconds) {
+        long minutes = totalSeconds / 60;
+        long seconds = totalSeconds % 60;
+        String strMinutes = (minutes < 10) ? "0" + minutes : String.valueOf(minutes);
+        String strSeconds = (seconds < 10) ? "0" + seconds : String.valueOf(seconds);
+        return strMinutes + " min " +" "+ strSeconds + "sec";
+    }
+    
 
     public static String convertToMinutesAndSeconds(long totalSeconds) {
         long minutes = totalSeconds / 60;

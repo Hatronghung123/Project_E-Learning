@@ -8,9 +8,10 @@ import Dal.CourseDetailDAO;
 import Dal.DisscussionDAO;
 import Dal.HomeDAO;
 import Dal.LessonDAO;
+import Dal.LessonManageDAO;
 import Model.Account;
 import Model.Category;
-import Model.Course;
+import YoutubeAPI.YoutubeDuration;
 import Model.DiscussionLesson;
 import Model.Enrollment;
 import Model.Lesson;
@@ -88,11 +89,6 @@ public class lessonServlet extends HttpServlet {
         int course_id = 0;
         int lesson_id = 0;
 
-        if (courseid_str != null && lessonid_str != null) {
-            course_id = Integer.parseInt(courseid_str);
-            lesson_id = Integer.parseInt(lessonid_str);
-        }
-
         // Kiểm tra nếu session không có thuộc tính 'user' thì chuyển hướng về trang đăng nhập
         if (acc == null) {
             response.sendRedirect("join?action=login");
@@ -101,6 +97,10 @@ public class lessonServlet extends HttpServlet {
 
             try {
 
+                if (courseid_str != null && lessonid_str != null) {
+                    course_id = Integer.parseInt(courseid_str);
+                    lesson_id = Integer.parseInt(lessonid_str);
+                }
                 //Kiểm tra người dùng nếu chưa mua khóa học mà truy cập đường link thì chuyển về home
                 ArrayList<Enrollment> listEnrollment = dao.getEnrollmentByAccountId(acc.getAccount_id());
                 if (!isPaid(course_id, listEnrollment)) {
@@ -132,9 +132,14 @@ public class lessonServlet extends HttpServlet {
 
                 //hiện thị ra các category trên header
                 displaycategory(request, response);
-                
+
                 //hiện thị số lượng sao của khóa học đó
                 displayRatingCourse(request, response, course_id);
+                
+                //Hiện thỉ tổng thời gian khóa học
+                long totalDuration = sumOfDurationInCourse(course_id);
+                displayTotalTimeLearnCourse(request, response, totalDuration);
+                
                 // Đặt các thuộc tính cho JSP
                 request.setAttribute("mainComments", mainComments);
                 request.setAttribute("repliesMap", repliesMap);
@@ -254,15 +259,15 @@ public class lessonServlet extends HttpServlet {
             ArrayList<StarRatingDTO> listRatings = cdDao.getRatings(course_id);
             //lấy ra số lượng sao trung bình và tổng số lượng đánh giá của khóa học
             ArrayList<Double> avgRatingCourse = AVGOfRaing.AvgRatingCourse(listRatings);
-            
+
             request.setAttribute("avgRatingCourse", avgRatingCourse.get(0));
             request.setAttribute("amountRatingCourse", avgRatingCourse.get(1));
         } catch (SQLException ex) {
             Logger.getLogger(lessonServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-        public void displaycategory(HttpServletRequest request, HttpServletResponse response)
+
+    public void displaycategory(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             HomeDAO dao = new HomeDAO();
@@ -270,6 +275,43 @@ public class lessonServlet extends HttpServlet {
             request.setAttribute("listCategory", listCategory);
         } catch (SQLException ex) {
             Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    //tính tổng thời gian học khóa học
+    private long sumOfDurationInCourse(int course_id)
+            throws ServletException, IOException {
+        LessonManageDAO dao = new LessonManageDAO();
+        long sumDuration = 0;
+        try {
+
+            ArrayList<Lesson> listLesson = dao.getListlessonByCid(course_id);
+            for (Lesson lesson : listLesson) {
+                sumDuration += lesson.getDuration();
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(lessonServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return sumDuration;
+    }
+
+    private void displayTotalTimeLearnCourse(HttpServletRequest request, HttpServletResponse response, long sumDuration)
+            throws ServletException, IOException {
+        String time = null;
+        if (sumDuration >= 3600) {
+            time = YoutubeDuration.SumConvertToHoursAndMinutesLesson(sumDuration);
+        } else if (sumDuration > 0) {
+            time = YoutubeDuration.SumConvertToMinutesAndSecondsLesson(sumDuration);
+        } else {
+            time = "00 hrs  00 min  00 sec";
+        }
+
+        if (time != null) {
+            request.setAttribute("totalTime", time);
+        } else {
+            request.setAttribute("totalTime", "00 hrs  00 min  00 sec");
+
         }
     }
 

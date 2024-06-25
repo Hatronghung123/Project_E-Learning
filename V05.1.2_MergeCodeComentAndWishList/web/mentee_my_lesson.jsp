@@ -333,7 +333,8 @@
                                             <i class="material-icons text-muted-light">schedule</i>
                                         </div>
                                         <div class="media-body media-middle">
-                                            2 <small class="text-muted">hrs</small> &nbsp; 26 <small class="text-muted">min</small>
+                                           ${totalTime}
+<!--                                            2 <small class="text-muted">hrs</small> &nbsp; 26 <small class="text-muted">min</small>-->
                                         </div>
                                     </div>
                                 </li>

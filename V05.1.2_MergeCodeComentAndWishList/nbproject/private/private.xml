@@ -3,10 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/New%20folder/V10/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/web/AddNewCourse.jsp</file>
-            <file>file:/D:/New%20folder/V10/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Controller/User/Manager/LessonMangeServelet.java</file>
-            <file>file:/D:/New%20folder/V10/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/web/UpdateCourse.jsp</file>
-            <file>file:/D:/New%20folder/V10/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/web/mentor_add_update_lesson.jsp</file>
+            <file>file:/D:/New%20folder/V10/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/web/mentee_my_lesson.jsp</file>
+            <file>file:/D:/New%20folder/V10/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Controller/lessonServlet.java</file>
+            <file>file:/D:/New%20folder/V10/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Controller/User/Manager/CourseManageServlet.java</file>
+            <file>file:/D:/New%20folder/V10/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Util/AVGOfRaing.java</file>
+            <file>file:/D:/New%20folder/V10/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/web/Profile.jsp</file>
+            <file>file:/D:/New%20folder/V10/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/YoutubeAPI/YoutubeDuration.java</file>
+            <file>file:/D:/New%20folder/V10/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/web/detail.jsp</file>
+            <file>file:/D:/New%20folder/V10/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Dal/LessonManageDAO.java</file>
         </group>
     </open-files>
 </project-private>
