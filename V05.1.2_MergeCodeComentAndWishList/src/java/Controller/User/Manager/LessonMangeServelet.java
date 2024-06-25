@@ -67,20 +67,28 @@ public class LessonMangeServelet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String course_id = request.getParameter("cid");
+        String action = request.getParameter("action");
 
         LessonManageDAO dao = new LessonManageDAO();
         try {
+            //Lấy ra được list module theo course id khi add hoặc update
             ArrayList<Module> listModule = dao.getListModuleByCid(Integer.parseInt(course_id));
+            
+            // Kiểm tra action
+            if ("updatelesson".equals(action)) {
+                updateLessonDoGet(request, response);
+            }
+            
             request.setAttribute("listModule", listModule);
+            request.setAttribute("action", action);
+            request.setAttribute("cid", course_id);
         } catch (SQLException ex) {
             Logger.getLogger(LessonMangeServelet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        updateLessonDoGet(request, response);
-        request.getRequestDispatcher("mentor_add_lesson.jsp").forward(request, response);
-
+        request.getRequestDispatcher("mentor_add_update_lesson.jsp").forward(request, response);
     }
 
     /**
@@ -101,10 +109,14 @@ public class LessonMangeServelet extends HttpServlet {
                 AddLesson(request, response);
                 break;
             case "deletelesson":
-                 deleteLesson(request, response);
-                 break;
+                deleteLesson(request, response);
+                break;
+            case "updatelesson":
+                updateLessonDoPost(request, response);
+                break;
             default:
-                throw new AssertionError();
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action specified.");
+                break;
         }
     }
 
@@ -125,6 +137,8 @@ public class LessonMangeServelet extends HttpServlet {
         return duration;
     }
 
+    
+    //thêm một lesson mới vào database
     private void AddLesson(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String cid = request.getParameter("cid");
@@ -134,11 +148,16 @@ public class LessonMangeServelet extends HttpServlet {
         String videoLink = request.getParameter("videoLink");
         long duration = getDuraton(videoLink);
         LessonManageDAO dao = new LessonManageDAO();
-        Lesson lesson = new Lesson(Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
-        dao.InsertComment(lesson);
+        try {
+            Lesson lesson = new Lesson(Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
+            dao.InsertLesson(lesson);
+        } catch (Exception e) {
+        }
+
         response.sendRedirect("course-manage?cid=" + cid + "&action=update");
     }
 
+    //xóa lesson ra khỏi database
     private void deleteLesson(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String lessonid = request.getParameter("lessonid");
@@ -152,37 +171,43 @@ public class LessonMangeServelet extends HttpServlet {
         response.sendRedirect("course-manage?cid=" + cid + "&action=update");
     }
 
-    
-     private void updateLessonDoGet(HttpServletRequest request, HttpServletResponse response)
+    //Hiện thị thông tin cua lesson cũ lên form
+    private void updateLessonDoGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String lessonid = request.getParameter("lessonid");
-        
+
         LessonManageDAO dao = new LessonManageDAO();
         Lesson lesson = null;
         try {
-           lesson = dao.getlessonByLessonid(Integer.parseInt(lessonid));
+            lesson = dao.getlessonByLessonid(Integer.parseInt(lessonid));
         } catch (SQLException ex) {
             Logger.getLogger(LessonMangeServelet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception e) {
-            
+
         }
         request.setAttribute("lesson", lesson);
-        
+
     }
-    
-    
-     private void updateLessonDoPost(HttpServletRequest request, HttpServletResponse response)
+
+    //Update dữ liệu mới vào database
+    private void updateLessonDoPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String cid = request.getParameter("cid");
+        String lessonid = request.getParameter("lessonid");
         String lessonName = request.getParameter("lessonName");
-        String moduleid = request.getParameter("moduleid");
+        String moduleid = request.getParameter("module");
         String lessonContent = request.getParameter("lessonContent");
-        String videoLink = request.getParameter("lessonVideo");
+        String videoLink = request.getParameter("videoLink");
         long duration = getDuraton(videoLink);
         LessonManageDAO dao = new LessonManageDAO();
-        Lesson lesson = new Lesson(Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
-        dao.InsertComment(lesson);
-        response.sendRedirect("course-manage?cid=" + cid + "&action=update");
+        try {
+            Lesson lesson = new Lesson(Integer.parseInt(lessonid), Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
+            dao.updateLesson(lesson);
+            response.sendRedirect("course-manage?cid=" + cid + "&action=update");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
-    
+
 }

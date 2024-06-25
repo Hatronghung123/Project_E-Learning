@@ -66,10 +66,7 @@
     <link href="css/style.css" rel="stylesheet">
     <!-- Vendor CSS -->
 
-    <style>
-        
 
-    </style>
 
 
 </head>

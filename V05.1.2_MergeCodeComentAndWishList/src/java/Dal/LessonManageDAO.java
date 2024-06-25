@@ -22,7 +22,7 @@ public class LessonManageDAO {
     PreparedStatement ps = null; // Ném câu lệnh query sang sql server
     ResultSet rs = null; // Nhận kết quả trả về
 
-    public void InsertComment(Lesson lesson) {
+    public void InsertLesson(Lesson lesson) {
         String sql = """
                        insert into [Lesson] 
                        values(?,?,?,?,?)
@@ -54,6 +54,34 @@ public class LessonManageDAO {
             e.printStackTrace();
         }
     }
+    
+    
+    //UPDATE LESSON
+        public void updateLesson(Lesson lesson) {
+        String sql = """
+                        UPDATE [Lesson]
+                         SET [ModuleId] = ?
+                             ,[LessonName] = ?
+                             ,[LessonContent] = ?
+                             ,[LessonVideo] = ?
+                             ,[Duration] = ?
+                         WHERE LessonId = ?
+                     """;
+        try (Connection con = new DBContext().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            // Đặt các tham số vào câu lệnh PreparedStatement
+            ps.setInt(1, lesson.getModuleid());
+            ps.setString(2, lesson.getLessonname());
+            ps.setString(3, lesson.getLessoncontent());
+            ps.setString(4, lesson.getLessonvideo());
+            ps.setLong(5, lesson.getDuration());
+            ps.setInt(6, lesson.getLessonid());
+            ps.executeUpdate();
+            System.out.println("Chèn dữ liệu thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
 
     //Lấy lisst module theo course ID để mentor chọn để tạo thêm lesson
     public ArrayList<Module> getListModuleByCid(int courseId) throws SQLException {

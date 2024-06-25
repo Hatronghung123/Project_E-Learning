@@ -36,7 +36,7 @@ public class Lesson {
         this.duration = duration;
     }
     
-       //dùng để read lesson
+       //dùng để read và update lesson
     public Lesson(int lessonid, int moduleid, String lessonname, String lessoncontent, String lessonvideo, long duration) {
         this.lessonid = lessonid;
         this.moduleid = moduleid;
