@@ -13,6 +13,7 @@ import java.sql.Date;
 public class Lesson {
 
     private int lessonid;
+    private int moduleid;
     private String modulname;
     private String lessonname;
     private String lessoncontent;
@@ -21,11 +22,33 @@ public class Lesson {
     private String mentorname;
     private String avatar;
     private int courseid;
-    private int duration;
+    private long duration;
+
     public Lesson() {
     }
 
-    public Lesson(int lessonid, String modulname, String lessonname, String lessoncontent, String lessonvideo, String coursename, String mentorname, String avatar, int courseid, int duration) {
+    //dùng để insert lesson
+    public Lesson( int moduleid, String lessonname, String lessoncontent, String lessonvideo, long duration) {
+        this.moduleid = moduleid;
+        this.lessonname = lessonname;
+        this.lessoncontent = lessoncontent;
+        this.lessonvideo = lessonvideo;
+        this.duration = duration;
+    }
+    
+       //dùng để read lesson
+    public Lesson(int lessonid, int moduleid, String lessonname, String lessoncontent, String lessonvideo, long duration) {
+        this.lessonid = lessonid;
+        this.moduleid = moduleid;
+        this.lessonname = lessonname;
+        this.lessoncontent = lessoncontent;
+        this.lessonvideo = lessonvideo;
+        this.duration = duration;
+    }
+    
+    
+
+    public Lesson(int lessonid, String modulname, String lessonname, String lessoncontent, String lessonvideo, String coursename, String mentorname, String avatar, int courseid, long duration) {
         this.lessonid = lessonid;
         this.modulname = modulname;
         this.lessonname = lessonname;
@@ -37,9 +60,8 @@ public class Lesson {
         this.courseid = courseid;
         this.duration = duration;
     }
-
-
-
+    
+    
 
     public int getLessonid() {
         return lessonid;
@@ -49,6 +71,17 @@ public class Lesson {
         this.lessonid = lessonid;
     }
 
+    public int getModuleid() {
+        return moduleid;
+    }
+
+    public void setModuleid(int moduleid) {
+        this.moduleid = moduleid;
+    }
+
+    
+    
+    
     public String getModulname() {
         return modulname;
     }
@@ -73,7 +106,6 @@ public class Lesson {
         this.lessoncontent = lessoncontent;
     }
 
-    
     public String getLessonvideo() {
         return lessonvideo;
     }
@@ -114,11 +146,11 @@ public class Lesson {
         this.courseid = courseid;
     }
 
-    public int getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 
@@ -127,10 +159,4 @@ public class Lesson {
         return "Lesson{" + "lessonid=" + lessonid + ", modulname=" + modulname + ", lessonname=" + lessonname + ", lessoncontent=" + lessoncontent + ", lessonvideo=" + lessonvideo + ", coursename=" + coursename + ", mentorname=" + mentorname + ", avatar=" + avatar + ", courseid=" + courseid + ", duration=" + duration + '}';
     }
 
-    
-     
-
-
-    
-    
 }
