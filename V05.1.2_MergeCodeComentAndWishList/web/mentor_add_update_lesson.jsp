@@ -135,7 +135,7 @@
                 <h1 class="page-heading h2">Add Lesson</h1>
                 <div class="card">
                     <div class="card-body">
-                        <form action="LessonManage?action=addlesson" method="post">
+                        <form action="LessonManage" method="post">
                             <input type="hidden" value="${cid}" name="cid">
                         <div class="form-group row">
                             <label for="" class="form-control-label col-md-3">Lesson Name:</label>
@@ -182,10 +182,17 @@
                             </div>
                         </div>
                         <div class="text-right mt-3">
-                            <button type="submit" name="add" class="btn btn-primary">Add Course</button>&nbsp;
-                            <button type="submit" name="cancel" class="btn btn-outline-danger md-btn-flat">Cancel</button>
+                            <c:if test="${action == 'addlesson'}">
+                                <input type="hidden" value="addlesson" name="action">
+                                <button type="submit" name="add" class="btn btn-primary">Add Course</button>&nbsp;
+                            </c:if>
+                            <c:if test="${action == 'updatelesson'}">
+                                <input type="hidden" value="updatelesson" name="action">
+                                <input type="hidden" value="${lesson.getLessonid()}" name="lessonid">
+                                <button type="submit" name="save" class="btn btn-primary">Save Course</button>&nbsp;
+                            </c:if>
 
-
+                            <button type="button" onclick="cancelAdd(${cid})" name="cancel" class="btn btn-outline-danger md-btn-flat">Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -215,10 +222,16 @@
         <script src="assets/js/fancytree.js"></script>
 
         <script>
-            document.getElementById('videoLink').addEventListener('input', function () {
-                var videoUrl = this.value;
-                document.getElementById('videoFrame').src = videoUrl;
-            });
+                                document.getElementById('videoLink').addEventListener('input', function () {
+                                    var videoUrl = this.value;
+                                    document.getElementById('videoFrame').src = videoUrl;
+                                });
+        </script>
+
+        <script>
+            function cancelAdd(cid) {
+                window.location.href = '/Project_E-Learning/course-manage?cid=' + cid + '&action=update';
+            }
         </script>
 
     </body>

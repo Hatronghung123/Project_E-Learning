@@ -237,13 +237,14 @@
                                             <small class="text-muted">${o.getModuleid()}</small>
                                         </div>
                                         <div class="media-right media-middle">
-                                            <form action="LessonManage?action=updatelesson" method="GET">
+                                            <!--form update-->
+                                            <form action="LessonManage" method="GET">
                                                 <input type="hidden" value="${o.getLessonid()}" name="lessonid">
                                                 <input type="hidden" value="${cid}" name="cid">
-
+                                                <input type="hidden" value="updatelesson" name="action">
                                                 <button type="submit" class="btn btn-white btn-sm"><i class="material-icons">edit</i></button> 
                                             </form>
-
+                                            <!--form delete-->
                                             <form action="LessonManage?action=deletelesson&cid=${cid}&lessonid=${o.getLessonid()}" method="POST">
 
                                                 <button type="submit" class="btn btn-delete btn-sm"><i class="material-icons">delete</i></button> 
