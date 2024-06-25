@@ -5,8 +5,11 @@
         <group>
             <file>file:/F:/Project_E-Learning/Online_Learning_System/web/create_quiz/cq.jsp</file>
             <file>file:/F:/Project_E-Learning/Online_Learning_System/web/create_quiz/deletequestion.jsp</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/src/java/Controller/ControllerQuestionServlet.java</file>
             <file>file:/F:/Project_E-Learning/Online_Learning_System/web/create_quiz/cquestions.jsp</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/src/java/Dal/QuizDAO.java</file>
             <file>file:/F:/Project_E-Learning/Online_Learning_System/web/create_quiz/canswer.jsp</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/src/java/Controller/CreateQuestionsServlet.java</file>
             <file>file:/F:/Project_E-Learning/Online_Learning_System/web/create_quiz/editquestion.jsp</file>
         </group>
     </open-files>

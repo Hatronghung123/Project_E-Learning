@@ -34,7 +34,7 @@
     <!-- Your delete modal content here -->
 </div>
 <script>
-    function deleteProductModal(id) {
+    function deleteQuestionModal(id) {
         let inputId = document.querySelector("#idDeleteInput");
         inputId.value = id;
     }

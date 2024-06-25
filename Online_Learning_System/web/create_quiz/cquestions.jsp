@@ -130,10 +130,17 @@
                                 <li class="list-group-item nestable-item">
                                     <div class="media">
                                         <div class="media-body media-middle">
-                                            <p class="question-number">${question.questionNum}. ${question.getQuestionName()}</p>
+                                            <p class="question-number" 
+                                               data-question-id="${question.getQuestionId()}"
+                                               data-question-name="${question.getQuestionName()}"
+                                               data-question-num="${question.questionNum}">
+                                                ${question.questionNum}. ${question.getQuestionName()}
+                                            </p>
                                             <c:forEach items="${listAnswers}" var="answer">
                                                 <c:if test="${question.getQuestionId() == answer.getQuestionId()}">
-                                                    <div class="answer ${answer.isCorrect ? 'correct' : 'incorrect'}">
+                                                    <div class="answer ${answer.isCorrect ? 'correct' : 'incorrect'}" 
+                                                         data-answer-choice="${answer.getChoices()}"
+                                                         data-is-correct="${answer.isCorrect}">
                                                         ${answer.getChoices()}<br>
                                                     </div>
                                                 </c:if>
@@ -142,9 +149,9 @@
                                         <div class="media-right text-right">
                                             <div>
                                                 <a class="btn btn-primary" data-toggle="modal" data-target="#editQuestionModal" 
-                                                   onclick="editQuestionModal(${question.getQuestionId()}, '${question.getQuestionName()}', ${question.questionNum})">Edit</a>
+                                                   onclick="editQuestionModal(this, ${question.getQuestionId()})">Edit</a>
                                                 <a class="btn btn-danger" data-toggle="modal" data-target="#delete-question-modal" 
-                                                   onclick="deleteProductModal(${question.getQuestionId()})">Delete</a>
+                                                   onclick="deleteQuestionModal(${question.getQuestionId()})">Delete</a>
                                             </div>
                                         </div>
                                     </div>
@@ -153,7 +160,7 @@
                         </div>
                     </c:forEach>
                     <div class="card-header bg-white">
-                        <a href="#" data-toggle="modal" data-target="#editQuiz" class="btn btn-success">Add Question</a>
+                        <a href="#" data-toggle="modal" data-target="#createQuestion" class="btn btn-success">Add Question</a>
                     </div>
                 </div>
             </form>

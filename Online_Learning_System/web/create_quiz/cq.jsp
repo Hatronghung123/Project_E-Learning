@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Create A New Quiz</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -36,9 +36,6 @@
         <!-- Template Stylesheet -->
         <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
 
-
-
-
         <!-- Prevent the demo from appearing in search engines (REMOVE THIS) -->
         <meta name="robots" content="noindex">
 
@@ -56,10 +53,6 @@
 
         <!-- Sidebar Collapse -->
         <link type="text/css" href="${pageContext.request.contextPath}/assets/vendor/sidebar-collapse.min.css" rel="stylesheet">
-
-        <!--         App CSS 
-                <link type="text/css" href="${pageContext.request.contextPath}/assets/css/style.css" rel="stylesheet">-->
-
 
         <!-- Touchspin -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap-touchspin.css">
@@ -98,67 +91,63 @@
     <body>
         <jsp:include page="../common/menu.jsp"></jsp:include>
 
-            <div class="container">
-                <!-- Breadcrumbs 
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="fixed-instructor-dashboard.html">Home</a></li>
-                    <li class="breadcrumb-item"><a href="fixed-instructor-quizzes.html">Quiz Manager</a></li>
-                    <li class="breadcrumb-item active">Edit Quiz</li>
-                </ol> -->
-                <h1 class="page-heading h2" style="margin-top: 10px;">Vue.js Deploy Quiz</h1>
-                <form id="addQuizForm" action="createquiz" method="post">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Basic</h4>
+        <div class="container">
+            <h1 class="page-heading h2" style="margin-top: 10px;">Create A New Quiz</h1>
+            <form id="addQuizForm" action="createquiz" method="post" onsubmit="return validateForm3(event)">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Quiz</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label for="quizTitle" class="col-sm-3 col-form-label">Quiz Title:</label>
+                            <div class="col-sm-9 col-md-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Title" aria-describedby="sizing-addon2" name="quizTitle" id="quizTitle">
+                                    <div id="quizTitleError" class="error"></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="form-group row">
-                                <label for="quizTitle" class="col-sm-3 col-form-label">Quiz Title:</label>
-                                <div class="col-sm-9 col-md-4">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Title" aria-describedby="sizing-addon2" name="quizTitle" id="quizTitle">
+                        <div class="form-group row">
+                            <label for="time_toggle" class="col-sm-3 col-form-label">Timeframe:</label>
+                            <div class="col-sm-9">
+                                <div class="form-inline">
+                                    <div class="form-group" style="margin-right: 10px; margin-top: 10px">
+                                        <input type="number" min="1" max="100" class="form-control text-center" name="timeNumber" id="timeNumber" style="width: 70px;">
+                                        <div id="timeNumberError" class="error"></div>
+                                    </div>
+                                    <div class="form-group" style="margin-right: 10px; margin-top: 10px">
+                                        <select class="custom-select" name="timeUnit">
+                                            <option value="hour" selected>Hours</option>
+                                            <option value="minutes">Minutes</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label for="time_toggle" class="col-sm-3 col-form-label">Timeframe:</label>
-                                <div class="col-sm-9">
-                                    <div class="form-inline">
-                                        <div class="form-group" style="margin-right: 10px; margin-top: 10px">
-                                            <input type="number" min="1" max="100" class="form-control text-center" name="timeNumber" style="width: 70px;">
-                                        </div>
-                                        <div class="form-group" style="margin-right: 10px; margin-top: 10px">
-                                            <select class="custom-select" name="timeUnit">
-                                                <option value="hour" selected>Hours</option>
-                                                <option value="minutes">Minutes</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="quizScore" class="col-sm-3 col-form-label">Quiz Score:</label>
-                                <div class="col-sm-9">
-                                    <div class="form-inline">
-                                        <div class="form-group" style="margin-right: 10px; margin-top: 10px">
-                                            <input type="number" class="form-control text-center" name="quizScore" style="width: 70px;">
-                                        </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="quizScore" class="col-sm-3 col-form-label">Quiz Score:</label>
+                            <div class="col-sm-9">
+                                <div class="form-inline">
+                                    <div class="form-group" style="margin-right: 10px;">
+                                        <input type="number" min="1" max="10" class="form-control text-center" name="quizScore" id="quizScore" style="width: 70px;">
+                                        <div id="quizScoreError" class="error"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-header bg-white">
+                    <div class="card-footer">
+                        <div class="">
                             <input type="submit" name="AddQuiz" value="Add Quiz" class="btn btn-success" style="width: 127.6px;">
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
+        </div>
 
-
-            <!-- jQuery -->
-            <script src="${pageContext.request.contextPath}/assets/vendor/jquery.min.js"></script>
+        <!-- jQuery -->
+        <script src="${pageContext.request.contextPath}/assets/vendor/jquery.min.js"></script>
 
         <!-- Bootstrap -->
         <script src="${pageContext.request.contextPath}/assets/vendor/popper.min.js"></script>
@@ -178,21 +167,49 @@
         <!-- App JS -->
         <script src="${pageContext.request.contextPath}/assets/js/main.js"></script>
 
-
         <!-- Vendor JS -->
         <script src="${pageContext.request.contextPath}/assets/vendor/jquery.nestable.js"></script>
         <script src="${pageContext.request.contextPath}/assets/vendor/jquery.bootstrap-touchspin.js"></script>
-
-
 
         <!-- Initialize -->
         <script src="${pageContext.request.contextPath}/assets/js/nestable.js"></script>
         <script src="${pageContext.request.contextPath}/assets/js/touchspin.js"></script>
 
-
-
-
         <script src="${pageContext.request.contextPath}/lib/wow/wow.min.js"></script>
         <script src="${pageContext.request.contextPath}/lib/easing/easing.min.js"></script>
+
+        <!-- JavaScript for form validation -->
+        <script>
+            function validateForm3(event) {
+                // Lấy các giá trị từ các trường input
+                let quizTitle = $('#quizTitle').val();
+                let timeNumber = $('#timeNumber').val();
+                let quizScore = $('#quizScore').val();
+
+                // Clear current error messages
+                $('.error').html('');
+
+                // Check if fields are empty and show error messages
+                if (quizTitle === '') {
+                    $('#quizTitleError').html('Title Can Not Be Empty');
+                }
+                if (timeNumber === '') {
+                    $('#timeNumberError').html('Time Frame Of Quiz Can Not Be Empty');
+                }
+                if (quizScore === '') {
+                    $('#quizScoreError').html('Score Of Quiz Can Not Be Empty');
+                }
+
+                let error = '';
+                $('.error').each(function () {
+                    error += $(this).html();
+                });
+                if (error === '') {
+                    $('#addQuizForm').submit();
+                } else {
+                    event.preventDefault();
+                }
+            }
+        </script>
     </body>
 </html>
