@@ -80,6 +80,7 @@ public class CreateQuizServlet extends HttpServlet {
 
         String timeNumber = request.getParameter("timeNumber");
         String timeUnit = request.getParameter("timeUnit");
+        int quizScore = Integer.parseInt(request.getParameter("quizScore"));
         Time quizTime = null;
 
         if (timeNumber != null && !timeNumber.isEmpty()) {
@@ -110,7 +111,7 @@ public class CreateQuizServlet extends HttpServlet {
         Quiz quiz = null;
         if (quizTime != null) {
             QuizDAO quizDAO = new QuizDAO();
-            quiz = quizDAO.insertQuiz( new Quiz(quizTitle, quizTime));
+            quiz = quizDAO.insertQuiz( new Quiz(quizTitle, quizTime, quizScore));
         }
         HttpSession session = request.getSession();
         session.setAttribute("quizId", quiz.getQuizId());

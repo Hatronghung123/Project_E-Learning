@@ -28,12 +28,11 @@ public class Quiz {
         this.passScore = passScore;
     }
 
-    public Quiz(String quizName, Time quizTime) {
+    public Quiz(String quizName, Time quizTime, int passScore) {
         this.quizName = quizName;
         this.quizTime = quizTime;
+        this.passScore = passScore;
     }
-
-   
 
     public int getQuizId() {
         return quizId;

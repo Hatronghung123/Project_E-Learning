@@ -34,11 +34,12 @@ public class QuizDAO extends DBContext {
             System.out.println("Failed to make connection!");
             return null;
         }
-        String sql = "INSERT INTO [dbo].[Quiz] ([QuizName], [QuizTime]) VALUES (?, ?)";
+        String sql = "INSERT INTO [dbo].[Quiz] ([QuizName], [QuizTime], [PassScore]) VALUES (?, ?, ?)";
         try {
             statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setString(1, quiz.getQuizName());
             statement.setTime(2, quiz.getQuizTime());
+            statement.setInt(3, quiz.getPassScore());
 
             int affectedRows = statement.executeUpdate();
 
@@ -113,8 +114,13 @@ public class QuizDAO extends DBContext {
 
     public static void main(String[] args) {
         QuizDAO dao = new QuizDAO();
+        ArrayList<Answer> listAnswers = new ArrayList<>();
+        listAnswers.add(new Answer(253, "A) Hello My Love", false));
+        listAnswers.add(new Answer(253, "B) Hello My Teacher", false));
+        listAnswers.add(new Answer(253, "A) Hello My Mother", true));
+        listAnswers.add(new Answer(253, "A) Hello My Dad", true));
 
-        dao.deleteQuestionById(174, 173);
+        dao.editAnswers(listAnswers);
     }
 
     public ArrayList<Questions> getListQuestions(Questions questions) {
@@ -207,4 +213,79 @@ public class QuizDAO extends DBContext {
             ex.printStackTrace();
         }
     }
+
+    public Questions editQuestionsById(Questions questions, int idQuestionEdit) {
+        connection = getConnection();
+        if (connection == null) {
+            System.out.println("Failed to make connection!");
+            return null;
+        }
+        String sql = "UPDATE [dbo].[Question]\n"
+                + "   SET [QuestionNum] = ?\n"
+                + "      ,[QuizId] = ?\n"
+                + "      ,[QuestionName] = ?\n"
+                + "      ,[Type] = ?\n"
+                + " WHERE [QuestionId] = ?";
+        try {
+            statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            statement.setInt(1, questions.getQuestionNum());
+            statement.setInt(2, questions.getQuizId());
+            statement.setString(3, questions.getQuestionName());
+            statement.setBoolean(4, questions.isType());
+            statement.setInt(5, idQuestionEdit);
+
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows > 0) {
+                ResultSet rs = statement.getGeneratedKeys();
+                if (rs.next()) {
+                    questions.setQuestionId(rs.getInt(1));
+                }
+                rs.close();
+            }
+
+            statement.close();
+            connection.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return questions;
+    }
+
+    public void editAnswers(ArrayList<Answer> answers) {
+        connection = getConnection();
+        deleteAnswers(answers);
+        String sql = "insert into QuestionChoices\n"
+                + "  values(?,?,?)";
+        try {
+            statement = connection.prepareStatement(sql);
+
+            for (Answer answer : answers) {
+                statement.setInt(1, answer.getQuestionId());
+                statement.setString(2, answer.getChoices());
+                statement.setBoolean(3, answer.isIsCorrect());
+                statement.addBatch();
+            }
+
+            statement.executeBatch();
+            statement.close();
+            connection.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteAnswers(ArrayList<Answer> answers) {
+        connection = getConnection();
+        String sql_Delete = "delete from [dbo].[QuestionChoices]"
+                + "where [QuestionId] = ?";
+        try {
+            statement = connection.prepareStatement(sql_Delete);
+            statement.setInt(1, answers.get(0).getQuestionId());
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }

@@ -63,12 +63,13 @@ public class CreateQuestionsServlet extends HttpServlet {
         switch (action) {
             case "create":
                 createQuestion(request);
+                //response.sendRedirect("controller");
                 break;
             case "delete":
                 deleteQuestion(request, response);
                 break;
             case "edit":
-                editQuestion(request);
+                editQuestion(request, response);
             default:
         }
         response.sendRedirect("controller");
@@ -116,7 +117,29 @@ public class CreateQuestionsServlet extends HttpServlet {
         quizDAO.deleteQuestionById(questionId, quizId);
     }
 
-    private void editQuestion(HttpServletRequest request) {
-        
+    private void editQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession();
+        int quizId = (int) session.getAttribute("quizId");
+        PrintWriter o = response.getWriter();
+        int idQuestionEdit = Integer.parseInt(request.getParameter("id"));
+        String questionNumber_str = request.getParameter("number");
+        String titleQuestion = request.getParameter("title");
+        String typeQuestion_str = request.getParameter("typeQuestion");
+        String[] choices = request.getParameterValues("answer");
+
+        int questionNumber = Integer.parseInt(questionNumber_str);
+        boolean typeQuestion = false;
+        typeQuestion = typeQuestion_str.equalsIgnoreCase("radioBox");
+
+        Questions questions = quizDAO.editQuestionsById(new Questions(questionNumber, quizId, titleQuestion, typeQuestion), idQuestionEdit);
+
+        ArrayList<Answer> answers = new ArrayList<>();
+        for (int i = 1; i <= choices.length; i++) {
+            boolean correctAnswer = request.getParameter("correctAnswer" + i) == null ? false : true;
+            answers.add(new Answer(idQuestionEdit, choices[i - 1], correctAnswer));
+        }
+        //o.println(choices[1]);
+        quizDAO.editAnswers(answers);
     }
+
 }
