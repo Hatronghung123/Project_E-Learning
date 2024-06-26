@@ -13,7 +13,7 @@ public class ServerPath {
     public static String getPathImageCouse(){
         //return "E:\\Project_E-Learning\\V5.1.1\\web\\images";
 
-        return "D:\\New folder\\V10\\Project_E-Learning\\V05.1.2_MergeCodeComentAndWishList\\web\\images";
+        return "D:\\New folder\\V11\\Project_E-Learning\\V05.1.2_MergeCodeComentAndWishList\\web\\images";
 //=======
 //        return "E:\\Project_E-Learning\\V05.1.2_MergeCodeComentAndWishList\\web\\images";
 //    }

@@ -67,7 +67,19 @@
     <!-- Vendor CSS -->
 
 
+    <style>
+        .rounded-circle{
+            height: 50px;
+            width: 50px;
+        }
 
+        .breadcrumb-item + .breadcrumb-item::before {
+            color: black;
+        }
+        .breadcrumb{
+            margin-top: 10px;
+        }
+    </style>
 
 </head>
 
@@ -113,6 +125,8 @@
                                     <input type="hidden" name="cid" value="${lesson.getCourseid()}">
                                     <input type="hidden" name="lessonid" value="${lesson.getLessonid()}">
                                     <input type="hidden" name="parentCommentID" value="">
+                                    <input type="hidden" name="createBy" value="${lesson.getCreateby()}">
+
                                     <button type="submit">Submit</button>
                                 </div>
                             </form>
@@ -143,6 +157,8 @@
                                                     <input type="hidden" name="cid" value="${lesson.getCourseid()}">
                                                     <input type="hidden" name="lessonid" value="${lesson.getLessonid()}">
                                                     <input type="hidden" name="disscussID" value="${o.getDisscussionID()}">
+                                                    <input type="hidden" name="createBy" value="${lesson.getCreateby()}">
+
                                                     <input type="hidden" name="parent" value="null">
                                                     <button type="submit" class="del">Delete</button>
                                                 </form>
@@ -170,6 +186,7 @@
                                                             <input type="hidden" name="lessonid" value="${lesson.getLessonid()}">
                                                             <input type="hidden" name="disscussID" value="${reply.getDisscussionID()}">
                                                             <input type="hidden" name="parent" value="${reply.getParentId()}">
+                                                            <input type="hidden" name="createBy" value="${lesson.getCreateby()}">
                                                             <button type="submit" class="del">Delete</button>
                                                         </form>
                                                     </c:if>
@@ -184,6 +201,7 @@
                                             <input type="hidden" name="parent" value="${o.getDisscussionID()}">
                                             <!--Chuyển lai trang có cid hiện tại-->
                                             <input type="hidden" name="cid" value="${lesson.getCourseid()}">
+                                            <input type="hidden" name="createBy" value="${lesson.getCreateby()}">
 
                                             <!-- Thêm class `reply-textarea` vào textarea để dễ dàng chọn từ JavaScript -->
                                             <textarea required="" name="content" rows="1" placeholder="Reply to this comment..." class="reply-textarea" style="display: none;"></textarea>
@@ -283,7 +301,7 @@
                                                 <div class="module-content">
 
                                                     <c:if test="${o.getModulename() == i.getModulname()}">
-                                                        <a style="color: black" href="lesson?cid=${i.getCourseid()}&lessonid=${i.getLessonid()}" class="btn btn-block btn--col module-lesson" data-lessonid="${i.getLessonid()}">
+                                                        <a style="color: black" href="lesson?cid=${i.getCourseid()}&lessonid=${i.getLessonid()}&createBy=${i.getCreateby()}" class="btn btn-block btn--col module-lesson" data-lessonid="${i.getLessonid()}">
                                                             ${status.index + 1}. ${i.getLessonname()}
                                                             <div>
 
@@ -309,13 +327,13 @@
                             <div class="card-header bg-white">
                                 <div class="media">
                                     <div class="media-left media-middle">
-                                        <img src="assets/images/people/110/guy-6.jpg" alt="About Adrian" width="50" class="rounded-circle">
+                                        <img src="${lesson.getAvatar()}" alt="About Adrian" class="rounded-circle">
                                     </div>
                                     <div class="media-body media-middle">
-                                        <h4 class="card-title"><a href="instructor-profile.html">${lesson.getMentorname()}</a></h4>
+                                        <h4 class="card-title"><a href="#">${lesson.getMentorname()}</a></h4>
                                         <p class="card-subtitle">Instructor</p>
                                     </div>
-                                        <a class="buttons" href="messenger?sender_id=${sessionScope.account.getAccount_id()}&receiver_id=${lesson.getProfile_id()}">Chat Now</a>
+                                    <a class="buttons" href="messenger?sender_id=${sessionScope.account.getAccount_id()}&receiver_id=${lesson.getProfile_id()}">Chat Now</a>
                                 </div>
                             </div>
                             <!--                            <div class="card-body">
@@ -334,8 +352,8 @@
                                             <i class="material-icons text-muted-light">schedule</i>
                                         </div>
                                         <div class="media-body media-middle">
-                                           ${totalTime}
-<!--                                            2 <small class="text-muted">hrs</small> &nbsp; 26 <small class="text-muted">min</small>-->
+                                            ${totalTime}
+                                            <!--                                            2 <small class="text-muted">hrs</small> &nbsp; 26 <small class="text-muted">min</small>-->
                                         </div>
                                     </div>
                                 </li>

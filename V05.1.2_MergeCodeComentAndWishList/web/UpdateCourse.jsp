@@ -204,6 +204,17 @@
                 background-color: #198754;
                 border-color: #198754;
             }
+
+
+            as{
+
+                font-family: 'Nunito', sans-serif;
+                font-weight: 600;
+                transition: .5s;
+
+            }
+
+
         </style>
 
     </head>
@@ -245,10 +256,9 @@
                                                 <button type="submit" class="btn btn-white btn-sm"><i class="material-icons">edit</i></button> 
                                             </form>
                                             <!--form delete-->
-                                            <form action="LessonManage?action=deletelesson&cid=${cid}&lessonid=${o.getLessonid()}" method="POST">
 
-                                                <button type="submit" class="btn btn-delete btn-sm"><i class="material-icons">delete</i></button> 
-                                            </form>
+                                            <a class="btn btn-delete btn-sm" data-toggle="modal" data-target="#delete-lessson-modal"
+                                               onclick="deleteQuestionModal(${o.getLessonid()}, ${cid})"><i class="material-icons">delete</i></a>
 
                                         </div>
                                     </div>
@@ -261,12 +271,56 @@
         </div>
 
 
+        <!--Form delete-->
+        <div class="modal fade" id="delete-lessson-modal" >
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title" id="delete-modal-label">Delete</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this lesson ?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <form action="LessonManage?action=deletelesson" method="POST">
+                            <div class="form-group" style="display: none">
+                                <input type="text" class="form-control" id="idlessonInput" name="lessonid">
+                                <input type="text" class="form-control" id="idCourseInput" name="cid">
+
+                            </div>
+                            <button type="button" class="as btn-secondary" data-dismiss="modal">No</button>
+                            <button type="submit" class="as btn-danger">Yes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function deleteQuestionModal(lessonid, courseId) {
+                let inputlessonId = document.querySelector("#idlessonInput");
+                let inputICourseId = document.querySelector("#idCourseInput");
+
+                inputlessonId.value = lessonid;
+                inputICourseId.value = courseId;
+            }
+
+        </script>
+
         <!-- jQuery -->
         <script src="assets/vendor/jquery.min.js"></script>
         <!-- Vendor JS -->
         <script src="assets/vendor/jquery.nestable.js"></script> 
         <!-- Init -->
         <script src="assets/js/nestable.js"></script>
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- Bootstrap JavaScript -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     </body>
 
 </html>

@@ -24,7 +24,7 @@ public class Lesson {
     private String avatar;
     private int courseid;
     private long duration;
-
+    private int createby;
     public Lesson() {
     }
 
@@ -48,8 +48,9 @@ public class Lesson {
     }
     
     
+//Dùng để lấy dữ liệu trong lesson
 
-    public Lesson(int lessonid, String modulname, String lessonname, String lessoncontent, String lessonvideo, String coursename, String mentorname, String avatar, int courseid, long duration,int profile_id) {
+    public Lesson(int lessonid, String modulname, String lessonname, String lessoncontent, String lessonvideo, String coursename, String mentorname, String avatar, int courseid, long duration,int profile_id, int createby) {
         this.lessonid = lessonid;
         this.modulname = modulname;
         this.lessonname = lessonname;
@@ -57,11 +58,14 @@ public class Lesson {
         this.lessonvideo = lessonvideo;
         this.coursename = coursename;
         this.mentorname = mentorname;
+        this.profile_id = profile_id;
         this.avatar = avatar;
         this.courseid = courseid;
         this.duration = duration;
-        this.profile_id = profile_id;
+        this.createby = createby;
     }
+    
+    
 
     
     
@@ -167,10 +171,22 @@ public class Lesson {
         this.profile_id = profile_id;
     }
 
+    public int getCreateby() {
+        return createby;
+    }
+
+    public void setCreateby(int createby) {
+        this.createby = createby;
+    }
     
+    
+
     @Override
     public String toString() {
-        return "Lesson{" + "lessonid=" + lessonid + ", modulname=" + modulname + ", lessonname=" + lessonname + ", lessoncontent=" + lessoncontent + ", lessonvideo=" + lessonvideo + ", coursename=" + coursename + ", mentorname=" + mentorname + ", avatar=" + avatar + ", courseid=" + courseid + ", duration=" + duration + '}';
+        return "Lesson{" + "lessonid=" + lessonid + ", moduleid=" + moduleid + ", modulname=" + modulname + ", lessonname=" + lessonname + ", lessoncontent=" + lessoncontent + ", lessonvideo=" + lessonvideo + ", coursename=" + coursename + ", mentorname=" + mentorname + ", profile_id=" + profile_id + ", avatar=" + avatar + ", courseid=" + courseid + ", duration=" + duration + ", createby=" + createby + '}';
     }
+
+    
+
 
 }

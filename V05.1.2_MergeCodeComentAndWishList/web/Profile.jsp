@@ -104,7 +104,8 @@
 
 
             .iamge {
-
+                width: 80px !important;
+                height: 80px;
                 border-radius: 50%;
             }
             
