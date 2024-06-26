@@ -20,6 +20,7 @@ public class Lesson {
     private String lessonvideo;
     private String coursename;
     private String mentorname;
+    private int profile_id;
     private String avatar;
     private int courseid;
     private long duration;
@@ -48,7 +49,7 @@ public class Lesson {
     
     
 
-    public Lesson(int lessonid, String modulname, String lessonname, String lessoncontent, String lessonvideo, String coursename, String mentorname, String avatar, int courseid, long duration) {
+    public Lesson(int lessonid, String modulname, String lessonname, String lessoncontent, String lessonvideo, String coursename, String mentorname, String avatar, int courseid, long duration,int profile_id) {
         this.lessonid = lessonid;
         this.modulname = modulname;
         this.lessonname = lessonname;
@@ -59,7 +60,11 @@ public class Lesson {
         this.avatar = avatar;
         this.courseid = courseid;
         this.duration = duration;
+        this.profile_id = profile_id;
     }
+
+    
+    
     
     
 
@@ -154,6 +159,15 @@ public class Lesson {
         this.duration = duration;
     }
 
+    public int getProfile_id() {
+        return profile_id;
+    }
+
+    public void setProfile_id(int profile_id) {
+        this.profile_id = profile_id;
+    }
+
+    
     @Override
     public String toString() {
         return "Lesson{" + "lessonid=" + lessonid + ", modulname=" + modulname + ", lessonname=" + lessonname + ", lessoncontent=" + lessoncontent + ", lessonvideo=" + lessonvideo + ", coursename=" + coursename + ", mentorname=" + mentorname + ", avatar=" + avatar + ", courseid=" + courseid + ", duration=" + duration + '}';

@@ -83,7 +83,8 @@ public class LessonDAO {
                 + "    p.FullName,\n"
                 + "    p.Avatar,\n"
                 + "	c.CourseId\n"
-                + "	,[Duration]\n"
+                + "    p.ProfileId,\n" 
+                + "	[Duration]\n"
                 + "FROM [dbo].[Lesson] l\n"
                 + "JOIN [dbo].[Module] m ON l.ModuleId = m.ModuleId\n"
                 + "JOIN [dbo].[Course] c ON c.CourseId = m.CourseId\n"
@@ -107,8 +108,9 @@ public class LessonDAO {
                 String Avatar = rs.getString(8);
                 int course_id = rs.getInt(9);
                 long duration = rs.getInt("Duration");
+                int profile_id = rs.getInt("ProfileId");
 
-                list.add(new Lesson(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration));
+                list.add(new Lesson(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration,profile_id));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -120,23 +122,24 @@ public class LessonDAO {
 
     public Lesson getlessonByCid(int courseId, int lessonid) throws SQLException {
 
-        String sql = "SELECT\n"
-                + "    l.LessonId,\n"
-                + "    m.ModuleName,\n"
-                + "    l.LessonName,\n"
-                + "    l.LessonContent,\n"
-                + "    l.LessonVideo,\n"
-                + "    c.CourseName,\n"
-                + "    p.FullName,\n"
-                + "    p.Avatar,\n"
-                + "	c.CourseId\n"
-                + "	,[Duration]\n"
-                + "FROM [dbo].[Lesson] l\n"
-                + "JOIN [dbo].[Module] m ON l.ModuleId = m.ModuleId\n"
-                + "JOIN [dbo].[Course] c ON c.CourseId = m.CourseId\n"
-                + "JOIN [dbo].[Teaching] teach ON teach.CourseId = c.CourseId\n"
-                + "JOIN [dbo].[Profile] p ON p.ProfileId = teach.MentorId\n"
-                + "WHERE c.CourseId = ? and l.LessonId = ?";
+        String sql = "  SELECT\n" +
+"                   l.LessonId,\n" +
+"                m.ModuleName,\n" +
+"                  l.LessonName,\n" +
+"                   l.LessonContent,\n" +
+"                    l.LessonVideo,\n" +
+"                   c.CourseName,\n" +
+"                    p.FullName,\n" +
+"                    p.Avatar,\n" +
+"                	c.CourseId,\n" +
+"			p.ProfileId\n" +
+"               	,[Duration]\n" +
+"                FROM [dbo].[Lesson] l\n" +
+"                JOIN [dbo].[Module] m ON l.ModuleId = m.ModuleId\n" +
+"                JOIN [dbo].[Course] c ON c.CourseId = m.CourseId\n" +
+"                JOIN [dbo].[Teaching] teach ON teach.CourseId = c.CourseId\n" +
+"                JOIN [dbo].[Profile] p ON p.ProfileId = teach.MentorId\n" +
+"                WHERE c.CourseId = ? and l.LessonId = ?";
         try {
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
@@ -154,9 +157,11 @@ public class LessonDAO {
                 String mentor_name = rs.getString(7);
                 String Avatar = rs.getString(8);
                 int course_id = rs.getInt(9);
+               int profile_id = rs.getInt("ProfileId");
                 long duration = rs.getInt("Duration");
+                
 
-                return new Lesson(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration);
+                return new Lesson(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration,profile_id);
             }
         } catch (Exception e) {
             e.printStackTrace();

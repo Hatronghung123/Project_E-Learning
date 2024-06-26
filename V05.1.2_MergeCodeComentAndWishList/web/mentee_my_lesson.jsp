@@ -315,6 +315,7 @@
                                         <h4 class="card-title"><a href="instructor-profile.html">${lesson.getMentorname()}</a></h4>
                                         <p class="card-subtitle">Instructor</p>
                                     </div>
+                                        <a class="buttons" href="messenger?sender_id=${sessionScope.account.getAccount_id()}&receiver_id=${lesson.getProfile_id()}">Chat Now</a>
                                 </div>
                             </div>
                             <!--                            <div class="card-body">
