@@ -179,12 +179,15 @@
             <a href="home" class="navbar-brand d-flex align-items-center px-4 px-lg-5" style="text-decoration: none; margin-right: 0px">
                 <h2 class="m-0 text-primary">Back</h2>
             </a>
-            <div class="col-2">
-                <h7 style="margin-bottom: 0px">hello</h7>
-            </div>
-<!--            <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>-->
+            <%--<c:forEach items="${quiz}" var="quiz">--%>
+                    <div class="col-2">
+                        <h7 style="margin-bottom: 0px">Hello</h7>
+                    </div>
+            <%--</c:forEach>--%>
+           
+            <!--            <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>-->
 
             <div class="timer col-5" id="timer">
                 <span id="hours">00</span>:<span id="minutes">25</span>:<span id="seconds">00</span>
@@ -192,18 +195,18 @@
 
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
-<!--                    <a href="home" class="nav-item nav-link active">Home</a>
-                    <a href="about.jsp" class="nav-item nav-link">About</a>
-                    <a href="Courses.jsp" class="nav-item nav-link">Courses</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                        <div class="dropdown-menu fade-down m-0">
-                            <a href="team.html" class="dropdown-item">Our Team</a>
-                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                            <a href="404.html" class="dropdown-item">404 Page</a>
-                        </div>
-                    </div>
-                    <a href="contact.html" class="nav-item nav-link">Contact</a>-->
+                    <!--                    <a href="home" class="nav-item nav-link active">Home</a>
+                                        <a href="about.jsp" class="nav-item nav-link">About</a>
+                                        <a href="Courses.jsp" class="nav-item nav-link">Courses</a>
+                                        <div class="nav-item dropdown">
+                                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                                            <div class="dropdown-menu fade-down m-0">
+                                                <a href="team.html" class="dropdown-item">Our Team</a>
+                                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                                                <a href="404.html" class="dropdown-item">404 Page</a>
+                                            </div>
+                                        </div>
+                                        <a href="contact.html" class="nav-item nav-link">Contact</a>-->
 
                 </div>
 
@@ -216,7 +219,54 @@
 
         <div class="max-width-800">
 
-            <form id="quizForm">
+
+
+            <form id="quizForm" action="doquiz" method="POST">
+                <div class="question">
+                    <h3>1. Which is the first robot to get citizenship in a country?</h3>
+                    <ul class="options">
+                        <li><input type="checkbox" id="q1a" name="q1" value="A"><label for="q1a">A. Kuri</label></li>
+                        <li><input type="checkbox" id="q1b" name="q1" value="B"><label for="q1b">B. Sophia</label></li>
+                        <li><input type="checkbox" id="q1c" name="q1" value="C"><label for="q1c">C. Aibo</label></li>
+                        <li><input type="checkbox" id="q1d" name="q1" value="D"><label for="q1d">D. Honda E-2 D R</label></li>
+                    </ul>
+                </div>
+                <div class="question">
+                    <h3>1. Which is the first robot to get citizenship in a country?</h3>
+                    <ul class="options">
+                        <li><input type="checkbox" id="q1a" name="q1" value="A"><label for="q1a">A. Kuri</label></li>
+                        <li><input type="checkbox" id="q1b" name="q1" value="B"><label for="q1b">B. Sophia</label></li>
+                        <li><input type="checkbox" id="q1c" name="q1" value="C"><label for="q1c">C. Aibo</label></li>
+                        <li><input type="checkbox" id="q1d" name="q1" value="D"><label for="q1d">D. Honda E-2 D R</label></li>
+                    </ul>
+                </div>
+                <div class="question">
+                    <h3>1. Which is the first robot to get citizenship in a country?</h3>
+                    <ul class="options">
+                        <li><input type="checkbox" id="q1a" name="q1" value="A"><label for="q1a">A. Kuri</label></li>
+                        <li><input type="checkbox" id="q1b" name="q1" value="B"><label for="q1b">B. Sophia</label></li>
+                        <li><input type="checkbox" id="q1c" name="q1" value="C"><label for="q1c">C. Aibo</label></li>
+                        <li><input type="checkbox" id="q1d" name="q1" value="D"><label for="q1d">D. Honda E-2 D R</label></li>
+                    </ul>
+                </div>
+                <div class="question">
+                    <h3>1. Which is the first robot to get citizenship in a country?</h3>
+                    <ul class="options">
+                        <li><input type="checkbox" id="q1a" name="q1" value="A"><label for="q1a">A. Kuri</label></li>
+                        <li><input type="checkbox" id="q1b" name="q1" value="B"><label for="q1b">B. Sophia</label></li>
+                        <li><input type="checkbox" id="q1c" name="q1" value="C"><label for="q1c">C. Aibo</label></li>
+                        <li><input type="checkbox" id="q1d" name="q1" value="D"><label for="q1d">D. Honda E-2 D R</label></li>
+                    </ul>
+                </div>
+                <div class="question">
+                    <h3>1. Which is the first robot to get citizenship in a country?</h3>
+                    <ul class="options">
+                        <li><input type="checkbox" id="q1a" name="q1" value="A"><label for="q1a">A. Kuri</label></li>
+                        <li><input type="checkbox" id="q1b" name="q1" value="B"><label for="q1b">B. Sophia</label></li>
+                        <li><input type="checkbox" id="q1c" name="q1" value="C"><label for="q1c">C. Aibo</label></li>
+                        <li><input type="checkbox" id="q1d" name="q1" value="D"><label for="q1d">D. Honda E-2 D R</label></li>
+                    </ul>
+                </div>
                 <div class="question">
                     <h3>1. Which is the first robot to get citizenship in a country?</h3>
                     <ul class="options">
@@ -243,9 +293,9 @@
                         <li><input type="radio" id="q3b" name="q3" value="B"><label for="q3b">B. New Zealand</label></li>
                     </ul>
                 </div>
-                
-                <a href="#" data-toggle="modal" data-target="#createQuestion" class="btn btn-success" style="border: 5px">Add Question</a>
-                    
+
+                <a href="#" data-toggle="modal" data-target="#createQuestion" class="btn btn-success" style="border: 5px">Submit</a>
+
             </form>
         </div>
         <script>
@@ -275,6 +325,18 @@
             updateTimer();
 
         </script>
+
+        <!-- JavaScript Libraries -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+        <script src="${pageContext.request.contextPath}/lib/wow/wow.min.js"></script>
+        <script src="${pageContext.request.contextPath}/lib/easing/easing.min.js"></script>
+        <script src="${pageContext.request.contextPath}/lib/waypoints/waypoints.min.js"></script>
+        <script src="${pageContext.request.contextPath}/lib/owlcarousel/owl.carousel.min.js"></script>
+
+        <!-- Template Javascript -->
+        <script src="${pageContext.request.contextPath}/js/main.js"></script>
     </body>
 
 </html>

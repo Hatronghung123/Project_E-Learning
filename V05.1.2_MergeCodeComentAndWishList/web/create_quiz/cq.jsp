@@ -118,15 +118,15 @@
                                     </div>
                                     <div class="form-group" style="margin-right: 10px; margin-top: 10px">
                                         <select class="custom-select" name="timeUnit">
-                                            <option value="hour" selected>Hours</option>
-                                            <option value="minutes">Minutes</option>
+                                            <option value="minutes" selected>Minutes</option>
+                                            <option value="seconds">Seconds</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="quizScore" class="col-sm-3 col-form-label">Quiz Score:</label>
+                            <label for="quizScore" class="col-sm-3 col-form-label">Pass Score:</label>
                             <div class="col-sm-9">
                                 <div class="form-inline">
                                     <div class="form-group" style="margin-right: 10px;">
