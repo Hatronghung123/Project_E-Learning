@@ -52,7 +52,12 @@
                     <a href="404.html" class="dropdown-item">404 Page</a>
                 </div>
             </div>-->
-            <a href="contact.jsp" class="nav-item nav-link">Contact</a>
+<c:if test="${sessionScope.account.role_id == 1}" >
+ <a href="managerAdmin.jsp" class="nav-item nav-link">ManagerbyAdmin</a>
+</c:if>
+          
+ <a href="contact.jsp" class="nav-item nav-link">Contact</a>
+
 
             <!--                
                                                                     <div class="nav-item dropdown">
