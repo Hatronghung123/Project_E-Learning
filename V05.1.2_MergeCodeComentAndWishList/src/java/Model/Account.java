@@ -13,6 +13,7 @@ package Model;
 public class Account {
 
     private int account_id;
+    private String fullName;
     private String email;
     private String password;
     private boolean status;
@@ -32,6 +33,17 @@ public class Account {
     public Account(String email) {
         this.email = email;
     }
+
+    public Account(int account_id, String fullName, String email, String password, boolean status, int role_id) {
+        this.account_id = account_id;
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.status = status;
+        this.role_id = role_id;
+    }
+    
+    
 
     public Account(int account_id, String email, String password, boolean status, int role_id) {
         this.account_id = account_id;
@@ -118,6 +130,14 @@ public class Account {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     
