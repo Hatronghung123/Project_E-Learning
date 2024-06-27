@@ -80,7 +80,7 @@ public class listCourseSeverlet extends HttpServlet {
         CourseDetailDAO cdDao = new CourseDetailDAO();
         String action = request.getParameter("action");
         Account acc = (Account) session.getAttribute("account");
-        String cid = request.getParameter("cateid");
+        String cid = request.getParameter("cid");
 
         try {
             ArrayList<Course> listAllCourse = dao.getAllCourses();
