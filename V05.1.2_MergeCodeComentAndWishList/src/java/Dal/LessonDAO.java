@@ -21,14 +21,14 @@ import java.util.ArrayList;
  * @author Tuan Anh(Gia Truong)
  */
 public class LessonDAO {
-    
+
     Connection con = null; // Kết nối với sql server
     PreparedStatement ps = null; // Ném câu lệnh query sang sql server
     ResultSet rs = null; // Nhận kết quả trả về
 
     // Chèn bill lên db
     public void insertBillPayment(Payment payment) {
-        
+
         String sql = "insert into Payment\n"
                 + "values (?,?,?,?,?)";
         try {
@@ -40,17 +40,17 @@ public class LessonDAO {
             ps.setString(4, payment.getPaymentmethodid());
             ps.setInt(5, payment.getAmount());
             ps.executeUpdate();
-            
+
         } catch (Exception e) {
             e.printStackTrace();  // In chi tiết lỗi ra console
 
         }
-        
+
     }
 
     //khi thanh toán xong thì phải insert thông tin vào enrollment
     public void insertEnrollment(Enrollment enrollment) {
-        
+
         String sql = "insert into Enrollment\n"
                 + "values (?,?,?,?)";
         try {
@@ -60,17 +60,17 @@ public class LessonDAO {
             ps.setInt(2, enrollment.getCourseid());
             ps.setDate(3, enrollment.getEnrollmentdate());
             ps.setInt(4, enrollment.getProgress());
-            
+
             ps.executeUpdate();
-            
+
         } catch (Exception e) {
             e.printStackTrace();  // In chi tiết lỗi ra console
 
         }
-        
+
     }
 
-    //Lấy course theo course ID
+    //Lấy lisst lesson in module theo course ID
     public ArrayList<Lesson> getListModulByCidd(int courseId) throws SQLException {
         ArrayList<Lesson> list = new ArrayList<>();
         String sql = "SELECT\n"
@@ -82,7 +82,10 @@ public class LessonDAO {
                 + "    c.CourseName,\n"
                 + "    p.FullName,\n"
                 + "    p.Avatar,\n"
-                + "	c.CourseId\n"
+                + "	c.CourseId,\n"
+                + "    p.ProfileId,\n"
+                + "    c.[CreatedBy],\n"
+                + "	[Duration]\n"
                 + "FROM [dbo].[Lesson] l\n"
                 + "JOIN [dbo].[Module] m ON l.ModuleId = m.ModuleId\n"
                 + "JOIN [dbo].[Course] c ON c.CourseId = m.CourseId\n"
@@ -93,7 +96,7 @@ public class LessonDAO {
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             ps.setInt(1, courseId);
-            
+
             rs = ps.executeQuery();
             while (rs.next()) {
                 int lesson_id = rs.getInt(1);
@@ -105,40 +108,47 @@ public class LessonDAO {
                 String mentor_name = rs.getString(7);
                 String Avatar = rs.getString(8);
                 int course_id = rs.getInt(9);
-                list.add(new Lesson(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id));
+                long duration = rs.getInt("Duration");
+                int profile_id = rs.getInt("ProfileId");
+                int create_by = rs.getInt("CreatedBy");
+
+                list.add(new Lesson(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration, profile_id, create_by));
             }
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Lỗi");
         }
-        
+
         return list;
     }
-    
+
     public Lesson getlessonByCid(int courseId, int lessonid) throws SQLException {
-        
-        String sql = "SELECT\n"
-                + "    l.LessonId,\n"
-                + "    m.ModuleName,\n"
-                + "    l.LessonName,\n"
-                + "    l.LessonContent,\n"
-                + "    l.LessonVideo,\n"
-                + "    c.CourseName,\n"
-                + "    p.FullName,\n"
-                + "    p.Avatar,\n"
-                + "	c.CourseId\n"
-                + "FROM [dbo].[Lesson] l\n"
-                + "JOIN [dbo].[Module] m ON l.ModuleId = m.ModuleId\n"
-                + "JOIN [dbo].[Course] c ON c.CourseId = m.CourseId\n"
-                + "JOIN [dbo].[Teaching] teach ON teach.CourseId = c.CourseId\n"
-                + "JOIN [dbo].[Profile] p ON p.ProfileId = teach.MentorId\n"
-                + "WHERE c.CourseId = ? and l.LessonId = ?";
+
+        String sql = "  SELECT\n"
+                + "                   l.LessonId,\n"
+                + "                m.ModuleName,\n"
+                + "                  l.LessonName,\n"
+                + "                   l.LessonContent,\n"
+                + "                    l.LessonVideo,\n"
+                + "                   c.CourseName,\n"
+                + "                    p.FullName,\n"
+                + "                    p.Avatar,\n"
+                + "                	c.CourseId,\n"
+                + "			p.ProfileId,\n"
+                + "                     c.[CreatedBy]\n"
+                + "               	,[Duration]\n"
+                + "                FROM [dbo].[Lesson] l\n"
+                + "                JOIN [dbo].[Module] m ON l.ModuleId = m.ModuleId\n"
+                + "                JOIN [dbo].[Course] c ON c.CourseId = m.CourseId\n"
+                + "                JOIN [dbo].[Teaching] teach ON teach.CourseId = c.CourseId\n"
+                + "                JOIN [dbo].[Profile] p ON p.ProfileId = teach.MentorId\n"
+                + "                WHERE c.CourseId = ? and l.LessonId = ?";
         try {
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             ps.setInt(1, courseId);
             ps.setInt(2, lessonid);
-            
+
             rs = ps.executeQuery();
             while (rs.next()) {
                 int lesson_id = rs.getInt(1);
@@ -150,18 +160,21 @@ public class LessonDAO {
                 String mentor_name = rs.getString(7);
                 String Avatar = rs.getString(8);
                 int course_id = rs.getInt(9);
-                
-                return new Lesson(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id);
+                int profile_id = rs.getInt("ProfileId");
+                long duration = rs.getInt("Duration");
+                int create_by = rs.getInt("CreatedBy");
+
+                return new Lesson(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration, profile_id ,create_by);
             }
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Lỗi");
         }
-        
+
         return null;
     }
 
-    //Lấy course theo course ID
+    //Lấy lisst module theo course ID
     public ArrayList<Module> getListModulByCid(int courseId) throws SQLException {
         ArrayList<Module> list = new ArrayList<>();
         String sql = "SELECT  [ModuleId]\n"
@@ -173,7 +186,7 @@ public class LessonDAO {
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
             ps.setInt(1, courseId);
-            
+
             rs = ps.executeQuery();
             while (rs.next()) {
                 int moduleid = rs.getInt(1);
@@ -185,12 +198,11 @@ public class LessonDAO {
             e.printStackTrace();
             System.out.println("Lỗi");
         }
-        
+
         return list;
     }
-    
-    
-        //Lấy ra list enrollment để kiểm tra người dùng đã mua khóa học này hay chưa
+
+    //Lấy ra list enrollment để kiểm tra người dùng đã mua khóa học này hay chưa
     public ArrayList<Enrollment> getEnrollmentByAccountId(int courseId) throws SQLException {
         ArrayList<Enrollment> list = new ArrayList<>();
         String sql = " SELECT [EnrollmentId]\n"
@@ -206,25 +218,56 @@ public class LessonDAO {
             ps.setInt(1, courseId);
             rs = ps.executeQuery();
             while (rs.next()) {
-                
+
                 int enrollId = rs.getInt(1);
                 int accId = rs.getInt(2);
                 int courseid = rs.getInt(3);
                 Date enrollmentDate = rs.getDate(4);
                 int progress = rs.getInt(5);
-                
+
                 list.add(new Enrollment(enrollId, accId, courseid, enrollmentDate, progress));
             }
         } catch (Exception e) {
             e.printStackTrace();  // In chi tiết lỗi ra console
 
         }
-        
+
         return list;
     }
-    
+
+    //Lấy ra lesson Id để chuyuển hướn gnười tới khóa học với lesson đó khí thanh toán thành công
+    public long getLessonIdByCourseId(int courseId) throws SQLException {
+
+        String sql = """
+                       SELECT TOP (1) [LessonId]
+                     
+                       FROM [dbo].[Lesson] l
+                     JOIN [dbo].[Module] m ON l.ModuleId = m.ModuleId
+                     JOIN [dbo].[Course] c ON c.CourseId = m.CourseId
+                       WHERE c.CourseId = ?
+                       ORDER BY [LessonId] ASC
+                     """;
+        try {
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, courseId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+
+                long lessonId = rs.getInt(1);
+
+                return lessonId;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();  // In chi tiết lỗi ra console
+
+        }
+
+        return 0;
+    }
+
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         LessonDAO dao = new LessonDAO();
-        System.out.println(dao.getlessonByCid(2,1));
+        System.out.println(dao.getlessonByCid(2, 1));
     }
 }

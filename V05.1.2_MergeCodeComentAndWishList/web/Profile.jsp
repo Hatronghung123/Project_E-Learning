@@ -25,7 +25,7 @@
         <!-- Icon Font Stylesheet -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <!-- Libraries Stylesheet -->
         <link href="lib/animate/animate.min.css" rel="stylesheet">
         <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
@@ -103,7 +103,26 @@
             }
 
 
+            .iamge {
+                width: 80px !important;
+                height: 80px;
+                border-radius: 50%;
+            }
+            
         </style>
+
+        <script>
+            function chooseFile(fileInput) {
+                if (fileInput.files && fileInput.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#image').attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(fileInput.files[0]);
+                }
+            }
+        </script>
     </head>
     <body>
         <jsp:include page="common/menu.jsp"></jsp:include>
@@ -136,9 +155,9 @@
                                         <div class="tab-pane fade active show" id="account-general">
                                             <h3 style="color: red">${requestScope.error}</h3>
                                         <div class="card-body media align-items-center">
-                                            <img src="${sessionScope.profile.avt}" alt="avatar" class="d-block ui-w-80">
+                                            <img src="${sessionScope.profile.avt}" id="image" alt="avatar" class=" iamge d-block ui-w-80">
                                             <div class="media-body ml-4">
-                                                <input type="file" class="" name="avt">
+                                                <input type="file" class="" name="avt" onchange="chooseFile(this)">
                                                 <div class="text-black-50 small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
                                             </div>
                                         </div>

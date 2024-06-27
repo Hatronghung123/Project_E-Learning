@@ -46,6 +46,12 @@ public class ProfileDTO {
         this.managed_by = managed_by;
     }
 
+    public ProfileDTO(int profile_id, String fullname, String avt) {
+        this.profile_id = profile_id;
+        this.fullname = fullname;
+        this.avt = avt;
+    }
+
 
     public ProfileDTO(String fullname, int managed_by) {
         this.fullname = fullname;

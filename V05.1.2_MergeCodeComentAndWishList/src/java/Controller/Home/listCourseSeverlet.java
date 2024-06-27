@@ -105,7 +105,6 @@ public class listCourseSeverlet extends HttpServlet {
                 course.setFormattedPrice(formartPrice(course.getPrice()));
             }
 
-             
 //            có thể viết hàm riêng
             //list All course
             if (cid.equals("all")) {
@@ -139,8 +138,6 @@ public class listCourseSeverlet extends HttpServlet {
 
     }
 
-
-
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -155,6 +152,7 @@ public class listCourseSeverlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             Account acc = (Account) session.getAttribute("account");
+            String action = request.getParameter("action");
 
             String search = request.getParameter("search");
             if (search == null || search.isBlank()) {
@@ -173,14 +171,14 @@ public class listCourseSeverlet extends HttpServlet {
             for (Course course : listCourseBySearch) {
                 course.setFormattedPrice(formartPrice(course.getPrice()));
             }
-            
-             //Set số sao và lượt đánh giá cho từng khóa học
-                for (Course course : listCourseBySearch) {
-                    ArrayList<StarRatingDTO> listRating = cdDao.getRatings(course.getCourse_id());
-                    course.setStar(AVGOfRaing.AvgRatingCourse(listRating).get(0));
-                    course.setSumOfRating(AVGOfRaing.AvgRatingCourse(listRating).get(1));
-                }
 
+            //Set số sao và lượt đánh giá cho từng khóa học
+            for (Course course : listCourseBySearch) {
+                ArrayList<StarRatingDTO> listRating = cdDao.getRatings(course.getCourse_id());
+                course.setStar(AVGOfRaing.AvgRatingCourse(listRating).get(0));
+                course.setSumOfRating(AVGOfRaing.AvgRatingCourse(listRating).get(1));
+            }
+            request.setAttribute("action", action);
             request.setAttribute("listCourseBySearch", listCourseBySearch);
             request.setAttribute("searchValue", search);
 

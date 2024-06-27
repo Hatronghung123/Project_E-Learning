@@ -6,6 +6,7 @@ package Controller;
 
 import Dal.CourseDetailDAO;
 import Dal.HomeDAO;
+import Dal.LessonDAO;
 import Dal.WishlistDAO;
 import Model.Account;
 import Model.Category;
@@ -76,14 +77,14 @@ public class CourseDetailServelet extends HttpServlet {
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("account");
-
+        CourseDetailDAO cdDao = new CourseDetailDAO();
+        LessonDAO lessondao = new LessonDAO();
         try {
             String course_Id_str = request.getParameter("cid");
             int course_Id = 0;
             if (!course_Id_str.isBlank() && course_Id_str != null) {
                 course_Id = Integer.parseInt(course_Id_str);
             }
-            CourseDetailDAO cdDao = new CourseDetailDAO();
 
             ArrayList<Course> listCourst_Relate = cdDao.getRelateCourse(course_Id);
             ArrayList<Category> listAllCategory = cdDao.getCategoryById(course_Id);
@@ -97,8 +98,8 @@ public class CourseDetailServelet extends HttpServlet {
                 //Lấy ra list wishList để check is active icon
                 getCidFromWishlistByAccId(request, response, acc.getAccount_id());
                 request.setAttribute("listEnrollment", listEnrollment);
-
             }
+
             //Định dạng khóa học theo giá tiền Việt Nam
             for (Course course : listCourst_Relate) {
                 course.setFormattedPrice(formartPrice(course.getPrice()));
@@ -112,11 +113,16 @@ public class CourseDetailServelet extends HttpServlet {
                 course.setSumOfRating(AVGOfRaing.AvgRatingCourse(listRating).get(1));
             }
 
+            long lessonid = lessondao.getLessonIdByCourseId(course_Id);
+
             //hiện thì category in header
             displaycategory(request, response);
             //lấy ra số lượng sao trung bình và tổng số lượng đánh giá của khóa học
             displayRatingCourse(request, response, listRatings, course_Id);
 
+            
+            request.setAttribute("cid", course_Id);
+            request.setAttribute("lessonid", lessonid);
             request.setAttribute("listRatings", listRatings);
             request.setAttribute("listCourse_relate", listCourst_Relate);
             request.setAttribute("listAllCategory", listAllCategory);

@@ -88,6 +88,26 @@
     </head>
 
     <body>
+
+        <!--Xử lí nút resum-->
+
+        <%
+                String lastLessonId = null;
+                Cookie[] cookies = request.getCookies();
+                if (cookies != null) {
+                    for (Cookie cookie : cookies) {
+                    if ("lastLessonId".equals(cookie.getName())) {
+                        lastLessonId = cookie.getValue();
+                        break;
+                    }
+                }
+                }
+            if (lastLessonId == null) {
+            // Nếu không có cookie, bạn có thể đặt giá trị mặc định, ví dụ: bài học đầu tiên
+            lastLessonId = "1"; // hoặc bất kỳ giá trị nào khác mà bạn cho là hợp lý
+            }
+        %>
+
         <jsp:include page="common/menu.jsp"></jsp:include>
 
 
@@ -135,71 +155,84 @@
 
                                             <c:when test="${sessionScope.account == null}">
                                                 <!--nguoi dung chua dang nhap-->
-                                                <a href="join?action=login" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                <a href="join?action=login&cid=${o.getCourse_id()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
 
                                             </c:when>
 
+
                                             <c:otherwise><!--Nguoi dung da dang nhap-->
-                                                <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
-                                                <c:set var="isPaid" value="false"/>
-                                                <c:if test="${fn:length(listEnrollment) > 0}">
-                                                    <c:forEach items="${listEnrollment}" var="i">
-                                                        <c:if test="${currentCourseId == i.getCourseid()}">                   
-                                                            <c:set var="isPaid" value="true"/>
-                                                        </c:if>
-                                                    </c:forEach>
-                                                </c:if>
+
+                                                <!--Nguoi này là ngươi tao ra khoa hoc duoc join truc tiep-->
                                                 <c:choose>
-                                                    <c:when test="${isPaid == true}">
-                                                        <a href="lesson?cid=${o.getCourse_id()}&lessonid=1" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                    <c:when test="${o.getCreate_by() == sessionScope.account.getAccount_id()}">
+                                                        <a href="lesson?cid=${o.getCourse_id()}&lessonid=1&createBy=${o.getCreate_by()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
                                                     </c:when>
+
                                                     <c:otherwise>
-                                                        <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+
+
+                                                        <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
+                                                        <c:set var="isPaid" value="false"/>
+                                                        <c:if test="${fn:length(listEnrollment) > 0}">
+                                                            <c:forEach items="${listEnrollment}" var="i">
+                                                                <c:if test="${currentCourseId == i.getCourseid()}">                   
+                                                                    <c:set var="isPaid" value="true"/>
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </c:if>
+                                                        <c:choose>
+                                                            <c:when test="${isPaid == true}">
+                                                                <a href="lesson?cid=${o.getCourse_id()}&lessonid=1&createBy=${o.getCreate_by()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                            </c:otherwise>
+
+                                                        </c:choose> 
                                                     </c:otherwise>
-
-                                                </c:choose> 
-
+                                                </c:choose>
                                             </c:otherwise>
 
                                         </c:choose>
+
                                     </div>
                                 </div>
-                               <!--ADD TO WISHLIST-->
-                                        <c:if test="${sessionScope.account != null}">
-                                           
-                                                <!--nguoi dung chua dang nhap-->
-                                                <div class ="wishlist">
-                                                    <div class="product-slider">
-                                                        <a class="product-slider__fav js-fav" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">
-                                                            <c:choose>
-                                                                <c:when test="${CourseIdList.contains(o.getCourse_id())}">
-                                                                    <div class="heart is-active">
-                                                                        <div class ="wishlist-text">ADD TO WISHLIST </div>
-                                                                    </div>
-                                                                </c:when>
+                                <!--ADD TO WISHLIST-->
+                                <c:if test="${sessionScope.account != null}">
 
-                                                                <c:otherwise>
-                                                                    <div class="heart ">
-                                                                        <div class ="wishlist-text">ADD TO WISHLIST </div>
-                                                                    </div> 
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                  
-                                        </c:if>
+                                    <!--nguoi dung chua dang nhap-->
+                                    <div class ="wishlist">
+                                        <div class="product-slider">
+                                            <a class="product-slider__fav js-fav" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">
+                                                <c:choose>
+                                                    <c:when test="${CourseIdList.contains(o.getCourse_id())}">
+                                                        <div class="heart is-active">
+                                                            <div class ="wishlist-text">ADD TO WISHLIST </div>
+                                                        </div>
+                                                    </c:when>
+
+                                                    <c:otherwise>
+                                                        <div class="heart ">
+                                                            <div class ="wishlist-text">ADD TO WISHLIST </div>
+                                                        </div> 
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </c:if>
                                 <div class="text-center pb-0" style ="padding-left: 12px;padding-right: 12px;padding-bottom: 12px;padding-top: 7px;">
                                     <h3 class="mb-0">${o.getFormattedPrice()}₫</h3>
                                     <div class="mb-3">
-                                            <c:forEach var="i" begin="1" end="${o.getStar()}">
-                                                    <small class="fa fa-star text-primary"></small>
-                                                </c:forEach>
-                                                <c:forEach var="i" begin="${o.getStar() +1}" end="5">
-                                                    <small class="fa fa-star empty-star"></small>
-                                                </c:forEach>
-                                                
-                                                <small>(${o.getSumOfRating()})</small>
+                                        <c:forEach var="i" begin="1" end="${o.getStar()}">
+                                            <small class="fa fa-star text-primary"></small>
+                                        </c:forEach>
+                                        <c:forEach var="i" begin="${o.getStar() +1}" end="5">
+                                            <small class="fa fa-star empty-star"></small>
+                                        </c:forEach>
+
+                                        <small>(${o.getSumOfRating()})</small>
                                     </div>
                                     <h5 class="mb-4">${o.getCourse_name()}</h5>
                                 </div>
@@ -211,9 +244,9 @@
                             </div>
                         </div>
                     </c:forEach>
-                        
-                        
-                        <c:forEach var="o" items="${listCourseBySearch}">
+
+
+                    <c:forEach var="o" items="${listCourseBySearch}">
                         <div class="col-lg-4 col-md-6 wow fadeInUp"  data-wow-delay="0.3s" style="padding-bottom: 20px;">
                             <div class="course-item bg-light"   >
                                 <div class="position-relative overflow-hidden">
@@ -234,67 +267,80 @@
 
                                             </c:when>
 
+
                                             <c:otherwise><!--Nguoi dung da dang nhap-->
-                                                <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
-                                                <c:set var="isPaid" value="false"/>
-                                                <c:if test="${fn:length(listEnrollment) > 0}">
-                                                    <c:forEach items="${listEnrollment}" var="i">
-                                                        <c:if test="${currentCourseId == i.getCourseid()}">                   
-                                                            <c:set var="isPaid" value="true"/>
-                                                        </c:if>
-                                                    </c:forEach>
-                                                </c:if>
+
+                                                <!--Nguoi này là ngươi tao ra khoa hoc duoc join truc tiep-->
                                                 <c:choose>
-                                                    <c:when test="${isPaid == true}">
-                                                        <a href="lesson?cid=${o.getCourse_id()}&lessonid=1" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                    <c:when test="${o.getCreate_by() == sessionScope.account.getAccount_id()}">
+                                                        <a href="lesson?cid=${o.getCourse_id()}&lessonid=1&createBy=${o.getCreate_by()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
                                                     </c:when>
+
                                                     <c:otherwise>
-                                                        <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+
+
+                                                        <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
+                                                        <c:set var="isPaid" value="false"/>
+                                                        <c:if test="${fn:length(listEnrollment) > 0}">
+                                                            <c:forEach items="${listEnrollment}" var="i">
+                                                                <c:if test="${currentCourseId == i.getCourseid()}">                   
+                                                                    <c:set var="isPaid" value="true"/>
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </c:if>
+                                                        <c:choose>
+                                                            <c:when test="${isPaid == true}">
+                                                                <a href="lesson?cid=${o.getCourse_id()}&lessonid=1&createBy=${o.getCreate_by()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                            </c:otherwise>
+
+                                                        </c:choose> 
                                                     </c:otherwise>
-
-                                                </c:choose> 
-
+                                                </c:choose>
                                             </c:otherwise>
 
                                         </c:choose>
+
                                     </div>
                                 </div>
-                               <!--ADD TO WISHLIST-->
-                                        <c:if test="${sessionScope.account != null}">
-                                           
-                                                <!--nguoi dung chua dang nhap-->
-                                                <div class ="wishlist">
-                                                    <div class="product-slider">
-                                                        <a class="product-slider__fav js-fav" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">
-                                                            <c:choose>
-                                                                <c:when test="${CourseIdList.contains(o.getCourse_id())}">
-                                                                    <div class="heart is-active">
-                                                                        <div class ="wishlist-text">ADD TO WISHLIST </div>
-                                                                    </div>
-                                                                </c:when>
+                                <!--ADD TO WISHLIST-->
+                                <c:if test="${sessionScope.account != null}">
 
-                                                                <c:otherwise>
-                                                                    <div class="heart ">
-                                                                        <div class ="wishlist-text">ADD TO WISHLIST </div>
-                                                                    </div> 
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                  
-                                        </c:if>
+                                    <!--nguoi dung chua dang nhap-->
+                                    <div class ="wishlist">
+                                        <div class="product-slider">
+                                            <a class="product-slider__fav js-fav" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">
+                                                <c:choose>
+                                                    <c:when test="${CourseIdList.contains(o.getCourse_id())}">
+                                                        <div class="heart is-active">
+                                                            <div class ="wishlist-text">ADD TO WISHLIST </div>
+                                                        </div>
+                                                    </c:when>
+
+                                                    <c:otherwise>
+                                                        <div class="heart ">
+                                                            <div class ="wishlist-text">ADD TO WISHLIST </div>
+                                                        </div> 
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </c:if>
                                 <div class="text-center p-4 pb-0">
                                     <h3 class="mb-0">${o.getFormattedPrice()}₫</h3>
                                     <div class="mb-3">
-                                           <c:forEach var="i" begin="1" end="${o.getStar()}">
-                                                    <small class="fa fa-star text-primary"></small>
-                                                </c:forEach>
-                                                <c:forEach var="i" begin="${o.getStar() +1}" end="5">
-                                                    <small class="fa fa-star empty-star"></small>
-                                                </c:forEach>
-                                                
-                                                <small>(${o.getSumOfRating()})</small>
+                                        <c:forEach var="i" begin="1" end="${o.getStar()}">
+                                            <small class="fa fa-star text-primary"></small>
+                                        </c:forEach>
+                                        <c:forEach var="i" begin="${o.getStar() +1}" end="5">
+                                            <small class="fa fa-star empty-star"></small>
+                                        </c:forEach>
+
+                                        <small>(${o.getSumOfRating()})</small>
                                     </div>
                                     <h5 class="mb-4">${o.getCourse_name()}</h5>
                                 </div>
@@ -324,30 +370,42 @@
 
                                             <c:when test="${sessionScope.account == null}">
                                                 <!--nguoi dung chua dang nhap-->
-                                                <a href="join?action=login" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                <a href="join?action=login&cid=${o.getCourse_id()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
 
                                             </c:when>
 
+
                                             <c:otherwise><!--Nguoi dung da dang nhap-->
-                                                <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
-                                                <c:set var="isPaid" value="false"/>
-                                                <c:if test="${fn:length(listEnrollment) > 0}">
-                                                    <c:forEach items="${listEnrollment}" var="i">
-                                                        <c:if test="${currentCourseId == i.getCourseid()}">                   
-                                                            <c:set var="isPaid" value="true"/>
-                                                        </c:if>
-                                                    </c:forEach>
-                                                </c:if>
+
+                                                <!--Nguoi này là ngươi tao ra khoa hoc duoc join truc tiep-->
                                                 <c:choose>
-                                                    <c:when test="${isPaid == true}">
-                                                        <a href="lesson?cid=${o.getCourse_id()}&lessonid=1" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                    <c:when test="${o.getCreate_by() == sessionScope.account.getAccount_id()}">
+                                                        <a href="lesson?cid=${o.getCourse_id()}&lessonid=1&createBy=${o.getCreate_by()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
                                                     </c:when>
+
                                                     <c:otherwise>
-                                                        <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+
+
+                                                        <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
+                                                        <c:set var="isPaid" value="false"/>
+                                                        <c:if test="${fn:length(listEnrollment) > 0}">
+                                                            <c:forEach items="${listEnrollment}" var="i">
+                                                                <c:if test="${currentCourseId == i.getCourseid()}">                   
+                                                                    <c:set var="isPaid" value="true"/>
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </c:if>
+                                                        <c:choose>
+                                                            <c:when test="${isPaid == true}">
+                                                                <a href="lesson?cid=${o.getCourse_id()}&lessonid=1&createBy=${o.getCreate_by()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                            </c:otherwise>
+
+                                                        </c:choose> 
                                                     </c:otherwise>
-
-                                                </c:choose> 
-
+                                                </c:choose>
                                             </c:otherwise>
 
                                         </c:choose>
@@ -355,46 +413,46 @@
 
                                     </div>
                                 </div>
-                                         
-  <!--ADD TO WISHLIST-->
-                                        <c:if test="${sessionScope.account != null}">
-                                           
-                                                <!--nguoi dung chua dang nhap-->
-                                                <div class ="wishlist">
-                                                    <div class="product-slider">
-                                                        <a class="product-slider__fav js-fav" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">
-                                                            <c:choose>
-                                                                <c:when test="${CourseIdList.contains(o.getCourse_id())}">
-                                                                    <div class="heart is-active">
-                                                                        <div class ="wishlist-text">ADD TO WISHLIST </div>
-                                                                    </div>
-                                                                </c:when>
 
-                                                                <c:otherwise>
-                                                                    <div class="heart ">
-                                                                        <div class ="wishlist-text">ADD TO WISHLIST </div>
-                                                                    </div> 
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                  
-                                        </c:if>
+                                <!--ADD TO WISHLIST-->
+                                <c:if test="${sessionScope.account != null}">
 
-                                            
-                                
+                                    <!--nguoi dung chua dang nhap-->
+                                    <div class ="wishlist">
+                                        <div class="product-slider">
+                                            <a class="product-slider__fav js-fav" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">
+                                                <c:choose>
+                                                    <c:when test="${CourseIdList.contains(o.getCourse_id())}">
+                                                        <div class="heart is-active">
+                                                            <div class ="wishlist-text">ADD TO WISHLIST </div>
+                                                        </div>
+                                                    </c:when>
+
+                                                    <c:otherwise>
+                                                        <div class="heart ">
+                                                            <div class ="wishlist-text">ADD TO WISHLIST </div>
+                                                        </div> 
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </c:if>
+
+
+
                                 <div class="text-center pb-0" style ="padding-left: 12px;padding-right: 12px;padding-bottom: 12px; padding-top: 5px;">
                                     <h3 class="mb-0">${o.getFormattedPrice()}₫</h3>
                                     <div class="mb-3">
-                                          <c:forEach var="i" begin="1" end="${o.getStar()}">
-                                                    <small class="fa fa-star text-primary"></small>
-                                                </c:forEach>
-                                                <c:forEach var="i" begin="${o.getStar() +1}" end="5">
-                                                    <small class="fa fa-star empty-star"></small>
-                                                </c:forEach>
-                                                
-                                                <small>(${o.getSumOfRating()})</small>
+                                        <c:forEach var="i" begin="1" end="${o.getStar()}">
+                                            <small class="fa fa-star text-primary"></small>
+                                        </c:forEach>
+                                        <c:forEach var="i" begin="${o.getStar() +1}" end="5">
+                                            <small class="fa fa-star empty-star"></small>
+                                        </c:forEach>
+
+                                        <small>(${o.getSumOfRating()})</small>
                                     </div>
                                     <h5 class="mb-4">${o.getCourse_name()}</h5>
                                 </div>
@@ -565,48 +623,48 @@
 
 
         <!-- Testimonial Start -->
-        <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
-            <div class="container">
-                <div class="text-center">
-                    <h6 class="section-title bg-white text-center text-primary px-3">Testimonial</h6>
-                    <h1 class="mb-5">Our Students Say!</h1>
-                </div>
-                <div class="owl-carousel testimonial-carousel position-relative">
-                    <div class="testimonial-item text-center">
-                        <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-1.jpg" style="width: 80px; height: 80px;">
-                        <h5 class="mb-0">Client Name</h5>
-                        <p>Profession</p>
-                        <div class="testimonial-text bg-light text-center p-4">
-                            <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
+        <!--        <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="container">
+                        <div class="text-center">
+                            <h6 class="section-title bg-white text-center text-primary px-3">Testimonial</h6>
+                            <h1 class="mb-5">Our Students Say!</h1>
+                        </div>
+                        <div class="owl-carousel testimonial-carousel position-relative">
+                            <div class="testimonial-item text-center">
+                                <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-1.jpg" style="width: 80px; height: 80px;">
+                                <h5 class="mb-0">Client Name</h5>
+                                <p>Profession</p>
+                                <div class="testimonial-text bg-light text-center p-4">
+                                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
+                                </div>
+                            </div>
+                            <div class="testimonial-item text-center">
+                                <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-2.jpg" style="width: 80px; height: 80px;">
+                                <h5 class="mb-0">Client Name</h5>
+                                <p>Profession</p>
+                                <div class="testimonial-text bg-light text-center p-4">
+                                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
+                                </div>
+                            </div>
+                            <div class="testimonial-item text-center">
+                                <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-3.jpg" style="width: 80px; height: 80px;">
+                                <h5 class="mb-0">Client Name</h5>
+                                <p>Profession</p>
+                                <div class="testimonial-text bg-light text-center p-4">
+                                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
+                                </div>
+                            </div>
+                            <div class="testimonial-item text-center">
+                                <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-4.jpg" style="width: 80px; height: 80px;">
+                                <h5 class="mb-0">Client Name</h5>
+                                <p>Profession</p>
+                                <div class="testimonial-text bg-light text-center p-4">
+                                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="testimonial-item text-center">
-                        <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-2.jpg" style="width: 80px; height: 80px;">
-                        <h5 class="mb-0">Client Name</h5>
-                        <p>Profession</p>
-                        <div class="testimonial-text bg-light text-center p-4">
-                            <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-item text-center">
-                        <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-3.jpg" style="width: 80px; height: 80px;">
-                        <h5 class="mb-0">Client Name</h5>
-                        <p>Profession</p>
-                        <div class="testimonial-text bg-light text-center p-4">
-                            <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
-                        </div>
-                    </div>
-                    <div class="testimonial-item text-center">
-                        <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-4.jpg" style="width: 80px; height: 80px;">
-                        <h5 class="mb-0">Client Name</h5>
-                        <p>Profession</p>
-                        <div class="testimonial-text bg-light text-center p-4">
-                            <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                </div>-->
         <!-- Testimonial End -->
 
 

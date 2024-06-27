@@ -33,6 +33,18 @@
         <servlet-class>Controller.lessonServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>CreateQuizServlet</servlet-name>
+        <servlet-class>Controller.CreateQuizServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateQuestionsServlet</servlet-name>
+        <servlet-class>Controller.CreateQuestionsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ControllerQuestionServlet</servlet-name>
+        <servlet-class>Controller.ControllerQuestionServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>CourseManageServlet</servlet-name>
         <servlet-class>Controller.User.Manager.CourseManageServlet</servlet-class>
     </servlet>
@@ -79,6 +91,18 @@
     <servlet-mapping>
         <servlet-name>UpdateCourse</servlet-name>
         <url-pattern>/UpdateCourse</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateQuizServlet</servlet-name>
+        <url-pattern>/createquiz</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateQuestionsServlet</servlet-name>
+        <url-pattern>/question</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControllerQuestionServlet</servlet-name>
+        <url-pattern>/controller</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>

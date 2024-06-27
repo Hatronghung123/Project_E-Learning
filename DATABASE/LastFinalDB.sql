@@ -285,6 +285,7 @@ create table Lesson(
 	LessonName nvarchar(255),
 	LessonContent nvarchar(1000),
 	LessonVideo text,
+	Duration int
 );
 
 
@@ -294,18 +295,20 @@ insert into Lesson
 values(1, N'C# la gi?',N'Trong bài học này, chúng ta sẽ cùng tìm hiểu các vấn đề:
 Sơ lược về ngôn ngữ C#.
 Những đặc trưng của ngôn ngữ C#.
-Tại sao lại lựa chọn ngôn ngữ C#' ,'https://www.youtube.com/embed/9kohr6pMwag?si=U9sJEvQTUKLxvHHx'),
+Tại sao lại lựa chọn ngôn ngữ C#' ,'https://www.youtube.com/embed/9kohr6pMwag?si=U9sJEvQTUKLxvHHx', 318),
+
+
 (1, N'Cấu trúc lệnh cơ bản trong C# Console Application', N'Trong bài học này, chúng ta sẽ cùng tìm hiểu các vấn đề:
 
 Cấu trúc cơ bản của một chương trình trong C#.
 Giải thích ý nghĩa một số từ khóa được sử dụng trong chương trình đầu tiên.
 Cách viết comment trong C#.
-Ví dụ chương trình đầu tiên bằng C#.','https://www.youtube.com/embed/FhAIc0tlyaQ?si=c5ClSGle5mNg1fNw'),
+Ví dụ chương trình đầu tiên bằng C#.','https://www.youtube.com/embed/FhAIc0tlyaQ?si=c5ClSGle5mNg1fNw',1386),
 (1,N'Nhập xuất cơ bản trong C# Console Application
 ',N'Trong bài học này, chúng ta sẽ cùng tìm hiểu các vấn đề:
 
 Cấu trúc cơ bản của các lệnh nhập xuất và ý nghĩa của chúng trong C#.
-Ví dụ demo chương trình nhập xuất bằng C#.','https://www.youtube.com/embed/BAscPWPtCD8?si=-hrRHd1obZIIp2vy'),
+Ví dụ demo chương trình nhập xuất bằng C#.','https://www.youtube.com/embed/BAscPWPtCD8?si=-hrRHd1obZIIp2vy',1828),
 
 (1,N'Biến trong C#',N'Để đọc hiểu bài này tốt nhất các bạn nên có kiến thức cơ bản về các phần:
 
@@ -315,7 +318,7 @@ Cấu trúc nhập xuất của C# trên nền Console Application.
 
 Biến là gì? Tại sao phải sử dụng biến?
 Khai báo và sử dụng biến.
-Quy tắc đặt tên biến.','https://www.youtube.com/embed/IEz7uMSHitM?si=D_FhSF4eWfGE4Qok'),
+Quy tắc đặt tên biến.','https://www.youtube.com/embed/IEz7uMSHitM?si=D_FhSF4eWfGE4Qok',1524),
 (1,N'Kiểu dữ liệu trong C#',N'Để đọc hiểu bài này tốt nhất các bạn nên có kiến thức cơ bản về các phần:
 
 Cấu trúc lệnh của C# viết trên nền Console Application.
@@ -326,7 +329,7 @@ Biến trong C#.
 Kiểu dữ liệu là gì? Tại sao phải có kiểu dữ liệu?
 Phân loại kiểu dữ liệu và ý nghĩa của từng kiểu dữ liệu.
 Ví dụ chương trình sử dụng một số kiểu dữ liệu.
-','https://www.youtube.com/embed/yrH7Qe8FXqE?si=lC8OMRwzNwPpJvU3'),
+','https://www.youtube.com/embed/yrH7Qe8FXqE?si=lC8OMRwzNwPpJvU3',1234),
 (1,N'Toán tử trong C#',N'Để đọc hiểu bài này tốt nhất các bạn nên có kiến thức cơ bản về các phần:
 
 CẤU TRÚC LỆNH CỦA C# VIẾT TRÊN NỀN CONSOLE APPLICATION.
@@ -337,7 +340,7 @@ Trong bài học này, chúng ta sẽ cùng tìm hiểu các vấn đề:
 Toán tử là gì? Có mấy loại toán tử?
 Cú pháp và ý nghĩa của từng toán tử.
 Độ ưu tiên của toán tử.
-Ví dụ chương trình sử dụng một số toán tử.','https://www.youtube.com/embed/niz7Gg8uB-k?si=bnm5v5MPvW2tE1ls');
+Ví dụ chương trình sử dụng một số toán tử.','https://www.youtube.com/embed/niz7Gg8uB-k?si=bnm5v5MPvW2tE1ls',1235);
 
 
 create table Quiz(

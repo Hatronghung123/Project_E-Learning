@@ -7,9 +7,11 @@ package Controller.User.Manager;
 import Dal.CourseDetailDAO;
 import Dal.CourseManageDAO;
 import Dal.HomeDAO;
+import Dal.LessonManageDAO;
 import Model.Account;
 import Model.Category;
 import Model.CourseManageDTO;
+import Model.Lesson;
 import Util.ServerPath;
 import Util.Validation;
 import java.io.IOException;
@@ -28,6 +30,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.taglibs.standard.lang.jstl.ELException;
 
 /**
  *
@@ -77,17 +80,35 @@ public class CourseManageServlet extends HttpServlet {
         PrintWriter o = response.getWriter();
         String cid = (String) request.getParameter("cid") == null ? "" : (String) request.getParameter("cid");
         String action = (String) request.getParameter("action") == null ? "" : (String) request.getParameter("action");
-
+        
+        
         HttpSession session = request.getSession();
         Account my_account = (Account) session.getAttribute("account");
         CourseManageDAO course_manage_DAO = new CourseManageDAO();
         ArrayList<CourseManageDTO> list_managed_course = course_manage_DAO.getMyManagedCourse(my_account.getAccount_id());
         request.setAttribute("list_managed_couse", list_managed_course);
+        
+        
+//        read data lesson from database
+        LessonManageDAO dao = new LessonManageDAO();
+        ArrayList<Lesson> lessonList = null;
+        try {
+            lessonList = dao.getListlessonByCid(Integer.parseInt(cid));
+            //o.print(lessonList);
+        } catch (SQLException ex) {
+            Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }catch (Exception e) {
+            
+        }
+        
 
         if (!(cid.isEmpty() && action.isEmpty())) {
             switch (action) {
                 case "update":
                     request.setAttribute("cid", cid);
+                    if(lessonList != null) {
+                        request.setAttribute("lessonList", lessonList);
+                    }
                     request.getRequestDispatcher("UpdateCourse.jsp").forward(request, response);
                     return;
                 case "add_new_course": {

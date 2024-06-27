@@ -45,7 +45,7 @@ public class DisscussionDAO {
         }
     }
 
-    public void deleteMainComment(int discussionId) {
+    public void deleteReplyComment(int discussionId) {
         String sql = "DELETE FROM DiscussionLesson WHERE DisscussionId = ?";
         try (Connection con = new DBContext().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, discussionId);
@@ -56,8 +56,10 @@ public class DisscussionDAO {
         }
     }
 
+    
+//    Xóa tất cả comment (comment cha)
     public void deleteComent(int discussionId) {
-    deleteComentReplies(discussionId); // Xóa tất cả các comment reply
+    deleteAllComentReplies(discussionId); // Xóa tất cả các comment reply
     
     String sql = "DELETE FROM DiscussionLesson WHERE DisscussionId = ?";
     try (Connection con = new DBContext().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -70,7 +72,7 @@ public class DisscussionDAO {
 }
 
     
-       public void deleteComentReplies(int commentId) {
+       public void deleteAllComentReplies(int commentId) {
         //xóa tất cả các reply liên quan
         String sql = "	DELETE FROM DiscussionLesson WHERE ParentCommentID = ?";
         try (Connection con = new DBContext().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {

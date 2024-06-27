@@ -7,6 +7,7 @@ package Dal;
 import Model.Account;
 import Model.ProfileDTO;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -20,7 +21,7 @@ public class AccountDAO extends DBContext {
         System.out.println(dao.checkAccountExist("tuong0505ht@gmail.com"));
 //        dao.insertUser(new Account("tuongdeptrai@gmail.com", "67676767", 4), new Profile("Pham Cat Tuong", 0));
         Account a = dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010");
-        System.out.println(dao.getProfile(a).getFullname());
+        System.out.println(dao.getAllAccount());
         System.out.println("Succesfully");
     }
 
@@ -323,6 +324,40 @@ public class AccountDAO extends DBContext {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+    
+    
+    
+    //Lấy ra tất cả tài khoản
+        public ArrayList<Account> getAllAccount() {
+            ArrayList<Account> list = new ArrayList<>();
+        connection = getConnection();
+        String sql = """
+                     SELECT [AccountId]
+                       	  ,p.FullName
+                             ,[Email]
+                             ,[Password]
+                             ,[Status]
+                             ,[RoleId]
+                         FROM [Project Online Learning].[dbo].[Account] acc
+                         Join [dbo].[Profile] p on p.[ProfileId] = acc.AccountId """;
+        try {
+            statement = connection.prepareStatement(sql);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int account_id = resultSet.getInt(1);
+                String fullName = resultSet.getString(2);
+                String email_in_db = resultSet.getString(3);
+                String password_in_db = resultSet.getString(4);
+                int role_id = resultSet.getInt(6);
+                boolean status = resultSet.getBoolean(5);
+
+                list.add(new Account(account_id,fullName, email_in_db, password_in_db, status, role_id));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
     }
 
 }

@@ -16,6 +16,15 @@ public class Module {
     public Module() {
     }
 
+    
+    
+        public Module(int moduleid, String modulename) {
+        this.moduleid = moduleid;
+        this.modulename = modulename;
+       
+    }
+    
+    
     public Module(int moduleid, String modulename, int courseid) {
         this.moduleid = moduleid;
         this.modulename = modulename;

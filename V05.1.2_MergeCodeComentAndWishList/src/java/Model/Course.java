@@ -202,8 +202,8 @@ public class Course {
         this.star = star;
     }
 
-    public double getSumOfRating() {
-        return sumOfRating;
+    public int getSumOfRating() {
+        return (int) sumOfRating;
     }
 
     public void setSumOfRating(double sumOfRating) {

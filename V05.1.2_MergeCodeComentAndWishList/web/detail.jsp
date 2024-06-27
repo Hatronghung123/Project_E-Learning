@@ -12,18 +12,32 @@
 
     <head>
         <meta charset="utf-8">
-        <title>Edukate - Online Education Website Template</title>
+        <title>Online Learning</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
-        <meta content="Free HTML Templates" name="keywords">
-        <meta content="Free HTML Templates" name="description">
+        <meta content="" name="keywords">
+        <meta content="" name="description">
 
 
 
 
+
+
+        <!-- Favicon -->
+        <link href="img/favicon.ico" rel="icon">
 
         <!-- Google Web Fonts -->
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"> 
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+
+        <!-- Icon Font Stylesheet -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+        <!-- Libraries Stylesheet -->
+        <link href="lib/animate/animate.min.css" rel="stylesheet">
+        <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">        
+
         <!-- AOS Library Stylesheet -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
@@ -37,14 +51,8 @@
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
 
 
-        <!-- Icon Font Stylesheet -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-        <!--         Libraries Stylesheet 
-                <link href="lib/animate/animate.min.css" rel="stylesheet">
-                 Libraries Stylesheet 
-                <link href="lib/owlcarousels/assets/owl.carousel.min.css" rel="stylesheet">-->
+
         <!-- Customized Bootstrap Stylesheet -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <!-- Customized Bootstrap Stylesheet -->
@@ -120,147 +128,58 @@
 
     <body>
 
+        <%
+            String courseId =request.getParameter("cid");
+                String lastLessonId = null;
+                Cookie[] cookies = request.getCookies();
+                if (cookies != null) {
+                    for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("lastLessonId_" + courseId)) {
+                        lastLessonId = cookie.getValue();
+                        break;
+                    }
+                }
+                }
+                
+            Object lessonidObj = request.getAttribute("lessonid");
+            if (lastLessonId == null) {
+            // Nếu không có cookie, bạn có thể đặt giá trị mặc định, ví dụ: bài học đầu tiên
+            String lessonid = lessonidObj.toString();
+            lastLessonId = lessonid; 
+            }
+        %>
+
+        <jsp:include page="common/menu.jsp"></jsp:include>
 
 
-
-        <!-- Navbar Start -->
-        <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
-            <a href="home" class="navbar-brand d-flex align-items-center px-4 px-lg-5" style="text-decoration: none;">
-                <h2 class="m-0 text-primary"><i class="fa fa-book me-3"></i>OLS</h2>
-            </a>
-
-            <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-
-                <!--        search by category-->
-                <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" style="
-                           border-style: solid;
-                           border-width: thin;
-                           border-radius: 10px;
-                           padding: 10px;
-                           margin: 15px;
-                           color: #06BBCC;
-                           ">Explore</a>
-                        <div class="dropdown-menu fade-down m-0">
-                            <c:forEach items="${listCategory}" var="o">
-                                <a href="listCourseSeverlet?cid=${o.getCategory_id()}" class="dropdown-item">${o.getCategory_name()}</a>
-                            </c:forEach>
-                        </div>
-                    </div>
-                </div>
-
-                <!--        search by name-->
-                <form action="listCourseSeverlet" method="post" class="navbar-nav ">
-                    <input class="search-input" style="width: 300px;" type="text" value="${searchValue}" name="search"  placeholder="Search in course">
-                    <input style="border-radius: 4px;" class="btn btn-primary" type="submit" value="Search">
-                </form>
-
-                <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    <a href="home" class="nav-item nav-link active">Home</a>
-                    <a href="about.jsp" class="nav-item nav-link">About</a>
-                    <a href="Courses.jsp" class="nav-item nav-link">Courses</a>
-                    <!--                    <div class="nav-item dropdown">
-                                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                                            <div class="dropdown-menu fade-down m-0">
-                                                <a href="team.html" class="dropdown-item">Our Team</a>
-                                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                                                <a href="404.html" class="dropdown-item">404 Page</a>
-                                            </div>
-                                        </div>-->
-                    <a href="contact.html" class="nav-item nav-link">Contact</a>
-
-                    <!--                
-                                                                            <div class="nav-item dropdown">
-                                                                                <a href="#"  class="btn btn-primary py-4 px-lg-5 d-none d-lg-block" data-bs-toggle="dropdown">${sessionScope.profile.fullname}<i class="fa fa-arrow-down ms-3"></i></a>                            
-                                                                                <div class="dropdown-menu fade-down m-0">
-                                                                                    <a class="dropdown-item" href="profile">My profile</a>
-                                                                                    <a class="dropdown-item" href="join?action=logout">Log Out</a>
-                                                        
-                                                                                </div>
-                                                                            </div>  -->
-                </div>
-
-                <c:if test="${sessionScope.account != null}">
-                    <div class="navbar-nav ms-auto p-5 p-lg-0" >
-                        <div class="nav-item dropdown"  >
-                            <c:if test="${not empty sessionScope.profile.fullname}">
-                                <c:set var="fullName" value="${sessionScope.profile.fullname}" />
-                                <script>
-                                    var fullName = "${fullName}";
-                                    var limitedName = fullName.length > 12 ? fullName.substring(0, 12) + '...' : fullName;
-                                    document.write('<a href="#" class="btn btn-primary py-4 px-lg-5 d-lg-block" data-toggle="dropdown">' + limitedName + '<i class="fa fa-arrow-down ms-3"></i></a>');
-                                </script>
-                            </c:if>
-                            <!-- <a href="#" class="btn btn-primary py-4 px-lg-5 d-lg-block" data-toggle="dropdown">
-                            ${sessionScope.profile.fullname}<i class="fa fa-arrow-down ms-3"></i>
-                        </a>-->
-
-                            <div class="dropdown-menu fade-down m-0"   >
-                                <a class="dropdown-item" href="profile">My Profile</a>
-                                <a class="dropdown-item" href="my-courses">My Courses</a>
-                                <a class="dropdown-item" href="user/abc">Abc</a>
-                                <a class="dropdown-item" href="join?action=logout">Log Out</a>
+            <!-- Header Start -->
+            <div class="container-fluid bg-primary py-5 mb-5 page-header">
+                <div class="container py-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-10 text-center">
+                            <h1 class="display-3 text-white animated slideInDown">Course Detail</h1>
+                            <div class="breadcrumb justify-content-center">
+                                <p class="breadcrumb-item"><a class="text-white" href="home">Home</a></p>
+                                <i class="fa fa-angle-double-right pt-1 px-3 text-white"></i>
+                                <p class="breadcrumb-item text-white active">Course Detail</p>
                             </div>
-                        </div>
-                    </div>
-                </c:if>
-                <c:if test="${sessionScope.account == null}">
-                    <div class="navbar-nav ms-auto p-4 p-lg-0">
-                        <div class="nav-item dropdown">
-                            <a href="#" class="btn btn-primary py-4 px-lg-5 d-lg-block" data-toggle="dropdown">
-                                Login/Register<i class="fa fa-arrow-down ms-3"></i>
-                            </a>
-                            <div class="dropdown-menu fade-down m-0">
-                                <a href="join?action=login" class="dropdown-item">Login</a>
-                                <a href="join?action=signup" class="dropdown-item">Register</a>
-                            </div>
-                        </div>
-                    </div>
-                </c:if>
-            </div>
-        </nav>
-        <!-- Navbar End -->
-
-
-
-
-
-
-
-        <!-- Header Start -->
-        <div class="container-fluid bg-primary py-5 mb-5 page-header">
-            <div class="container py-5">
-                <div class="row justify-content-center">
-                    <div class="col-lg-10 text-center">
-                        <h1 class="display-3 text-white animated slideInDown">Course Detail</h1>
-                        <div class="breadcrumb justify-content-center">
-                            <p class="breadcrumb-item"><a class="text-white" href="home">Home</a></p>
-                            <i class="fa fa-angle-double-right pt-1 px-3 text-white"></i>
-                            <p class="breadcrumb-item text-white active">Course Detail</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Header End -->
+            <!-- Header End -->
 
 
 
-        <!-- Detail Start -->
-        <div data-aos="fade-up" class="container-fluid py-5">
-            <div class="container py-5">
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div  class="mb-5">
-                            <div class="position-relative mb-5">
-                                <h6 style="color: #F14D5D !important" class="d-inline-block position-relative text-secondary text-uppercase pb-2">Course Detail</h6>
-                                <h1 class="display-4">${getCourseByID.getCourse_name()}</h1>
+            <!-- Detail Start -->
+            <div data-aos="fade-up" class="container-fluid py-5">
+                <div class="container py-5">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div  class="mb-5">
+                                <div class="position-relative mb-5">
+                                    <h6 style="color: #F14D5D !important" class="d-inline-block position-relative text-secondary text-uppercase pb-2">Course Detail</h6>
+                                    <h1 class="display-4">${getCourseByID.getCourse_name()}</h1>
                             </div>
                             <img style="width: 100%; /* Đảm bảo rằng ảnh sẽ rộng hết phần tử cha */
                                  height: 480px; /* Chiều cao mong muốn */; /* Đảm bảo tỷ lệ khung hình bảo toàn */
@@ -307,29 +226,42 @@
 
                                                     </c:when>
 
+
                                                     <c:otherwise><!--Nguoi dung da dang nhap-->
-                                                        <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
-                                                        <c:set var="isPaid" value="false"/>
-                                                        <c:if test="${fn:length(listEnrollment) > 0}">
-                                                            <c:forEach items="${listEnrollment}" var="i">
-                                                                <c:if test="${currentCourseId == i.getCourseid()}">                   
-                                                                    <c:set var="isPaid" value="true"/>
-                                                                </c:if>
-                                                            </c:forEach>
-                                                        </c:if>
+
+                                                        <!--Nguoi này là ngươi tao ra khoa hoc duoc join truc tiep-->
                                                         <c:choose>
-                                                            <c:when test="${isPaid == true}">
-                                                                <a href="lesson?cid=${o.getCourse_id()}&lessonid=1" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                            <c:when test="${o.getCreate_by() == sessionScope.account.getAccount_id()}">
+                                                                <a href="lesson?cid=${o.getCourse_id()}&lessonid=1&createBy=${o.getCreate_by()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
                                                             </c:when>
+
                                                             <c:otherwise>
-                                                                <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+
+
+                                                                <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
+                                                                <c:set var="isPaid" value="false"/>
+                                                                <c:if test="${fn:length(listEnrollment) > 0}">
+                                                                    <c:forEach items="${listEnrollment}" var="i">
+                                                                        <c:if test="${currentCourseId == i.getCourseid()}">                   
+                                                                            <c:set var="isPaid" value="true"/>
+                                                                        </c:if>
+                                                                    </c:forEach>
+                                                                </c:if>
+                                                                <c:choose>
+                                                                    <c:when test="${isPaid == true}">
+                                                                        <a href="lesson?cid=${o.getCourse_id()}&lessonid=1&createBy=${o.getCreate_by()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                                    </c:otherwise>
+
+                                                                </c:choose> 
                                                             </c:otherwise>
-
-                                                        </c:choose> 
-
+                                                        </c:choose>
                                                     </c:otherwise>
 
                                                 </c:choose>
+
 
                                             </div>
 
@@ -371,7 +303,7 @@
                                                 <c:forEach var="i" begin="${o.getStar() +1}" end="5">
                                                     <small class="fa fa-star empty-star"></small>
                                                 </c:forEach>
-                                                
+
                                                 <small>(${o.getSumOfRating()})</small>
                                             </div>
                                             <h5 class="mb-4">${o.getCourse_name()}</h5>
@@ -402,7 +334,7 @@
                             </div>
                             <div class="d-flex justify-content-between border-bottom px-4">
                                 <h6 class="text-white my-3">Rating</h6>
-                                <h6 class="text-white my-3">4.5 <small>(250)</small></h6>
+                                <h6 class="text-white my-3">${avgRatingCourse} <small>(${amountRatingCourse})</small></h6>
                             </div>
                             <div class="d-flex justify-content-between border-bottom px-4">
                                 <h6 class="text-white my-3">Lectures</h6>
@@ -423,39 +355,50 @@
                             <h5 class="text-white py-3 px-4 m-0">Course Price: ${getCourseByID.getFormattedPrice()}₫</h5>
                             <c:if test="${sessionScope.account == null}">
                                 <div class="py-3 px-4">
-                                    <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5" href="join?action=login">Enroll Now</a>
+                                    <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5" href="join?action=login&cid=${getCourseByID.getCourse_id()}">Enroll Now</a>
                                 </div>
                             </c:if>
 
                             <c:if test="${sessionScope.account != null}">
-                                <c:set var="currentCourseId" value="${getCourseByID.getCourse_id()}"/>
+                                <!--Nguoi này là ngươi tao ra khoa hoc duoc join truc tiep-->
                                 <c:choose>
-
-                                    <c:when test="${fn:length(listEnrollment) > 0}">
-                                        <c:forEach items="${listEnrollment}" var="o">
-                                            <c:if test="${currentCourseId == o.getCourseid()}">
-                                                <div class="py-3 px-4">
-                                                    <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="lesson?cid=${currentCourseId}&lessonid=1" >Resume</a>
-                                                </div>
-                                                <c:set var="isPaid" value="true"/>
-                                            </c:if>
-                                        </c:forEach>
-
+                                    <c:when test="${sessionScope.account.getAccount_id() == getCourseByID.getCreate_by()}">
+                                        <div class="py-3 px-4">
+                                            <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="lesson?cid=${getCourseByID.getCourse_id()}&lessonid=<%=lastLessonId%>&createBy=${getCourseByID.getCreate_by()}">Join Now</a>
+                                        </div>
                                     </c:when>
+                                        
                                     <c:otherwise>
-                                        <c:set var="isPaid" value="false"/>
+                                        <c:set var="currentCourseId" value="${getCourseByID.getCourse_id()}"/>
+                                        <c:choose>
+
+                                            <c:when test="${fn:length(listEnrollment) > 0}">
+                                                <c:forEach items="${listEnrollment}" var="o">
+                                                    <c:if test="${currentCourseId == o.getCourseid()}">
+                                                        <div class="py-3 px-4">
+                                                            <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="lesson?cid=${currentCourseId}&lessonid=<%=lastLessonId%>&createBy=${getCourseByID.getCreate_by()}">Resume</a>
+                                                        </div>
+                                                        <c:set var="isPaid" value="true"/>
+                                                    </c:if>
+                                                </c:forEach>
+
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:set var="isPaid" value="false"/>
+                                            </c:otherwise>
+
+
+
+
+                                        </c:choose> 
+
+                                        <c:if test="${isPaid != true}">
+                                            <div class="py-3 px-4">
+                                                <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="vnpay_pay.jsp?price=${getCourseByID.getPrice()}&cid=${getCourseByID.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" >Enroll Now</a>
+                                            </div>
+                                        </c:if>
                                     </c:otherwise>
-
-
-
-
-                                </c:choose> 
-
-                                <c:if test="${isPaid != true}">
-                                    <div class="py-3 px-4">
-                                        <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="vnpay_pay.jsp?price=${getCourseByID.getPrice()}&cid=${getCourseByID.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" >Enroll Now</a>
-                                    </div>
-                                </c:if>
+                                </c:choose>
                             </c:if>
 
 
@@ -550,12 +493,12 @@
         <!-- AOS Library Javascript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
         <script>
-                                    AOS.init();
+            AOS.init();
         </script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
         <script>
-                                    new WOW().init();
+            new WOW().init();
         </script>
 
         <!-- Template Javascript -->
@@ -573,33 +516,33 @@
 
 
         <script>      document.addEventListener('DOMContentLoaded', function () {
-                                        var favButtons = document.querySelectorAll(".js-fav");
-                                        favButtons.forEach(function (favButton) {
-                                            favButton.addEventListener("click", function (event) {
-                                                event.preventDefault(); // Ngăn chặn hành động mặc định của thẻ <a> (chuyển hướng)
+                var favButtons = document.querySelectorAll(".js-fav");
+                favButtons.forEach(function (favButton) {
+                    favButton.addEventListener("click", function (event) {
+                        event.preventDefault(); // Ngăn chặn hành động mặc định của thẻ <a> (chuyển hướng)
 
-                                                // Thực hiện ngầm hành động thêm vào wishlist
-                                                var href = this.getAttribute("href");
-                                                console.log("Adding to wishlist: " + href);
+                        // Thực hiện ngầm hành động thêm vào wishlist
+                        var href = this.getAttribute("href");
+                        console.log("Adding to wishlist: " + href);
 
-                                                // Thực hiện thêm vào wishlist (Ví dụ: gửi yêu cầu AJAX)
-                                                var xhr = new XMLHttpRequest();
-                                                xhr.open("GET", href, true);
-                                                xhr.onreadystatechange = function () {
-                                                    if (xhr.readyState === 4 && xhr.status === 200) {
-                                                        console.log("Added to wishlist");
-                                                    }
-                                                };
-                                                xhr.send();
+                        // Thực hiện thêm vào wishlist (Ví dụ: gửi yêu cầu AJAX)
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("GET", href, true);
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState === 4 && xhr.status === 200) {
+                                console.log("Added to wishlist");
+                            }
+                        };
+                        xhr.send();
 
-                                                // Thay đổi trạng thái của icon trái tim
-                                                var heartIcon = this.querySelector('.heart');
-                                                if (heartIcon) {
-                                                    heartIcon.classList.toggle("is-active");
-                                                }
-                                            });
-                                        });
-                                    });</script>
+                        // Thay đổi trạng thái của icon trái tim
+                        var heartIcon = this.querySelector('.heart');
+                        if (heartIcon) {
+                            heartIcon.classList.toggle("is-active");
+                        }
+                    });
+                });
+            });</script>
 
 
 
