@@ -146,6 +146,10 @@ public class lessonServlet extends HttpServlet {
                 ArrayList<Model.Module> moduleList = dao.getListModulByCid(course_id);
                 Lesson lesson = dao.getlessonByCid(course_id, lesson_id);
 
+                
+                
+                
+                
 //                List all comment 
                 ArrayList<DiscussionLesson> allComments = discussDao.getCommentsByLesson(lesson_id);
 //              // Phân tách comments chính và các replies

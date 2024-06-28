@@ -21,8 +21,8 @@
 
         <!-- Custom fonts for this template -->
         <link href="${pageContext.request.contextPath}/static_dasboard/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-        <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
 
         <!-- Custom styles for this template -->
@@ -276,7 +276,7 @@
                             <h1 class="h3 mb-2 text-gray-800">Tables</h1>
                             <div class="container">
                                 <h2>Import Mentor Accounts</h2>
-                                <form action="manageAccount" method="post" enctype="multipart/form-data" class="upload-form">
+                                <form action="manageAccount?action=import" method="post" enctype="multipart/form-data" class="upload-form">
                                     <label for="file-upload" class="custom-file-upload">
                                         <input type="file" id="file-upload" name="file" accept=".xlsx">
                                     </label>
@@ -288,8 +288,10 @@
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h5 class="card-title">All Students List  </h5>
-                                    <a href="add-student.html" class="btn btn-primary">+ Add new</a>
-
+                                    <div>
+                                    <a href="manageAccount?action=addAccount" class="btn btn-primary">+ Add new</a>
+                                    <a href="manageAccount?action=import" class="btn btn-primary">- Delete</a>
+                                    </div>
                                 </div>
 
 
@@ -305,6 +307,7 @@
                                                     <th style="width: 250px;">Email</th>
                                                     <th style="width: 200px;">Password</th>
                                                     <th style="width: 100px;">Role</th>
+                                                    <th style="width: 0px;">Status</th>
                                                     <th style="width:0px;">Active</th>
                                                 </tr>
                                             </thead>
@@ -315,6 +318,7 @@
                                                     <th>Email</th>
                                                     <th>Password</th>
                                                     <th>Role</th>
+                                                    <th>Status</th>
                                                     <th>Active</th>
                                                 </tr>
                                             </tfoot>
@@ -324,11 +328,12 @@
                                                     <td>${o.getAccount_id()}</td>
                                                     <td>${o.getFullName()}</td>
                                                     <td>${o.getEmail()}</td>
+                                                    <td>${o.getPassword()}</td>
                                                     <td>${o.getRole_id()}</td>
                                                     <td>${o.isStatus() == true ? "is Active" : "Lock"}</td>
                                                     <td>
-                                                        <a href="javascript:void(0);" class="btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i></a>
-                                                        <a href="javascript:void(0);" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
+                                                        <a href="manageAccount?action=updateAccount&accountid=${o.getAccount_id()}" class="btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i></a>
+                                                        <a href="manageAccount?action=activeAcount" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>
 
                                                     </td>
                                                 </tr>

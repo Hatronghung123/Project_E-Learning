@@ -17,9 +17,12 @@ public class Account {
     private String email;
     private String password;
     private boolean status;
+        private boolean gender;
+
     //1 - active 
     //2 - inactive
     private int role_id;
+    
     /*
      role_id = 1 =>ADMIN
                 2 => Manager
@@ -42,6 +45,17 @@ public class Account {
         this.status = status;
         this.role_id = role_id;
     }
+
+    public Account(int account_id, String fullName, String email, String password, boolean status, boolean gender, int role_id) {
+        this.account_id = account_id;
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.status = status;
+        this.gender = gender;
+        this.role_id = role_id;
+    }
+    
     
     
 
@@ -140,6 +154,15 @@ public class Account {
         this.fullName = fullName;
     }
 
+    public boolean isGender() {
+        return gender;
+    }
+
+    public void setGender(boolean gender) {
+        this.gender = gender;
+    }
+
+    
     
 
 

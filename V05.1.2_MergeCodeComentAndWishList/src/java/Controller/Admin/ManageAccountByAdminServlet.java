@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,7 +38,7 @@ import java.util.List;
         maxFileSize = 1024 * 1024 * 10, // 10 MB
         maxRequestSize = 1024 * 1024 * 50 // 50 MB
 )
-public class imPortMentorServlet extends HttpServlet {
+public class ManageAccountByAdminServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -78,14 +79,34 @@ public class imPortMentorServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //response.getWriter().println("Mentor accounts imported and activated successfully.");
-
+        String accountId = request.getParameter("accountid");
+        String action = (request.getParameter("action") == null ? "" : request.getParameter("action"));
         AccountDAO accDao = new AccountDAO();
-        ArrayList<Account> listAllAccount = accDao.getAllAccount();
-        
-        
-        
-        request.setAttribute("listAllAccount", listAllAccount);
-        request.getRequestDispatcher("tables.jsp").forward(request, response);
+
+        try {
+
+            switch (action) {
+                case "addAccount":
+                    request.getRequestDispatcher("add_account.jsp").forward(request, response);
+                    break;
+                case "updateAccount":
+                    Account account = accDao.getAccountById(Integer.parseInt(accountId));
+                    
+                    request.setAttribute("accid", accountId);
+                    request.setAttribute("account", account);
+                    request.getRequestDispatcher("update_account.jsp").forward(request, response);
+                    break;
+                default:
+//                    read
+                    ArrayList<Account> listAllAccount = accDao.getAllAccount();
+
+                    request.setAttribute("listAllAccount", listAllAccount);
+                    request.getRequestDispatcher("manageAccount.jsp").forward(request, response);
+            }
+
+        } catch (Exception e) {
+        }
+
     }
 
     /**
@@ -98,6 +119,27 @@ public class imPortMentorServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = (request.getParameter("action") == null ? "" : request.getParameter("action"));
+
+        switch (action) {
+            case "import":
+                importMentorFromFileExcel(request, response);
+                break;
+            case "addAccount":
+                addNewAccountByAdmin(request, response);
+                break;
+            case "updateAccount":
+                updateAccountByAdmin(request, response);
+                break;
+            default:
+                throw new AssertionError();
+        }
+    }
+
+    
+    //Lấy dữ liệu từ excel lên database
+    private void importMentorFromFileExcel(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         SendEmail sendMk = new SendEmail();
         Part filePart = request.getPart("file");
@@ -122,7 +164,8 @@ public class imPortMentorServlet extends HttpServlet {
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
                 String email = getCellValue(row.getCell(0));
-
+                String fullname = getCellValue(row.getCell(1));
+                int manageBy = getCellValueInt(row.getCell(2));
                 // Kiểm tra nếu email đã tồn tại
                 if (accDao.checkAccountExist(email)) {
                     response.getWriter().println("Email already exists: " + email);
@@ -134,7 +177,7 @@ public class imPortMentorServlet extends HttpServlet {
 
                 // Tạo đối tượng tài khoản và hồ sơ
                 Account account = new Account(email, password, 3);
-                ProfileDTO profile = new ProfileDTO("", 0);
+                ProfileDTO profile = new ProfileDTO(fullname, manageBy);
 
                 // Thêm vào database
                 accDao.insertUser(account, profile);
@@ -163,6 +206,101 @@ public class imPortMentorServlet extends HttpServlet {
         response.sendRedirect("manageAccount");
     }
 
+    
+    //thêm tài khoản mới
+    private void addNewAccountByAdmin(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        AccountDAO accDao = new AccountDAO();
+        HttpSession session = request.getSession();
+        String fullname = request.getParameter("fullname");
+        String email = request.getParameter("email");
+        String pass = request.getParameter("pass");
+        String cfpass = request.getParameter("cfpass");
+        String gender_str = request.getParameter("gender");
+        String role = request.getParameter("role");
+        //String avatar = request.getParameter("");
+        Account accSession = (Account) session.getAttribute("account");
+
+        String msg = "";
+        boolean gender = false;
+        if (gender_str.equals("Male")) {
+            gender = true;
+        }
+
+        if (!pass.equals(cfpass)) {
+            msg = "Password must equal repassword";
+        } else if (pass.length() < 8) {
+            msg = "The length password must be longer 8 character";
+        } else if (accDao.checkAccountExist(email)) {
+            msg = "Account was exist";
+        } else {
+            try {
+                Account account = new Account(email, pass, Integer.parseInt(role));
+                ProfileDTO profile = new ProfileDTO(fullname, gender, 0, accSession.getAccount_id());
+                accDao.insertUserByAdmin(account, profile);
+                response.sendRedirect("manageAccount");
+                return;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        request.setAttribute("msg", msg);
+        request.setAttribute("fullname", fullname);
+        request.setAttribute("email", email);
+        request.setAttribute("pass", pass);
+        request.setAttribute("cfpass", cfpass);
+        request.setAttribute("gender", gender);
+        request.setAttribute("role", role);
+
+        request.getRequestDispatcher("add_account.jsp").forward(request, response);
+    }
+    
+    
+    //Update tài khoản bỏi admin
+    private void updateAccountByAdmin (HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+                AccountDAO accDao = new AccountDAO();
+        HttpSession session = request.getSession();
+        String fullname = request.getParameter("fullname");
+        String email = request.getParameter("email");
+        String pass = request.getParameter("pass");
+        String gender_str = request.getParameter("gender");
+        String role = request.getParameter("role");
+        String profiId = request.getParameter("accid");
+        
+        String msg = "";
+        boolean gender = false;
+        if (gender_str.equals("Male")) {
+            gender = true;
+        }
+
+        if (pass.length() < 8) {
+            msg = "The length password must be longer 8 character";
+        } else {
+            try {
+                Account account = new Account(email, pass, Integer.parseInt(role));
+                ProfileDTO profile = new ProfileDTO(Integer.parseInt(profiId), fullname, gender);
+                accDao.updateAccount(account, profile);
+                response.sendRedirect("manageAccount");
+                return;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        request.setAttribute("msg", msg);
+        request.setAttribute("fullname", fullname);
+        request.setAttribute("email", email);
+        request.setAttribute("pass", pass);
+        request.setAttribute("gender", gender);
+        request.setAttribute("role", role);
+        request.setAttribute("accid", profiId);
+
+        request.getRequestDispatcher("update_account.jsp").forward(request, response);
+        
+    }
+
     /**
      * Returns a short description of the servlet.
      *
@@ -179,6 +317,14 @@ public class imPortMentorServlet extends HttpServlet {
             return null;
         }
         return cell.getCellType() == CellType.STRING ? cell.getStringCellValue() : cell.toString();
+    }
+    
+        // Hàm lấy giá trị ô kiểu int
+    private int getCellValueInt(Cell cell) {
+        if (cell == null) {
+            return 0;
+        }
+        return cell.getCellType() == CellType.NUMERIC ? (int)cell.getNumericCellValue(): 0;
     }
 
     // Tạo mật khẩu ngẫu nhiên
