@@ -52,11 +52,18 @@
                                 <a href="404.html" class="dropdown-item">404 Page</a>
                             </div>
                         </div>-->
-            <c:if test="${sessionScope.account.role_id == 1}" >
-                <a href="dasboard_for_admin/dasboard_home.jsp" class="nav-item nav-link">Dasboard</a>
-            </c:if>
+            <c:choose>
+                <c:when test="${sessionScope.account.role_id == 1}" >
+                <a href="dasboard_for_admin/StatisticalSeverlet" class="nav-item nav-link">Dasboard</a>
+            </c:when>
+                <c:otherwise>
+                         <a href="contact.jsp" class="nav-item nav-link">Contact</a>
+                </c:otherwise>
 
-            <a href="contact.jsp" class="nav-item nav-link">Contact</a>
+            </c:choose>
+            
+
+         
 
 
             <!--                

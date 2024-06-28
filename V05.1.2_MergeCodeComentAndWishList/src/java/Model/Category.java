@@ -12,6 +12,7 @@ public class Category {
     private String category_id;
     private String category_name;
     private int numberofCate;
+    private double percentage;
 
     public Category() {
     }
@@ -25,6 +26,13 @@ public class Category {
         this.category_id = category_id;
         this.category_name = category_name;
         this.numberofCate = numberofCate;
+    }
+
+    public Category(String category_id, String category_name, int numberofCate, double percentage) {
+        this.category_id = category_id;
+        this.category_name = category_name;
+        this.numberofCate = numberofCate;
+        this.percentage = percentage;
     }
     
     
@@ -52,14 +60,24 @@ public class Category {
     public void setNumberofCate(int numberofCate) {
         this.numberofCate = numberofCate;
     }
+
+    public double getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(double percentage) {
+        this.percentage = percentage;
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" + "category_id=" + category_id + ", category_name=" + category_name + ", numberofCate=" + numberofCate + ", percentage=" + percentage + '}';
+    }
     
     
     
 
-    @Override
-    public String toString() {
-        return "Category{" + "category_id=" + category_id + ", category_name=" + category_name + '}';
-    }
+    
     
     
 }
