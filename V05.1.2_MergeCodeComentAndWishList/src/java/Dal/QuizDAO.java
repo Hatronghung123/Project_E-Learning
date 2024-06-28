@@ -288,4 +288,96 @@ public class QuizDAO extends DBContext {
         }
     }
 
+    // get list question by module id
+    public ArrayList<Questions> getListQuestionsByModuleId(int moduleId) {
+        ArrayList<Questions> listFound = new ArrayList<>();
+        connection = getConnection();
+        String sql = "select * \n"
+                + "from Question que\n"
+                + "join Quiz qui on que.QuizId = qui.QuizId \n"
+                + "where qui.ModuleId = ?";
+        try {
+            // tạo đối tượng preparestatement
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, moduleId);
+            // thực thi câu lệnh
+            resultSet = statement.executeQuery();
+            // trả về kết quả
+            while (resultSet.next()) {
+                int questionId = resultSet.getInt("questionId");
+                int questionNum = resultSet.getInt("questionNum");
+                int quizId = resultSet.getInt("quizId");
+                String questionName = resultSet.getString("questionName");
+                Boolean type = resultSet.getBoolean("type");
+                Questions question = new Questions(questionId, questionNum, quizId, questionName, type);
+                listFound.add(question);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return listFound;
+    }
+
+    // get list Answer by module id
+    public ArrayList<Answer> getlistAnswerByModuleId(int moduleId) {
+        ArrayList<Answer> listFound = new ArrayList<>();
+        // connect with DB
+        connection = getConnection();
+        // viết câu lệnh sql
+        String sql = "select qc.QuestionId, qc.Choices, qc.IsCorrect, que.QuestionNum, que.QuestionName, qi.QuizId, que.Type, qi.ModuleId\n"
+                + "from QuestionChoices qc\n"
+                + "join Question que on qc.QuestionId = que.QuestionId\n"
+                + "join Quiz qi on que.QuizId = qi.QuizId \n"
+                + "where qi.ModuleId = ?";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, moduleId);
+            // thực thi câu lệnh
+            resultSet = statement.executeQuery();
+            // trả về kết quả
+            while (resultSet.next()) {
+                int questionId = resultSet.getInt("questionId");
+                String choices = resultSet.getString("choices");
+                Boolean isCorrect = resultSet.getBoolean("isCorrect");
+
+                Answer answer = new Answer(questionId, choices, isCorrect);
+                listFound.add(answer);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return listFound;
+    }
+
+    // find quiz by module id
+    public Quiz findQuizByModuleId(int moduleIdSelect) {
+        connection = getConnection();
+        
+        String sql = "select *\n"
+                + "from Quiz q \n"
+                + "join Module m on  q.ModuleId = m.ModuleId\n"
+                + "where m.ModuleId = ?";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, moduleIdSelect);
+            // thực thi câu lệnh
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int quizId = resultSet.getInt(1);
+                int moduleId = resultSet.getInt(2);
+                int quizNum = resultSet.getInt(3);
+                String quizName  = resultSet.getString(4);
+                Time quizTime  = resultSet.getTime(5);
+                int passScore = resultSet.getInt(6);
+                
+                Quiz quiz = new Quiz(quizId, moduleId, quizNum, quizName, quizTime, passScore);
+                return quiz;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
 }

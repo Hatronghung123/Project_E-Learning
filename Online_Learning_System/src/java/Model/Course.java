@@ -24,11 +24,45 @@ public class Course {
     private String study_time;
     private String formattedPrice; 
     private int is_active;
-
+    private int amountSudentJoin;
+    private double star;
+    private double sumOfRating;
     public Course() {
     }
+    
+    //Dùng để get new course và get course detail 
+        public Course(int course_id, String course_name, String description, String instructor, String image, int price, String course_category_id, int create_by, Date date, String study_time, int is_active) {
+        this.course_id = course_id;
+        this.course_name = course_name;
+        this.description = description;
+        this.instructor = instructor;
+        this.image = image;
+        this.price = price;
+        this.course_category_id = course_category_id;
+        this.create_by = create_by;
+        this.date = date;
+        this.study_time = study_time;
+        this.is_active = is_active;
+    }
 
-    public Course(int course_id, String course_name, String description, String instructor, String image, int price, String course_category_id, int create_by, Date date, String study_time, int is_active) {
+    public Course(int course_id, String course_name, String description, String instructor, String image, int price, String course_category_id, int create_by, Date date, String study_time, int is_active, int amountSudentJoin) {
+        this.course_id = course_id;
+        this.course_name = course_name;
+        this.description = description;
+        this.instructor = instructor;
+        this.image = image;
+        this.price = price;
+        this.course_category_id = course_category_id;
+        this.create_by = create_by;
+        this.date = date;
+        this.study_time = study_time;
+        this.is_active = is_active;
+        this.amountSudentJoin = amountSudentJoin;
+    }
+
+    //Dùng để Lấy ra số lượng sao và số lượng sinh viên tham gia khóa học
+
+    public Course(int course_id, String course_name, String description, String instructor, String image, int price, String course_category_id, int create_by, Date date, String study_time, String formattedPrice, int is_active, int amountSudentJoin, double star, double sumOfRating) {
         this.course_id = course_id;
         this.course_name = course_name;
         this.description = description;
@@ -41,7 +75,11 @@ public class Course {
         this.study_time = study_time;
         this.formattedPrice = formattedPrice;
         this.is_active = is_active;
+        this.amountSudentJoin = amountSudentJoin;
+        this.star = star;
+        this.sumOfRating = sumOfRating;
     }
+    
 
     public Course(String course_name, String image, int create_by) {
         this.course_name = course_name;
@@ -148,11 +186,39 @@ public class Course {
         this.instructor = instructor;
     }
 
+    public int getAmountSudentJoin() {
+        return amountSudentJoin;
+    }
+
+    public void setAmountSudentJoin(int amountSudentJoin) {
+        this.amountSudentJoin = amountSudentJoin;
+    }
+
+    public double getStar() {
+        return star;
+    }
+
+    public void setStar(double star) {
+        this.star = star;
+    }
+
+    public int getSumOfRating() {
+        return (int) sumOfRating;
+    }
+
+    public void setSumOfRating(double sumOfRating) {
+        this.sumOfRating = sumOfRating;
+    }
+
+
     @Override
     public String toString() {
-        return "Course{" + "course_id=" + course_id + ", course_name=" + course_name + ", description=" + description + ", instructor=" + instructor + ", image=" + image + ", price=" + price + ", course_category_id=" + course_category_id + ", create_by=" + create_by + ", date=" + date + ", study_time=" + study_time + ", formattedPrice=" + formattedPrice + ", is_active=" + is_active + '}';
+        return "Course{" + "course_id=" + course_id + ", course_name=" + course_name + ", description=" + description + ", instructor=" + instructor + ", image=" + image + ", price=" + price + ", course_category_id=" + course_category_id + ", create_by=" + create_by + ", date=" + date + ", study_time=" + study_time + ", formattedPrice=" + formattedPrice + ", is_active=" + is_active + ", amountSudentJoin=" + amountSudentJoin + '}';
     }
     
+    
+
+
     
 
     

@@ -3,12 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/F:/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Controller/CreateQuizServlet.java</file>
+            <file>file:/F:/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/web/do_quiz/do_quiz.jsp</file>
+            <file>file:/F:/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Controller/DoQuizServlet.java</file>
             <file>file:/F:/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Model/Quiz.java</file>
-            <file>file:/F:/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Controller/ControllerQuestionServlet.java</file>
-            <file>file:/F:/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/web/create_quiz/cq.jsp</file>
-            <file>file:/F:/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Model/Module.java</file>
-            <file>file:/F:/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Model/Modules.java</file>
+            <file>file:/F:/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Dal/QuizDAO.java</file>
+            <file>file:/F:/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Model/Answer.java</file>
+            <file>file:/F:/Project_E-Learning/V05.1.2_MergeCodeComentAndWishList/src/java/Model/Questions.java</file>
         </group>
     </open-files>
 </project-private>

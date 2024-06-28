@@ -5,7 +5,7 @@
 package Dal;
 
 import Model.Account;
-import Model.Profile;
+import Model.ProfileDTO;
 import java.sql.SQLException;
 
 /**
@@ -83,7 +83,7 @@ public class AccountDAO extends DBContext {
         return null;
     }
 
-    public void insertUser(Account account, Profile profile) {
+    public void insertUser(Account account, ProfileDTO profile) {
         insertAccount(account);
         Account new_insert_account = getAccountByEmailPass(account.getEmail(), account.getPassword());
         insertProfile(profile, new_insert_account.getAccount_id());
@@ -112,7 +112,7 @@ public class AccountDAO extends DBContext {
         }
     }
 
-    public void insertProfile(Profile profile, int account_id) {
+    public void insertProfile(ProfileDTO profile, int account_id) {
         connection = getConnection();
         String sql_profile = """
                              INSERT INTO [dbo].[Profile]
@@ -141,7 +141,7 @@ public class AccountDAO extends DBContext {
         }
     }
 
-    public Profile getProfile(Account account_login) {
+    public ProfileDTO getProfile(Account account_login) {
         connection = getConnection();
         String sql = """
                      SELECT [ProfileId]
@@ -163,7 +163,7 @@ public class AccountDAO extends DBContext {
                 String avt = resultSet.getString(4);
                 double money = resultSet.getDouble(5);
                 int manageBy = resultSet.getInt(6);
-                return new Profile(profile_id, fullname, gender, avt, money, manageBy);
+                return new ProfileDTO(profile_id, fullname, gender, avt, money, manageBy);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

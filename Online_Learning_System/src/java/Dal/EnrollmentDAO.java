@@ -19,7 +19,7 @@ public class EnrollmentDAO extends DBContext {
     public static void main(String[] args) {
         EnrollmentDAO dao = new EnrollmentDAO();
         ArrayList<EnrollmentDTO> list = dao.getCourseByAccId(1);
-        System.out.println(list.get(0).getCreate_by());
+        System.out.println(list);
     }
 
     public ArrayList<EnrollmentDTO> getCourseByAccId(int account_id) {

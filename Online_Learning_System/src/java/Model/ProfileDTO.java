@@ -16,17 +16,28 @@ package Model;
   FROM [Project_Online_Learning].[dbo].[tbl_profile]
 
  */
-public class Profile {
+public class ProfileDTO {
     int profile_id;
     String fullname;
     boolean gender;
     String avt;
     double money;
     int managed_by;
-    public Profile() {
+    String email;
+    public ProfileDTO() {
     }
 
-    public Profile(int profile_id, String fullname, boolean gender, String avt, double money, int managed_by) {
+    public ProfileDTO(int profile_id, String fullname, boolean gender, String avt, double money, String email) {
+        this.profile_id = profile_id;
+        this.fullname = fullname;
+        this.gender = gender;
+        this.avt = avt;
+        this.money = money;
+        this.email = email;
+    }
+
+    
+    public ProfileDTO(int profile_id, String fullname, boolean gender, String avt, double money, int managed_by) {
         this.profile_id = profile_id;
         this.fullname = fullname;
         this.gender = gender;
@@ -35,8 +46,14 @@ public class Profile {
         this.managed_by = managed_by;
     }
 
+    public ProfileDTO(int profile_id, String fullname, String avt) {
+        this.profile_id = profile_id;
+        this.fullname = fullname;
+        this.avt = avt;
+    }
 
-    public Profile(String fullname, int managed_by) {
+
+    public ProfileDTO(String fullname, int managed_by) {
         this.fullname = fullname;
         this.managed_by = managed_by;
     }
@@ -46,6 +63,15 @@ public class Profile {
         return profile_id;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    
     public void setProfile_id(int profile_id) {
         this.profile_id = profile_id;
     }

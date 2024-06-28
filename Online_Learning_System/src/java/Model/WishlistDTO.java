@@ -9,6 +9,7 @@ package Model;
  * @author tuong
  */
 public class WishlistDTO {
+    
     private int course_id;
     private String course_name;
     private String image;
@@ -20,6 +21,10 @@ public class WishlistDTO {
     public WishlistDTO() {
     }
 
+     public WishlistDTO(int course_id) {
+        this.course_id = course_id;
+    }
+    
     public WishlistDTO(int course_id, String course_name, String image, float price, float discount, String create_by, float star) {
         this.course_id = course_id;
         this.course_name = course_name;
@@ -85,6 +90,12 @@ public class WishlistDTO {
     public void setStar(float star) {
         this.star = star;
     }
+
+    @Override
+    public String toString() {
+        return "WishlistDTO{" + "course_id=" + course_id + ", course_name=" + course_name + ", image=" + image + ", price=" + price + ", discount=" + discount + ", create_by=" + create_by + ", star=" + star + '}';
+    }
+    
     
     
 }

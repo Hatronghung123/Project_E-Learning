@@ -4,12 +4,15 @@
  */
 package Controller.User;
 
+import Controller.CourseDetailServelet;
 import Dal.EnrollmentDAO;
+import Dal.HomeDAO;
 import Dal.WishlistDAO;
 import Model.Account;
+import Model.Category;
 import Model.Course;
 import Model.EnrollmentDTO;
-import Model.Profile;
+import Model.ProfileDTO;
 import Model.WishlistDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,7 +21,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.mail.Session;
 
 /**
@@ -65,19 +71,37 @@ public class courseServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        String cid_str = request.getParameter("cid");
+        String accid_str = request.getParameter("accid");
+
+        WishlistDAO wishlistDAO = new WishlistDAO();
         EnrollmentDAO enrollDAO = new EnrollmentDAO();
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
-        Profile my_profile = (Profile) session.getAttribute("profile");
+        ProfileDTO my_profile = (ProfileDTO) session.getAttribute("profile");
         Account my_account = (Account) session.getAttribute("account");
-        
+
+        if (my_account == null) {
+            response.sendRedirect("join?action=login");
+            return;
+        } else {
+            if (cid_str != null && !cid_str.isBlank() && accid_str != null && !accid_str.isBlank()) {
+                int cid_int = Integer.parseInt(cid_str);
+                int accd_int = Integer.parseInt(accid_str);
+                wishlistDAO.insetWishList(accd_int, cid_int);
+
+            }
+        }
         ArrayList<EnrollmentDTO> course_list = enrollDAO.getCourseByAccId(my_account.getAccount_id());
         request.setAttribute("course_list", course_list);
         //out.print(course_list.get(0).getEnrollment_date());
-        
-        WishlistDAO wishlistDAO = new WishlistDAO();
+
         ArrayList<WishlistDTO> wish_list = wishlistDAO.getWishListByAccId(my_account.getAccount_id());
         request.setAttribute("wish_list", wish_list);
+
+         //hiện thị ra các category trên header
+                displaycategory(request, response);
         
         request.getRequestDispatcher("MyCourses.jsp").forward(request, response);
     }
@@ -106,4 +130,16 @@ public class courseServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    
+    
+        public void displaycategory(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            HomeDAO dao = new HomeDAO();
+            ArrayList<Category> listCategory = dao.getAllCategory();
+            request.setAttribute("listCategory", listCategory);
+        } catch (SQLException ex) {
+            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

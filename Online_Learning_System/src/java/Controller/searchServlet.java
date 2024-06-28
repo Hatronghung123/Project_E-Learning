@@ -82,29 +82,4 @@ public class searchServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    public class LoopDemo {
-
-        public int sumPositiveNumbers(int[] numbers) {
-            int total = 0;
-            for (int num : numbers) {
-                if (num > 0) {
-                    total += num;
-                } 
-            }
-            return total;
-        }
-    
-    
-   
-    public int findFirstNegative(int[] numbers) {
-        for (int i = 0; i < numbers.length; i++) {
-            if (numbers[i] < 0) {
-                return i;
-            }
-        }
-        return -1;
-    }
-}
-
-
 }

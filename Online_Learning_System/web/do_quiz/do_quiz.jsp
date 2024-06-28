@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Quiz Page</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -39,37 +39,7 @@
         <!-- Template Stylesheet -->
         <link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet">
 
-
-
-
-        <!-- Prevent the demo from appearing in search engines (REMOVE THIS) -->
-        <meta name="robots" content="noindex">
-
-        <!-- Simplebar -->
-        <link type="text/css" href="${pageContext.request.contextPath}/assets/vendor/simplebar.css" rel="stylesheet">
-
-        <!-- Material Design Icons  -->
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-        <!-- Roboto Web Font -->
-        <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
-
-        <!-- MDK -->
-        <link type="text/css" href="${pageContext.request.contextPath}/assets/vendor/material-design-kit.css" rel="stylesheet">
-
-        <!-- Sidebar Collapse -->
-        <link type="text/css" href="${pageContext.request.contextPath}/assets/vendor/sidebar-collapse.min.css" rel="stylesheet">
-
-        <!-- App CSS -->
-        <link type="text/css" href="assets/css/style.css" rel="stylesheet">
-
-
-        <!-- Touchspin -->
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/bootstrap-touchspin.css">
-
-        <!-- Vendor CSS -->
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/nestable.css">
-        <!-- link css quiz add-->
+        <!-- Additional CSS for the quiz counter -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/createQuiz/style.css"/>
 
         <style>
@@ -93,7 +63,7 @@
             }
 
             .timer span {
-                background-color: #ff6600;
+                background-color: #00cc66;
                 color: white;
                 padding: 5px;
                 border-radius: 3px;
@@ -170,140 +140,130 @@
                 border-top: 1px solid #ccc;
             }
         </style>
+        <script>
+            // Function to save timer state
+            function saveTimerState(timeLeft) {
+                sessionStorage.setItem('quizTimeLeft', timeLeft);
+            }
+
+            // Function to load timer state
+            function loadTimerState() {
+                return parseInt(sessionStorage.getItem('quizTimeLeft')) || null;
+            }
+
+            // Function to save quiz state (submitted or not)
+            function saveQuizState(isSubmitted) {
+                sessionStorage.setItem('quizSubmitted', isSubmitted);
+            }
+
+            // Function to load quiz state
+            function loadQuizState() {
+                return sessionStorage.getItem('quizSubmitted') === 'true';
+            }
+
+            // Function to save selected answers into session storage
+            function saveSelections() {
+                document.querySelectorAll('input[type=radio], input[type=checkbox]').forEach((input) => {
+                    if (input.type === 'radio') {
+                        if (input.checked) {
+                            sessionStorage.setItem(input.name, input.value);
+                        }
+                    } else if (input.type === 'checkbox') {
+                        let selectedValues = JSON.parse(sessionStorage.getItem(input.name)) || [];
+                        if (input.checked) {
+                            selectedValues.push(input.value);
+                        } else {
+                            selectedValues = selectedValues.filter(value => value !== input.value);
+                        }
+                        sessionStorage.setItem(input.name, JSON.stringify(selectedValues));
+                    }
+                });
+            }
+
+            // Function to load saved selections from session storage
+            function loadSelections() {
+                document.querySelectorAll('input[type=radio], input[type=checkbox]').forEach((input) => {
+                    if (input.type === 'radio') {
+                        const savedValue = sessionStorage.getItem(input.name);
+                        if (savedValue !== null && savedValue === input.value) {
+                            input.checked = true;
+                        }
+                    } else if (input.type === 'checkbox') {
+                        const savedValues = JSON.parse(sessionStorage.getItem(input.name)) || [];
+                        if (savedValues.includes(input.value)) {
+                            input.checked = true;
+                        }
+                    }
+                });
+            }
+        </script>
     </head>
 
     <body>
-
         <!-- Navbar Start -->
         <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
             <a href="home" class="navbar-brand d-flex align-items-center px-4 px-lg-5" style="text-decoration: none; margin-right: 0px">
                 <h2 class="m-0 text-primary">Back</h2>
             </a>
-            <%--<c:forEach items="${quiz}" var="quiz">--%>
-                    <div class="col-2">
-                        <h7 style="margin-bottom: 0px">Hello</h7>
-                    </div>
-            <%--</c:forEach>--%>
-           
-            <!--            <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>-->
 
+            <div class="col-2">
+                <h7 style="margin-bottom: 0px">${quizDoQuiz.getQuizName()}</h7>
+            </div>
             <div class="timer col-5" id="timer">
                 <span id="hours">00</span>:<span id="minutes">25</span>:<span id="seconds">00</span>
             </div>
 
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    <!--                    <a href="home" class="nav-item nav-link active">Home</a>
-                                        <a href="about.jsp" class="nav-item nav-link">About</a>
-                                        <a href="Courses.jsp" class="nav-item nav-link">Courses</a>
-                                        <div class="nav-item dropdown">
-                                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                                            <div class="dropdown-menu fade-down m-0">
-                                                <a href="team.html" class="dropdown-item">Our Team</a>
-                                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                                                <a href="404.html" class="dropdown-item">404 Page</a>
-                                            </div>
-                                        </div>
-                                        <a href="contact.html" class="nav-item nav-link">Contact</a>-->
-
+                    <a href="#" id="resetQuiz" class="nav-item nav-link" style="display: none;">Reset</a>
+                    <span id="answeredCount" class="nav-item nav-link active">0</span>
+                    <span class="nav-item nav-link active">/</span>
+                    <span id="totalCount" class="nav-item nav-link active">${listQuestionsByMId.size()}</span> 
+                    <span class="nav-item nav-link active">questions answered</span>
                 </div>
-
-
             </div>
         </nav>
         <!-- Navbar End -->
 
-
-
         <div class="max-width-800">
-
-
-
             <form id="quizForm" action="doquiz" method="POST">
-                <div class="question">
-                    <h3>1. Which is the first robot to get citizenship in a country?</h3>
-                    <ul class="options">
-                        <li><input type="checkbox" id="q1a" name="q1" value="A"><label for="q1a">A. Kuri</label></li>
-                        <li><input type="checkbox" id="q1b" name="q1" value="B"><label for="q1b">B. Sophia</label></li>
-                        <li><input type="checkbox" id="q1c" name="q1" value="C"><label for="q1c">C. Aibo</label></li>
-                        <li><input type="checkbox" id="q1d" name="q1" value="D"><label for="q1d">D. Honda E-2 D R</label></li>
-                    </ul>
-                </div>
-                <div class="question">
-                    <h3>1. Which is the first robot to get citizenship in a country?</h3>
-                    <ul class="options">
-                        <li><input type="checkbox" id="q1a" name="q1" value="A"><label for="q1a">A. Kuri</label></li>
-                        <li><input type="checkbox" id="q1b" name="q1" value="B"><label for="q1b">B. Sophia</label></li>
-                        <li><input type="checkbox" id="q1c" name="q1" value="C"><label for="q1c">C. Aibo</label></li>
-                        <li><input type="checkbox" id="q1d" name="q1" value="D"><label for="q1d">D. Honda E-2 D R</label></li>
-                    </ul>
-                </div>
-                <div class="question">
-                    <h3>1. Which is the first robot to get citizenship in a country?</h3>
-                    <ul class="options">
-                        <li><input type="checkbox" id="q1a" name="q1" value="A"><label for="q1a">A. Kuri</label></li>
-                        <li><input type="checkbox" id="q1b" name="q1" value="B"><label for="q1b">B. Sophia</label></li>
-                        <li><input type="checkbox" id="q1c" name="q1" value="C"><label for="q1c">C. Aibo</label></li>
-                        <li><input type="checkbox" id="q1d" name="q1" value="D"><label for="q1d">D. Honda E-2 D R</label></li>
-                    </ul>
-                </div>
-                <div class="question">
-                    <h3>1. Which is the first robot to get citizenship in a country?</h3>
-                    <ul class="options">
-                        <li><input type="checkbox" id="q1a" name="q1" value="A"><label for="q1a">A. Kuri</label></li>
-                        <li><input type="checkbox" id="q1b" name="q1" value="B"><label for="q1b">B. Sophia</label></li>
-                        <li><input type="checkbox" id="q1c" name="q1" value="C"><label for="q1c">C. Aibo</label></li>
-                        <li><input type="checkbox" id="q1d" name="q1" value="D"><label for="q1d">D. Honda E-2 D R</label></li>
-                    </ul>
-                </div>
-                <div class="question">
-                    <h3>1. Which is the first robot to get citizenship in a country?</h3>
-                    <ul class="options">
-                        <li><input type="checkbox" id="q1a" name="q1" value="A"><label for="q1a">A. Kuri</label></li>
-                        <li><input type="checkbox" id="q1b" name="q1" value="B"><label for="q1b">B. Sophia</label></li>
-                        <li><input type="checkbox" id="q1c" name="q1" value="C"><label for="q1c">C. Aibo</label></li>
-                        <li><input type="checkbox" id="q1d" name="q1" value="D"><label for="q1d">D. Honda E-2 D R</label></li>
-                    </ul>
-                </div>
-                <div class="question">
-                    <h3>1. Which is the first robot to get citizenship in a country?</h3>
-                    <ul class="options">
-                        <li><input type="checkbox" id="q1a" name="q1" value="A"><label for="q1a">A. Kuri</label></li>
-                        <li><input type="checkbox" id="q1b" name="q1" value="B"><label for="q1b">B. Sophia</label></li>
-                        <li><input type="checkbox" id="q1c" name="q1" value="C"><label for="q1c">C. Aibo</label></li>
-                        <li><input type="checkbox" id="q1d" name="q1" value="D"><label for="q1d">D. Honda E-2 D R</label></li>
-                    </ul>
-                </div>
-                <div class="question">
-                    <h3>2. Which country in the world is believed to have the most miles of motorway?</h3>
-                    <ul class="options">
-                        <li><input type="radio" id="q2a" name="q2" value="A"><label for="q2a">A. Turkey</label></li>
-                        <li><input type="radio" id="q2b" name="q2" value="B"><label for="q2b">B. Japan</label></li>
-                        <li><input type="radio" id="q2c" name="q2" value="C"><label for="q2c">C. Germany</label></li>
-                        <li><input type="radio" id="q2d" name="q2" value="D"><label for="q2d">D. United States</label></li>
-                    </ul>
-                </div>
-                <div class="question">
-                    <h3>3. Which country prohibited parents from choosing baby names like Islam, Medina, Jihad and Quran for
-                        their children?</h3>
-                    <ul class="options">
-                        <li><input type="radio" id="q3a" name="q3" value="A"><label for="q3a">A. China</label></li>
-                        <li><input type="radio" id="q3b" name="q3" value="B"><label for="q3b">B. New Zealand</label></li>
-                    </ul>
-                </div>
-
-                <a href="#" data-toggle="modal" data-target="#createQuestion" class="btn btn-success" style="border: 5px">Submit</a>
-
+                <input type="hidden" name="mid" value="1">
+                <!--<input type="hidden" name="cid" value="2">-->
+                <c:forEach items="${listQuestionsByMId}" var="question">
+                    <div class="question" data-question-id="${question.getQuestionId()}">
+                        <h3>${question.getQuestionNum()}. ${question.getQuestionName()}</h3>
+                        <ul class="options">
+                            <c:forEach items="${listAnswerByMId}" var="answer">
+                                <c:if test="${question.getQuestionId() == answer.getQuestionId()}">
+                                    <li>
+                                        <input type="${question.isType() == true ? 'radio' : 'checkbox'}" 
+                                               id="${answer.getQuestionId()}${answer.getChoices()}" 
+                                               name="${answer.getQuestionId()}" 
+                                               value="${answer.getChoices()}"
+                                               onchange="updateAnsweredCount()">
+                                        <label for="${answer.getQuestionId()}${answer.getChoices()}">${answer.getChoices()}</label>
+                                    </li>
+                                </c:if>
+                            </c:forEach>        
+                        </ul>
+                    </div>
+                </c:forEach>
+                <button type="button" id="submitQuiz" class="btn btn-success" style="border: 5px">Submit</button>
             </form>
         </div>
+
         <script>
             let timer = document.getElementById('timer');
             let hoursSpan = document.getElementById('hours');
             let minutesSpan = document.getElementById('minutes');
             let secondsSpan = document.getElementById('seconds');
-            let timeLeft = 25 * 60;
+            let submitButton = document.getElementById('submitQuiz');
+            let resetButton = document.getElementById('resetQuiz');
+            let quizForm = document.getElementById('quizForm');
+
+            const quizTime = '${quizDoQuiz.getQuizTime()}';
+            const timeParts = quizTime.split(':');
+            let timeLeft = loadTimerState() || (+timeParts[0]) * 3600 + (+timeParts[1]) * 60 + (+timeParts[2]);
 
             function updateTimer() {
                 let hours = Math.floor(timeLeft / 3600);
@@ -316,14 +276,72 @@
 
                 if (timeLeft > 0) {
                     timeLeft--;
+                    saveTimerState(timeLeft);
                     setTimeout(updateTimer, 1000);
                 } else {
-                    document.getElementById('quizForm').submit();
+                    submitQuiz();
                 }
             }
 
-            updateTimer();
+            function submitQuiz() {
+                saveQuizState(true);
+                quizForm.submit();
+                showResetButton();
+            }
 
+            function showResetButton() {
+                submitButton.style.display = 'none';
+                resetButton.style.display = 'block';
+            }
+
+            function resetQuiz() {
+                sessionStorage.clear();
+                location.reload();
+            }
+
+            let answeredCount = 0;
+            const totalCount = ${listQuestionsByMId.size()};
+
+            function updateAnsweredCount() {
+                const questions = document.querySelectorAll('.question');
+                answeredCount = 0;
+
+                questions.forEach(question => {
+                    const radios = question.querySelectorAll('input[type="radio"]');
+                    const checkboxes = question.querySelectorAll('input[type="checkbox"]');
+
+                    const isRadioAnswered = Array.from(radios).some(radio => radio.checked);
+                    const isCheckboxAnswered = Array.from(checkboxes).some(checkbox => checkbox.checked);
+
+                    if (isRadioAnswered || isCheckboxAnswered) {
+                        answeredCount++;
+                    }
+                });
+
+                document.getElementById('answeredCount').textContent = answeredCount;
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                if (loadQuizState()) {
+                    showResetButton();
+                } else {
+                    updateTimer();
+                    loadSelections();
+                }
+
+                document.querySelectorAll('input[type=radio], input[type=checkbox]').forEach((input) => {
+                    input.addEventListener('change', () => {
+                        saveSelections();
+                        updateAnsweredCount();
+                    });
+                });
+
+                submitButton.addEventListener('click', submitQuiz);
+                resetButton.addEventListener('click', resetQuiz);
+
+                // Initial count update
+                updateAnsweredCount();
+            });
         </script>
 
         <!-- JavaScript Libraries -->
@@ -338,5 +356,4 @@
         <!-- Template Javascript -->
         <script src="${pageContext.request.contextPath}/js/main.js"></script>
     </body>
-
 </html>
