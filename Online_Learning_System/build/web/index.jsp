@@ -37,7 +37,6 @@
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
         <style>
-
             @import url('https://fonts.googleapis.com/css?family=Dosis:400,600,700,800');
             .ms-auto-1{
                 margin-left: 10px !important;
@@ -344,7 +343,6 @@
                                             </c:when>
 
 
-
                                             <c:otherwise><!--Nguoi dung da dang nhap-->
 
 
@@ -386,7 +384,6 @@
 
                                     </div>
                                 </div>
-
 
 
                                 <!--ADD TO WISHLIST-->

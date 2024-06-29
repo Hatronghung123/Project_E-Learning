@@ -205,7 +205,6 @@
             }
 
 
-
             as{
 
                 font-family: 'Nunito', sans-serif;
@@ -221,7 +220,6 @@
     <body>
         <div class="card">
             <div class="card-header">
-
                 <h4 class="card-title">Modules</h4>
             </div>
             <div class="card-body">
@@ -257,11 +255,12 @@
                                 </ul>
                             </li>
                             <div>
-                                <a href="ModuleManager?action=edit&moduleId=${module.moduleid}" class="btn btn-outline">Edit Module</a>
+                                <a href="ModuleManage?action=edit&moduleId=${module.moduleid}" class="btn btn-outline">Edit Module</a>
                             </div>
                         </c:forEach>
                     </ul>
                 </div>
+
             </div>
         </div>
         <script type="text/javascript">
@@ -288,6 +287,7 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <!-- Bootstrap JavaScript -->
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     </body>
 
 </html>

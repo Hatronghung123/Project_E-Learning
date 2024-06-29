@@ -17,6 +17,11 @@
         <meta content="" name="keywords">
         <meta content="" name="description">
 
+
+
+
+
+
         <!-- Favicon -->
         <link href="img/favicon.ico" rel="icon">
 
@@ -221,6 +226,7 @@
 
                                                     </c:when>
 
+
                                                     <c:otherwise><!--Nguoi dung da dang nhap-->
 
                                                         <!--Nguoi này là ngươi tao ra khoa hoc duoc join truc tiep-->
@@ -360,7 +366,6 @@
                             <c:if test="${sessionScope.account != null}">
                                 <!--Nguoi này là ngươi tao ra khoa hoc duoc join truc tiep-->
                                 <c:choose>
-
                                     <c:when test="${sessionScope.account.getAccount_id() == getCourseByID.getCreate_by()}">
                                         <div class="py-3 px-4">
                                             <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="lesson?cid=${getCourseByID.getCourse_id()}&lessonid=<%=lastLessonId%>&createBy=${getCourseByID.getCreate_by()}">Join Now</a>

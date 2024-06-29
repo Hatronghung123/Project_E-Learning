@@ -53,11 +53,8 @@
         <servlet-class>Controller.User.Manager.UpdateCourseServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ModuleManagerServlet</servlet-name>
-        <servlet-class>Controller.User.Manager.ModuleManagerServlet</servlet-class>
-    </servlet>
-        <servlet-name>DoQuizServlet</servlet-name>
-        <servlet-class>Controller.DoQuizServlet</servlet-class>
+        <servlet-name>ModuleManageServler</servlet-name>
+        <servlet-class>Controller.User.Manager.ModuleManageServler</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginGoogleHandler</servlet-name>
@@ -112,10 +109,8 @@
         <url-pattern>/controller</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ModuleManagerServlet</servlet-name>
-        <url-pattern>/ModuleManager</url-pattern>
-        <servlet-name>DoQuizServlet</servlet-name>
-        <url-pattern>/doquiz</url-pattern>
+        <servlet-name>ModuleManageServler</servlet-name>
+        <url-pattern>/ModuleManage</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>

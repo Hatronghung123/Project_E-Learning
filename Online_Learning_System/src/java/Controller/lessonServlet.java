@@ -16,7 +16,6 @@ import Model.Category;
 import YoutubeAPI.YoutubeDuration;
 import Model.DiscussionLesson;
 import Model.Enrollment;
-
 import Model.LessonDTO;
 import Model.StarRatingDTO;
 import Util.AVGOfRaing;
@@ -94,7 +93,6 @@ public class lessonServlet extends HttpServlet {
 
         int course_id = 0;
         int lesson_id = 0;
-
         int createBy_id = 0;
 
         // Kiểm tra nếu session không có thuộc tính 'user' thì chuyển hướng về trang đăng nhập
@@ -102,7 +100,6 @@ public class lessonServlet extends HttpServlet {
             response.sendRedirect("join?action=login");
             return;
         } else {
-
             try {
 
                 if (courseid_str != null && createBy != null) {
@@ -184,7 +181,6 @@ public class lessonServlet extends HttpServlet {
                 //hiện thị số lượng sao của khóa học đó
                 displayRatingCourse(request, response, course_id);
 
-
                 //Hiện thỉ tổng thời gian khóa học
                 long totalDuration = sumOfDurationInCourse(course_id);
                 displayTotalTimeLearnCourse(request, response, totalDuration);
@@ -199,7 +195,6 @@ public class lessonServlet extends HttpServlet {
                 request.setAttribute("lessonList", lessonList);
                 request.setAttribute("listEnrollment", listEnrollment);
                 //response.getWriter().print(lessonList);
-
 
                 //Lưu trữ id bài học hiện tại lên Cookie
                 Cookie lastLessonCookie = new Cookie("lastLessonId_" + course_id, String.valueOf(lesson_id));
@@ -255,7 +250,6 @@ public class lessonServlet extends HttpServlet {
         String disscusionId = request.getParameter("disscussID");
         String cid = request.getParameter("cid");
         String lessonid = request.getParameter("lessonid");
-
         String createBy = request.getParameter("createBy");
 
 //        out.print(parentCommentId);
@@ -264,7 +258,6 @@ public class lessonServlet extends HttpServlet {
             //delete comment cha và delete tất comment reply
 
             dao.deleteComent(Integer.parseInt(disscusionId));
-
 
             response.sendRedirect("lesson?cid=" + cid + "&lessonid=" + lessonid + "&createBy=" + createBy);
         } else {
@@ -284,7 +277,7 @@ public class lessonServlet extends HttpServlet {
         if (parentComentId_str != null && !parentComentId_str.isEmpty() && !"null".equals(parentComentId_str)) {
             parentCommentId = Integer.parseInt(parentComentId_str);
         }
-String createBy = request.getParameter("createBy");
+        String createBy = request.getParameter("createBy");
         String comment = request.getParameter("content");
         String cid = request.getParameter("cid");
         
@@ -295,7 +288,6 @@ String createBy = request.getParameter("createBy");
         DisscussionDAO dao = new DisscussionDAO();
         DiscussionLesson discuss = new DiscussionLesson(parentCommentId, acc.getAccount_id(), Integer.parseInt(lession_id), comment, new Timestamp(System.currentTimeMillis()));
         dao.InsertComment(discuss);
-
         response.sendRedirect("lesson?cid=" + cid + "&lessonid=" + lession_id + "&createBy=" + createBy);
     }
 

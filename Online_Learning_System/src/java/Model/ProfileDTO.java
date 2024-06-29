@@ -24,6 +24,7 @@ public class ProfileDTO {
     double money;
     int managed_by;
     String email;
+    
     public ProfileDTO() {
     }
 
@@ -45,6 +46,7 @@ public class ProfileDTO {
         this.money = money;
         this.managed_by = managed_by;
     }
+    
     //insert by admin
         public ProfileDTO( String fullname, boolean gender, double money, int managed_by) {
         this.fullname = fullname;
@@ -59,6 +61,9 @@ public class ProfileDTO {
         this.fullname = fullname;
         this.gender = gender;
     }
+
+        
+        
     public ProfileDTO(int profile_id, String fullname, String avt) {
         this.profile_id = profile_id;
         this.fullname = fullname;

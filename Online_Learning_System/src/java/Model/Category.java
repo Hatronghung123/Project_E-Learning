@@ -13,6 +13,7 @@ public class Category {
     private String category_name;
     private int numberofCate;
     private double percentage;
+
     public Category() {
     }
 
@@ -60,7 +61,6 @@ public class Category {
         this.numberofCate = numberofCate;
     }
 
-
     public double getPercentage() {
         return percentage;
     }
@@ -68,7 +68,6 @@ public class Category {
     public void setPercentage(double percentage) {
         this.percentage = percentage;
     }
-
 
     @Override
     public String toString() {

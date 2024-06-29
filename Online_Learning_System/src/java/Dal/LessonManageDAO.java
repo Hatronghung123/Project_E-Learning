@@ -3,8 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Dal;
+
+
 import Model.LessonDTO;
 import Model.ModuleDTO;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,6 +29,8 @@ public class LessonManageDAO {
     Connection con = null; // Kết nối với sql server
     PreparedStatement ps = null; // Ném câu lệnh query sang sql server
     ResultSet rs = null; // Nhận kết quả trả về
+
+
     public void InsertLesson(LessonDTO lesson) {
         String sql = """
                        insert into [Lesson] 
@@ -60,6 +65,7 @@ public class LessonManageDAO {
     }
 
     //UPDATE LESSON
+
     public void updateLesson(LessonDTO lesson) {
         String sql = """
                         UPDATE [Lesson]
@@ -104,6 +110,8 @@ public class LessonManageDAO {
             while (rs.next()) {
                 int module_id = rs.getInt(1);
                 String modulname = rs.getString(2);
+
+
                 list.add(new ModuleDTO(module_id, modulname));
             }
         } catch (Exception e) {
@@ -115,6 +123,7 @@ public class LessonManageDAO {
     }
 
     //Lấy ra tất cả lesson của course by cid
+
     public ArrayList<LessonDTO> getListlessonByCid(int courseid) throws SQLException {
         ArrayList<LessonDTO> list = new ArrayList<>();
         String sql = """
@@ -130,6 +139,7 @@ public class LessonManageDAO {
                                             join [dbo].[Module] m on m.ModuleId = l.ModuleId
                                             Join [dbo].[Course] c on c.CourseId = m.CourseId
                                             where  c.CourseId = ?
+
                      """;
         try {
             con = new DBContext().getConnection();
@@ -147,6 +157,7 @@ public class LessonManageDAO {
                 String moduleName = rs.getString(7);
 
                 list.add(new LessonDTO(lesson_id, moduleid, lesson_name, lesson_content, lesson_video, duration, moduleName));
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -159,6 +170,9 @@ public class LessonManageDAO {
     //Lấy lesoson theo lesson id
 
     public LessonDTO getlessonByLessonid(int lessonId) throws SQLException {
+
+
+
         String sql = """
                       SELECT  [LessonId]
                              ,[ModuleId]
@@ -182,7 +196,10 @@ public class LessonManageDAO {
                 String lesson_content = rs.getString(4);
                 String lesson_video = rs.getString(5);
                 long duration = rs.getInt(6);
+
+
                 return new LessonDTO(lesson_id, moduleid, lesson_name, lesson_content, lesson_video, duration);
+
             }
         } catch (Exception e) {
             e.printStackTrace();

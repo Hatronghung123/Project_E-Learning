@@ -33,6 +33,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.taglibs.standard.lang.jstl.ELException;
 
 /**
  *
@@ -80,7 +81,6 @@ public class CourseManageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter o = response.getWriter();
-
         HeaderSession header = new HeaderSession(request, response);
 
         String cid = (String) request.getParameter("cid") == null ? "" : (String) request.getParameter("cid");
@@ -156,7 +156,6 @@ public class CourseManageServlet extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
         String cid = (String) request.getParameter("cid") == null ? "" : (String) request.getParameter("cid");
-
         PrintWriter o = response.getWriter();
         switch (action) {
             case "add_new_module":
@@ -189,7 +188,6 @@ public class CourseManageServlet extends HttpServlet {
 
     private void deleteCourse(String cid, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CourseManageDAO course_manage_DAO = new CourseManageDAO();
-
         boolean success = course_manage_DAO.deleteCourse(cid);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -214,7 +212,6 @@ public class CourseManageServlet extends HttpServlet {
 //    }
 
     private void addCourse(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
-
         request.getRequestDispatcher("AddNewCourse.jsp").forward(request, response);
     }
 
@@ -225,7 +222,6 @@ public class CourseManageServlet extends HttpServlet {
         String price = request.getParameter("price") == null ? "0" : request.getParameter("price");
         String discount = request.getParameter("discount") == null ? "0" : request.getParameter("discount");
         String category = request.getParameter("category") == null ? "" : request.getParameter("category");
-
 
         String[] fullFields = {course_name, description, category};
 
@@ -244,12 +240,10 @@ public class CourseManageServlet extends HttpServlet {
         if (!Validation.checkString(description)) {
             request.setAttribute("description", description);
             request.setAttribute("error_desciption", "You must input desciption!");
-
         }
         if (!Validation.checkString(category)) {
             request.setAttribute("category", category);
             request.setAttribute("error_category", "You must choose category!");
-
         }
         if (Validation.checkStringArray(fullFields)) {
             HttpSession session = request.getSession();

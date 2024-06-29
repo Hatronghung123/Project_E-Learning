@@ -18,6 +18,8 @@ import java.io.InputStream;
  * @author tuong
  */
 public class Validation {
+
+
     public Validation() {
     }
 
@@ -38,6 +40,7 @@ public class Validation {
         }
         return true;
     }
+    
 
     public static boolean checkInt(String str) {
         str = str.trim();

@@ -77,7 +77,6 @@ public class LessonMangeServelet extends HttpServlet {
 
         try {
             //Lấy ra được list module theo course id khi add hoặc update
-
             ArrayList<ModuleDTO> listModule = dao.getListModuleByCid(Integer.parseInt(course_id));
             switch (action) {
 
@@ -254,7 +253,6 @@ public class LessonMangeServelet extends HttpServlet {
         long duration = getDuraton(videoLink);
         LessonManageDAO dao = new LessonManageDAO();
         try {
-
             LessonDTO lesson = new LessonDTO(Integer.parseInt(lessonid), Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
 
             dao.updateLesson(lesson);

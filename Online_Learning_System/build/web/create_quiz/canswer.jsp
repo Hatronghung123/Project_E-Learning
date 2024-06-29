@@ -98,7 +98,6 @@
             deleteButton.className = 'btn btn-danger btn-sm';
             deleteButton.innerHTML = '&times;';
             deleteButton.addEventListener('click', function () {
-                correctAnswerInput.name = 'correctAnswer' + (container.children.length -1);
                 container.removeChild(answerRow);
             });
 

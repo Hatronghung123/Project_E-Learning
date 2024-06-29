@@ -92,7 +92,6 @@ public class LoginGoogleHandler extends HttpServlet {
 
             out.print(profile_register.getFullname());
 
-
             sendPassword.send("hatronghung7777@gmail.com", "chnzvsbysoeesgwe", acc_gg.getEmail(), "This is your password", password, response);
         } else {
             account_register = accountDAO.getAccountGoogle(acc_gg.getEmail());

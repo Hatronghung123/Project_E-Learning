@@ -10,7 +10,6 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
         <title>Add New Course</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
@@ -158,6 +157,7 @@
                                                 <h3 style="color: red">${requestScope.error_category}</h3>
                                                 <label class="form-label">Category</label>
                                                 <select name="category" class="custom-select">
+                                                    <option value="" selected >Choose one</option>
                                                     <c:forEach items="${listCategory}" var="o">
                                                         <option value="${o.category_id}" <c:if test="${requestScope.category} == null}">selected</c:if>>${o.getCategory_name()}</option>
                                                     </c:forEach>
@@ -170,7 +170,6 @@
                         </div>
                     </div>
                     <div class="text-right mt-3">
-
                         <a onclick="cancel(event)" href="#" name="cancel" class="btn btn-outline-danger md-btn-flat">Cancel</a>
                         <button type="submit" name="add" class="btn btn-primary">Add Course</button>&nbsp;
                     </div>
@@ -179,7 +178,6 @@
             <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
             <script type="text/javascript">
-
                             function cancel(event) {
                                 event.preventDefault();
                                 if (confirm("Are you sure you want to exit?")) {

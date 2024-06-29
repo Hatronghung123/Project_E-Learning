@@ -239,5 +239,3 @@ public class CourseDetailServelet extends HttpServlet {
 
 
 }
-
-

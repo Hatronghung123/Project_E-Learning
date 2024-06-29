@@ -112,7 +112,6 @@ public class LessonDAO {
                 int course_id = rs.getInt(9);
                 long duration = rs.getInt("Duration");
                 int profile_id = rs.getInt("ProfileId");
-
                 int create_by = rs.getInt("CreatedBy");
 
 
@@ -165,10 +164,11 @@ public class LessonDAO {
                 String mentor_name = rs.getString(7);
                 String Avatar = rs.getString(8);
                 int course_id = rs.getInt(9);
-
                 int profile_id = rs.getInt("ProfileId");
                 long duration = rs.getInt("Duration");
                 int create_by = rs.getInt("CreatedBy");
+
+
                 return new LessonDTO(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration, profile_id ,create_by);
             }
         } catch (Exception e) {

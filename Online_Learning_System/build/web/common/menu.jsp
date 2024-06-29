@@ -59,6 +59,8 @@
                 <c:otherwise>
                          <a href="contact.jsp" class="nav-item nav-link">Contact</a>
                 </c:otherwise>
+
+
             </c:choose>
             
         </div>
@@ -74,7 +76,6 @@
                         <c:if test="${sessionScope.account.role_id == 2 || sessionScope.account.role_id == 3}">
                             <a class="dropdown-item" href="course-manage">Manager</a>
                         </c:if>
-
                         <c:if test="${sessionScope.account.role_id == 3}">
                             <a class="dropdown-item" href="messenger?sender_id=${sessionScope.account.getAccount_id()}&receiver_id=0">Messenger</a>
                         </c:if>

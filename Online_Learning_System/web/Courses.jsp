@@ -93,7 +93,6 @@
 
     <body>
 
-
         <!--Xử lí nút resum-->
 
         <%
@@ -252,7 +251,6 @@
                     </c:forEach>
 
 
-
                     <c:forEach var="o" items="${listCourseBySearch}">
                         <div class="col-lg-4 col-md-6 wow fadeInUp"  data-wow-delay="0.3s" style="padding-bottom: 20px;">
                             <div class="course-item bg-light"   >
@@ -273,6 +271,7 @@
                                                 <a href="join?action=login&cid=${o.getCourse_id()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
 
                                             </c:when>
+
 
                                             <c:otherwise><!--Nguoi dung da dang nhap-->
 
