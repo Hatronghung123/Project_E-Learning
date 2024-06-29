@@ -134,7 +134,6 @@
                 background-color: #f9f9f9;
                 border: 1px solid #ddd;
                 border-radius: 4px;
-                display: flex;
                 align-items: center;
                 padding: 10px;
                 transition: background-color 0.3s ease;
@@ -216,52 +215,6 @@
 
 
         </style>
-        <style>
-            .nestable-list {
-                list-style-type: none;
-                padding: 0;
-            }
-            .nestable-item {
-                border: 1px solid #ddd;
-                margin-bottom: 10px;
-                border-radius: 5px;
-                overflow: hidden;
-            }
-            .module-header {
-                background-color: #f8f9fa;
-                padding: 10px 15px;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-            }
-            .module-header:hover {
-                background-color: #e9ecef;
-            }
-            .module-number {
-                font-weight: bold;
-                margin-right: 10px;
-            }
-            .module-name {
-                flex-grow: 1;
-            }
-            .toggle-icon {
-                transition: transform 0.3s ease;
-            }
-            .lesson-list {
-                padding: 0;
-                margin: 0;
-                list-style-type: none;
-            }
-            .lesson-item {
-                padding: 10px 15px;
-                border-top: 1px solid #ddd;
-                background-color: #fff;
-            }
-            .lesson-item:hover {
-                background-color: #f8f9fa;
-            }
-        </style>
-
 
     </head>
     <body>
@@ -280,19 +233,20 @@
                     <a href="course-manage?action=add_module&cid=${cid}" class="btn btn-outline">Add New Module<i class="material-icons">add</i></a>
                 </div>
 
-                <div class="nestable" id="nestable-handles-primary">
-                    <ul class="nestable-list">
+                <div class="" style="margin-top: 20px;" id="">
+                    <ul class="list-group">
                         <c:forEach items="${list_module}" var="module">
                             <li class="nestable-item" data-id="${module.moduleid}">
-                                <div class="module-header" onclick="toggleLessons(${module.moduleid})">
-                                    <span class="module-number">${module.module_number}</span>
-                                    <span class="module-name">${module.modulename}</span>
-                                    <span class="toggle-icon">&#9660;</span>
-                                </div>
-                                <ul id="lessons-${module.moduleid}" class="lesson-list" style="display: none;">
+                                <label class="card-title mb-0">
+                                    <a href="#" class="module-link">${module.module_number}</a>
+                                </label> &nbsp;&nbsp;&nbsp;
+                                <label class="card-title h6 mb-0">
+                                    <a href="" onclick="toggleLessons(event, '${module.moduleid}')">${module.modulename}</a>
+                                </label>
+                                <ul id="lessons-${module.moduleid}" class="" style="display: none;">
                                     <c:forEach items="${list_lesson}" var="lesson">
                                         <c:if test="${module.moduleid == lesson.moduleid}">
-                                            <li class="lesson-item" data-id="${lesson.lessonid}">
+                                            <li class="nestable-item" data-id="${lesson.lessonid}">
                                                 ${lesson.lessonname}
                                             </li>
                                         </c:if>
@@ -306,17 +260,16 @@
             </div>
         </div>
 
-        <script>
-            function toggleLessons(moduleId) {
-                const lessonsList = document.getElementById(`lessons-${moduleId}`);
-                const toggleIcon = lessonsList.previousElementSibling.querySelector('.toggle-icon');
+        <script type="text/javascript">
+            function toggleLessons(event, moduleId) {
+                event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
 
-                if (lessonsList.style.display === 'none') {
+                var lessonsList = document.getElementById('lessons-' + moduleId);
+
+                if (lessonsList.style.display === 'none' || lessonsList.style.display === '') {
                     lessonsList.style.display = 'block';
-                    toggleIcon.style.transform = 'rotate(180deg)';
                 } else {
                     lessonsList.style.display = 'none';
-                    toggleIcon.style.transform = 'rotate(0deg)';
                 }
             }
         </script>
