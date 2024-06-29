@@ -368,7 +368,6 @@ create table QuestionChoices(
 create table AnswerQuestion(
 	AccountId int references Account(AccountId),
 	QuestionId int references Question(QuestionId),
-	primary key(AccountId, QuestionId),
 	Answer text,
 	IsCorrect bit,
 );
