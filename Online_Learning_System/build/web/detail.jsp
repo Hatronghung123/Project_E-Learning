@@ -226,7 +226,9 @@
                                                         <!--Nguoi này là ngươi tao ra khoa hoc duoc join truc tiep-->
                                                         <c:choose>
                                                             <c:when test="${o.getCreate_by() == sessionScope.account.getAccount_id()}">
-                                                                <a href="lesson?cid=${o.getCourse_id()}&lessonid=1&createBy=${o.getCreate_by()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+
+                                                                <a href="dataTransferLesson?cid=${o.getCourse_id()}&lessonid=${o.getFirstlessonid()}&createBy=${o.getCreate_by()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+
                                                             </c:when>
 
                                                             <c:otherwise>
@@ -243,7 +245,9 @@
                                                                 </c:if>
                                                                 <c:choose>
                                                                     <c:when test="${isPaid == true}">
-                                                                        <a href="lesson?cid=${o.getCourse_id()}&lessonid=1&createBy=${o.getCreate_by()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+
+                                                                        <a href="dataTransferLesson?cid=${o.getCourse_id()}&lessonid=${o.getFirstlessonid()}&createBy=${o.getCreate_by()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+
                                                                     </c:when>
                                                                     <c:otherwise>
                                                                         <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
@@ -332,7 +336,7 @@
                             </div>
                             <div class="d-flex justify-content-between border-bottom px-4">
                                 <h6 class="text-white my-3">Lectures</h6>
-                                <h6 class="text-white my-3">15</h6>
+                                <h6 class="text-white my-3">${getCourseByID.getLeture()}</h6>
                             </div>
                             <div class="d-flex justify-content-between border-bottom px-4">
                                 <h6 class="text-white my-3">Duration</h6>

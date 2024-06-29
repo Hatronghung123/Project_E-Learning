@@ -66,6 +66,7 @@ public class MentorManageServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         AccountDTO my_account = (AccountDTO) session.getAttribute("account");
+
         ProfileManageDAO mentor_manage_DAO = new ProfileManageDAO();
         ArrayList<ProfileDTO> list_managed_mentor = mentor_manage_DAO.getMyListManagedMentor(my_account.getAccount_id());
         

@@ -8,6 +8,7 @@ import Model.Course;
 import Model.Enrollment;
 import Model.LessonDTO;
 import Model.Payment;
+
 import Model.ModuleDTO;
 import java.sql.Connection;
 import java.sql.Date;
@@ -71,6 +72,7 @@ public class LessonDAO {
     }
 
     //Lấy lisst lesson in module theo course ID
+
     public ArrayList<LessonDTO> getListModulByCidd(int courseId) throws SQLException {
         ArrayList<LessonDTO> list = new ArrayList<>();
         String sql = "SELECT\n"
@@ -113,6 +115,7 @@ public class LessonDAO {
 
                 int create_by = rs.getInt("CreatedBy");
 
+
                 list.add(new LessonDTO(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration, profile_id, create_by));
             }
         } catch (Exception e) {
@@ -122,6 +125,7 @@ public class LessonDAO {
 
         return list;
     }
+
 
     public LessonDTO getlessonByCid(int courseId, int lessonid) throws SQLException {
 
@@ -165,8 +169,7 @@ public class LessonDAO {
                 int profile_id = rs.getInt("ProfileId");
                 long duration = rs.getInt("Duration");
                 int create_by = rs.getInt("CreatedBy");
-
-                return new LessonDTO(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration, profile_id, create_by);
+                return new LessonDTO(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration, profile_id ,create_by);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -177,6 +180,7 @@ public class LessonDAO {
     }
 
     //Lấy lisst module theo course ID
+
     public ArrayList<ModuleDTO> getListModulByCid(int courseId) throws SQLException {
         ArrayList<ModuleDTO> list = new ArrayList<>();
         String sql = "SELECT  [ModuleId]\n"
@@ -194,6 +198,7 @@ public class LessonDAO {
                 int moduleid = rs.getInt(1);
                 String modulename = rs.getString(2);
                 int course_id = rs.getInt(3);
+
                 list.add(new ModuleDTO(moduleid, modulename));
             }
         } catch (Exception e) {
@@ -268,6 +273,36 @@ public class LessonDAO {
         return 0;
     }
 
+
+    
+        //Lấy ra createby  để chuyuển hướn gnười tới khóa học với lesson đó khí thanh toán thành công
+    public long getCreateByByCourseId(int courseId) throws SQLException {
+
+        String sql = """
+                     SELECT [CreatedBy]
+                         FROM [Project Online Learning].[dbo].[Course]
+                       Where [CourseId] = ?
+                     """;
+        try {
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, courseId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+
+                long createBy = rs.getInt(1);
+
+                return createBy;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();  // In chi tiết lỗi ra console
+
+        }
+
+        return 0;
+    }
+
+    
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         LessonDAO dao = new LessonDAO();
         System.out.println(dao.getlessonByCid(2, 1));

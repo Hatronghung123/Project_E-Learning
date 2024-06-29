@@ -105,6 +105,7 @@ public class profileServlet extends HttpServlet {
                 request.getRequestDispatcher("Profile.jsp").forward(request, response);
         }
 
+
     }
 
     /**
@@ -122,6 +123,7 @@ public class profileServlet extends HttpServlet {
 //get action
         String action = request.getParameter("action") == null ? "" : request.getParameter("action");
 
+
         switch (action) {
             case "general":
                 changeInformationProfile(request, response);
@@ -133,6 +135,7 @@ public class profileServlet extends HttpServlet {
                 return;
             default:
                 throw new AssertionError();
+
         }
     }
 
@@ -246,6 +249,7 @@ public class profileServlet extends HttpServlet {
         session.setAttribute("profile", my_profile);
         session.setAttribute("account", my_account);
         session.setMaxInactiveInterval(60 * 30);
+
     }
 
     

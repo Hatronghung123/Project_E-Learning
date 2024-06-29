@@ -9,6 +9,7 @@ import Model.ModuleDTO;
 
 import Dal.LessonManageDAO;
 import Model.LessonDTO;
+
 import YoutubeAPI.YoutubeDuration;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -67,30 +68,53 @@ public class LessonMangeServelet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String course_id = request.getParameter("cid");
-        String action = request.getParameter("action");
 
         LessonManageDAO dao = new LessonManageDAO();
+        ArrayList<LessonDTO> lessonList = null;
+        String course_id = request.getParameter("cid");
+
+        String action = (request.getParameter("action") == null) ? "" : request.getParameter("action");
+
         try {
             //Lấy ra được list module theo course id khi add hoặc update
 
             ArrayList<ModuleDTO> listModule = dao.getListModuleByCid(Integer.parseInt(course_id));
-            
-            // Kiểm tra action
-            if ("updatelesson".equals(action)) {
-                updateLessonDoGet(request, response);
+            switch (action) {
+
+                case "addlesson":
+                    request.setAttribute("listModule", listModule);
+                    request.setAttribute("action", action);
+                    request.setAttribute("cid", course_id);
+                    request.getRequestDispatcher("mentor_add_lesson.jsp").forward(request, response);
+                    break;
+                case "updatelesson":
+                    updateLessonDoGet(request, response);
+
+                    request.setAttribute("listModule", listModule);
+                    request.setAttribute("action", action);
+                    request.setAttribute("cid", course_id);
+                    request.getRequestDispatcher("mentor_update_lesson.jsp").forward(request, response);
+                    break;
+                default:
+                    //        read data lesson from database
+//                      Khi nào có create modul thì mới cầnđoaj này 
+                    lessonList = dao.getListlessonByCid(Integer.parseInt(course_id));
+                    request.setAttribute("cid", course_id);
+                    if (lessonList != null) {
+                        request.setAttribute("lessonList", lessonList);
+                    }
+                    request.getRequestDispatcher("UpdateCourse.jsp").forward(request, response);
+                    return;
+                //o.print(lessonList);
+
             }
-            
-            request.setAttribute("listModule", listModule);
-            request.setAttribute("action", action);
-            request.setAttribute("cid", course_id);
+
         } catch (SQLException ex) {
             Logger.getLogger(LessonMangeServelet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        request.getRequestDispatcher("mentor_add_update_lesson.jsp").forward(request, response);
     }
 
     /**
@@ -139,10 +163,13 @@ public class LessonMangeServelet extends HttpServlet {
         return duration;
     }
 
-    
+
     //thêm một lesson mới vào database
     private void AddLesson(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        String action = (request.getParameter("action") == null) ? "" : request.getParameter("action");
+
         String cid = request.getParameter("cid");
         String lessonName = request.getParameter("lessonName");
         String moduleid = request.getParameter("module");
@@ -150,14 +177,35 @@ public class LessonMangeServelet extends HttpServlet {
         String videoLink = request.getParameter("videoLink");
         long duration = getDuraton(videoLink);
         LessonManageDAO dao = new LessonManageDAO();
-        try {
 
-            LessonDTO lesson = new LessonDTO(Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
-            dao.InsertLesson(lesson);
+        //Lấy ra được list module theo course id khi add hoặc update
+
+        String msg = "";
+        try {
+            ArrayList<ModuleDTO> listModule = dao.getListModuleByCid(Integer.parseInt(cid));
+            if (dao.checkLessonExist(lessonName) != null) {
+                msg = "Lesson was exist";
+            } else {
+                LessonDTO lesson = new LessonDTO(Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
+                dao.InsertLesson(lesson);
+                response.sendRedirect("course-manage?cid=" + cid + "&action=update");
+                return;
+            }
+
+            request.setAttribute("msg", msg);
+            request.setAttribute("action", action);
+            request.setAttribute("cid", cid);
+            request.setAttribute("lessonName", lessonName);
+            request.setAttribute("lessonContent", lessonContent);
+            request.setAttribute("videoLink", videoLink);
+            request.setAttribute("moduleid", moduleid);
+            request.setAttribute("listModule", listModule);
+
+            request.getRequestDispatcher("mentor_add_lesson.jsp").forward(request, response);
+
         } catch (Exception e) {
         }
 
-        response.sendRedirect("course-manage?cid=" + cid + "&action=update");
     }
 
     //xóa lesson ra khỏi database
@@ -182,6 +230,7 @@ public class LessonMangeServelet extends HttpServlet {
         LessonManageDAO dao = new LessonManageDAO();
 
         LessonDTO lesson = null;
+
         try {
             lesson = dao.getlessonByLessonid(Integer.parseInt(lessonid));
         } catch (SQLException ex) {
@@ -207,6 +256,7 @@ public class LessonMangeServelet extends HttpServlet {
         try {
 
             LessonDTO lesson = new LessonDTO(Integer.parseInt(lessonid), Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
+
             dao.updateLesson(lesson);
             response.sendRedirect("course-manage?cid=" + cid + "&action=update");
         } catch (Exception e) {

@@ -37,7 +37,7 @@ public class LessonDTO {
         this.duration = duration;
     }
     
-       //dùng để read và update lesson
+       // update lesson
     public LessonDTO(int lessonid, int moduleid, String lessonname, String lessoncontent, String lessonvideo, long duration) {
         this.lessonid = lessonid;
         this.moduleid = moduleid;
@@ -45,6 +45,17 @@ public class LessonDTO {
         this.lessoncontent = lessoncontent;
         this.lessonvideo = lessonvideo;
         this.duration = duration;
+    }
+    
+    //dùng để read 
+        public LessonDTO(int lessonid, int moduleid, String lessonname, String lessoncontent, String lessonvideo, long duration, String modulname) {
+        this.lessonid = lessonid;
+        this.moduleid = moduleid;
+        this.lessonname = lessonname;
+        this.lessoncontent = lessoncontent;
+        this.lessonvideo = lessonvideo;
+        this.duration = duration;
+        this.modulname = modulname;
     }
     
     

@@ -84,6 +84,7 @@ public class courseServlet extends HttpServlet {
 
         AccountDTO my_account = (AccountDTO) session.getAttribute("account");
 
+
         if (my_account == null) {
             response.sendRedirect("join?action=login");
             return;

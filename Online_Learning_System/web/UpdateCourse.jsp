@@ -219,7 +219,6 @@
 
     </head>
     <body>
-
         <div class="card">
             <div class="card-header">
 
@@ -237,30 +236,34 @@
 
                 <div class="" style="margin-top: 20px;" id="">
                     <ul class="list-group">
+                        <%int i = 0;%>
                         <c:forEach items="${list_module}" var="module">
                             <li class="nestable-item" data-id="${module.moduleid}">
                                 <label class="card-title mb-0">
-                                    <a href="#" class="module-link">${module.module_number}</a>
+                                    <a href="#" class="module-link"><%= ++i%></a>
                                 </label> &nbsp;&nbsp;&nbsp;
                                 <label class="card-title h6 mb-0">
                                     <a href="" onclick="toggleLessons(event, '${module.moduleid}')">${module.modulename}</a>
                                 </label>
                                 <ul id="lessons-${module.moduleid}" class="" style="display: none;">
+                                    <%int j = 0;%>
                                     <c:forEach items="${list_lesson}" var="lesson">
                                         <c:if test="${module.moduleid == lesson.moduleid}">
                                             <li class="nestable-item" data-id="${lesson.lessonid}">
-                                                ${lesson.lessonname}
+                                                <%= ++j%>  ${lesson.lessonname}
                                             </li>
                                         </c:if>
                                     </c:forEach>
                                 </ul>
                             </li>
+                            <div>
+                                <a href="ModuleManager?action=edit&moduleId=${module.moduleid}" class="btn btn-outline">Edit Module</a>
+                            </div>
                         </c:forEach>
                     </ul>
                 </div>
             </div>
         </div>
-
         <script type="text/javascript">
             function toggleLessons(event, moduleId) {
                 event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
@@ -288,3 +291,4 @@
     </body>
 
 </html>
+

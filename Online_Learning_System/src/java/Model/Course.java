@@ -22,11 +22,16 @@ public class Course {
     private int create_by;
     private Date date;
     private String study_time;
-    private String formattedPrice; 
+    private String formattedPrice;
     private int is_active;
     private int amountSudentJoin;
     private double star;
     private double sumOfRating;
+
+    private int leture;
+    private int firstlessonid;
+
+
     public Course() {
     }
     
@@ -45,7 +50,10 @@ public class Course {
         this.is_active = is_active;
     }
 
-    public Course(int course_id, String course_name, String description, String instructor, String image, int price, String course_category_id, int create_by, Date date, String study_time, int is_active, int amountSudentJoin) {
+
+    //Dùng để get new course 
+    public Course(int course_id, String course_name, String description, String instructor, String image, int price, String course_category_id, int create_by, Date date, String study_time, int is_active, int firstlessonid) {
+
         this.course_id = course_id;
         this.course_name = course_name;
         this.description = description;
@@ -57,12 +65,12 @@ public class Course {
         this.date = date;
         this.study_time = study_time;
         this.is_active = is_active;
-        this.amountSudentJoin = amountSudentJoin;
+
+        this.firstlessonid = firstlessonid;
     }
 
-    //Dùng để Lấy ra số lượng sao và số lượng sinh viên tham gia khóa học
-
-    public Course(int course_id, String course_name, String description, String instructor, String image, int price, String course_category_id, int create_by, Date date, String study_time, String formattedPrice, int is_active, int amountSudentJoin, double star, double sumOfRating) {
+    //relate couurse vaf all course lisst
+    public Course(int course_id, String course_name, String description, String instructor, String image, int price, String course_category_id, int create_by, Date date, String study_time, int is_active, int amountSudentJoin, int firstlessonid) {
         this.course_id = course_id;
         this.course_name = course_name;
         this.description = description;
@@ -73,11 +81,26 @@ public class Course {
         this.create_by = create_by;
         this.date = date;
         this.study_time = study_time;
-        this.formattedPrice = formattedPrice;
         this.is_active = is_active;
         this.amountSudentJoin = amountSudentJoin;
-        this.star = star;
-        this.sumOfRating = sumOfRating;
+        this.firstlessonid = firstlessonid;
+
+    }
+
+    //Dùng để get  detail 
+    public Course(int course_id, String course_name, String instructor, String image, int price, String course_category_id, int create_by, Date date, String study_time, int is_active, int leture) {
+        this.course_id = course_id;
+        this.course_name = course_name;
+        this.instructor = instructor;
+        this.image = image;
+        this.price = price;
+        this.course_category_id = course_category_id;
+        this.create_by = create_by;
+        this.date = date;
+        this.study_time = study_time;
+        this.is_active = is_active;
+        this.leture = leture;
+
     }
     
 
@@ -86,9 +109,6 @@ public class Course {
         this.image = image;
         this.create_by = create_by;
     }
-    
-
-   
 
     public int getCourse_id() {
         return course_id;
@@ -211,18 +231,33 @@ public class Course {
     }
 
 
+    public int getLeture() {
+        return leture;
+    }
+
+    public void setLeture(int leture) {
+        this.leture = leture;
+    }
+
+    public int getFirstlessonid() {
+        return firstlessonid;
+    }
+
+    public void setFirstlessonid(int firstlessonid) {
+        this.firstlessonid = firstlessonid;
+    }
+
     @Override
     public String toString() {
-        return "Course{" + "course_id=" + course_id + ", course_name=" + course_name + ", description=" + description + ", instructor=" + instructor + ", image=" + image + ", price=" + price + ", course_category_id=" + course_category_id + ", create_by=" + create_by + ", date=" + date + ", study_time=" + study_time + ", formattedPrice=" + formattedPrice + ", is_active=" + is_active + ", amountSudentJoin=" + amountSudentJoin + '}';
+        return "Course{" + "course_id=" + course_id + ", course_name=" + course_name + ", description=" + description + ", instructor=" + instructor + ", image=" + image + ", price=" + price + ", course_category_id=" + course_category_id + ", create_by=" + create_by + ", date=" + date + ", study_time=" + study_time + ", formattedPrice=" + formattedPrice + ", is_active=" + is_active + ", amountSudentJoin=" + amountSudentJoin + ", star=" + star + ", sumOfRating=" + sumOfRating + ", leture=" + leture + ", firstlessonid=" + firstlessonid + '}';
+
     }
     
     
 
 
-    
 
     
 
-    
 
 }

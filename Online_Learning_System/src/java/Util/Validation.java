@@ -8,7 +8,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.io.FileOutputStream;
+
 import java.io.IOException;
+
 import java.io.InputStream;
 
 /**
@@ -69,6 +71,7 @@ public class Validation {
         return insertImageIntoProject(folder, file_image, file_name_random);
     }
     private static String createFileNameRandom(Part file_image) {
+
         String image_file_name = file_image.getSubmittedFileName();
         String[] image_file_name_split = image_file_name.split("\\.");
 
@@ -78,12 +81,14 @@ public class Validation {
         return image_file_name;
     }
 
+
     public static String insertImageIntoTomcatServer(HttpServletRequest request, String folder, Part file_image_course) {
         String image_file_name = createFileNameRandom(file_image_course);
         //tra ve folder khi not_build
         String upload_path_to_server = request.getServletContext().getRealPath(folder).replaceFirst("build", "") + File.separator + image_file_name;
         try {
             FileOutputStream fos = new FileOutputStream(upload_path_to_server);
+
             InputStream is = file_image_course.getInputStream();
 
             byte[] data = new byte[is.available()];
@@ -103,12 +108,14 @@ public class Validation {
 
         try {
             FileOutputStream fos = new FileOutputStream(upload_path_to_project);
+
             InputStream is = file_image_course.getInputStream();
 
             byte[] data = new byte[is.available()];
             is.read(data);
             fos.write(data);
             fos.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -136,4 +143,5 @@ public class Validation {
 //        }
 //        return true;
 //    }
+
 }

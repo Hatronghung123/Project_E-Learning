@@ -11,6 +11,7 @@ import Dal.LessonDAO;
 import Dal.LessonManageDAO;
 
 import Model.AccountDTO;
+
 import Model.Category;
 import YoutubeAPI.YoutubeDuration;
 import Model.DiscussionLesson;
@@ -86,6 +87,7 @@ public class lessonServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         AccountDTO acc = (AccountDTO) session.getAttribute("account");
+
         String createBy = request.getParameter("createBy");
         String courseid_str = request.getParameter("cid");
         String lessonid_str = request.getParameter("lessonid");
@@ -123,6 +125,7 @@ public class lessonServlet extends HttpServlet {
                     // Nếu vẫn không có lessonid, đặt bài học đầu tiên là mặc định
                     if (lessonid_str == null) {
                          ArrayList<LessonDTO> lessonList = dao.getListModulByCidd(course_id);
+
                         if (!lessonList.isEmpty()) {
                             lesson_id = lessonList.get(0).getLessonid();
                         }
@@ -146,10 +149,12 @@ public class lessonServlet extends HttpServlet {
                         return;
                     }
 
+
                 }
                 ArrayList<LessonDTO> lessonList = dao.getListModulByCidd(course_id);
                 ArrayList<Model.ModuleDTO> moduleList = dao.getListModulByCid(course_id);
                 LessonDTO lesson = dao.getlessonByCid(course_id, lesson_id);
+
 
                 
                 
@@ -202,6 +207,8 @@ public class lessonServlet extends HttpServlet {
                 // Đặt đường dẫn của cookie để nó có hiệu lực trên toàn bộ trang web
                 lastLessonCookie.setPath("/");
                 response.addCookie(lastLessonCookie);
+                session.setAttribute("lastLessonId_"+course_id, lesson_id);
+
 
             } catch (SQLException ex) {
                 Logger.getLogger(lessonServlet.class.getName()).log(Level.SEVERE, null, ex);
@@ -280,7 +287,9 @@ public class lessonServlet extends HttpServlet {
 String createBy = request.getParameter("createBy");
         String comment = request.getParameter("content");
         String cid = request.getParameter("cid");
+        
         AccountDTO acc = (AccountDTO) session.getAttribute("account");
+
         String lession_id = request.getParameter("lessonid");
 
         DisscussionDAO dao = new DisscussionDAO();
@@ -343,6 +352,7 @@ String createBy = request.getParameter("createBy");
         LessonManageDAO dao = new LessonManageDAO();
         long sumDuration = 0;
         try {
+
 
             ArrayList<LessonDTO> listLesson = dao.getListlessonByCid(course_id);
             for (LessonDTO lesson : listLesson) {

@@ -338,7 +338,9 @@
 <p class="text-danger">${msg}</p>
                                                 <div class="col-lg-12 col-md-12 col-sm-12">
                                                     <button type="submit" class="btn btn-primary">Submit</button>
-                                                    <button type="submit" class="btn btn-light">Cencel</button>
+
+                                                    <button onclick="cancelAdd(${cid})" type="button" class="btn btn-light">Cencel</button>
+
                                                 </div>
                                             </div>
                                         </form>
@@ -373,6 +375,12 @@
             </div>
 
 
+
+        <script>
+            function cancelAdd(cid) {
+                window.location.href = '/Project_E-Learning/dasboard_for_admin/manageAccount';
+            }
+        </script>
 
       
 

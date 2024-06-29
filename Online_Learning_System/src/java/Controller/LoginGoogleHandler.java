@@ -85,6 +85,7 @@ public class LoginGoogleHandler extends HttpServlet {
         //kiem tra xem email co trong DB khong
         if (!accountDAO.checkAccountExist(acc_gg.getEmail())) {
             account_register = new AccountDTO(acc_gg.getEmail(), password, 4);
+
             profile_register = new ProfileDTO(acc_gg.getName(), 0);
 
             accountDAO.insertUser(account_register, profile_register);

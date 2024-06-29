@@ -37,7 +37,11 @@
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
         <style>
+<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css?family=Dosis:400,600,700,800');
+=======
+            @import url('https://fonts.googleapis.com/css?family=Dosis:400,600,700,800');
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
             .ms-auto-1{
                 margin-left: 10px !important;
             }
@@ -85,6 +89,8 @@
         </style>    
     </head>
     <body>
+
+
         <jsp:include page="common/menu.jsp"></jsp:include>
             <!-- Carousel Start -->
             <div class="container-fluid p-0 mb-5">
@@ -110,27 +116,43 @@
                                             </c:when>
 
                                             <c:otherwise><!--Nguoi dung da dang nhap-->
-                                                <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
-                                                <c:set var="isPaid" value="false"/>
-                                                <c:if test="${fn:length(listEnrollment) > 0}">
-                                                    <c:forEach items="${listEnrollment}" var="i">
-                                                        <c:if test="${currentCourseId == i.getCourseid()}">                   
-                                                            <c:set var="isPaid" value="true"/>
-                                                        </c:if>
-                                                    </c:forEach>
-                                                </c:if>
+
+
+                                                <!--Nguoi này là ngươi tao ra khoa hoc duoc join truc tiep-->
                                                 <c:choose>
-                                                    <c:when test="${isPaid == true}">
-                                                        <a href="lesson?cid=${o.getCourse_id()}&lessonid=1" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a>
+                                                    <c:when test="${o.getCreate_by() == sessionScope.account.getAccount_id()}">
+                                                        <a href="dataTransferLesson?cid=${o.getCourse_id()}&lessonid=${o.getFirstlessonid()}&createBy=${o.getCreate_by()}" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a>
                                                     </c:when>
+
                                                     <c:otherwise>
+<<<<<<< HEAD
                                                         <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan"" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a>
                                                     </c:otherwise>
+=======
+                                                        <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
+                                                        <c:set var="isPaid" value="false"/>
+                                                        <c:if test="${fn:length(listEnrollment) > 0}">
+                                                            <c:forEach items="${listEnrollment}" var="i">
+                                                                <c:if test="${currentCourseId == i.getCourseid()}">                   
+                                                                    <c:set var="isPaid" value="true"/>
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </c:if>
+                                                        <c:choose>
+                                                            <c:when test="${isPaid == true}">
+                                                                <a href="dataTransferLesson?cid=${o.getCourse_id()}&lessonid=${o.getFirstlessonid()}&createBy=${o.getCreate_by()}" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan"" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a>
+                                                            </c:otherwise>
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
 
-                                                </c:choose> 
+                                                        </c:choose> 
 
+
+                                                    </c:otherwise> 
+                                                </c:choose>
                                             </c:otherwise>
-
                                         </c:choose>
 
                                     </div>
@@ -328,6 +350,7 @@
 
                                             </c:when>
 
+<<<<<<< HEAD
                                             <c:otherwise><!--Nguoi dung da dang nhap-->
                                                 <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
                                                 <c:set var="isPaid" value="false"/>
@@ -348,6 +371,40 @@
 
                                                 </c:choose> 
 
+=======
+
+                                            <c:otherwise><!--Nguoi dung da dang nhap-->
+
+                                                <!--Nguoi này là ngươi tao ra khoa hoc duoc join truc tiep-->
+                                                <c:choose>
+                                                    <c:when test="${o.getCreate_by() == sessionScope.account.getAccount_id()}">
+                                                        <a href="dataTransferLesson?cid=${o.getCourse_id()}&lessonid=${o.getFirstlessonid()}&createBy=${o.getCreate_by()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                    </c:when>
+
+                                                    <c:otherwise>
+
+
+                                                        <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
+                                                        <c:set var="isPaid" value="false"/>
+                                                        <c:if test="${fn:length(listEnrollment) > 0}">
+                                                            <c:forEach items="${listEnrollment}" var="i">
+                                                                <c:if test="${currentCourseId == i.getCourseid()}">                   
+                                                                    <c:set var="isPaid" value="true"/>
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </c:if>
+                                                        <c:choose>
+                                                            <c:when test="${isPaid == true}">
+                                                                <a href="dataTransferLesson?cid=${o.getCourse_id()}&lessonid=${o.getFirstlessonid()}&createBy=${o.getCreate_by()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                            </c:otherwise>
+
+                                                        </c:choose> 
+                                                    </c:otherwise>
+                                                </c:choose>
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
                                             </c:otherwise>
 
                                         </c:choose>
@@ -355,6 +412,7 @@
                                     </div>
                                 </div>
 
+<<<<<<< HEAD
                                         
                                 <!--ADD TO WISHLIST-->
                                         <c:if test="${sessionScope.account != null}">
@@ -392,6 +450,45 @@
                                                 </c:forEach>
                                                 
                                                 <small>(${o.getSumOfRating()})</small>
+=======
+
+                                <!--ADD TO WISHLIST-->
+                                <c:if test="${sessionScope.account != null}">
+
+                                    <!--nguoi dung chua dang nhap-->
+                                    <div class ="wishlist">
+                                        <div class="product-slider">
+                                            <a class="product-slider__fav js-fav" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">
+                                                <c:choose>
+                                                    <c:when test="${CourseIdList.contains(o.getCourse_id())}">
+                                                        <div class="heart is-active">
+                                                            <div class ="wishlist-text">ADD TO WISHLIST </div>
+                                                        </div>
+                                                    </c:when>
+
+                                                    <c:otherwise>
+                                                        <div class="heart ">
+                                                            <div class ="wishlist-text">ADD TO WISHLIST </div>
+                                                        </div> 
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </c:if>
+                                <div class="text-center pb-0" style ="padding-left: 12px;padding-right: 12px;padding-bottom: 12px;padding-top: 7px">
+                                    <h3 class="mb-0">${o.getFormattedPrice()}₫</h3>
+                                    <div class="mb-3">
+                                        <c:forEach var="i" begin="1" end="${o.getStar()}">
+                                            <small class="fa fa-star text-primary"></small>
+                                        </c:forEach>
+                                        <c:forEach var="i" begin="${o.getStar() +1}" end="5">
+                                            <small class="fa fa-star empty-star"></small>
+                                        </c:forEach>
+
+                                        <small>(${o.getSumOfRating()})</small>
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
                                     </div>
                                     <h5 class="mb-4">${o.getCourse_name()}</h5>
                                 </div>
@@ -410,6 +507,7 @@
         <!-- Courses End -->
 
 
+<<<<<<< HEAD
         <!--         Team Start 
                 <div class="container-xxl py-5">
                     <div class="container">
@@ -540,6 +638,8 @@
                     </div>
                 </div>
                  Testimonial End -->
+=======
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
 
 
         <jsp:include page="common/footer.jsp"></jsp:include>

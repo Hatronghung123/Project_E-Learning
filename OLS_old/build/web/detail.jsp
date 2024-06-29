@@ -128,7 +128,30 @@
 
     <body>
 
+<<<<<<< HEAD
 
+=======
+        <%
+            String courseId =request.getParameter("cid");
+                String lastLessonId = null;
+                Cookie[] cookies = request.getCookies();
+                if (cookies != null) {
+                    for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("lastLessonId_" + courseId)) {
+                        lastLessonId = cookie.getValue();
+                        break;
+                    }
+                }
+                }
+                
+            Object lessonidObj = request.getAttribute("lessonid");
+            if (lastLessonId == null) {
+            // Nếu không có cookie, bạn có thể đặt giá trị mặc định, ví dụ: bài học đầu tiên
+            String lessonid = lessonidObj.toString();
+            lastLessonId = lessonid; 
+            }
+        %>
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
 
         <jsp:include page="common/menu.jsp"></jsp:include>
 
@@ -207,29 +230,49 @@
 
                                                     </c:when>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
                                                     <c:otherwise><!--Nguoi dung da dang nhap-->
-                                                        <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
-                                                        <c:set var="isPaid" value="false"/>
-                                                        <c:if test="${fn:length(listEnrollment) > 0}">
-                                                            <c:forEach items="${listEnrollment}" var="i">
-                                                                <c:if test="${currentCourseId == i.getCourseid()}">                   
-                                                                    <c:set var="isPaid" value="true"/>
-                                                                </c:if>
-                                                            </c:forEach>
-                                                        </c:if>
+
+                                                        <!--Nguoi này là ngươi tao ra khoa hoc duoc join truc tiep-->
                                                         <c:choose>
-                                                            <c:when test="${isPaid == true}">
-                                                                <a href="lesson?cid=${o.getCourse_id()}&lessonid=1" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                            <c:when test="${o.getCreate_by() == sessionScope.account.getAccount_id()}">
+                                                                <a href="dataTransferLesson?cid=${o.getCourse_id()}&lessonid=${o.getFirstlessonid()}&createBy=${o.getCreate_by()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
                                                             </c:when>
+
                                                             <c:otherwise>
+<<<<<<< HEAD
                                                                 <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+=======
+
+
+                                                                <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
+                                                                <c:set var="isPaid" value="false"/>
+                                                                <c:if test="${fn:length(listEnrollment) > 0}">
+                                                                    <c:forEach items="${listEnrollment}" var="i">
+                                                                        <c:if test="${currentCourseId == i.getCourseid()}">                   
+                                                                            <c:set var="isPaid" value="true"/>
+                                                                        </c:if>
+                                                                    </c:forEach>
+                                                                </c:if>
+                                                                <c:choose>
+                                                                    <c:when test="${isPaid == true}">
+                                                                        <a href="dataTransferLesson?cid=${o.getCourse_id()}&lessonid=${o.getFirstlessonid()}&createBy=${o.getCreate_by()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                                    </c:otherwise>
+
+                                                                </c:choose> 
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
                                                             </c:otherwise>
-
-                                                        </c:choose> 
-
+                                                        </c:choose>
                                                     </c:otherwise>
 
                                                 </c:choose>
+
 
                                             </div>
 
@@ -306,7 +349,7 @@
                             </div>
                             <div class="d-flex justify-content-between border-bottom px-4">
                                 <h6 class="text-white my-3">Lectures</h6>
-                                <h6 class="text-white my-3">15</h6>
+                                <h6 class="text-white my-3">${getCourseByID.getLeture()}</h6>
                             </div>
                             <div class="d-flex justify-content-between border-bottom px-4">
                                 <h6 class="text-white my-3">Duration</h6>
@@ -328,8 +371,9 @@
                             </c:if>
 
                             <c:if test="${sessionScope.account != null}">
-                                <c:set var="currentCourseId" value="${getCourseByID.getCourse_id()}"/>
+                                <!--Nguoi này là ngươi tao ra khoa hoc duoc join truc tiep-->
                                 <c:choose>
+<<<<<<< HEAD
 
                                     <c:when test="${fn:length(listEnrollment) > 0}">
                                         <c:forEach items="${listEnrollment}" var="o">
@@ -341,10 +385,45 @@
                                             </c:if>
                                         </c:forEach>
 
+=======
+                                    <c:when test="${sessionScope.account.getAccount_id() == getCourseByID.getCreate_by()}">
+                                        <div class="py-3 px-4">
+                                            <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="lesson?cid=${getCourseByID.getCourse_id()}&lessonid=<%=lastLessonId%>&createBy=${getCourseByID.getCreate_by()}">Join Now</a>
+                                        </div>
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
                                     </c:when>
+                                        
                                     <c:otherwise>
-                                        <c:set var="isPaid" value="false"/>
+                                        <c:set var="currentCourseId" value="${getCourseByID.getCourse_id()}"/>
+                                        <c:choose>
+
+                                            <c:when test="${fn:length(listEnrollment) > 0}">
+                                                <c:forEach items="${listEnrollment}" var="o">
+                                                    <c:if test="${currentCourseId == o.getCourseid()}">
+                                                        <div class="py-3 px-4">
+                                                            <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="lesson?cid=${currentCourseId}&lessonid=<%=lastLessonId%>&createBy=${getCourseByID.getCreate_by()}">Resume</a>
+                                                        </div>
+                                                        <c:set var="isPaid" value="true"/>
+                                                    </c:if>
+                                                </c:forEach>
+
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:set var="isPaid" value="false"/>
+                                            </c:otherwise>
+
+
+
+
+                                        </c:choose> 
+
+                                        <c:if test="${isPaid != true}">
+                                            <div class="py-3 px-4">
+                                                <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="vnpay_pay.jsp?price=${getCourseByID.getPrice()}&cid=${getCourseByID.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" >Enroll Now</a>
+                                            </div>
+                                        </c:if>
                                     </c:otherwise>
+<<<<<<< HEAD
 
 
 
@@ -356,6 +435,9 @@
                                         <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="vnpay_pay.jsp?price=${getCourseByID.getPrice()}&cid=${getCourseByID.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" >Enroll Now</a>
                                     </div>
                                 </c:if>
+=======
+                                </c:choose>
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
                             </c:if>
 
 

@@ -11,6 +11,7 @@ package Util;
 public class ServerPath {
 
      public static String getPathImage(){
-        return "E:\\Project_E-Learning\\Online_Learning_System\\web";
+        return "D:\\New folder\\V11\\Project_E-Learning\\Online_Learning_System\\web";
+
     }
 }

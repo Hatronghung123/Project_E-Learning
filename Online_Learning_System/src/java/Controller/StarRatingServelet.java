@@ -8,6 +8,7 @@ import Dal.CourseDetailDAO;
 import Dal.StarRatingDAO;
 
 import Model.AccountDTO;
+
 import Model.Course;
 import Model.StarRatingDTO;
 import java.io.IOException;
@@ -104,6 +105,7 @@ public class StarRatingServelet extends HttpServlet {
         String comment = request.getParameter("comment");
 
         AccountDTO account = (AccountDTO) session.getAttribute("account");
+
         StarRatingDAO dao = new StarRatingDAO();
 
         String msg = "";

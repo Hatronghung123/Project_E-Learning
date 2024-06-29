@@ -110,6 +110,7 @@
             .form-label{
                 margin-bottom: 0px;
             }
+
         </style>
     </head>
     <body>
@@ -151,10 +152,12 @@
                                     <div class="tab-pane fade show" id="Courses">
                                         <div class="card-body pb-2">
                                             <c:forEach items="${list_managed_couse}" var="c">
+
                                                 <div id="course-${c.course_id}" class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
                                                     <div class="col-lg-2">
                                                         <img src="${c.image}"
                                                              width="100%" height="auto" alt="image course"/>
+
                                                     </div>
                                                     <div class="col-lg-8">
                                                         <label class="form-label" style="color: black; font-size: 15px">Mentor: ${c.mentor_name}</label><br>                                                        
@@ -172,16 +175,20 @@
                                                         <label class="form-label" style="color: #000; font-size: 15px ">Number of enrollment: ${c.number_enrollment}</label><br>
                                                     </div>
                                                     <c:if test="${c.status}">
+
                                                         <div class="col-lg-1 delete" style="padding-left: 0px">
+
                                                             <button onclick="deleteCourse('${c.course_id}')" class="btn btn-outline-danger">Delete</button>
                                                         </div>
                                                     </c:if>
                                                     <c:if test="${!c.status}">
+
                                                         <div class="col-lg-1 active" style="padding-left: 0px">
                                                             <button onclick="activeCourse('${c.course_id}')" class="btn btn-outline-success">Active</button>
                                                         </div>
                                                     </c:if>
                                                     <div class="col-lg-1" style="padding-left: 0px">
+
                                                         <a href="course-manage?cid=${c.course_id}&action=update" class="btn btn-outline-primary">Update</a>
                                                     </div>
                                                 </div>
@@ -218,9 +225,11 @@
                                         if (statusLabel) {
                                             statusLabel.style.color = '#cc0033';
                                             statusLabel.textContent = 'Inactive';
+
                                             alert('Course deleted successfully');
                                             window.location.reload();
                                         }
+
                                     } else {
                                         alert('An error occurred while deleting the course');
                                     }
@@ -261,6 +270,7 @@
                                 });
                     }
                 }
+
             </script>
 
         </div>

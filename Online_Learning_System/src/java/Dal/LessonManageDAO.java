@@ -118,17 +118,18 @@ public class LessonManageDAO {
     public ArrayList<LessonDTO> getListlessonByCid(int courseid) throws SQLException {
         ArrayList<LessonDTO> list = new ArrayList<>();
         String sql = """
-                      SELECT  
-                      [LessonId]
-                      ,l.[ModuleId]
-                      ,[LessonName]
-                      ,[LessonContent]
-                      ,[LessonVideo]
-                      ,[Duration]
-                      FROM [Project Online Learning].[dbo].[Lesson] l 
-                      join [dbo].[Module] m on m.ModuleId = l.ModuleId
-                      Join [dbo].[Course] c on c.CourseId = m.CourseId
-                      where  c.CourseId = ?
+                                            SELECT  
+                                            [LessonId]
+                                            ,l.[ModuleId]
+                                            ,[LessonName]
+                                            ,[LessonContent]
+                                            ,[LessonVideo]
+                                            ,[Duration]
+                                            ,m.ModuleName
+                                            FROM [Project Online Learning].[dbo].[Lesson] l 
+                                            join [dbo].[Module] m on m.ModuleId = l.ModuleId
+                                            Join [dbo].[Course] c on c.CourseId = m.CourseId
+                                            where  c.CourseId = ?
                      """;
         try {
             con = new DBContext().getConnection();
@@ -143,7 +144,9 @@ public class LessonManageDAO {
                 String lesson_content = rs.getString(4);
                 String lesson_video = rs.getString(5);
                 long duration = rs.getInt(6);
-                list.add(new LessonDTO(lesson_id, moduleid, lesson_name, lesson_content, lesson_video, duration));
+                String moduleName = rs.getString(7);
+
+                list.add(new LessonDTO(lesson_id, moduleid, lesson_name, lesson_content, lesson_video, duration, moduleName));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -154,6 +157,7 @@ public class LessonManageDAO {
     }
 
     //Lấy lesoson theo lesson id
+
     public LessonDTO getlessonByLessonid(int lessonId) throws SQLException {
         String sql = """
                       SELECT  [LessonId]
@@ -188,8 +192,47 @@ public class LessonManageDAO {
         return null;
     }
 
+
+         public LessonDTO checkLessonExist(String lessonName) throws SQLException {
+
+        String sql = """
+                     SELECT [LessonId]
+                           ,[ModuleId]
+                           ,[LessonName]
+                           ,[LessonContent]
+                           ,[LessonVideo]
+                           ,[Duration]
+                       FROM [Project Online Learning].[dbo].[Lesson]
+                      WHERE LOWER(LessonName) = LOWER(?)
+                     """;
+        try {
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, lessonName);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int lesson_id = rs.getInt(1);
+                int modulid = rs.getInt(2);
+                String lesson_name = rs.getString(3);
+                String lesson_content = rs.getString(4);
+                String lesson_video = rs.getString(5);
+                long duration = rs.getInt(6);
+              
+
+                return new LessonDTO(lesson_id, modulid, lesson_name, lesson_content, lesson_video, duration);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Lỗi");
+        }
+
+        return null;
+    }
+    
     public static void main(String[] args) throws SQLException {
         LessonManageDAO dao = new LessonManageDAO();
-        System.out.println(dao.getListlessonByCid(2));
+        System.out.println(dao.checkLessonExist("Vòng Lặp While"));
+
+
     }
 }

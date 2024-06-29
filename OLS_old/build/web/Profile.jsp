@@ -104,7 +104,12 @@
 
 
             .iamge {
+<<<<<<< HEAD
 
+=======
+                width: 80px !important;
+                height: 80px;
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
                 border-radius: 50%;
             }
             
