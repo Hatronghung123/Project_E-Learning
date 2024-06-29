@@ -4,14 +4,22 @@
  */
 package Controller.Home;
 
+import Controller.lessonServlet;
 import Dal.AccountDAO;
 import Dal.CourseDetailDAO;
 import Dal.HomeDAO;
+import Dal.LessonDAO;
+import Dal.LessonManageDAO;
+import Dal.WishlistDAO;
 import Model.Account;
 import Model.Category;
 import Model.Course;
 import Model.Enrollment;
-import Model.Profile;
+import Model.Lesson;
+import Model.ProfileDTO;
+import Model.StarRatingDTO;
+import Model.WishlistDTO;
+import Util.AVGOfRaing;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -21,7 +29,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -71,6 +81,7 @@ public class homeServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("account");
+        String action = request.getParameter("action");
         PrintWriter out = response.getWriter();
 
         try {
@@ -78,20 +89,38 @@ public class homeServlet extends HttpServlet {
             CourseDetailDAO cdDao = new CourseDetailDAO();
             ArrayList<Category> listCategory = dao.getAllCategory();
             ArrayList<Course> listNewCourse = dao.getNewCourse();
-
+            ArrayList<Course> listPopulerCourse = dao.getPopulerCourse();
             if (acc != null) {
                 ArrayList<Enrollment> listEnrollment = cdDao.getEnrollmentByAccountId(acc.getAccount_id());
                 request.setAttribute("listEnrollment", listEnrollment);
+
+                //Lấy ra list wishList để check is active icon
+                getCidFromWishlistByAccId(request, response, acc.getAccount_id());
+
             }
 
+            //Định dạng khóa học theo giá tiền Việt Nam và set tổng số h của khóa học
+            for (Course course : listPopulerCourse) {
+                course.setFormattedPrice(formartPrice(course.getPrice()));
+                course.setStudy_time(sumOfDurationInCourseInHrs(course.getCourse_id()));
+            }
+            //Set số sao và lượt đánh giá cho từng khóa học
+            for (Course course : listPopulerCourse) {
+                ArrayList<StarRatingDTO> listRating = cdDao.getRatings(course.getCourse_id());
+                course.setStar(AVGOfRaing.AvgRatingCourse(listRating).get(0));
+                course.setSumOfRating(AVGOfRaing.AvgRatingCourse(listRating).get(1));
+            }
+
+
+
+            request.setAttribute("action", action);
+            request.setAttribute("listPopulerCourse", listPopulerCourse);
             request.setAttribute("listNewCourse", listNewCourse);
             request.setAttribute("listCategory", listCategory);
 
         } catch (SQLException ex) {
             Logger.getLogger(homeServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        //get acc profile to show
         getProfile(request, response);
 
         request.getRequestDispatcher("index.jsp").forward(request, response);
@@ -155,15 +184,59 @@ public class homeServlet extends HttpServlet {
             HttpSession session = request.getSession();
             Account account_login = accountDAO.getAccountByEmailPass(email, password);
             if (account_login != null) {
-                Profile profile = accountDAO.getProfile(account_login);
+                ProfileDTO profile = accountDAO.getProfile(account_login);
                 session.setAttribute("profile", profile);
             }
 
             session.setAttribute("account", account_login);
             session.setMaxInactiveInterval(60 * 30);
-            
-
         }
     }
 
+    public String formartPrice(int price) {
+        NumberFormat formatTer = NumberFormat.getInstance(new Locale("vi", "VN"));
+        return formatTer.format(price);
+    }
+
+    //kiểm tra xem heart active or inactive
+    public void getCidFromWishlistByAccId(HttpServletRequest request, HttpServletResponse response, int acc_id)
+            throws ServletException, IOException {
+        WishlistDAO dao = new WishlistDAO();
+        ArrayList<WishlistDTO> listWishListCoursId = dao.getCidFromWishListByAccId(acc_id);
+        ArrayList<Integer> CourseIdList = new ArrayList<>();
+        for (WishlistDTO wishlist : listWishListCoursId) {
+            CourseIdList.add(wishlist.getCourse_id());
+        }
+        //response.getWriter().print(listWishListCoursId);
+
+        request.setAttribute("CourseIdList", CourseIdList);
+    }
+
+    
+        //tính tổng thời gian học khóa học
+    private String sumOfDurationInCourseInHrs(int course_id)
+            throws ServletException, IOException {
+        LessonManageDAO dao = new LessonManageDAO();
+        int sumDuration = 0;
+        try {
+
+            ArrayList<Lesson> listLesson = dao.getListlessonByCid(course_id);
+            for (Lesson lesson : listLesson) {
+                sumDuration += lesson.getDuration();
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(lessonServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        double hours = (double)sumDuration / 3600;
+        int before_hours = (int) hours;
+        int after_hourse = (sumDuration % 3600) / 60;
+        
+        
+        return before_hours + String.format(".%02d", after_hourse) + " Hrs";
+    }
+
+    
+    
 }

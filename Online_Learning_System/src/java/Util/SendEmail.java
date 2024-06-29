@@ -37,6 +37,9 @@ public class SendEmail {
             message.setSubject(subject);
             message.setText(body);
 
+            // Thêm thông tin metadata
+            message.setHeader("X-Mailer", "JavaMail API");
+
             // Gửi message
             Transport.send(message);
             System.out.println("Email đã được gửi thành công!");

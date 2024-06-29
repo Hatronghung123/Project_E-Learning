@@ -18,9 +18,56 @@ public class WishlistDAO extends DBContext {
     public static void main(String[] args) {
         WishlistDAO dao = new WishlistDAO();
         ArrayList<WishlistDTO> list = dao.getWishListByAccId(2);
-        System.out.println(list.get(1).getDiscount());
+        System.out.println(dao.getCidFromWishListByAccId(1));
     }
 
+    public void insetWishList(int account_id, int course_id) {
+        connection = getConnection();
+        String sql = """
+                     INSERT INTO [dbo].[WishList] 
+                                  ([AccountId],
+                            [CourseId])
+                            VALUES
+                                  (?
+                                  ,?)""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, account_id);
+            statement.setInt(2, course_id);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    
+    
+     public ArrayList<WishlistDTO> getCidFromWishListByAccId(int account_id) {
+        connection = getConnection();
+        ArrayList<WishlistDTO> list = new ArrayList<>();
+        String sql = """
+                     SELECT  [CourseId]
+                         FROM [dbo].[WishList]
+                         Where AccountId = ?""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, account_id);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) { 
+                int course_id = resultSet.getInt(1);
+ 
+                list.add(new WishlistDTO(course_id));
+            }
+           
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
+    
+    
     public ArrayList<WishlistDTO> getWishListByAccId(int account_id) {
         connection = getConnection();
         ArrayList<WishlistDTO> list = new ArrayList<>();
@@ -55,4 +102,5 @@ public class WishlistDAO extends DBContext {
         }
         return null;
     }
+
 }

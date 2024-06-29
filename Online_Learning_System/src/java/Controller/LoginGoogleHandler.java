@@ -7,7 +7,7 @@ package Controller;
 import Dal.AccountDAO;
 import Model.Account;
 import Model.AccountGoogle;
-import Model.Profile;
+import Model.ProfileDTO;
 import Util.SendEmail;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -80,23 +80,22 @@ public class LoginGoogleHandler extends HttpServlet {
         AccountDAO accountDAO = new AccountDAO();
 
         Account account_register = null;
-        Profile profile_register = null;
+        ProfileDTO profile_register = null;
         //kiem tra xem email co trong DB khong
         if (!accountDAO.checkAccountExist(acc_gg.getEmail())) {
             account_register = new Account(acc_gg.getEmail(), password, 4);
-            profile_register = new Profile(acc_gg.getName(), 0);
+            profile_register = new ProfileDTO(acc_gg.getName(), 0);
 
             accountDAO.insertUser(account_register, profile_register);
 
             out.print(profile_register.getFullname());
 
-            sendPassword.send("hatronghung7777@gmail.com", "chnzvsbysoeesgwe", acc_gg.getEmail(), "đây là mật khẩu của bạn", password, response);
-        }
-        else{
+            sendPassword.send("hatronghung7777@gmail.com", "chnzvsbysoeesgwe", acc_gg.getEmail(), "This is your password", password, response);
+        } else {
             account_register = accountDAO.getAccountGoogle(acc_gg.getEmail());
             profile_register = accountDAO.getProfile(account_register);
         }
-        
+
         HttpSession session = request.getSession();
         session.setAttribute("account", account_register);
         if (account_register != null) {

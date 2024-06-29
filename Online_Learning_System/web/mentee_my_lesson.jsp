@@ -8,7 +8,10 @@
 
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="YoutubeAPI.YoutubeDuration" %>
+
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
@@ -65,31 +68,17 @@
 
 
     <style>
-        .module-content {
-            display: none; /* Initially hide module contents */
-        }
-        .btnn {
-            background-color: #2bc5d4;
-            border-radius: 4px;
-        }
-        .btnn:hover {
-            background-color: #32e8fa;
+        .rounded-circle{
+            height: 50px;
+            width: 50px;
         }
 
-        .module-content a {
-            text-align: left;
-            display: block;
-            color: #2bc5d4 !important;
+        .breadcrumb-item + .breadcrumb-item::before {
+            color: black;
         }
-
-        .active-lesson {
-            font-weight: bold; /* Làm cho văn bản đậm hơn */
-            color: #007bff;    /* Đổi màu chữ */
-            background-color: black; /* Thay đổi nền */
-            border-left: 3px solid #007bff; /* Thêm viền bên trái */
+        .breadcrumb{
+            margin-top: 10px;
         }
-
-
     </style>
 
 </head>
@@ -125,12 +114,149 @@
                         </div>
 
                         <!--comment-->
-                        <form action="lesson?action=comment" method="POST">
-                            <div class="card list-group list-group-fit">
-                                <textarea id="content" class="form-control" name="ndck" required placeholder="Comment here"></textarea>
+
+                        <div class="comments">
+                            <h2>Comments</h2>
+                            <!-- Thêm comment mới -->
+                            <form action="lesson?status=insert" method="post">
+                                <div class="comment-input">
+                                    <img src="${sessionScope.profile.getAvt()}" alt="User Avatar" class="avatar">
+                                    <textarea required="" name="content" rows="1" placeholder="Add a comment..."></textarea>
+                                    <input type="hidden" name="cid" value="${lesson.getCourseid()}">
+                                    <input type="hidden" name="lessonid" value="${lesson.getLessonid()}">
+                                    <input type="hidden" name="parentCommentID" value="">
+                                    <input type="hidden" name="createBy" value="${lesson.getCreateby()}">
+
+                                    <button type="submit">Submit</button>
+                                </div>
+                            </form>
+
+
+
+
+
+                            <!-- Hiển thị comment và reply -->
+                            <div class="comment-list">
+                                <c:forEach var="o" items="${mainComments}"> 
+                                    <c:if test="${o.getLessonId() == lesson.getLessonid()}">
+                                        <div class="comment">
+
+                                            <img src="${o.getAvatar()}" alt="User1 Avatar" class="avatar">    
+
+                                            <div class="comment-content">
+                                                <p><strong>${o.getName()}</strong>  <span class="timestamp">${o.getTimeAgo()}</span></p>
+                                                <p>${o.getComment()}</p> 
+
+
+
+
+                                            </div> 
+                                            <!-- Nút xóa comment -->
+                                            <c:if test="${sessionScope.account.getAccount_id() == o.getAcccountId()}">
+                                                <form action="lesson?status=delete" method="post" class="delete-form" onsubmit="return confirmDelete(this);">
+                                                    <input type="hidden" name="cid" value="${lesson.getCourseid()}">
+                                                    <input type="hidden" name="lessonid" value="${lesson.getLessonid()}">
+                                                    <input type="hidden" name="disscussID" value="${o.getDisscussionID()}">
+                                                    <input type="hidden" name="createBy" value="${lesson.getCreateby()}">
+
+                                                    <input type="hidden" name="parent" value="null">
+                                                    <button type="submit" class="del">Delete</button>
+                                                </form>
+                                            </c:if>
+
+                                        </div>
+
+                                        <div class="comment-list replies">
+                                            <!-- Hiển thị các reply -->
+                                            <c:forEach var="reply" items="${repliesMap[o.getDisscussionID()]}">
+                                                <div class="comment replies">                    
+                                                    <img src="${reply.getAvatar()}" alt="User Avatar" class="avatar">
+
+                                                    <div class="comment-content">
+                                                        <p><strong>${reply.getName()}</strong><span class="timestamp">${reply.getTimeAgo()}</span></p>
+                                                        <p>${reply.getComment()}</p>
+
+
+                                                    </div>          
+                                                    <!--    Nút xóa reply 
+                                                    -->  
+                                                    <c:if test="${sessionScope.account.getAccount_id() == reply.getAcccountId()}">
+                                                        <form action="lesson?status=delete" method="post" class="delete-form" onsubmit="return confirmDelete(this);">
+                                                            <input type="hidden" name="cid" value="${lesson.getCourseid()}">
+                                                            <input type="hidden" name="lessonid" value="${lesson.getLessonid()}">
+                                                            <input type="hidden" name="disscussID" value="${reply.getDisscussionID()}">
+                                                            <input type="hidden" name="parent" value="${reply.getParentId()}">
+                                                            <input type="hidden" name="createBy" value="${lesson.getCreateby()}">
+                                                            <button type="submit" class="del">Delete</button>
+                                                        </form>
+                                                    </c:if>
+                                                </div>
+                                            </c:forEach>
+                                        </div> 
+
+
+                                        <!-- Form để thêm reply -->
+                                        <form action="lesson?status=insert" method="post" class="reply-form">
+                                            <input type="hidden" name="lessonid" value="${lesson.getLessonid()}">
+                                            <input type="hidden" name="parent" value="${o.getDisscussionID()}">
+                                            <!--Chuyển lai trang có cid hiện tại-->
+                                            <input type="hidden" name="cid" value="${lesson.getCourseid()}">
+                                            <input type="hidden" name="createBy" value="${lesson.getCreateby()}">
+
+                                            <!-- Thêm class `reply-textarea` vào textarea để dễ dàng chọn từ JavaScript -->
+                                            <textarea required="" name="content" rows="1" placeholder="Reply to this comment..." class="reply-textarea" style="display: none;"></textarea>
+                                            <button type="button" class="reply-btn">Reply</button>
+                                            <button type="submit"  class="submit-reply-btn">Submit Reply</button>
+                                            <button type="button" class="cancel-reply-btn">Cancel</button>
+                                        </form>
+
+
+
+                                    </c:if>
+                                </c:forEach>
                             </div>
-                            <button class="btnn" type="submit" name="comment" >Comment</button>
-                        </form>
+
+                        </div>
+
+                        <script>
+                            function confirmDelete(form) {
+                                return confirm("Are you sure you want to delete this comment?");
+                            }
+                        </script>
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
+                                var replyButtons = document.querySelectorAll('.reply-btn');
+                                var cancelReplyButtons = document.querySelectorAll('.cancel-reply-btn');
+
+                                replyButtons.forEach(function (button) {
+                                    button.addEventListener('click', function () {
+                                        // Hiển thị ô textarea, nút Submit và nút Cancel
+                                        var form = this.parentElement;
+                                        form.querySelector('.reply-textarea').style.display = 'block';
+                                        form.querySelector('.submit-reply-btn').style.display = 'inline-block';
+                                        form.querySelector('.cancel-reply-btn').style.display = 'inline-block';
+
+                                        // Ẩn nút Reply
+                                        this.style.display = 'none';
+                                    });
+                                });
+
+                                cancelReplyButtons.forEach(function (button) {
+                                    button.addEventListener('click', function () {
+                                        // Ẩn ô textarea, nút Submit và nút Cancel
+                                        var form = this.parentElement;
+                                        form.querySelector('.reply-textarea').style.display = 'none';
+                                        form.querySelector('.submit-reply-btn').style.display = 'none';
+                                        this.style.display = 'none';
+
+                                        // Hiển thị lại nút Reply
+                                        form.querySelector('.reply-btn').style.display = 'inline-block';
+                                    });
+                                });
+                            });
+                        </script>
+
 
 
                         <!-- Lessons -->
@@ -175,13 +301,19 @@
                                                 <div class="module-content">
 
                                                     <c:if test="${o.getModulename() == i.getModulname()}">
-                                                    <a href="lesson?cid=${i.getCourseid()}&lessonid=${i.getLessonid()}" class="btn btn-block btn--col module-lesson" data-lessonid="${i.getLessonid()}">
-                                                        ${status.index + 1}. ${i.getLessonname()}
-                                                    </a>
+                                                        <a style="color: black" href="lesson?cid=${i.getCourseid()}&lessonid=${i.getLessonid()}&createBy=${i.getCreateby()}" class="btn btn-block btn--col module-lesson" data-lessonid="${i.getLessonid()}">
+                                                            ${status.index + 1}. ${i.getLessonname()}
+                                                            <div>
+
+                                                                <small class="text-muted module-lesson" style="color: black">${ YoutubeDuration.convertToMinutesAndSeconds(i.getDuration())}</small>
+                                                            </div>
+                                                        </a> 
+
                                                     </c:if>
 
 
                                                 </div>
+
                                             </c:forEach>
 
                                         </div>
@@ -195,20 +327,21 @@
                             <div class="card-header bg-white">
                                 <div class="media">
                                     <div class="media-left media-middle">
-                                        <img src="assets/images/people/110/guy-6.jpg" alt="About Adrian" width="50" class="rounded-circle">
+                                        <img src="${lesson.getAvatar()}" alt="About Adrian" class="rounded-circle">
                                     </div>
                                     <div class="media-body media-middle">
-                                        <h4 class="card-title"><a href="instructor-profile.html">${lesson.getMentorname()}</a></h4>
+                                        <h4 class="card-title"><a href="#">${lesson.getMentorname()}</a></h4>
                                         <p class="card-subtitle">Instructor</p>
                                     </div>
+                                    <a class="buttons" href="messenger?sender_id=${sessionScope.account.getAccount_id()}&receiver_id=${lesson.getProfile_id()}">Chat Now</a>
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <p>Having over 12 years exp. Adrian is one of the lead UI designers in the industry Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, aut.</p>
-                                <a href="#" class="btn btn-default"><i class="fa fa-facebook"></i></a>
-                                <a href="#" class="btn btn-default"><i class="fa fa-twitter"></i></a>
-                                <a href="#" class="btn btn-default"><i class="fa fa-github"></i></a>
-                            </div>
+                            <!--                            <div class="card-body">
+                                                            <p>Having over 12 years exp. Adrian is one of the lead UI designers in the industry Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, aut.</p>
+                                                            <a href="#" class="btn btn-default"><i class="fa fa-facebook"></i></a>
+                                                            <a href="#" class="btn btn-default"><i class="fa fa-twitter"></i></a>
+                                                            <a href="#" class="btn btn-default"><i class="fa fa-github"></i></a>
+                                                        </div>-->
                         </div>
 
                         <div class="card">
@@ -219,7 +352,8 @@
                                             <i class="material-icons text-muted-light">schedule</i>
                                         </div>
                                         <div class="media-body media-middle">
-                                            2 <small class="text-muted">hrs</small> &nbsp; 26 <small class="text-muted">min</small>
+                                            ${totalTime}
+                                            <!--                                            2 <small class="text-muted">hrs</small> &nbsp; 26 <small class="text-muted">min</small>-->
                                         </div>
                                     </div>
                                 </li>
@@ -240,13 +374,16 @@
                             </div>
                             <div class="card-body">
                                 <div class="rating">
-                                    <i class="material-icons">star</i>
-                                    <i class="material-icons">star</i>
-                                    <i class="material-icons">star</i>
-                                    <i class="material-icons">star</i>
-                                    <i class="material-icons">star_border</i>
+                                    <c:forEach var="i" begin="1" end="${avgRatingCourse}">
+                                        <i class="material-icons" >star</i>
+                                    </c:forEach>
+                                    <c:forEach var="i" begin="${avgRatingCourse +1}" end="5">
+                                        <i class="material-icons" >star_border</i>
+                                    </c:forEach>
                                 </div>
-                                <small class="text-muted">20 ratings</small>
+                                <small class="text-muted">
+                                    <fmt:formatNumber value="${amountRatingCourse}" type="number" maxFractionDigits="0" /> ratings
+                                </small>
                             </div>
                         </div>
 

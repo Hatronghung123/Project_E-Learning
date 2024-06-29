@@ -5,8 +5,9 @@
 package Dal;
 
 import Model.Account;
-import Model.Profile;
+import Model.ProfileDTO;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -20,8 +21,9 @@ public class AccountDAO extends DBContext {
         System.out.println(dao.checkAccountExist("tuong0505ht@gmail.com"));
 //        dao.insertUser(new Account("tuongdeptrai@gmail.com", "67676767", 4), new Profile("Pham Cat Tuong", 0));
         Account a = dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010");
-        System.out.println(dao.getProfile(a).getFullname());
+        System.out.println(dao.CheckActiveOrInActive(12));
         System.out.println("Succesfully");
+        dao.activeOrInactiveAccount(12, 0);
     }
 
     //tra ve account theo EMAIL & PASS
@@ -83,7 +85,7 @@ public class AccountDAO extends DBContext {
         return null;
     }
 
-    public void insertUser(Account account, Profile profile) {
+    public void insertUser(Account account, ProfileDTO profile) {
         insertAccount(account);
         Account new_insert_account = getAccountByEmailPass(account.getEmail(), account.getPassword());
         insertProfile(profile, new_insert_account.getAccount_id());
@@ -112,7 +114,7 @@ public class AccountDAO extends DBContext {
         }
     }
 
-    public void insertProfile(Profile profile, int account_id) {
+    public void insertProfile(ProfileDTO profile, int account_id) {
         connection = getConnection();
         String sql_profile = """
                              INSERT INTO [dbo].[Profile]
@@ -141,7 +143,7 @@ public class AccountDAO extends DBContext {
         }
     }
 
-    public Profile getProfile(Account account_login) {
+    public ProfileDTO getProfile(Account account_login) {
         connection = getConnection();
         String sql = """
                      SELECT [ProfileId]
@@ -163,7 +165,7 @@ public class AccountDAO extends DBContext {
                 String avt = resultSet.getString(4);
                 double money = resultSet.getDouble(5);
                 int manageBy = resultSet.getInt(6);
-                return new Profile(profile_id, fullname, gender, avt, money, manageBy);
+                return new ProfileDTO(profile_id, fullname, gender, avt, money, manageBy);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -324,5 +326,209 @@ public class AccountDAO extends DBContext {
             ex.printStackTrace();
         }
     }
+    
+    //===========Admin=================
+    
+    //Lấy ra tất cả tài khoản
+        public ArrayList<Account> getAllAccount() {
+            ArrayList<Account> list = new ArrayList<>();
+        connection = getConnection();
+        String sql = """
+                     SELECT [AccountId]
+                       	  ,p.FullName
+                             ,[Email]
+                             ,[Password]
+                             ,[Status]
+                             ,[RoleId]
+                         FROM [Project Online Learning].[dbo].[Account] acc
+                         Join [dbo].[Profile] p on p.[ProfileId] = acc.AccountId """;
+        try {
+            statement = connection.prepareStatement(sql);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int account_id = resultSet.getInt(1);
+                String fullName = resultSet.getString(2);
+                String email_in_db = resultSet.getString(3);
+                String password_in_db = resultSet.getString(4);
+                int role_id = resultSet.getInt(6);
+                boolean status = resultSet.getBoolean(5);
+
+                list.add(new Account(account_id,fullName, email_in_db, password_in_db, status, role_id));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
+        
+        
+        
+        
+       public void insertUserByAdmin(Account account, ProfileDTO profile) {
+        insertAccount(account);
+        Account new_insert_account = getAccountByEmailPass(account.getEmail(), account.getPassword());
+        insertProfileByAdmin(profile, new_insert_account.getAccount_id());
+    }
+
+
+
+    public void insertProfileByAdmin(ProfileDTO profile, int account_id) {
+        connection = getConnection();
+        String sql_profile = """
+                             INSERT INTO [dbo].[Profile]
+                                        ([ProfileId]
+                                        ,[FullName]
+                                        ,[Gender]
+                                        ,[Avatar]
+                                        ,[Money]
+                                        ,[ManagedBy])
+                                  VALUES
+                                        (?,?,?,null,0,?)""";
+
+        try {
+            statement = connection.prepareStatement(sql_profile);
+            statement.setInt(1, account_id);
+            statement.setString(2, profile.getFullname());
+            statement.setBoolean(3, profile.isGender());
+            if (profile.getManaged_by() == 0) {
+                statement.setString(4, null);
+            } else {
+                statement.setInt(4, profile.getManaged_by());
+            }
+            // thực thi câu lệnh
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+    //lấy account theo id để admin có thể sửa thông tin tài khoản
+     public Account getAccountById(int accountId) {
+        connection = getConnection();
+        String sql = """
+                     SELECT  [AccountId]
+                     		,p.[FullName]
+                           ,[Email]
+                           ,[Password]
+                           ,[Status]
+                     	  ,p.Gender
+                           ,[RoleId]
+                       FROM [Project Online Learning].[dbo].[Account] acc
+                       Join [dbo].[Profile] p on acc.[AccountId] = p.[ProfileId]
+                       Where acc.[AccountId] = ?""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, accountId);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int acc_id = resultSet.getInt(1);
+                String fullname = resultSet.getString(2);
+                String email = resultSet.getString(3);
+                String pass = resultSet.getString(4);
+                boolean status = resultSet.getBoolean(5);
+                boolean gender = resultSet.getBoolean(6);
+                int role = resultSet.getInt(7);
+                return new Account(acc_id, fullname, email, pass, status, gender, role) ;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+     
+     
+     public void updateAccount(Account account, ProfileDTO profile) {
+         updateProfile(profile);
+        connection = getConnection();
+        String sql = """
+                       UPDATE [dbo].[Account]
+                              SET [Password] = ?
+                      		,RoleId = ?
+                             WHERE Email = ?""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, account.getPassword());
+            statement.setInt(2, account.getRole_id());
+            statement.setString(3, account.getEmail());
+            // thực thi câu lệnh
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+     
+    public void updateProfile(ProfileDTO profile) {
+        connection = getConnection();
+        String sql = """
+                       UPDATE[dbo].[Profile]
+                      
+                      		SET [FullName] = ?
+                            ,[Gender] =?
+                            WHERE [ProfileId] = ?""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, profile.getFullname());
+            statement.setBoolean(2, profile.isGender());
+            statement.setInt(3, profile.getProfile_id());
+            
+            // thực thi câu lệnh
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+          
+          
+   //kiểm tra xem tài khoản active hay inactive
+    public boolean CheckActiveOrInActive(int accountid)  {
+        connection = getConnection();
+        String sql = """
+                     SELECT [Status] 
+                         FROM [Project Online Learning].[dbo].[Account]
+                         WHERE [AccountId] = ?
+                     """;
+        try {
+            statement = connection.prepareStatement(sql);
+
+            statement.setInt(1, accountid);
+             resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+
+                boolean status = resultSet.getBoolean(1);
+
+                return status;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();  // In chi tiết lỗi ra console
+
+        }
+
+        return false;
+    }
+ 
+    
+    //update account inactive nếu tài khoản đó active
+    public void activeOrInactiveAccount(int accountid, int status ) {
+        connection = getConnection();
+        String sql = """
+                         UPDATE[dbo].[Account]
+                                                  
+                                      SET [Status] = ? 
+                               WHERE [AccountId] = ?""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, status);
+            statement.setInt(2, accountid);
+            // thực thi câu lệnh
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+          
+          
 
 }

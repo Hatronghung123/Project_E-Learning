@@ -5,10 +5,18 @@
 package Controller;
 
 import Dal.CourseDetailDAO;
+import Dal.HomeDAO;
+import Dal.LessonDAO;
+import Dal.LessonManageDAO;
+import Dal.WishlistDAO;
 import Model.Account;
 import Model.Category;
 import Model.Course;
 import Model.Enrollment;
+import Model.Lesson;
+import Model.StarRatingDTO;
+import Model.WishlistDTO;
+import Util.AVGOfRaing;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -69,36 +77,62 @@ public class CourseDetailServelet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        HttpSession session =request.getSession();
+        HttpSession session = request.getSession();
         Account acc = (Account) session.getAttribute("account");
-        
+        CourseDetailDAO cdDao = new CourseDetailDAO();
+        LessonDAO lessondao = new LessonDAO();
         try {
             String course_Id_str = request.getParameter("cid");
             int course_Id = 0;
             if (!course_Id_str.isBlank() && course_Id_str != null) {
                 course_Id = Integer.parseInt(course_Id_str);
             }
-            CourseDetailDAO cdDao = new CourseDetailDAO();
+
             ArrayList<Course> listCourst_Relate = cdDao.getRelateCourse(course_Id);
             ArrayList<Category> listAllCategory = cdDao.getCategoryById(course_Id);
+            ArrayList<StarRatingDTO> listRatings = cdDao.getRatings(course_Id);
             Course getCourseByID = cdDao.getCourseById(course_Id);
-            if(acc != null) {
-            ArrayList<Enrollment> listEnrollment = cdDao.getEnrollmentByAccountId(acc.getAccount_id()); 
-            request.setAttribute("listEnrollment", listEnrollment);
+
+            if (acc != null) {
+                //Kiểm tra đã mua khóa học này hay chưa
+                ArrayList<Enrollment> listEnrollment = cdDao.getEnrollmentByAccountId(acc.getAccount_id());
+
+                //Lấy ra list wishList để check is active icon
+                getCidFromWishlistByAccId(request, response, acc.getAccount_id());
+                request.setAttribute("listEnrollment", listEnrollment);
             }
-            //Định dạng khóa học theo giá tiền Việt Nam
-            for(Course course : listCourst_Relate) {
+
+            //Định dạng khóa học theo giá tiền Việt Nam và set tổng số h của khóa học
+            for (Course course : listCourst_Relate) {
                 course.setFormattedPrice(formartPrice(course.getPrice()));
+                course.setStudy_time(sumOfDurationInCourseInHrs(course.getCourse_id()));
+
             }
-            
             getCourseByID.setFormattedPrice(formartPrice(getCourseByID.getPrice()));
+            getCourseByID.setStudy_time(sumOfDurationInCourseInHrs(course_Id));
             
+            //Set số sao và lượt đánh giá cho từng khóa học
+            for (Course course : listCourst_Relate) {
+                ArrayList<StarRatingDTO> listRating = cdDao.getRatings(course.getCourse_id());
+                course.setStar(AVGOfRaing.AvgRatingCourse(listRating).get(0));
+                course.setSumOfRating(AVGOfRaing.AvgRatingCourse(listRating).get(1));
+            }
+
+            long lessonid = lessondao.getLessonIdByCourseId(course_Id);
+
+            //hiện thì category in header
+            displaycategory(request, response);
+            //lấy ra số lượng sao trung bình và tổng số lượng đánh giá của khóa học
+            displayRatingCourse(request, response, listRatings, course_Id);
+
+            request.setAttribute("cid", course_Id);
+            request.setAttribute("lessonid", lessonid);
+            request.setAttribute("listRatings", listRatings);
             request.setAttribute("listCourse_relate", listCourst_Relate);
             request.setAttribute("listAllCategory", listAllCategory);
             request.setAttribute("getCourseByID", getCourseByID);
-           
-//            out.print(getCourseByID.getImage());
 
+            //         out.print(getCourseByID.getImage());
         } catch (SQLException ex) {
             Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -131,11 +165,68 @@ public class CourseDetailServelet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    
-    public String formartPrice (int price) {
+    public String formartPrice(int price) {
         NumberFormat formatTer = NumberFormat.getInstance(new Locale("vi", "VN"));
         return formatTer.format(price);
     }
-    
-    
+
+    public void displayRatingCourse(HttpServletRequest request, HttpServletResponse response, ArrayList<StarRatingDTO> listRatings, int course_id)
+            throws ServletException, IOException {
+
+        //lấy ra số lượng sao trung bình và tổng số lượng đánh giá của khóa học
+        ArrayList<Double> avgRatingCourse = AVGOfRaing.AvgRatingCourse(listRatings);
+
+        request.setAttribute("avgRatingCourse", avgRatingCourse.get(0));
+        request.setAttribute("amountRatingCourse", avgRatingCourse.get(1));
+
+    }
+
+    //Lấy courseId từ bảng wish List theo account id để xem tài khoản này đã thêm khóa học này vào wish  list hay chưa
+    public void getCidFromWishlistByAccId(HttpServletRequest request, HttpServletResponse response, int acc_id)
+            throws ServletException, IOException {
+        WishlistDAO dao = new WishlistDAO();
+        ArrayList<WishlistDTO> listWishListCoursId = dao.getCidFromWishListByAccId(acc_id);
+        ArrayList<Integer> CourseIdList = new ArrayList<>();
+        for (WishlistDTO wishlist : listWishListCoursId) {
+            CourseIdList.add(wishlist.getCourse_id());
+        }
+        //response.getWriter().print(listWishListCoursId);
+
+        request.setAttribute("CourseIdList", CourseIdList);
+    }
+
+    public void displaycategory(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            HomeDAO dao = new HomeDAO();
+            ArrayList<Category> listCategory = dao.getAllCategory();
+            request.setAttribute("listCategory", listCategory);
+        } catch (SQLException ex) {
+            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    //tính tổng thời gian học khóa học
+    private String sumOfDurationInCourseInHrs(int course_id)
+            throws ServletException, IOException {
+        LessonManageDAO dao = new LessonManageDAO();
+        int sumDuration = 0;
+        try {
+
+            ArrayList<Lesson> listLesson = dao.getListlessonByCid(course_id);
+            for (Lesson lesson : listLesson) {
+                sumDuration += lesson.getDuration();
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(lessonServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        double hours = (double) sumDuration / 3600;
+        int before_hours = (int) hours;
+        int after_hourse = (sumDuration % 3600) / 60;
+
+        return before_hours + String.format(".%02d", after_hourse) + " Hrs";
+    }
+
 }
