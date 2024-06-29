@@ -7,10 +7,13 @@ package Controller.User;
 import Controller.CourseDetailServelet;
 import Dal.AccountDAO;
 import Dal.HomeDAO;
-import Model.Account;
+
+import Model.AccountDTO;
 import Model.Category;
 import Model.ProfileDTO;
+import Util.HeaderSession;
 import Util.ServerPath;
+import Util.Validation;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -77,17 +80,31 @@ public class profileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        HttpSession session = request.getSession();
-        ProfileDTO profile = (ProfileDTO) session.getAttribute("profile");
-        Account account = (Account) session.getAttribute("account");
 
-         //hiện thị ra các category trên header
-                displaycategory(request, response);
-        
-        session.setAttribute("profile", profile);
-        session.setAttribute("account", account);
-        //out.print(profile.isGender());
-        request.getRequestDispatcher("Profile.jsp").forward(request, response);
+        String action = request.getParameter("action") == null ? "" : request.getParameter("action");
+        //        HttpSession session = request.getSession();
+        //        ProfileDTO profile = (ProfileDTO) session.getAttribute("profile");
+        //        AccountDTO account = (AccountDTO) session.getAttribute("account");
+        //
+        //        //hiện thị ra các category trên header
+        //        displaycategory(request, response);
+        //
+        //        session.setAttribute("profile", profile);
+        //        session.setAttribute("account", account);
+        HeaderSession header = new HeaderSession(request, response);
+        switch (action) {
+            case "general" -> {
+                request.getRequestDispatcher("Profile.jsp").forward(request, response);
+                return;
+            }
+            case "change_password" -> {
+                request.getRequestDispatcher("ProfileChangePassword.jsp").forward(request, response);
+                return;
+            }
+            default ->
+                request.getRequestDispatcher("Profile.jsp").forward(request, response);
+        }
+
     }
 
     /**
@@ -102,103 +119,21 @@ public class profileServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter o = response.getWriter();
-        HttpSession session = request.getSession();
-//start get data from Profile.jsp 
-        Part file_avt = request.getPart("avt");
-        String fullname = request.getParameter("fullname") == null ? "" : request.getParameter("fullname");
-        //String email = request.getParameter("email") == null ? "" : request.getParameter("email");
-        String gender = request.getParameter("gender") == null ? "" : request.getParameter("gender");
-        boolean bool_gender = gender.equals("male");
+//get action
+        String action = request.getParameter("action") == null ? "" : request.getParameter("action");
 
-        String password = ((Account) session.getAttribute("account")).getPassword();
-        String old_password = request.getParameter("old_password") == null ? "" : request.getParameter("old_password");
-        String new_password = request.getParameter("new_password") == null ? "" : request.getParameter("new_password");
-        String re_new_password = request.getParameter("re_new_password") == null ? "" : request.getParameter("re_new_password");
-//end get data from Profile.jsp
-
-        AccountDAO accountDAO = new AccountDAO();
-        ProfileDTO new_profile = (ProfileDTO) session.getAttribute("profile");
-        Account new_account = (Account) session.getAttribute("account");
-
-        if (file_avt != null && file_avt.getSize() > 0) {
-            String avt_file_name = createFileNameRandom(file_avt);
-            //insert selectted_image into server (not build)
-            //String test_path = 
-            insertImageIntoServer(request, avt_file_name, file_avt);
-            String avt_path_in_server = "images/" + avt_file_name;
-            new_profile.setAvt(avt_path_in_server);
-            accountDAO.updateAvatar_ByAccId(avt_path_in_server, new_account.getAccount_id());
-            //o.print();
+        switch (action) {
+            case "general":
+                changeInformationProfile(request, response);
+                request.getRequestDispatcher("Profile.jsp").forward(request, response);
+                return;
+            case "change_password":
+                changePassword(request, response);
+                request.getRequestDispatcher("ProfileChangePassword.jsp").forward(request, response);
+                return;
+            default:
+                throw new AssertionError();
         }
-
-        if (fullname.isBlank()) {
-            request.setAttribute("error", "You must have a name!");
-        } else {
-            //update db profile name
-            Account account = (Account) session.getAttribute("account");
-            accountDAO.updateFullName_ByAccId(fullname, account.getAccount_id());
-            new_profile.setFullname(fullname);
-        }
-//        if (email.isBlank()) {
-//            request.setAttribute("error", "You must have an email!");
-//
-//        } else if (!email.matches("[a-zA-Z0-9]+@([a-zA-Z]+.){1,2}[a-zA-Z]+")) {
-//            request.setAttribute("error", "Please Enter Email matches with fomat email@domain.com");
-//            request.setAttribute("email", email);
-//
-//        } else {
-//            //update email vao db account
-//            AccountDAO accountDAO = new AccountDAO();
-//            Account account = (Account) session.getAttribute("account");
-//            accountDAO.updateEmail_ByAccId(email, account.getAccount_id());
-//            new_account.setEmail(email);
-//
-//            Cookie email_remember = new Cookie("email", email);
-//            email_remember.setMaxAge(60 * 60 * 24);
-//            response.addCookie(email_remember);
-//        }
-
-        if (!gender.equals("")) {
-            //update gender vao db profile
-            Account account = (Account) session.getAttribute("account");
-            accountDAO.updateGender_ByAccId(bool_gender, account.getAccount_id());
-            new_profile.setGender(bool_gender);
-        }
-
-        if (!(old_password.isBlank() && new_password.isBlank() && re_new_password.isBlank())) {
-
-            if (!password.equals(old_password)) {
-                request.setAttribute("error", "You inputed wrong old password!");
-
-            } else {
-                if (!new_password.equals(re_new_password)) {
-                    request.setAttribute("error", "New passwords are not match!");
-
-                } else {
-                    if (new_password.length() < 8) {
-                        //request.setAttribute("password", password);
-                        request.setAttribute("error", "Password must be at least 8 characters!");
-                    } else {
-                        //update password
-                        Account account = (Account) session.getAttribute("account");
-                        accountDAO.updatePassword_ByAccId(new_password, account.getAccount_id());
-                        new_account.setPassword(new_password);
-
-                        Cookie password_remember = new Cookie("password", new_password);
-                        password_remember.setMaxAge(60 * 60 * 24);
-                        response.addCookie(password_remember);
-
-                    }
-                }
-            }
-        }
-
-        session.setAttribute("profile", new_profile);
-        session.setAttribute("account", new_account);
-
-        session.setMaxInactiveInterval(60 * 30);
-
-        request.getRequestDispatcher("Profile.jsp").forward(request, response);
     }
 
     /**
@@ -210,56 +145,107 @@ public class profileServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+// </editor-fold>
 
-    private String createFileNameRandom(Part file_avt) {
-        String image_file_name = file_avt.getSubmittedFileName();
-        String[] image_file_name_split = image_file_name.split("\\.");
+    private void changeInformationProfile(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        HttpSession session = request.getSession();
+//start get account data from session
+        ProfileDTO my_profile = (ProfileDTO) session.getAttribute("profile");
+        AccountDTO my_account = (AccountDTO) session.getAttribute("account");
+//end get account data from
+//data access object
+        AccountDAO accountDAO = new AccountDAO();
 
-        image_file_name_split[0] = image_file_name_split[0] + (int) (Math.random() * 10000);
-        image_file_name = image_file_name_split[0] + "." + image_file_name_split[1];
+//start get data from Profile.jsp 
+        Part file_avt = request.getPart("avt");
+        String fullname = request.getParameter("fullname") == null ? "" : request.getParameter("fullname").trim();
+        //String email = request.getParameter("email") == null ? "" : request.getParameter("email");
+        String gender = request.getParameter("gender") == null ? "" : request.getParameter("gender");
+        boolean bool_gender = gender.equals("male");
+//end get data from Profile.jsp
 
-        return image_file_name;
+
+//update avatar
+        if (file_avt != null && file_avt.getSize() > 0) {
+            String avt_file_name = Validation.inputFile(request, file_avt, "avatar_images");
+            my_profile.setAvt(avt_file_name);
+            accountDAO.updateAvatar_ByAccId(avt_file_name, my_account.getAccount_id());
+            request.setAttribute("success_avatar", "Avatar is changed successfully!");
+        }
+//update name        
+        if (Validation.checkName(fullname)) {
+            //update db profile name if changed
+            if (!fullname.equals(my_profile.getFullname())) {
+                accountDAO.updateFullName_ByAccId(fullname, my_account.getAccount_id());
+                my_profile.setFullname(fullname);
+                request.setAttribute("success_name", "Name is changed successfully!");
+            } else {
+                request.setAttribute("info_name", "Name remains unchanged.");
+            }
+        } else {
+            request.setAttribute("error_name", "Name is not valid!");
+        }
+//update gender  
+        if (!gender.equals("")) {
+            //update gender vao db profile if changed
+            if (!gender.equalsIgnoreCase(my_profile.isGender() ? "male" : "female")) {
+                AccountDTO account = (AccountDTO) session.getAttribute("account");
+                accountDAO.updateGender_ByAccId(bool_gender, account.getAccount_id());
+                my_profile.setGender(bool_gender);
+                request.setAttribute("success_gender", "Gender is changed successfully!");
+            }
+        }
+        session.setAttribute("profile", my_profile);
+        session.setAttribute("account", my_account);
+        session.setMaxInactiveInterval(60 * 30);
     }
 
-    public static void main(String[] args) {
+    private void changePassword(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+//start get account data from session
+        ProfileDTO my_profile = (ProfileDTO) session.getAttribute("profile");
+        AccountDTO my_account = (AccountDTO) session.getAttribute("account");
+//end get account data from
+//data access object
+        AccountDAO accountDAO = new AccountDAO();
 
-    }
+        //start get data from Profile.jsp 
+        String my_password = my_account.getPassword();
+        String old_password = request.getParameter("old_password") == null ? "" : request.getParameter("old_password");
+        String new_password = request.getParameter("new_password") == null ? "" : request.getParameter("new_password");
+        String re_new_password = request.getParameter("re_new_password") == null ? "" : request.getParameter("re_new_password");
+//end get data from Profile.jsp
+        String[] fullFields = {old_password, new_password, re_new_password};
 
-    private String insertImageIntoServer(HttpServletRequest request, String avt_file_name, Part file_avt) {
-        String upload_directory = "/images"; // folder goc cua web khi builded
-        //tra ve folder khi not_build
-        String upload_path_to_project = ServerPath.getPathImageCouse()+ File.separator + avt_file_name;
-        String upload_path_to_server = request.getServletContext().getRealPath(upload_directory).replaceFirst("build", "") + File.separator + avt_file_name;
-        
-        String replacedPath = upload_path_to_project.replace("\\", "/");
-        String replacePath_not_build = replacedPath.replaceFirst("//", "/");
-        
-        String replacedPath_server = upload_path_to_server.replace("\\", "/");
-        String replacePath_server_not_build = upload_path_to_server.replaceFirst("//", "/");
-        try {
-            FileOutputStream fos = new FileOutputStream(replacePath_not_build);
-            InputStream is = file_avt.getInputStream();
-
-            byte[] data = new byte[is.available()];
-            is.read(data);
-            fos.write(data);
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (Validation.checkStringArray(fullFields)) {
+            if (!my_password.equals(old_password)) {
+                request.setAttribute("error_current_pass", "You inputed wrong old password!");
+            } else {
+                if (!new_password.equals(re_new_password)) {
+                    request.setAttribute("error_match_new_pass", "New passwords are not match!");
+                } else {
+                    if (new_password.length() < 8) {
+                        //request.setAttribute("password", password);
+                        request.setAttribute("error_length_new_pass", "Password must be at least 8 characters!");
+                    } else {
+                        //update password
+                        accountDAO.updatePassword_ByAccId(new_password, my_account.getAccount_id());
+                        my_account.setPassword(new_password);
+                        //add cookies
+                        Cookie password_remember = new Cookie("password", new_password);
+                        password_remember.setMaxAge(60 * 60 * 24);
+                        response.addCookie(password_remember);
+                        request.setAttribute("success_password", "Password is changed successfully!");
+                    }
+                }
+            }
         }
-        try {
-            FileOutputStream fos = new FileOutputStream(replacePath_server_not_build);
-            InputStream is = file_avt.getInputStream();
-
-            byte[] data = new byte[is.available()];
-            is.read(data);
-            fos.write(data);
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        else{
+            request.setAttribute("error_full_fields", "If you want to change your password, please fill in all fields!");
         }
-
-        return replacePath_not_build;
+        session.setAttribute("profile", my_profile);
+        session.setAttribute("account", my_account);
+        session.setMaxInactiveInterval(60 * 30);
     }
 
     

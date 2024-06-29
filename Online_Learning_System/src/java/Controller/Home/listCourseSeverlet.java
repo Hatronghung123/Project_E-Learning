@@ -7,7 +7,8 @@ package Controller.Home;
 import Dal.CourseDetailDAO;
 import Dal.HomeDAO;
 import Dal.WishlistDAO;
-import Model.Account;
+
+import Model.AccountDTO;
 import Model.Category;
 import Model.Course;
 import Model.Enrollment;
@@ -79,7 +80,8 @@ public class listCourseSeverlet extends HttpServlet {
         HomeDAO dao = new HomeDAO();
         CourseDetailDAO cdDao = new CourseDetailDAO();
         String action = request.getParameter("action");
-        Account acc = (Account) session.getAttribute("account");
+
+        AccountDTO acc = (AccountDTO) session.getAttribute("account");
         String cid = request.getParameter("cateid");
 
         try {
@@ -151,7 +153,8 @@ public class listCourseSeverlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
-            Account acc = (Account) session.getAttribute("account");
+
+            AccountDTO acc = (AccountDTO) session.getAttribute("account");
             String action = request.getParameter("action");
 
             String search = request.getParameter("search");

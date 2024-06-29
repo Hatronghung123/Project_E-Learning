@@ -5,7 +5,8 @@
 package Controller;
 
 import Dal.AccountDAO;
-import Model.Account;
+
+import Model.AccountDTO;
 import Model.ProfileDTO;
 import Util.SendEmail;
 import java.io.IOException;
@@ -66,7 +67,7 @@ public class joinServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         //check account da ton tai trong session chua!
-        Account account_exist_session = (Account) session.getAttribute("account");
+        AccountDTO account_exist_session = (AccountDTO) session.getAttribute("account");
         if (account_exist_session != null) {
             String action = request.getParameter("action") == null ? "" : request.getParameter("action");
             switch (action) {
@@ -214,8 +215,8 @@ public class joinServlet extends HttpServlet {
 //        if (check_remember_true) {
 //            AccountDAO accountDAO = new AccountDAO();
 //            HttpSession session = request.getSession();
-//            Account account_input = new Account(password, email);
-//            Account account_login = accountDAO.findByEmailAndPass(account_input);
+//            AccountDTO account_input = new AccountDTO(password, email);
+//            AccountDTO account_login = accountDAO.findByEmailAndPass(account_input);
 //            if (account_login != null) {
 //                session.setAttribute("account", account_login);
 //                session.setMaxInactiveInterval(60 * 30);
@@ -262,7 +263,7 @@ public class joinServlet extends HttpServlet {
         }
 
         // kiểm tra thông tin có tồn tại trong db hay không
-        Account account_login = accountDAO.getAccountByEmailPass(email, password);
+        AccountDTO account_login = accountDAO.getAccountByEmailPass(email, password);
 
         //kiem tra email co chua? Neu co roi ma sai mat khau thi in ra message ban nhap sai mat khau
         if (accountDAO.checkAccountExist(email) && account_login == null) {
@@ -393,7 +394,7 @@ public class joinServlet extends HttpServlet {
 
         //kiểm tra xem email đã tồn tại trong db chưa
         // nếu rồi thì hiển thị lỗi quay trở lại trang sign up
-//        Account accountByEmailPass = accountDAO.getAccountByEmailPass(account);
+//        AccountDTO accountByEmailPass = accountDAO.getAccountByEmailPass(account);
         if (accountDAO.checkAccountExist(email)) {
             request.setAttribute("fullname", fullname);
             //request.setAttribute("password", password);
@@ -402,11 +403,12 @@ public class joinServlet extends HttpServlet {
             request.getRequestDispatcher("SignUp.jsp").forward(request, response);
             return;
         } else {
-            Account account = new Account(email, password);
+
+            AccountDTO account = new AccountDTO(email, password);
             ProfileDTO profile_register = new ProfileDTO(fullname, 0);
             // nếu chưa thì inser vào trong db, chuyển dến trang home
             accountDAO.insertUser(account, profile_register);
-            Account account_login = accountDAO.getAccountByEmailPass(email, password);
+            AccountDTO account_login = accountDAO.getAccountByEmailPass(email, password);
             session.setAttribute("account", account_login);
 
             if (account_login != null) {
@@ -429,7 +431,7 @@ public class joinServlet extends HttpServlet {
     private void ForgotPasswordDoPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         AccountDAO accountDAO = new AccountDAO();
-//        Account account = new Account(email);
+//        AccountDTO account = new AccountDTO(email);
         if (!accountDAO.checkAccountExist(email)) {
             request.setAttribute("Error", "Account does not exist");
             request.getRequestDispatcher("ForgotPassword.jsp").forward(request, response);
@@ -496,7 +498,7 @@ public class joinServlet extends HttpServlet {
             AccountDAO accountDAO = new AccountDAO();
             HttpSession session = request.getSession();
             String email = (String) session.getAttribute("emailForgotPassword");
-            Account account = new Account(email, newPassword);
+            AccountDTO account = new AccountDTO(email, newPassword);
             accountDAO.updatePassword(account);
             request.getRequestDispatcher("Login.jsp").forward(request, response);
         }

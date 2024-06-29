@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -15,7 +16,6 @@ import java.io.InputStream;
  * @author tuong
  */
 public class Validation {
-
     public Validation() {
     }
 
@@ -36,8 +36,39 @@ public class Validation {
         }
         return true;
     }
-    
-    public static String createFileNameRandom(Part file_image) {
+
+    public static boolean checkInt(String str) {
+        str = str.trim();
+        for (int i = 0; i < str.length(); i++) {
+            if(str.charAt(i)<'0' || str.charAt(i) >'9')
+                return false;
+        }
+        return true;
+    }
+
+    public static boolean checkName(String name) {
+        name = name.trim();
+        if (name == null || name.isBlank()) {
+            return false;
+        }
+        String regex = "^[A-Za-z][A-Za-z ]{1,100}$";
+        return name.matches(regex);
+    }
+
+    public static boolean checkEmail(String email) {
+        email = email.trim();
+        if (email == null || email.isBlank()) {
+            return false;
+        }
+        String regex = "[a-zA-Z0-9]+@([a-zA-Z]+.){1,2}[a-zA-Z]+";
+        return email.matches(regex);
+    }
+
+    public static String inputFile(HttpServletRequest request, Part file_image, String folder) {
+        String file_name_random = insertImageIntoTomcatServer(request, folder, file_image);
+        return insertImageIntoProject(folder, file_image, file_name_random);
+    }
+    private static String createFileNameRandom(Part file_image) {
         String image_file_name = file_image.getSubmittedFileName();
         String[] image_file_name_split = image_file_name.split("\\.");
 
@@ -46,19 +77,13 @@ public class Validation {
 
         return image_file_name;
     }
-    public static String insertImageIntoServer(HttpServletRequest request, String image_file_name, Part file_image_course) {
-        String upload_directory = "/image_course"; // folder goc cua web khi builded
+
+    public static String insertImageIntoTomcatServer(HttpServletRequest request, String folder, Part file_image_course) {
+        String image_file_name = createFileNameRandom(file_image_course);
         //tra ve folder khi not_build
-        String upload_path_to_project = ServerPath.getPathImageCouse()+ File.separator + image_file_name;
-        String upload_path_to_server = request.getServletContext().getRealPath(upload_directory).replaceFirst("build", "") + File.separator + image_file_name;
-
-        String replacedPath = upload_path_to_project.replace("\\", "/");
-        String replacePath_not_build = replacedPath.replaceFirst("//", "/");
-
-//        String replacedPath_server = upload_path_to_server.replace("\\", "/");
-        String replacePath_server_not_build = upload_path_to_server.replaceFirst("//", "/");
+        String upload_path_to_server = request.getServletContext().getRealPath(folder).replaceFirst("build", "") + File.separator + image_file_name;
         try {
-            FileOutputStream fos = new FileOutputStream(replacePath_not_build);
+            FileOutputStream fos = new FileOutputStream(upload_path_to_server);
             InputStream is = file_image_course.getInputStream();
 
             byte[] data = new byte[is.available()];
@@ -68,39 +93,47 @@ public class Validation {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return image_file_name;
+    }
+
+    public static String insertImageIntoProject(String folder, Part file_image_course, String file_name_random) {
+        //tra ve path folder khi not_build
+        String upload_path_to_project = ServerPath.getPathImage() + File.separator + folder + "/" + file_name_random;
+
         try {
-            FileOutputStream fos = new FileOutputStream(replacePath_server_not_build);
+            FileOutputStream fos = new FileOutputStream(upload_path_to_project);
             InputStream is = file_image_course.getInputStream();
 
             byte[] data = new byte[is.available()];
             is.read(data);
             fos.write(data);
             fos.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return replacePath_not_build;
+        return folder + "/" + file_name_random;
     }
 
-    public static boolean verifyEmail(String email) {
-        email = email.trim();
-        if (email == null || email.equals("")) {
-            return false;
-        }
-        if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
-            return false;
-        }
-        return true;
-    }
-
-    private boolean verifyName(String name) {
-        name = name.trim();
-        if (name == null || name.equals("")) {
-            return false;
-        }
-        if (!name.matches("[a-zA-Z]*")) {
-            return false;
-        }
-        return true;
-    }
+//    public static boolean verifyEmail(String email) {
+//        email = email.trim();
+//        if (email == null || email.equals("")) {
+//            return false;
+//        }
+//        if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//    private boolean verifyName(String name) {
+//        name = name.trim();
+//        if (name == null || name.equals("")) {
+//            return false;
+//        }
+//        if (!name.matches("[a-zA-Z]*")) {
+//            return false;
+//        }
+//        return true;
+//    }
 }

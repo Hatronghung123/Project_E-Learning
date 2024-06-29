@@ -37,7 +37,8 @@
         <!-- Template Stylesheet -->
         <link href="css/style.css" rel="stylesheet">
         <style>
-@import url('https://fonts.googleapis.com/css?family=Dosis:400,600,700,800');
+
+            @import url('https://fonts.googleapis.com/css?family=Dosis:400,600,700,800');
             .ms-auto-1{
                 margin-left: 10px !important;
             }
@@ -328,26 +329,39 @@
 
                                             </c:when>
 
+
+
                                             <c:otherwise><!--Nguoi dung da dang nhap-->
-                                                <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
-                                                <c:set var="isPaid" value="false"/>
-                                                <c:if test="${fn:length(listEnrollment) > 0}">
-                                                    <c:forEach items="${listEnrollment}" var="i">
-                                                        <c:if test="${currentCourseId == i.getCourseid()}">                   
-                                                            <c:set var="isPaid" value="true"/>
-                                                        </c:if>
-                                                    </c:forEach>
-                                                </c:if>
+                                                
+                                                <!--Nguoi này là ngươi tao ra khoa hoc duoc join truc tiep-->
                                                 <c:choose>
-                                                    <c:when test="${isPaid == true}">
-                                                        <a href="lesson?cid=${o.getCourse_id()}&lessonid=1" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                    <c:when test="${o.getCreate_by() == sessionScope.account.getAccount_id()}">
+                                                        <a href="lesson?cid=${o.getCourse_id()}&lessonid=1&createBy=${o.getCreate_by()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
                                                     </c:when>
+
                                                     <c:otherwise>
-                                                        <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+
+
+                                                        <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
+                                                        <c:set var="isPaid" value="false"/>
+                                                        <c:if test="${fn:length(listEnrollment) > 0}">
+                                                            <c:forEach items="${listEnrollment}" var="i">
+                                                                <c:if test="${currentCourseId == i.getCourseid()}">                   
+                                                                    <c:set var="isPaid" value="true"/>
+                                                                </c:if>
+                                                            </c:forEach>
+                                                        </c:if>
+                                                        <c:choose>
+                                                            <c:when test="${isPaid == true}">
+                                                                <a href="lesson?cid=${o.getCourse_id()}&lessonid=1&createBy=${o.getCreate_by()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                            </c:otherwise>
+
+                                                        </c:choose> 
                                                     </c:otherwise>
-
-                                                </c:choose> 
-
+                                                </c:choose>
                                             </c:otherwise>
 
                                         </c:choose>
@@ -355,43 +369,44 @@
                                     </div>
                                 </div>
 
-                                        
-                                <!--ADD TO WISHLIST-->
-                                        <c:if test="${sessionScope.account != null}">
-                                           
-                                                <!--nguoi dung chua dang nhap-->
-                                                <div class ="wishlist">
-                                                    <div class="product-slider">
-                                                        <a class="product-slider__fav js-fav" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">
-                                                            <c:choose>
-                                                                <c:when test="${CourseIdList.contains(o.getCourse_id())}">
-                                                                    <div class="heart is-active">
-                                                                        <div class ="wishlist-text">ADD TO WISHLIST </div>
-                                                                    </div>
-                                                                </c:when>
 
-                                                                <c:otherwise>
-                                                                    <div class="heart ">
-                                                                        <div class ="wishlist-text">ADD TO WISHLIST </div>
-                                                                    </div> 
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                  
-                                        </c:if>
-                                 <div class="text-center pb-0" style ="padding-left: 12px;padding-right: 12px;padding-bottom: 12px;padding-top: 7px">
+
+                                <!--ADD TO WISHLIST-->
+                                <c:if test="${sessionScope.account != null}">
+
+                                    <!--nguoi dung chua dang nhap-->
+                                    <div class ="wishlist">
+                                        <div class="product-slider">
+                                            <a class="product-slider__fav js-fav" href="my-courses?accid=${sessionScope.account.getAccount_id()}&cid=${o.getCourse_id()}">
+                                                <c:choose>
+                                                    <c:when test="${CourseIdList.contains(o.getCourse_id())}">
+                                                        <div class="heart is-active">
+                                                            <div class ="wishlist-text">ADD TO WISHLIST </div>
+                                                        </div>
+                                                    </c:when>
+
+                                                    <c:otherwise>
+                                                        <div class="heart ">
+                                                            <div class ="wishlist-text">ADD TO WISHLIST </div>
+                                                        </div> 
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </c:if>
+                                <div class="text-center pb-0" style ="padding-left: 12px;padding-right: 12px;padding-bottom: 12px;padding-top: 7px">
                                     <h3 class="mb-0">${o.getFormattedPrice()}₫</h3>
                                     <div class="mb-3">
-                                         <c:forEach var="i" begin="1" end="${o.getStar()}">
-                                                    <small class="fa fa-star text-primary"></small>
-                                                </c:forEach>
-                                                <c:forEach var="i" begin="${o.getStar() +1}" end="5">
-                                                    <small class="fa fa-star empty-star"></small>
-                                                </c:forEach>
-                                                
-                                                <small>(${o.getSumOfRating()})</small>
+                                        <c:forEach var="i" begin="1" end="${o.getStar()}">
+                                            <small class="fa fa-star text-primary"></small>
+                                        </c:forEach>
+                                        <c:forEach var="i" begin="${o.getStar() +1}" end="5">
+                                            <small class="fa fa-star empty-star"></small>
+                                        </c:forEach>
+
+                                        <small>(${o.getSumOfRating()})</small>
                                     </div>
                                     <h5 class="mb-4">${o.getCourse_name()}</h5>
                                 </div>
@@ -410,136 +425,6 @@
         <!-- Courses End -->
 
 
-        <!--         Team Start 
-                <div class="container-xxl py-5">
-                    <div class="container">
-                        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                            <h6 class="section-title bg-white text-center text-primary px-3">Instructors</h6>
-                            <h1 class="mb-5">Expert Instructors</h1>
-                        </div>
-                        <div class="row g-4">
-                            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                                <div class="team-item bg-light">
-                                    <div class="overflow-hidden">
-                                        <img class="img-fluid" src="img/team-1.jpg" alt="">
-                                    </div>
-                                    <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                                        <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="text-center p-4">
-                                        <h5 class="mb-0">Instructor Name</h5>
-                                        <small>Designation</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                                <div class="team-item bg-light">
-                                    <div class="overflow-hidden">
-                                        <img class="img-fluid" src="img/team-2.jpg" alt="">
-                                    </div>
-                                    <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                                        <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="text-center p-4">
-                                        <h5 class="mb-0">Instructor Name</h5>
-                                        <small>Designation</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                                <div class="team-item bg-light">
-                                    <div class="overflow-hidden">
-                                        <img class="img-fluid" src="img/team-3.jpg" alt="">
-                                    </div>
-                                    <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                                        <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="text-center p-4">
-                                        <h5 class="mb-0">Instructor Name</h5>
-                                        <small>Designation</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
-                                <div class="team-item bg-light">
-                                    <div class="overflow-hidden">
-                                        <img class="img-fluid" src="img/team-4.jpg" alt="">
-                                    </div>
-                                    <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
-                                        <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                            <a class="btn btn-sm-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="text-center p-4">
-                                        <h5 class="mb-0">Instructor Name</h5>
-                                        <small>Designation</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                 Team End 
-        
-        
-                 Testimonial Start 
-                <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="container">
-                        <div class="text-center">
-                            <h6 class="section-title bg-white text-center text-primary px-3">Testimonial</h6>
-                            <h1 class="mb-5">Our Students Say!</h1>
-                        </div>
-                        <div class="owl-carousel testimonial-carousel position-relative">
-                            <div class="testimonial-item text-center">
-                                <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-1.jpg" style="width: 80px; height: 80px;">
-                                <h5 class="mb-0">Client Name</h5>
-                                <p>Profession</p>
-                                <div class="testimonial-text bg-light text-center p-4">
-                                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
-                                </div>
-                            </div>
-                            <div class="testimonial-item text-center">
-                                <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-2.jpg" style="width: 80px; height: 80px;">
-                                <h5 class="mb-0">Client Name</h5>
-                                <p>Profession</p>
-                                <div class="testimonial-text bg-light text-center p-4">
-                                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
-                                </div>
-                            </div>
-                            <div class="testimonial-item text-center">
-                                <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-3.jpg" style="width: 80px; height: 80px;">
-                                <h5 class="mb-0">Client Name</h5>
-                                <p>Profession</p>
-                                <div class="testimonial-text bg-light text-center p-4">
-                                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
-                                </div>
-                            </div>
-                            <div class="testimonial-item text-center">
-                                <img class="border rounded-circle p-2 mx-auto mb-3" src="img/testimonial-4.jpg" style="width: 80px; height: 80px;">
-                                <h5 class="mb-0">Client Name</h5>
-                                <p>Profession</p>
-                                <div class="testimonial-text bg-light text-center p-4">
-                                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                 Testimonial End -->
 
 
         <jsp:include page="common/footer.jsp"></jsp:include>

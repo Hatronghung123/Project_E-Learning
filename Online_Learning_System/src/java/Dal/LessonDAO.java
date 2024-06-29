@@ -6,9 +6,9 @@ package Dal;
 
 import Model.Course;
 import Model.Enrollment;
-import Model.Lesson;
+import Model.LessonDTO;
 import Model.Payment;
-import Model.Module;
+import Model.ModuleDTO;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -71,8 +71,8 @@ public class LessonDAO {
     }
 
     //Lấy lisst lesson in module theo course ID
-    public ArrayList<Lesson> getListModulByCidd(int courseId) throws SQLException {
-        ArrayList<Lesson> list = new ArrayList<>();
+    public ArrayList<LessonDTO> getListModulByCidd(int courseId) throws SQLException {
+        ArrayList<LessonDTO> list = new ArrayList<>();
         String sql = "SELECT\n"
                 + "    l.LessonId,\n"
                 + "    m.ModuleName,\n"
@@ -82,8 +82,9 @@ public class LessonDAO {
                 + "    c.CourseName,\n"
                 + "    p.FullName,\n"
                 + "    p.Avatar,\n"
-                + "	c.CourseId\n"
-                + "    p.ProfileId,\n" 
+                + "	c.CourseId,\n"
+                + "    p.ProfileId,\n"
+                + "    c.[CreatedBy],\n"
                 + "	[Duration]\n"
                 + "FROM [dbo].[Lesson] l\n"
                 + "JOIN [dbo].[Module] m ON l.ModuleId = m.ModuleId\n"
@@ -110,7 +111,9 @@ public class LessonDAO {
                 long duration = rs.getInt("Duration");
                 int profile_id = rs.getInt("ProfileId");
 
-                list.add(new Lesson(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration,profile_id));
+                int create_by = rs.getInt("CreatedBy");
+
+                list.add(new LessonDTO(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration, profile_id, create_by));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -120,26 +123,27 @@ public class LessonDAO {
         return list;
     }
 
-    public Lesson getlessonByCid(int courseId, int lessonid) throws SQLException {
+    public LessonDTO getlessonByCid(int courseId, int lessonid) throws SQLException {
 
-        String sql = "  SELECT\n" +
-"                   l.LessonId,\n" +
-"                m.ModuleName,\n" +
-"                  l.LessonName,\n" +
-"                   l.LessonContent,\n" +
-"                    l.LessonVideo,\n" +
-"                   c.CourseName,\n" +
-"                    p.FullName,\n" +
-"                    p.Avatar,\n" +
-"                	c.CourseId,\n" +
-"			p.ProfileId\n" +
-"               	,[Duration]\n" +
-"                FROM [dbo].[Lesson] l\n" +
-"                JOIN [dbo].[Module] m ON l.ModuleId = m.ModuleId\n" +
-"                JOIN [dbo].[Course] c ON c.CourseId = m.CourseId\n" +
-"                JOIN [dbo].[Teaching] teach ON teach.CourseId = c.CourseId\n" +
-"                JOIN [dbo].[Profile] p ON p.ProfileId = teach.MentorId\n" +
-"                WHERE c.CourseId = ? and l.LessonId = ?";
+        String sql = "  SELECT\n"
+                + "                   l.LessonId,\n"
+                + "                m.ModuleName,\n"
+                + "                  l.LessonName,\n"
+                + "                   l.LessonContent,\n"
+                + "                    l.LessonVideo,\n"
+                + "                   c.CourseName,\n"
+                + "                    p.FullName,\n"
+                + "                    p.Avatar,\n"
+                + "                	c.CourseId,\n"
+                + "			p.ProfileId,\n"
+                + "                     c.[CreatedBy]\n"
+                + "               	,[Duration]\n"
+                + "                FROM [dbo].[Lesson] l\n"
+                + "                JOIN [dbo].[Module] m ON l.ModuleId = m.ModuleId\n"
+                + "                JOIN [dbo].[Course] c ON c.CourseId = m.CourseId\n"
+                + "                JOIN [dbo].[Teaching] teach ON teach.CourseId = c.CourseId\n"
+                + "                JOIN [dbo].[Profile] p ON p.ProfileId = teach.MentorId\n"
+                + "                WHERE c.CourseId = ? and l.LessonId = ?";
         try {
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
@@ -157,11 +161,12 @@ public class LessonDAO {
                 String mentor_name = rs.getString(7);
                 String Avatar = rs.getString(8);
                 int course_id = rs.getInt(9);
-               int profile_id = rs.getInt("ProfileId");
-                long duration = rs.getInt("Duration");
-                
 
-                return new Lesson(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration,profile_id);
+                int profile_id = rs.getInt("ProfileId");
+                long duration = rs.getInt("Duration");
+                int create_by = rs.getInt("CreatedBy");
+
+                return new LessonDTO(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration, profile_id, create_by);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -172,8 +177,8 @@ public class LessonDAO {
     }
 
     //Lấy lisst module theo course ID
-    public ArrayList<Module> getListModulByCid(int courseId) throws SQLException {
-        ArrayList<Module> list = new ArrayList<>();
+    public ArrayList<ModuleDTO> getListModulByCid(int courseId) throws SQLException {
+        ArrayList<ModuleDTO> list = new ArrayList<>();
         String sql = "SELECT  [ModuleId]\n"
                 + "      ,[ModuleName]\n"
                 + "      ,[CourseId]\n"
@@ -189,7 +194,7 @@ public class LessonDAO {
                 int moduleid = rs.getInt(1);
                 String modulename = rs.getString(2);
                 int course_id = rs.getInt(3);
-                list.add(new Module(moduleid, modulename, courseId));
+                list.add(new ModuleDTO(moduleid, modulename));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -265,6 +270,6 @@ public class LessonDAO {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         LessonDAO dao = new LessonDAO();
-        System.out.println(dao.getListModulByCidd(2));
+        System.out.println(dao.getlessonByCid(2, 1));
     }
 }

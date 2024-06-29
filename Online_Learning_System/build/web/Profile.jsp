@@ -104,10 +104,11 @@
 
 
             .iamge {
-
+                width: 80px !important;
+                height: 80px;
                 border-radius: 50%;
             }
-            
+
         </style>
 
         <script>
@@ -134,15 +135,15 @@
                         </div>
                     </div>
                 </div>
-                <form action="profile" method="post" enctype="multipart/form-data">
+                <form action="profile?action=general" method="post" enctype="multipart/form-data">
                     <div class="container light-style flex-grow-1 container-p-y">
 
                         <div class=" overflow-hidden">
                             <div class="row no-gutters row-bordered row-border-light">
                                 <div class="col-md-3 pt-0">
                                     <div class="list-group list-group-flush account-settings-links">
-                                        <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-general">General</a>
-                                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">Change password</a>
+                                        <a class="list-group-item list-group-item-action active" href="profile?action=general">General</a>
+                                        <a class="list-group-item list-group-item-action" href="profile?action=change_password">Change password</a>
                                         <!-- <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-info">Information</a>-->
                                         <!--                                <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-social-links">Social links</a>
                                                                         <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-connections">Connections</a>-->
@@ -152,9 +153,10 @@
                                 <div class="col-md-9 card_mine">
                                     <div class="tab-content">
                                         <div class="tab-pane fade active show" id="account-general">
-                                            <h3 style="color: red">${requestScope.error}</h3>
-                                        <div class="card-body media align-items-center">
-                                            <img src="${sessionScope.profile.avt}" id="image" alt="avatar" class=" iamge d-block ui-w-80">
+
+                                            <h4 style="color: #339900">${requestScope.success_avatar}</h4>
+                                            <div class="card-body media align-items-center">
+                                                <img src="${sessionScope.profile.avt}" id="image" alt="avatar" class=" iamge d-block ui-w-80">
                                             <div class="media-body ml-4">
                                                 <input type="file" class="" name="avt" onchange="chooseFile(this)">
                                                 <div class="text-black-50 small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
@@ -165,6 +167,8 @@
 
                                             <div class="form-group">
                                                 <label class="form-label">Name</label>
+                                                <h4 style="color: red">${requestScope.error_name}</h4>
+                                                <h4 style="color: #339900">${requestScope.success_name}</h4>
                                                 <input name="fullname" type="text" class="form-control" value="${sessionScope.profile.fullname}">
                                             </div>
                                             <div class="form-group">
@@ -181,8 +185,8 @@
                                                                                     </div>-->
                                             <div class="form-group">
                                                 <label class="form-label">Gender</label>
+                                                <h4 style="color: #339900">${requestScope.success_gender}</h4>
                                                 <select name="gender" class="custom-select">
-                                                    <option <c:if test="${sessionScope.profile.gender == null}">selected</c:if>>Choose</option>
                                                     <option <c:if test="${sessionScope.profile.gender}">selected</c:if> value="male">Male</option>
                                                     <option <c:if test="${!sessionScope.profile.gender}">selected</c:if> value="female">Female</option>
                                                     </select>
@@ -224,170 +228,6 @@
                                                                                     </div>
                                                                                 </div>-->
                                         </div>
-
-
-                                        <div class="tab-pane fade" id="account-change-password">
-                                            <div class="card-body pb-2">
-                                                <div class="form-group">
-                                                    <label class="form-label">Current password</label>
-                                                    <input name="old_password" type="password" class="form-control">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="form-label">New password</label>
-                                                    <input name="new_password" type="password" class="form-control">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="form-label">Repeat new password</label>
-                                                    <input name="re_new_password" type="password" class="form-control">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!--                                <div class="tab-pane fade" id="account-social-links">
-                                                                            <div class="card-body pb-2">
-                                                                                <div class="form-group">
-                                                                                    <label class="form-label">Twitter</label>
-                                                                                    <input type="text" class="form-control" value="https://twitter.com/user">
-                                                                                </div>
-                                                                                <div class="form-group">
-                                                                                    <label class="form-label">Facebook</label>
-                                                                                    <input type="text" class="form-control" value="https://www.facebook.com/user">
-                                                                                </div>
-                                                                                <div class="form-group">
-                                                                                    <label class="form-label">Google+</label>
-                                                                                    <input type="text" class="form-control" value>
-                                                                                </div>
-                                                                                <div class="form-group">
-                                                                                    <label class="form-label">LinkedIn</label>
-                                                                                    <input type="text" class="form-control" value>
-                                                                                </div>
-                                                                                <div class="form-group">
-                                                                                    <label class="form-label">Instagram</label>
-                                                                                    <input type="text" class="form-control" value="https://www.instagram.com/user">
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>-->
-
-
-                                        <!--                                <div class="tab-pane fade" id="account-connections">
-                                                                            <div class="card-body">
-                                                                                <button type="button" class="btn btn-twitter">Connect to <strong>Twitter</strong></button>
-                                                                            </div>
-                                                                            <hr class="border-light m-0">
-                                                                            <div class="card-body">
-                                                                                <h5 class="mb-2">
-                                                                                    <a href="javascript:void(0)" class="float-right text-muted text-tiny"><i class="ion ion-md-close"></i> Remove</a>
-                                                                                    <i class="ion ion-logo-google text-google"></i>
-                                                                                    You are connected to Google:
-                                                                                </h5>
-                                                                                <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6b05060a131c0e07072b060a020745080406">[email&#160;protected]</a>
-                                                                            </div>
-                                                                            <hr class="border-light m-0">
-                                                                            <div class="card-body">
-                                                                                <button type="button" class="btn btn-facebook">Connect to <strong>Facebook</strong></button>
-                                                                            </div>
-                                                                            <hr class="border-light m-0">
-                                                                            <div class="card-body">
-                                                                                <button type="button" class="btn btn-instagram">Connect to <strong>Instagram</strong></button>
-                                                                            </div>
-                                                                        </div>-->
-
-
-                                        <!--                                <div class="tab-pane fade" id="account-notifications">
-                                                                            <div class="card-body pb-2">
-                                                                                <h6 class="mb-4">Activity</h6>
-                                                                                <div class="form-group">
-                                                                                    <label class="switcher">
-                                                                                        <input type="checkbox" class="switcher-input" checked>
-                                                                                        <span class="switcher-indicator">
-                                                                                            <span class="switcher-yes"></span>
-                                                                                            <span class="switcher-no"></span>
-                                                                                        </span>
-                                                                                        <span class="switcher-label">Email me when someone comments on my article</span>
-                                                                                    </label>
-                                                                                </div>
-                                                                                <div class="form-group">
-                                                                                    <label class="switcher">
-                                                                                        <input type="checkbox" class="switcher-input" checked>
-                                                                                        <span class="switcher-indicator">
-                                                                                            <span class="switcher-yes"></span>
-                                                                                            <span class="switcher-no"></span>
-                                                                                        </span>
-                                                                                        <span class="switcher-label">Email me when someone answers on my forum thread</span>
-                                                                                    </label>
-                                                                                </div>
-                                                                                <div class="form-group">
-                                                                                    <label class="switcher">
-                                                                                        <input type="checkbox" class="switcher-input">
-                                                                                        <span class="switcher-indicator">
-                                                                                            <span class="switcher-yes"></span>
-                                                                                            <span class="switcher-no"></span>
-                                                                                        </span>
-                                                                                        <span class="switcher-label">Email me when someone follows me</span>
-                                                                                    </label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <hr class="border-light m-0">
-                                                                            <div class="card-body pb-2">
-                                                                                <h6 class="mb-4">Application</h6>
-                                                                                <div class="form-group">
-                                                                                    <label class="switcher">
-                                                                                        <input type="checkbox" class="switcher-input" checked>
-                                                                                        <span class="switcher-indicator">
-                                                                                            <span class="switcher-yes"></span>
-                                                                                            <span class="switcher-no"></span>
-                                                                                        </span>
-                                                                                        <span class="switcher-label">News and announcements</span>
-                                                                                    </label>
-                                                                                </div>
-                                                                                <div class="form-group">
-                                                                                    <label class="switcher">
-                                                                                        <input type="checkbox" class="switcher-input">
-                                                                                        <span class="switcher-indicator">
-                                                                                            <span class="switcher-yes"></span>
-                                                                                            <span class="switcher-no"></span>
-                                                                                        </span>
-                                                                                        <span class="switcher-label">Weekly product updates</span>
-                                                                                    </label>
-                                                                                </div>
-                                                                                <div class="form-group">
-                                                                                    <label class="switcher">
-                                                                                        <input type="checkbox" class="switcher-input" checked>
-                                                                                        <span class="switcher-indicator">
-                                                                                            <span class="switcher-yes"></span>
-                                                                                            <span class="switcher-no"></span>
-                                                                                        </span>
-                                                                                        <span class="switcher-label">Weekly blog digest</span>
-                                                                                    </label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>-->
-
-
-                                        <div class="tab-pane fade" id="account-courses">
-                                            <div class="card-body pb-2">
-
-                                                <div class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
-                                                    <div class="col-lg-2">
-                                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Golden_tabby_and_white_kitten_n01.jpg/1200px-Golden_tabby_and_white_kitten_n01.jpg" 
-                                                             width="100px" height="100px" alt="alt"/>
-                                                    </div>
-                                                    <div class="col-lg-8">
-                                                        <label class="form-label" style="color: #06BBCC; font-size: 20px ">Course Name</label><br>
-                                                        <label class="form-label" style="color: black; font-size: 13px">Manager</label><br>
-                                                    </div>
-                                                    <div class="col-lg-2">
-                                                        <a href="" class="btn btn-outline-primary" ">Go to Course</a>
-                                                    </div>
-                                                </div>
-
-
-                                                <br>
-                                                <hr class="border-light m-0">
-
-                                            </div>
-                                        </div>
-
                                     </div>
                                 </div>
                             </div>

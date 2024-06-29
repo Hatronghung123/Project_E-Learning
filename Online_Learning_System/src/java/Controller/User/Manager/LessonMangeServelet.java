@@ -4,10 +4,11 @@
  */
 package Controller.User.Manager;
 
-import Model.Module;
+
+import Model.ModuleDTO;
 
 import Dal.LessonManageDAO;
-import Model.Lesson;
+import Model.LessonDTO;
 import YoutubeAPI.YoutubeDuration;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -72,7 +73,8 @@ public class LessonMangeServelet extends HttpServlet {
         LessonManageDAO dao = new LessonManageDAO();
         try {
             //Lấy ra được list module theo course id khi add hoặc update
-            ArrayList<Module> listModule = dao.getListModuleByCid(Integer.parseInt(course_id));
+
+            ArrayList<ModuleDTO> listModule = dao.getListModuleByCid(Integer.parseInt(course_id));
             
             // Kiểm tra action
             if ("updatelesson".equals(action)) {
@@ -149,7 +151,8 @@ public class LessonMangeServelet extends HttpServlet {
         long duration = getDuraton(videoLink);
         LessonManageDAO dao = new LessonManageDAO();
         try {
-            Lesson lesson = new Lesson(Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
+
+            LessonDTO lesson = new LessonDTO(Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
             dao.InsertLesson(lesson);
         } catch (Exception e) {
         }
@@ -177,7 +180,8 @@ public class LessonMangeServelet extends HttpServlet {
         String lessonid = request.getParameter("lessonid");
 
         LessonManageDAO dao = new LessonManageDAO();
-        Lesson lesson = null;
+
+        LessonDTO lesson = null;
         try {
             lesson = dao.getlessonByLessonid(Integer.parseInt(lessonid));
         } catch (SQLException ex) {
@@ -201,7 +205,8 @@ public class LessonMangeServelet extends HttpServlet {
         long duration = getDuraton(videoLink);
         LessonManageDAO dao = new LessonManageDAO();
         try {
-            Lesson lesson = new Lesson(Integer.parseInt(lessonid), Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
+
+            LessonDTO lesson = new LessonDTO(Integer.parseInt(lessonid), Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
             dao.updateLesson(lesson);
             response.sendRedirect("course-manage?cid=" + cid + "&action=update");
         } catch (Exception e) {

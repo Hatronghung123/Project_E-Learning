@@ -1,6 +1,6 @@
 package Dal;
 
-import Model.Account;
+import Model.AccountDTO;
 import Model.Messenger;
 
 import Model.ProfileDTO;
@@ -21,7 +21,7 @@ public class MessengerDAO extends DBContext {
     public static void main(String[] args) {
         MessengerDAO test = new MessengerDAO();
 //        test.insertNewMessenger(new Messenger(1, 3, "test1"));
-System.out.println(test.checkFirstConversation(1, 2));
+        System.out.println(test.checkFirstConversation(1, 2));
 //        try {);
 //            
 ////            System.out.println(test.getUsersWhoMessaged(3));
@@ -225,7 +225,5 @@ System.out.println(test.checkFirstConversation(1, 2));
         }
         return false;
     }
-
-   
 
 }

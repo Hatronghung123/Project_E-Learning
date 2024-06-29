@@ -27,8 +27,8 @@
                    ">Explore</a>
                 <div class="dropdown-menu fade-down m-0">
                     <c:forEach items="${listCategory}" var="o">
-                    <a href="listCourseSeverlet?cateid=${o.getCategory_id()}&action=course" class="dropdown-item">${o.getCategory_name()}</a>
-                   </c:forEach>
+                        <a href="listCourseSeverlet?cateid=${o.getCategory_id()}&action=course" class="dropdown-item">${o.getCategory_name()}</a>
+                    </c:forEach>
                 </div>
             </div>
         </div>
@@ -44,25 +44,23 @@
             <a href="home" class="nav-item nav-link  ${action == null ? "active" : ""}">Home</a>
             <a href="about.jsp?action=about" class="nav-item nav-link  ${action == "about" ? "active" : ""}">About</a>
             <a href="listCourseSeverlet?cateid=all&action=course" class="nav-item nav-link  ${action == "course" ? "active" : ""}">Courses</a>
-<!--            <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                <div class="dropdown-menu fade-down m-0">
-                    <a href="team.html" class="dropdown-item">Our Team</a>
-                    <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                    <a href="404.html" class="dropdown-item">404 Page</a>
-                </div>
-            </div>-->
-            <a href="contact.jsp" class="nav-item nav-link">Contact</a>
-
-            <!--                
-                                                                    <div class="nav-item dropdown">
-                                                                        <a href="#"  class="btn btn-primary py-4 px-lg-5 d-none d-lg-block" data-bs-toggle="dropdown">${sessionScope.profile.fullname}<i class="fa fa-arrow-down ms-3"></i></a>                            
-                                                                        <div class="dropdown-menu fade-down m-0">
-                                                                            <a class="dropdown-item" href="profile">My profile</a>
-                                                                            <a class="dropdown-item" href="join?action=logout">Log Out</a>
-                                                
-                                                                        </div>
-                                                                    </div>  -->
+            <!--            <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                            <div class="dropdown-menu fade-down m-0">
+                                <a href="team.html" class="dropdown-item">Our Team</a>
+                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                                <a href="404.html" class="dropdown-item">404 Page</a>
+                            </div>
+                        </div>-->
+            <c:choose>
+                <c:when test="${sessionScope.account.role_id == 1}" >
+                <a href="dasboard_for_admin/StatisticalSeverlet" class="nav-item nav-link">Dasboard</a>
+            </c:when>
+                <c:otherwise>
+                         <a href="contact.jsp" class="nav-item nav-link">Contact</a>
+                </c:otherwise>
+            </c:choose>
+            
         </div>
 
         <c:if test="${sessionScope.account != null}">
@@ -76,8 +74,9 @@
                         <c:if test="${sessionScope.account.role_id == 2 || sessionScope.account.role_id == 3}">
                             <a class="dropdown-item" href="course-manage">Manager</a>
                         </c:if>
-                            <c:if test="${sessionScope.account.role_id == 3}">
-                        <a class="dropdown-item" href="messenger?sender_id=${sessionScope.account.getAccount_id()}&receiver_id=0">Messenger</a>
+
+                        <c:if test="${sessionScope.account.role_id == 3}">
+                            <a class="dropdown-item" href="messenger?sender_id=${sessionScope.account.getAccount_id()}&receiver_id=0">Messenger</a>
                         </c:if>
                         <a class="dropdown-item" href="my-courses">My Courses</a>
                         <a class="dropdown-item" href="join?action=logout">Log Out</a>

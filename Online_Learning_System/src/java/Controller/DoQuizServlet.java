@@ -5,7 +5,8 @@
 package Controller;
 
 import Dal.QuizDAO;
-import Model.Account;
+import Model.AccountDTO;
+import Model.AccountDTO;
 import Model.UserAnswer;
 import Model.Answer;
 import Model.Questions;
@@ -71,7 +72,7 @@ public class DoQuizServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Account acc = (Account) session.getAttribute("account");
+        AccountDTO acc = (AccountDTO) session.getAttribute("account");
         if (acc == null) {
             response.sendRedirect("join?action=login");
             return;
@@ -102,7 +103,7 @@ public class DoQuizServlet extends HttpServlet {
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
-        Account acc = (Account) session.getAttribute("account");
+        AccountDTO acc = (AccountDTO) session.getAttribute("account");
 
         int moduleId = Integer.parseInt(request.getParameter("mid"));
         QuizDAO quizDAO = new QuizDAO();

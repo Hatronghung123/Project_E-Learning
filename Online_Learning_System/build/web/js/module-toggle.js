@@ -3,6 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
  */
 
+
+//module lesson
+
   $(document).ready(function () {
     // Lưu trạng thái mở/đóng của các modules vào localStorage
     function saveModuleState() {

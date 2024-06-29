@@ -134,7 +134,6 @@
                 background-color: #f9f9f9;
                 border: 1px solid #ddd;
                 border-radius: 4px;
-                display: flex;
                 align-items: center;
                 padding: 10px;
                 transition: background-color 0.3s ease;
@@ -204,6 +203,18 @@
                 background-color: #198754;
                 border-color: #198754;
             }
+
+
+
+            as{
+
+                font-family: 'Nunito', sans-serif;
+                font-weight: 600;
+                transition: .5s;
+
+            }
+
+
         </style>
 
     </head>
@@ -211,48 +222,38 @@
 
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Lessons</h4>
+
+                <h4 class="card-title">Modules</h4>
             </div>
             <div class="card-body">
 
+                <!--                <div>
+                                    <a href="LessonManage?action=addlesson&cid=${cid}" class="btn btn-outline">Add Lesson <i class="material-icons">add</i></a>
+                                </div>-->
+
                 <div>
-                    <a href="LessonManage?action=addlesson&cid=${cid}" class="btn btn-outline">Add Lesson <i class="material-icons">add</i></a>
+                    <a href="course-manage?action=add_module&cid=${cid}" class="btn btn-outline">Add New Module<i class="material-icons">add</i></a>
                 </div>
 
-                <div class="nestable" id="nestable-handles-primary">
-                    <ul class="nestable-list">
-                        <c:forEach items="${lessonList}" var="o">
-                            <li class="nestable-item nestable-item-handle" data-id="2">
-                                <div class="nestable-handle"><i class="material-icons">menu</i></div>
-                                <div class="nestable-content">
-                                    <div class="media">
-                                        <div class="media-left media-middle">
-
-                                            <iframe  id="videoFrame" class="embed-responsive-item" src="${o.getLessonvideo()}" allowfullscreen="" height="100" width="100"></iframe>
-                                        </div>
-                                        <div class="media-body media-middle">
-                                            <h5 class="card-title h6 mb-0">
-                                                <a href="fixed-instructor-lesson-add.html">${o.getLessonname()}</a>
-                                            </h5>
-                                            <small class="text-muted">${o.getModuleid()}</small>
-                                        </div>
-                                        <div class="media-right media-middle">
-                                            <!--form update-->
-                                            <form action="LessonManage" method="GET">
-                                                <input type="hidden" value="${o.getLessonid()}" name="lessonid">
-                                                <input type="hidden" value="${cid}" name="cid">
-                                                <input type="hidden" value="updatelesson" name="action">
-                                                <button type="submit" class="btn btn-white btn-sm"><i class="material-icons">edit</i></button> 
-                                            </form>
-                                            <!--form delete-->
-                                            <form action="LessonManage?action=deletelesson&cid=${cid}&lessonid=${o.getLessonid()}" method="POST">
-
-                                                <button type="submit" class="btn btn-delete btn-sm"><i class="material-icons">delete</i></button> 
-                                            </form>
-
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="" style="margin-top: 20px;" id="">
+                    <ul class="list-group">
+                        <c:forEach items="${list_module}" var="module">
+                            <li class="nestable-item" data-id="${module.moduleid}">
+                                <label class="card-title mb-0">
+                                    <a href="#" class="module-link">${module.module_number}</a>
+                                </label> &nbsp;&nbsp;&nbsp;
+                                <label class="card-title h6 mb-0">
+                                    <a href="" onclick="toggleLessons(event, '${module.moduleid}')">${module.modulename}</a>
+                                </label>
+                                <ul id="lessons-${module.moduleid}" class="" style="display: none;">
+                                    <c:forEach items="${list_lesson}" var="lesson">
+                                        <c:if test="${module.moduleid == lesson.moduleid}">
+                                            <li class="nestable-item" data-id="${lesson.lessonid}">
+                                                ${lesson.lessonname}
+                                            </li>
+                                        </c:if>
+                                    </c:forEach>
+                                </ul>
                             </li>
                         </c:forEach>
                     </ul>
@@ -260,6 +261,19 @@
             </div>
         </div>
 
+        <script type="text/javascript">
+            function toggleLessons(event, moduleId) {
+                event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
+
+                var lessonsList = document.getElementById('lessons-' + moduleId);
+
+                if (lessonsList.style.display === 'none' || lessonsList.style.display === '') {
+                    lessonsList.style.display = 'block';
+                } else {
+                    lessonsList.style.display = 'none';
+                }
+            }
+        </script>
 
         <!-- jQuery -->
         <script src="assets/vendor/jquery.min.js"></script>
@@ -267,6 +281,10 @@
         <script src="assets/vendor/jquery.nestable.js"></script> 
         <!-- Init -->
         <script src="assets/js/nestable.js"></script>
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- Bootstrap JavaScript -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     </body>
 
 </html>

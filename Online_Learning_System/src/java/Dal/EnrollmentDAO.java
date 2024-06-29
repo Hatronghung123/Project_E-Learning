@@ -4,7 +4,7 @@
  */
 package Dal;
 
-import Model.Account;
+import Model.AccountDTO;
 import Model.Course;
 import Model.EnrollmentDTO;
 import java.sql.SQLException;
