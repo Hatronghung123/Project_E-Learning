@@ -29,25 +29,50 @@ public class CourseDetailDAO {
     //Lấy ra tất cả 5 khóa học liên quan với khóa học hiện tại trong database  theo category
     public ArrayList<Course> getRelateCourse(int courseId) throws SQLException {
         ArrayList<Course> list = new ArrayList<>();
-        String sql = "SELECT TOP 4 cr.[CourseId]\n"
-                + "      ,cr.[CourseName]\n"
-                + "      ,cr.[Description]\n"
-                + "      ,cr.[Image]\n"
-                + "      ,cr.[Price]\n"
-                + "      ,cr.[CourseCategoryId]\n"
-                + "      ,cr.[CreatedBy]\n"
-                + "      ,cr.[DateCreated]\n"
-                + "      ,cr.[StudyTime]\n"
-                + "      ,cr.[Status]\n"
-                + "	  ,pro.[FullName] AS MentorName\n"
-                + "	  ,COUNT(e.EnrollmentId) as StudentCount\n"
-                + "  FROM [dbo].[Course] cr\n"
-                + "   join [dbo].[Teaching] te on te.CourseId = cr.CourseId\n"
-                + "   join [dbo].[Profile] pro on pro.ProfileId = te.MentorId\n"
-                + "   LEFT JOIN Enrollment e ON cr.CourseId = e.CourseId\n"
-                + "   WHERE [CourseCategoryId] = (SELECT  [CourseCategoryId] FROM Course WHERE  [CourseId] = ?) AND cr.[CourseId] != ?\n"
-                + "   Group by cr.CourseId, cr.CourseName, cr.[Description], cr.[Image],cr.[Price], cr.[CourseCategoryId],cr.[CreatedBy], cr.[DateCreated],cr.[StudyTime],cr.[Status],pro.[FullName]\n"
-                + "   ORDER BY StudentCount DESC;";
+        String sql = """
+                       SELECT TOP 4
+                         cr.[CourseId],
+                         cr.[CourseName],
+                         cr.[Description],
+                         cr.[Image],
+                         cr.[Price],
+                         cr.[CourseCategoryId],
+                         cr.[CreatedBy],
+                         cr.[DateCreated],
+                         cr.[StudyTime],
+                         cr.[Status],
+                         pro.[FullName] AS MentorName,
+                         COUNT(e.EnrollmentId) AS StudentCount,
+                     	                     	(
+                                                  SELECT TOP 1 L.LessonId
+                                                  FROM Module M
+                                                  INNER JOIN Lesson L ON M.ModuleId = L.ModuleId
+                                                  WHERE M.CourseId = Cr.CourseId
+                                                  ORDER BY L.LessonId
+                                              ) AS FirstLessonId
+                     
+                     FROM
+                         [dbo].[Course] cr
+                         JOIN [dbo].[Teaching] te ON te.CourseId = cr.CourseId
+                         JOIN [dbo].[Profile] pro ON pro.ProfileId = te.MentorId
+                         LEFT JOIN [dbo].[Enrollment] e ON cr.CourseId = e.CourseId
+                     WHERE
+                         cr.[CourseCategoryId] = (SELECT [CourseCategoryId] FROM [dbo].[Course] WHERE [CourseId] = ?) 
+                         AND cr.[CourseId] != ?
+                     GROUP BY
+                         cr.[CourseId],
+                         cr.[CourseName],
+                         cr.[Description],
+                         cr.[Image],
+                         cr.[Price],
+                         cr.[CourseCategoryId],
+                         cr.[CreatedBy],
+                         cr.[DateCreated],
+                         cr.[StudyTime],
+                         cr.[Status],
+                         pro.[FullName]
+                     ORDER BY
+                         StudentCount DESC;""";
         try {
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
@@ -78,7 +103,7 @@ public class CourseDetailDAO {
         return list;
     }
 
-    //Lấy ra  category theo id
+    //Lấy ra  category theo cid
     public ArrayList<Category> getCategoryById(int courseId) throws SQLException {
         ArrayList<Category> list = new ArrayList<>();
         String sql ="""

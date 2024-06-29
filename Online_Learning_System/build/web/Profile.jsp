@@ -229,7 +229,6 @@
                                                                                     </div>
                                                                                 </div>-->
                                         </div>
-<<<<<<< HEAD
 
 
                                         <div class="tab-pane fade" id="account-change-password">
