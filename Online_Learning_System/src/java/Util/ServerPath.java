@@ -9,10 +9,6 @@ package Util;
  * @author tuong
  */
 public class ServerPath {
-    
-//    public static String getPathAvatar(){
-//        return "E:\\Project_E-Learning\\Online_Learning_System\\web";
-//    }
      public static String getPathImage(){
         return "E:\\Project_E-Learning\\Online_Learning_System\\web";
     }

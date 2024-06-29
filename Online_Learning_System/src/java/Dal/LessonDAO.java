@@ -6,9 +6,9 @@ package Dal;
 
 import Model.Course;
 import Model.Enrollment;
-import Model.Lesson;
+import Model.LessonDTO;
 import Model.Payment;
-import Model.Module;
+import Model.ModuleDTO;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -71,8 +71,8 @@ public class LessonDAO {
     }
 
     //Lấy lisst lesson in module theo course ID
-    public ArrayList<Lesson> getListModulByCidd(int courseId) throws SQLException {
-        ArrayList<Lesson> list = new ArrayList<>();
+    public ArrayList<LessonDTO> getListModulByCidd(int courseId) throws SQLException {
+        ArrayList<LessonDTO> list = new ArrayList<>();
         String sql = "SELECT\n"
                 + "    l.LessonId,\n"
                 + "    m.ModuleName,\n"
@@ -112,7 +112,7 @@ public class LessonDAO {
                 int profile_id = rs.getInt("ProfileId");
                 int create_by = rs.getInt("CreatedBy");
 
-                list.add(new Lesson(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration, profile_id, create_by));
+                list.add(new LessonDTO(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration, profile_id, create_by));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -122,7 +122,7 @@ public class LessonDAO {
         return list;
     }
 
-    public Lesson getlessonByCid(int courseId, int lessonid) throws SQLException {
+    public LessonDTO getlessonByCid(int courseId, int lessonid) throws SQLException {
 
         String sql = "  SELECT\n"
                 + "                   l.LessonId,\n"
@@ -164,7 +164,7 @@ public class LessonDAO {
                 long duration = rs.getInt("Duration");
                 int create_by = rs.getInt("CreatedBy");
 
-                return new Lesson(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration, profile_id ,create_by);
+                return new LessonDTO(lesson_id, modulname, lesson_name, lesson_content, lesson_video, course_name, mentor_name, Avatar, course_id, duration, profile_id ,create_by);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -175,8 +175,8 @@ public class LessonDAO {
     }
 
     //Lấy lisst module theo course ID
-    public ArrayList<Module> getListModulByCid(int courseId) throws SQLException {
-        ArrayList<Module> list = new ArrayList<>();
+    public ArrayList<ModuleDTO> getListModulByCid(int courseId) throws SQLException {
+        ArrayList<ModuleDTO> list = new ArrayList<>();
         String sql = "SELECT  [ModuleId]\n"
                 + "      ,[ModuleName]\n"
                 + "      ,[CourseId]\n"
@@ -192,7 +192,7 @@ public class LessonDAO {
                 int moduleid = rs.getInt(1);
                 String modulename = rs.getString(2);
                 int course_id = rs.getInt(3);
-                list.add(new Module(moduleid, modulename, courseId));
+                list.add(new ModuleDTO(moduleid, modulename));
             }
         } catch (Exception e) {
             e.printStackTrace();

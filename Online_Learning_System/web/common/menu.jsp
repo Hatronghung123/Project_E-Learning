@@ -62,19 +62,6 @@
 
             </c:choose>
             
-
-         
-
-
-            <!--                
-                                                                    <div class="nav-item dropdown">
-                                                                        <a href="#"  class="btn btn-primary py-4 px-lg-5 d-none d-lg-block" data-bs-toggle="dropdown">${sessionScope.profile.fullname}<i class="fa fa-arrow-down ms-3"></i></a>                            
-                                                                        <div class="dropdown-menu fade-down m-0">
-                                                                            <a class="dropdown-item" href="profile">My profile</a>
-                                                                            <a class="dropdown-item" href="join?action=logout">Log Out</a>
-                                                
-                                                                        </div>
-                                                                    </div>  -->
         </div>
 
         <c:if test="${sessionScope.account != null}">

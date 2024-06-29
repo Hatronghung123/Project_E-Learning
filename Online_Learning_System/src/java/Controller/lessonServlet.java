@@ -14,7 +14,7 @@ import Model.Category;
 import YoutubeAPI.YoutubeDuration;
 import Model.DiscussionLesson;
 import Model.Enrollment;
-import Model.Lesson;
+import Model.LessonDTO;
 import Model.StarRatingDTO;
 import Util.AVGOfRaing;
 import java.io.IOException;
@@ -117,7 +117,7 @@ public class lessonServlet extends HttpServlet {
                     }
                     // Nếu vẫn không có lessonid, đặt bài học đầu tiên là mặc định
                     if (lessonid_str == null) {
-                         ArrayList<Lesson> lessonList = dao.getListModulByCidd(course_id);
+                         ArrayList<LessonDTO> lessonList = dao.getListModulByCidd(course_id);
                         if (!lessonList.isEmpty()) {
                             lesson_id = lessonList.get(0).getLessonid();
                         }
@@ -142,9 +142,9 @@ public class lessonServlet extends HttpServlet {
                     }
 
                 }
-                ArrayList<Lesson> lessonList = dao.getListModulByCidd(course_id);
-                ArrayList<Model.Module> moduleList = dao.getListModulByCid(course_id);
-                Lesson lesson = dao.getlessonByCid(course_id, lesson_id);
+                ArrayList<LessonDTO> lessonList = dao.getListModulByCidd(course_id);
+                ArrayList<Model.ModuleDTO> moduleList = dao.getListModulByCid(course_id);
+                LessonDTO lesson = dao.getlessonByCid(course_id, lesson_id);
 
                 
                 
@@ -334,8 +334,8 @@ public class lessonServlet extends HttpServlet {
         long sumDuration = 0;
         try {
 
-            ArrayList<Lesson> listLesson = dao.getListlessonByCid(course_id);
-            for (Lesson lesson : listLesson) {
+            ArrayList<LessonDTO> listLesson = dao.getListlessonByCid(course_id);
+            for (LessonDTO lesson : listLesson) {
                 sumDuration += lesson.getDuration();
             }
 

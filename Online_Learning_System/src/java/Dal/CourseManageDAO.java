@@ -104,7 +104,7 @@ public class CourseManageDAO extends DBContext {
                                         ,[CourseCategoryId]
                                         ,[CreatedBy]
                                         ,[DateCreated]
-                                        ,[StudyTime]
+                                        
                                         ,[Status])
                                   VALUES
                                         (?
@@ -115,7 +115,6 @@ public class CourseManageDAO extends DBContext {
                                         ,?
                                         ,?
                                         ,GETDATE()
-                                        ,?
                                         ,1)""";
         try {
             statement = connection.prepareStatement(sql_account);
@@ -126,8 +125,6 @@ public class CourseManageDAO extends DBContext {
             statement.setFloat(5, newCourse.getDiscount());
             statement.setString(6, newCourse.getCourse_category_id());
             statement.setInt(7, managerId);
-            statement.setString(8, newCourse.getStudy_time());
-
             // thực thi câu lệnh
             statement.executeUpdate();
         } catch (SQLException ex) {

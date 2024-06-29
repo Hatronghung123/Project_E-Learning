@@ -216,98 +216,109 @@
 
 
         </style>
+        <style>
+            .nestable-list {
+                list-style-type: none;
+                padding: 0;
+            }
+            .nestable-item {
+                border: 1px solid #ddd;
+                margin-bottom: 10px;
+                border-radius: 5px;
+                overflow: hidden;
+            }
+            .module-header {
+                background-color: #f8f9fa;
+                padding: 10px 15px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+            }
+            .module-header:hover {
+                background-color: #e9ecef;
+            }
+            .module-number {
+                font-weight: bold;
+                margin-right: 10px;
+            }
+            .module-name {
+                flex-grow: 1;
+            }
+            .toggle-icon {
+                transition: transform 0.3s ease;
+            }
+            .lesson-list {
+                padding: 0;
+                margin: 0;
+                list-style-type: none;
+            }
+            .lesson-item {
+                padding: 10px 15px;
+                border-top: 1px solid #ddd;
+                background-color: #fff;
+            }
+            .lesson-item:hover {
+                background-color: #f8f9fa;
+            }
+        </style>
+
 
     </head>
     <body>
 
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Lessons</h4>
+                <h4 class="card-title">Modules</h4>
             </div>
             <div class="card-body">
 
+                <!--                <div>
+                                    <a href="LessonManage?action=addlesson&cid=${cid}" class="btn btn-outline">Add Lesson <i class="material-icons">add</i></a>
+                                </div>-->
+
                 <div>
-                    <a href="LessonManage?action=addlesson&cid=${cid}" class="btn btn-outline">Add Lesson <i class="material-icons">add</i></a>
+                    <a href="course-manage?action=add_module&cid=${cid}" class="btn btn-outline">Add New Module<i class="material-icons">add</i></a>
                 </div>
 
                 <div class="nestable" id="nestable-handles-primary">
                     <ul class="nestable-list">
-                        <c:forEach items="${lessonList}" var="o">
-                            <li class="nestable-item nestable-item-handle" data-id="2">
-                                <div class="nestable-handle"><i class="material-icons">menu</i></div>
-                                <div class="nestable-content">
-                                    <div class="media">
-                                        <div class="media-left media-middle">
-
-                                            <iframe  id="videoFrame" class="embed-responsive-item" src="${o.getLessonvideo()}" allowfullscreen="" height="100" width="100"></iframe>
-                                        </div>
-                                        <div class="media-body media-middle">
-                                            <h5 class="card-title h6 mb-0">
-                                                <a href="fixed-instructor-lesson-add.html">${o.getLessonname()}</a>
-                                            </h5>
-                                            <small class="text-muted">${o.getModuleid()}</small>
-                                        </div>
-                                        <div class="media-right media-middle">
-                                            <!--form update-->
-                                            <form action="LessonManage" method="GET">
-                                                <input type="hidden" value="${o.getLessonid()}" name="lessonid">
-                                                <input type="hidden" value="${cid}" name="cid">
-                                                <input type="hidden" value="updatelesson" name="action">
-                                                <button type="submit" class="btn btn-white btn-sm"><i class="material-icons">edit</i></button> 
-                                            </form>
-                                            <!--form delete-->
-
-                                            <a class="btn btn-delete btn-sm" data-toggle="modal" data-target="#delete-lessson-modal"
-                                               onclick="deleteQuestionModal(${o.getLessonid()}, ${cid})"><i class="material-icons">delete</i></a>
-
-                                        </div>
-                                    </div>
+                        <c:forEach items="${list_module}" var="module">
+                            <li class="nestable-item" data-id="${module.moduleid}">
+                                <div class="module-header" onclick="toggleLessons(${module.moduleid})">
+                                    <span class="module-number">${module.module_number}</span>
+                                    <span class="module-name">${module.modulename}</span>
+                                    <span class="toggle-icon">&#9660;</span>
                                 </div>
+                                <ul id="lessons-${module.moduleid}" class="lesson-list" style="display: none;">
+                                    <c:forEach items="${list_lesson}" var="lesson">
+                                        <c:if test="${module.moduleid == lesson.moduleid}">
+                                            <li class="lesson-item" data-id="${lesson.lessonid}">
+                                                ${lesson.lessonname}
+                                            </li>
+                                        </c:if>
+                                    </c:forEach>
+                                </ul>
                             </li>
                         </c:forEach>
                     </ul>
                 </div>
-            </div>
-        </div>
 
-
-        <!--Form delete-->
-        <div class="modal fade" id="delete-lessson-modal" >
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header bg-primary">
-                        <h5 class="modal-title" id="delete-modal-label">Delete</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to delete this lesson ?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <form action="LessonManage?action=deletelesson" method="POST">
-                            <div class="form-group" style="display: none">
-                                <input type="text" class="form-control" id="idlessonInput" name="lessonid">
-                                <input type="text" class="form-control" id="idCourseInput" name="cid">
-
-                            </div>
-                            <button type="button" class="as btn-secondary" data-dismiss="modal">No</button>
-                            <button type="submit" class="as btn-danger">Yes</button>
-                        </form>
-                    </div>
-                </div>
             </div>
         </div>
 
         <script>
-            function deleteQuestionModal(lessonid, courseId) {
-                let inputlessonId = document.querySelector("#idlessonInput");
-                let inputICourseId = document.querySelector("#idCourseInput");
+            function toggleLessons(moduleId) {
+                const lessonsList = document.getElementById(`lessons-${moduleId}`);
+                const toggleIcon = lessonsList.previousElementSibling.querySelector('.toggle-icon');
 
-                inputlessonId.value = lessonid;
-                inputICourseId.value = courseId;
+                if (lessonsList.style.display === 'none') {
+                    lessonsList.style.display = 'block';
+                    toggleIcon.style.transform = 'rotate(180deg)';
+                } else {
+                    lessonsList.style.display = 'none';
+                    toggleIcon.style.transform = 'rotate(0deg)';
+                }
             }
-
         </script>
 
         <!-- jQuery -->

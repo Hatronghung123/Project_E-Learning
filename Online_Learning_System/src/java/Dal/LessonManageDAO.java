@@ -4,8 +4,8 @@
  */
 package Dal;
 
-import Model.Lesson;
-import Model.Module;
+import Model.LessonDTO;
+import Model.ModuleDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,7 +28,7 @@ public class LessonManageDAO {
     PreparedStatement ps = null; // Ném câu lệnh query sang sql server
     ResultSet rs = null; // Nhận kết quả trả về
 
-    public void InsertLesson(Lesson lesson) {
+    public void InsertLesson(LessonDTO lesson) {
         String sql = """
                        insert into [Lesson] 
                        values(?,?,?,?,?)
@@ -62,7 +62,7 @@ public class LessonManageDAO {
     }
 
     //UPDATE LESSON
-    public void updateLesson(Lesson lesson) {
+    public void updateLesson(LessonDTO lesson) {
         String sql = """
                         UPDATE [Lesson]
                          SET [ModuleId] = ?
@@ -88,8 +88,8 @@ public class LessonManageDAO {
     }
 
     //Lấy lisst module theo course ID để mentor chọn để tạo thêm lesson
-    public ArrayList<Module> getListModuleByCid(int courseId) throws SQLException {
-        ArrayList<Module> list = new ArrayList<>();
+    public ArrayList<ModuleDTO> getListModuleByCid(int courseId) throws SQLException {
+        ArrayList<ModuleDTO> list = new ArrayList<>();
         String sql = """
                        SELECT  [ModuleId]
                            ,[ModuleName]
@@ -106,7 +106,7 @@ public class LessonManageDAO {
                 int module_id = rs.getInt(1);
                 String modulname = rs.getString(2);
 
-                list.add(new Module(module_id, modulname));
+                list.add(new ModuleDTO(module_id, modulname));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -117,8 +117,8 @@ public class LessonManageDAO {
     }
 
     //Lấy ra tất cả lesson của course by cid
-    public ArrayList<Lesson> getListlessonByCid(int courseid) throws SQLException {
-        ArrayList<Lesson> list = new ArrayList<>();
+    public ArrayList<LessonDTO> getListlessonByCid(int courseid) throws SQLException {
+        ArrayList<LessonDTO> list = new ArrayList<>();
         String sql = """
                       SELECT  
                       [LessonId]
@@ -146,7 +146,7 @@ public class LessonManageDAO {
                 String lesson_video = rs.getString(5);
                 long duration = rs.getInt(6);
 
-                list.add(new Lesson(lesson_id, moduleid, lesson_name, lesson_content, lesson_video, duration));
+                list.add(new LessonDTO(lesson_id, moduleid, lesson_name, lesson_content, lesson_video, duration));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -157,7 +157,7 @@ public class LessonManageDAO {
     }
 
     //Lấy lesoson theo lesson id
-    public Lesson getlessonByLessonid(int lessonId) throws SQLException {
+    public LessonDTO getlessonByLessonid(int lessonId) throws SQLException {
 
         String sql = """
                       SELECT  [LessonId]
@@ -183,7 +183,7 @@ public class LessonManageDAO {
                 String lesson_video = rs.getString(5);
                 long duration = rs.getInt(6);
 
-                return new Lesson(lesson_id, moduleid, lesson_name, lesson_content, lesson_video, duration);
+                return new LessonDTO(lesson_id, moduleid, lesson_name, lesson_content, lesson_video, duration);
             }
         } catch (Exception e) {
             e.printStackTrace();

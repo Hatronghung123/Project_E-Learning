@@ -8,10 +8,13 @@ import Dal.CourseDetailDAO;
 import Dal.CourseManageDAO;
 import Dal.HomeDAO;
 import Dal.LessonManageDAO;
+import Dal.ModuleDAO;
 import Model.AccountDTO;
 import Model.Category;
 import Model.CourseManageDTO;
-import Model.Lesson;
+import Model.LessonDTO;
+import Model.ModuleDTO;
+import Util.HeaderSession;
 import Util.ServerPath;
 import Util.Validation;
 import java.io.IOException;
@@ -78,49 +81,61 @@ public class CourseManageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter o = response.getWriter();
+        HeaderSession header = new HeaderSession(request, response);
+
         String cid = (String) request.getParameter("cid") == null ? "" : (String) request.getParameter("cid");
         String action = (String) request.getParameter("action") == null ? "" : (String) request.getParameter("action");
 
         HttpSession session = request.getSession();
         AccountDTO my_account = (AccountDTO) session.getAttribute("account");
         CourseManageDAO course_manage_DAO = new CourseManageDAO();
+
         ArrayList<CourseManageDTO> list_managed_course = course_manage_DAO.getMyManagedCourse(my_account.getAccount_id());
         request.setAttribute("list_managed_couse", list_managed_course);
 
-//        read data lesson from database
-        LessonManageDAO dao = new LessonManageDAO();
-        ArrayList<Lesson> lessonList = null;
-        try {
-            lessonList = dao.getListlessonByCid(Integer.parseInt(cid));
-            //o.print(lessonList);
-        } catch (SQLException ex) {
-            Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception e) {
+////        read data lesson from database
+//        LessonManageDAO dao = new LessonManageDAO();
+//        ArrayList<Lesson> lessonList = null;
+//        try {
+//            lessonList = dao.getListlessonByCid(Integer.parseInt(cid));
+//        } catch (SQLException ex) {
+//            Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (NumberFormatException e) {
+//        }
+        switch (action) {
+            case "update":
+                request.setAttribute("cid", cid);
+//                if (lessonList != null) {
+//                    request.setAttribute("lessonList", lessonList);
+//                }
+                ModuleDAO module_dao = new ModuleDAO();
+                LessonManageDAO lesson_manage_dao = new LessonManageDAO();
+                try {
+                    ArrayList<ModuleDTO> list_module = module_dao.getListModulByCid(cid);
+                    ArrayList<LessonDTO> list_lesson = lesson_manage_dao.getListlessonByCid(Integer.parseInt(cid));
+                    request.setAttribute("list_module", list_module);
+                    request.setAttribute("list_lesson", list_lesson);
+                } catch (SQLException ex) {
+                    Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                request.getRequestDispatcher("UpdateCourse.jsp").forward(request, response);
+                return;
 
-        }
+            case "add_module":
+                request.setAttribute("cid", cid);
+                addModule(request, response);
+                return;
 
-        if (!(cid.isEmpty() && action.isEmpty())) {
-            switch (action) {
-                case "update":
-                    request.setAttribute("cid", cid);
-                    if (lessonList != null) {
-                        request.setAttribute("lessonList", lessonList);
-                    }
-                    request.getRequestDispatcher("UpdateCourse.jsp").forward(request, response);
-                    return;
-                case "add_new_course": {
-                    try {
-                        addCourse(request, response);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+            case "add_new_course":
+                try {
+                    addCourse(request, response);
+                } catch (SQLException ex) {
+                    Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 return;
-                default:
-                    throw new AssertionError();
-            }
+            default:
+                request.getRequestDispatcher("CourseManage.jsp").forward(request, response);
         }
-        request.getRequestDispatcher("CourseManage.jsp").forward(request, response);
     }
 //    public static void main(String[] args) {
 //        CourseManageDAO course_manage_DAO = new CourseManageDAO();
@@ -141,7 +156,11 @@ public class CourseManageServlet extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
         String cid = (String) request.getParameter("cid") == null ? "" : (String) request.getParameter("cid");
+        PrintWriter o = response.getWriter();
         switch (action) {
+            case "add_new_module":
+                addNewModuleDoPost(request, response, cid);
+                break;
             case "add_new_course":
                 addNewCouseDoPost(request, response);
                 break;
@@ -169,12 +188,11 @@ public class CourseManageServlet extends HttpServlet {
 
     private void deleteCourse(String cid, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CourseManageDAO course_manage_DAO = new CourseManageDAO();
-        course_manage_DAO.deleteCourse(cid);
-
+        boolean success = course_manage_DAO.deleteCourse(cid);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-        out.print("{\"success\": true}");
+        out.print("{\"success\":" + success + "}");
         out.flush();
     }
 
@@ -194,11 +212,6 @@ public class CourseManageServlet extends HttpServlet {
 //    }
 
     private void addCourse(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
-        HomeDAO dao = new HomeDAO();
-        CourseDetailDAO cdDao = new CourseDetailDAO();
-        ArrayList<Category> listCategory = dao.getAllCategory();
-
-        request.setAttribute("listCategory", listCategory);
         request.getRequestDispatcher("AddNewCourse.jsp").forward(request, response);
     }
 
@@ -209,43 +222,69 @@ public class CourseManageServlet extends HttpServlet {
         String price = request.getParameter("price") == null ? "0" : request.getParameter("price");
         String discount = request.getParameter("discount") == null ? "0" : request.getParameter("discount");
         String category = request.getParameter("category") == null ? "" : request.getParameter("category");
-        String study_time = request.getParameter("studyTime") == null ? "0h" : request.getParameter("studyTime");
 
         String[] fullFields = {course_name, description, category};
 
         request.setAttribute("price", price);
         request.setAttribute("discount", discount);
-        request.setAttribute("study_time", study_time);
 
         String image_file_name = "";
         if (file_image_course != null && file_image_course.getSize() > 0) {
             image_file_name = Validation.inputFile(request, file_image_course, "image_course");
             request.setAttribute("image", image_file_name);
         }
-        request.setAttribute("study_time", study_time);
         if (!Validation.checkString(course_name)) {
             request.setAttribute("course_name", course_name);
             request.setAttribute("error_name", "You must input course name!");
-            request.getRequestDispatcher("AddNewCourse.jsp").forward(request, response);
         }
         if (!Validation.checkString(description)) {
             request.setAttribute("description", description);
             request.setAttribute("error_desciption", "You must input desciption!");
-            request.getRequestDispatcher("AddNewCourse.jsp").forward(request, response);
-
         }
         if (!Validation.checkString(category)) {
             request.setAttribute("category", category);
             request.setAttribute("error_category", "You must choose category!");
-            request.getRequestDispatcher("AddNewCourse.jsp").forward(request, response);
         }
         if (Validation.checkStringArray(fullFields)) {
             HttpSession session = request.getSession();
             AccountDTO my_account = (AccountDTO) session.getAttribute("account");
             CourseManageDAO course_manage_DAO = new CourseManageDAO();
-            CourseManageDTO new_course = new CourseManageDTO(course_name, description, image_file_name, Float.parseFloat(price), Float.parseFloat(discount), category, study_time);
+            CourseManageDTO new_course = new CourseManageDTO(course_name, description, image_file_name, Float.parseFloat(price), Float.parseFloat(discount), category);
             course_manage_DAO.insertCourse(my_account.getAccount_id(), new_course);
             response.sendRedirect("course-manage");
+        } else {
+            request.getRequestDispatcher("AddNewCourse.jsp").forward(request, response);
+        }
+    }
+
+    private void addModule(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("AddNewModule.jsp").forward(request, response);
+    }
+
+    private void addNewModuleDoPost(HttpServletRequest request, HttpServletResponse response, String cid) throws IOException, ServletException {
+        String module_name = request.getParameter("module_name") == null ? "" : request.getParameter("module_name");
+        String module_number = request.getParameter("module_number") == null ? "" : request.getParameter("module_number");
+        
+        String[] fullFields = {module_name, module_number};
+        PrintWriter o = response.getWriter();
+        if (!Validation.checkString(module_name)) {
+            request.setAttribute("module_name", module_name);
+            request.setAttribute("error_module_name", "You must input module name!");
+        }
+        if (!Validation.checkInt(module_number)) {
+            request.setAttribute("module_number", module_number);
+            request.setAttribute("error_module_number", "You must input module number!");
+        }
+//da nhap du fields
+        if (Validation.checkStringArray(fullFields)) {
+            HttpSession session = request.getSession();
+            AccountDTO my_account = (AccountDTO) session.getAttribute("account");
+            ModuleDAO module_DAO = new ModuleDAO();
+            ModuleDTO new_module = new ModuleDTO(module_name, Integer.parseInt(module_number));
+            module_DAO.insertModule(cid, new_module);
+            response.sendRedirect("course-manage?cid="+cid+"&action=update");
+        } else {
+            request.getRequestDispatcher("AddNewModule.jsp").forward(request, response);
         }
     }
 

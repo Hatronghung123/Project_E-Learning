@@ -10,7 +10,7 @@ import java.sql.Date;
  *
  * @author Tuan Anh(Gia Truong)
  */
-public class Lesson {
+public class LessonDTO {
 
     private int lessonid;
     private int moduleid;
@@ -25,11 +25,11 @@ public class Lesson {
     private int courseid;
     private long duration;
     private int createby;
-    public Lesson() {
+    public LessonDTO() {
     }
 
     //dùng để insert lesson
-    public Lesson( int moduleid, String lessonname, String lessoncontent, String lessonvideo, long duration) {
+    public LessonDTO( int moduleid, String lessonname, String lessoncontent, String lessonvideo, long duration) {
         this.moduleid = moduleid;
         this.lessonname = lessonname;
         this.lessoncontent = lessoncontent;
@@ -38,7 +38,7 @@ public class Lesson {
     }
     
        //dùng để read và update lesson
-    public Lesson(int lessonid, int moduleid, String lessonname, String lessoncontent, String lessonvideo, long duration) {
+    public LessonDTO(int lessonid, int moduleid, String lessonname, String lessoncontent, String lessonvideo, long duration) {
         this.lessonid = lessonid;
         this.moduleid = moduleid;
         this.lessonname = lessonname;
@@ -50,7 +50,7 @@ public class Lesson {
     
 //Dùng để lấy dữ liệu trong lesson
 
-    public Lesson(int lessonid, String modulname, String lessonname, String lessoncontent, String lessonvideo, String coursename, String mentorname, String avatar, int courseid, long duration,int profile_id, int createby) {
+    public LessonDTO(int lessonid, String modulname, String lessonname, String lessoncontent, String lessonvideo, String coursename, String mentorname, String avatar, int courseid, long duration,int profile_id, int createby) {
         this.lessonid = lessonid;
         this.modulname = modulname;
         this.lessonname = lessonname;

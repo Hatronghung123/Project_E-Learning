@@ -8,28 +8,38 @@ package Model;
  *
  * @author Tuan Anh(Gia Truong)
  */
-public class Module {
+public class ModuleDTO {
+
     private int moduleid;
     private String modulename;
     private int courseid;
+    private int module_number;
 
-    public Module() {
+    public ModuleDTO() {
     }
 
-    
-    
-        public Module(int moduleid, String modulename) {
+    public ModuleDTO(int moduleid, String modulename) {
         this.moduleid = moduleid;
         this.modulename = modulename;
-       
     }
-    
-    
-    public Module(int moduleid, String modulename, int courseid) {
+    public ModuleDTO(int moduleid, String modulename, int module_number) {
         this.moduleid = moduleid;
         this.modulename = modulename;
-        this.courseid = courseid;
+        this.module_number = module_number;
     }
+
+    public ModuleDTO(String modulename, int module_number) {
+        this.modulename = modulename;
+        this.module_number = module_number;
+    }
+    
+    
+
+//    public ModuleDTO(int moduleid, String modulename, int courseid) {
+//        this.moduleid = moduleid;
+//        this.modulename = modulename;
+//        this.courseid = courseid;
+//    }
 
     public int getModuleid() {
         return moduleid;
@@ -55,11 +65,17 @@ public class Module {
         this.courseid = courseid;
     }
 
+    public int getModule_number() {
+        return module_number;
+    }
+
+    public void setModule_number(int module_number) {
+        this.module_number = module_number;
+    }
+
     @Override
     public String toString() {
         return "Module{" + "moduleid=" + moduleid + ", modulename=" + modulename + ", courseid=" + courseid + '}';
     }
-    
-    
-    
+
 }

@@ -38,6 +38,15 @@ public class Validation {
         }
         return true;
     }
+    
+    public static boolean checkInt(String str) {
+        str = str.trim();
+        for (int i = 0; i < str.length(); i++) {
+            if(str.charAt(i)<'0' || str.charAt(i) >'9')
+                return false;
+        }
+        return true;
+    }
 
     public static boolean checkName(String name) {
         name = name.trim();
