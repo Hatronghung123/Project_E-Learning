@@ -8,6 +8,7 @@ import Controller.CourseDetailServelet;
 import Dal.EnrollmentDAO;
 import Dal.HomeDAO;
 import Dal.WishlistDAO;
+
 import Model.AccountDTO;
 import Model.Category;
 import Model.Course;
@@ -80,7 +81,9 @@ public class courseServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
         ProfileDTO my_profile = (ProfileDTO) session.getAttribute("profile");
+
         AccountDTO my_account = (AccountDTO) session.getAttribute("account");
+
 
         if (my_account == null) {
             response.sendRedirect("join?action=login");

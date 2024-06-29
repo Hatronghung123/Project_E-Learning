@@ -9,11 +9,14 @@ import Dal.DisscussionDAO;
 import Dal.HomeDAO;
 import Dal.LessonDAO;
 import Dal.LessonManageDAO;
+
 import Model.AccountDTO;
+
 import Model.Category;
 import YoutubeAPI.YoutubeDuration;
 import Model.DiscussionLesson;
 import Model.Enrollment;
+
 import Model.LessonDTO;
 import Model.StarRatingDTO;
 import Util.AVGOfRaing;
@@ -82,13 +85,16 @@ public class lessonServlet extends HttpServlet {
         LessonDAO dao = new LessonDAO();
         DisscussionDAO discussDao = new DisscussionDAO();
         HttpSession session = request.getSession();
+
         AccountDTO acc = (AccountDTO) session.getAttribute("account");
+
         String createBy = request.getParameter("createBy");
         String courseid_str = request.getParameter("cid");
         String lessonid_str = request.getParameter("lessonid");
 
         int course_id = 0;
         int lesson_id = 0;
+
         int createBy_id = 0;
 
         // Kiểm tra nếu session không có thuộc tính 'user' thì chuyển hướng về trang đăng nhập
@@ -96,6 +102,7 @@ public class lessonServlet extends HttpServlet {
             response.sendRedirect("join?action=login");
             return;
         } else {
+
             try {
 
                 if (courseid_str != null && createBy != null) {
@@ -118,6 +125,7 @@ public class lessonServlet extends HttpServlet {
                     // Nếu vẫn không có lessonid, đặt bài học đầu tiên là mặc định
                     if (lessonid_str == null) {
                          ArrayList<LessonDTO> lessonList = dao.getListModulByCidd(course_id);
+
                         if (!lessonList.isEmpty()) {
                             lesson_id = lessonList.get(0).getLessonid();
                         }
@@ -141,10 +149,12 @@ public class lessonServlet extends HttpServlet {
                         return;
                     }
 
+
                 }
                 ArrayList<LessonDTO> lessonList = dao.getListModulByCidd(course_id);
                 ArrayList<Model.ModuleDTO> moduleList = dao.getListModulByCid(course_id);
                 LessonDTO lesson = dao.getlessonByCid(course_id, lesson_id);
+
 
                 
                 
@@ -174,6 +184,7 @@ public class lessonServlet extends HttpServlet {
                 //hiện thị số lượng sao của khóa học đó
                 displayRatingCourse(request, response, course_id);
 
+
                 //Hiện thỉ tổng thời gian khóa học
                 long totalDuration = sumOfDurationInCourse(course_id);
                 displayTotalTimeLearnCourse(request, response, totalDuration);
@@ -189,12 +200,15 @@ public class lessonServlet extends HttpServlet {
                 request.setAttribute("listEnrollment", listEnrollment);
                 //response.getWriter().print(lessonList);
 
+
                 //Lưu trữ id bài học hiện tại lên Cookie
                 Cookie lastLessonCookie = new Cookie("lastLessonId_" + course_id, String.valueOf(lesson_id));
                 lastLessonCookie.setMaxAge(60 * 60 * 24 * 30); //lưu trong vong một tháng
                 // Đặt đường dẫn của cookie để nó có hiệu lực trên toàn bộ trang web
                 lastLessonCookie.setPath("/");
                 response.addCookie(lastLessonCookie);
+                session.setAttribute("lastLessonId_"+course_id, lesson_id);
+
 
             } catch (SQLException ex) {
                 Logger.getLogger(lessonServlet.class.getName()).log(Level.SEVERE, null, ex);
@@ -241,6 +255,7 @@ public class lessonServlet extends HttpServlet {
         String disscusionId = request.getParameter("disscussID");
         String cid = request.getParameter("cid");
         String lessonid = request.getParameter("lessonid");
+
         String createBy = request.getParameter("createBy");
 
 //        out.print(parentCommentId);
@@ -249,6 +264,7 @@ public class lessonServlet extends HttpServlet {
             //delete comment cha và delete tất comment reply
 
             dao.deleteComent(Integer.parseInt(disscusionId));
+
 
             response.sendRedirect("lesson?cid=" + cid + "&lessonid=" + lessonid + "&createBy=" + createBy);
         } else {
@@ -268,15 +284,18 @@ public class lessonServlet extends HttpServlet {
         if (parentComentId_str != null && !parentComentId_str.isEmpty() && !"null".equals(parentComentId_str)) {
             parentCommentId = Integer.parseInt(parentComentId_str);
         }
-        String createBy = request.getParameter("createBy");
+String createBy = request.getParameter("createBy");
         String comment = request.getParameter("content");
         String cid = request.getParameter("cid");
+        
         AccountDTO acc = (AccountDTO) session.getAttribute("account");
+
         String lession_id = request.getParameter("lessonid");
 
         DisscussionDAO dao = new DisscussionDAO();
         DiscussionLesson discuss = new DiscussionLesson(parentCommentId, acc.getAccount_id(), Integer.parseInt(lession_id), comment, new Timestamp(System.currentTimeMillis()));
         dao.InsertComment(discuss);
+
         response.sendRedirect("lesson?cid=" + cid + "&lessonid=" + lession_id + "&createBy=" + createBy);
     }
 
@@ -333,6 +352,7 @@ public class lessonServlet extends HttpServlet {
         LessonManageDAO dao = new LessonManageDAO();
         long sumDuration = 0;
         try {
+
 
             ArrayList<LessonDTO> listLesson = dao.getListlessonByCid(course_id);
             for (LessonDTO lesson : listLesson) {

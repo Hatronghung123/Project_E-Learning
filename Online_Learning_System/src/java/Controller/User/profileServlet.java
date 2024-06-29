@@ -7,6 +7,7 @@ package Controller.User;
 import Controller.CourseDetailServelet;
 import Dal.AccountDAO;
 import Dal.HomeDAO;
+
 import Model.AccountDTO;
 import Model.Category;
 import Model.ProfileDTO;
@@ -79,6 +80,7 @@ public class profileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
+
         String action = request.getParameter("action") == null ? "" : request.getParameter("action");
         //        HttpSession session = request.getSession();
         //        ProfileDTO profile = (ProfileDTO) session.getAttribute("profile");
@@ -103,6 +105,7 @@ public class profileServlet extends HttpServlet {
                 request.getRequestDispatcher("Profile.jsp").forward(request, response);
         }
 
+
     }
 
     /**
@@ -120,6 +123,7 @@ public class profileServlet extends HttpServlet {
 //get action
         String action = request.getParameter("action") == null ? "" : request.getParameter("action");
 
+
         switch (action) {
             case "general":
                 changeInformationProfile(request, response);
@@ -131,6 +135,7 @@ public class profileServlet extends HttpServlet {
                 return;
             default:
                 throw new AssertionError();
+
         }
     }
 
@@ -161,6 +166,7 @@ public class profileServlet extends HttpServlet {
         String gender = request.getParameter("gender") == null ? "" : request.getParameter("gender");
         boolean bool_gender = gender.equals("male");
 //end get data from Profile.jsp
+
 
 //update avatar
         if (file_avt != null && file_avt.getSize() > 0) {
@@ -243,6 +249,19 @@ public class profileServlet extends HttpServlet {
         session.setAttribute("profile", my_profile);
         session.setAttribute("account", my_account);
         session.setMaxInactiveInterval(60 * 30);
+
     }
 
+    
+        public void displaycategory(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            HomeDAO dao = new HomeDAO();
+            ArrayList<Category> listCategory = dao.getAllCategory();
+            request.setAttribute("listCategory", listCategory);
+        } catch (SQLException ex) {
+            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }

@@ -3,9 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package Controller;
-
-import Dal.AccountDAO;
 import Model.AccountDTO;
+import Dal.AccountDAO;
+
+
+
 import Model.ProfileDTO;
 import Util.SendEmail;
 import java.io.IOException;
@@ -402,7 +404,9 @@ public class joinServlet extends HttpServlet {
             request.getRequestDispatcher("SignUp.jsp").forward(request, response);
             return;
         } else {
+
             AccountDTO account = new AccountDTO(email, password);
+
             ProfileDTO profile_register = new ProfileDTO(fullname, 0);
             // nếu chưa thì inser vào trong db, chuyển dến trang home
             accountDAO.insertUser(account, profile_register);

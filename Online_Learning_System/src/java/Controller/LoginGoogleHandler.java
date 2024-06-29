@@ -79,16 +79,19 @@ public class LoginGoogleHandler extends HttpServlet {
         String password = generateRandomPassword();
         AccountDAO accountDAO = new AccountDAO();
 
+
         AccountDTO account_register = null;
         ProfileDTO profile_register = null;
         //kiem tra xem email co trong DB khong
         if (!accountDAO.checkAccountExist(acc_gg.getEmail())) {
             account_register = new AccountDTO(acc_gg.getEmail(), password, 4);
+
             profile_register = new ProfileDTO(acc_gg.getName(), 0);
 
             accountDAO.insertUser(account_register, profile_register);
 
             out.print(profile_register.getFullname());
+
 
             sendPassword.send("hatronghung7777@gmail.com", "chnzvsbysoeesgwe", acc_gg.getEmail(), "This is your password", password, response);
         } else {

@@ -4,14 +4,19 @@
  */
 package Controller.Home;
 
+
 import Dal.AccountDAO;
 import Dal.CourseDetailDAO;
 import Dal.HomeDAO;
+import Dal.LessonManageDAO;
 import Dal.WishlistDAO;
+
 import Model.AccountDTO;
 import Model.Category;
 import Model.Course;
 import Model.Enrollment;
+import Model.LessonDTO;
+
 import Model.ProfileDTO;
 import Model.StarRatingDTO;
 import Model.WishlistDTO;
@@ -76,7 +81,9 @@ public class homeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
+
         AccountDTO acc = (AccountDTO) session.getAttribute("account");
+
         String action = request.getParameter("action");
         PrintWriter out = response.getWriter();
 
@@ -89,22 +96,27 @@ public class homeServlet extends HttpServlet {
             if (acc != null) {
                 ArrayList<Enrollment> listEnrollment = cdDao.getEnrollmentByAccountId(acc.getAccount_id());
                 request.setAttribute("listEnrollment", listEnrollment);
-                
-                 //Lấy ra list wishList để check is active icon
+
+
+                //Lấy ra list wishList để check is active icon
                 getCidFromWishlistByAccId(request, response, acc.getAccount_id());
-               
+
             }
 
-            //Định dạng khóa học theo giá tiền Việt Nam
+            //Định dạng khóa học theo giá tiền Việt Nam và set tổng số h của khóa học
             for (Course course : listPopulerCourse) {
                 course.setFormattedPrice(formartPrice(course.getPrice()));
+                course.setStudy_time(sumOfDurationInCourseInHrs(course.getCourse_id()));
             }
-              //Set số sao và lượt đánh giá cho từng khóa học
-                for (Course course : listPopulerCourse) {
-                    ArrayList<StarRatingDTO> listRating = cdDao.getRatings(course.getCourse_id());
-                    course.setStar(AVGOfRaing.AvgRatingCourse(listRating).get(0));
-                    course.setSumOfRating(AVGOfRaing.AvgRatingCourse(listRating).get(1));
-                }
+            //Set số sao và lượt đánh giá cho từng khóa học
+            for (Course course : listPopulerCourse) {
+                ArrayList<StarRatingDTO> listRating = cdDao.getRatings(course.getCourse_id());
+                course.setStar(AVGOfRaing.AvgRatingCourse(listRating).get(0));
+                course.setSumOfRating(AVGOfRaing.AvgRatingCourse(listRating).get(1));
+            }
+
+
+
 
             request.setAttribute("action", action);
             request.setAttribute("listPopulerCourse", listPopulerCourse);
@@ -190,9 +202,11 @@ public class homeServlet extends HttpServlet {
         NumberFormat formatTer = NumberFormat.getInstance(new Locale("vi", "VN"));
         return formatTer.format(price);
     }
-          
-          
-              public void getCidFromWishlistByAccId(HttpServletRequest request, HttpServletResponse response, int acc_id)
+
+
+    //kiểm tra xem heart active or inactive
+    public void getCidFromWishlistByAccId(HttpServletRequest request, HttpServletResponse response, int acc_id)
+
             throws ServletException, IOException {
         WishlistDAO dao = new WishlistDAO();
         ArrayList<WishlistDTO> listWishListCoursId = dao.getCidFromWishListByAccId(acc_id);
@@ -205,5 +219,32 @@ public class homeServlet extends HttpServlet {
         request.setAttribute("CourseIdList", CourseIdList);
     }
 
+    
+        //tính tổng thời gian học khóa học
+    private String sumOfDurationInCourseInHrs(int course_id)
+            throws ServletException, IOException {
+        LessonManageDAO dao = new LessonManageDAO();
+        int sumDuration = 0;
+        try {
+
+            ArrayList<LessonDTO> listLesson = dao.getListlessonByCid(course_id);
+            for (LessonDTO lesson : listLesson) {
+                sumDuration += lesson.getDuration();
+            }
+
+        } catch(SQLException e) {
+            
+        }
+        
+        double hours = (double)sumDuration / 3600;
+        int before_hours = (int) hours;
+        int after_hourse = (sumDuration % 3600) / 60;
+        
+        
+        return before_hours + String.format(".%02d", after_hourse) + " Hrs";
+    }
+
+    
+    
 
 }

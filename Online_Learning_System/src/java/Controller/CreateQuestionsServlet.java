@@ -96,16 +96,22 @@ public class CreateQuestionsServlet extends HttpServlet {
 
         int questionNumber = Integer.parseInt(questionNumber_str);
         boolean typeQuestion = false;
-        typeQuestion = typeQuestion_str.equalsIgnoreCase("radioBox");
+        //typeQuestion = typeQuestion_str.equalsIgnoreCase("radioBox");
 
+        ArrayList<Questions> listQuestion = new ArrayList<>();
         Questions questions = quizDAO.insertQuestions(new Questions(questionNumber, quizId, titleQuestion, typeQuestion));
+        listQuestion.add(questions);
 
         ArrayList<Answer> answers = new ArrayList<>();
         for (int i = 1; i <= choices.length; i++) {
             boolean correctAnswer = request.getParameter("correctAnswer" + i) == null ? false : true;
             answers.add(new Answer(questions.getQuestionId(), choices[i - 1], correctAnswer));
         }
+        
         quizDAO.insertAnswers(answers);
+        for (Questions questions1 : listQuestion) {
+            quizDAO.updateTypeQuestion(questions1);
+        }
         session.setAttribute("questions", questions);
 
     }

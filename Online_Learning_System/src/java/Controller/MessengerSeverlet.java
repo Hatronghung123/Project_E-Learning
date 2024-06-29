@@ -5,7 +5,9 @@
 package Controller;
 
 import Dal.MessengerDAO;
+
 import Model.AccountDTO;
+
 import Model.Messenger;
 
 import Model.ProfileDTO;
@@ -75,7 +77,9 @@ public class MessengerSeverlet extends HttpServlet {
         MessengerDAO messDAO = new MessengerDAO();
         int receiver_id = Integer.parseInt(request.getParameter("receiver_id"));
         int sender_id = Integer.parseInt(request.getParameter("sender_id"));
+
         AccountDTO account_exist_session = (AccountDTO) session.getAttribute("account");
+
         if (account_exist_session == null) {
             response.sendRedirect("join?action=login");
             return;
@@ -112,7 +116,9 @@ public class MessengerSeverlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
+
         AccountDTO accountInSession = (AccountDTO) session.getAttribute("account");
+
         MessengerDAO messageDAO = new MessengerDAO();
 
         if (accountInSession == null) {

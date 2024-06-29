@@ -106,6 +106,25 @@ public class AccountDTO {
         this.role_id = role_id;
     }
 
+    public String getRoleName() {
+        String role = "";
+        switch (getRole_id()) {
+            case 1:
+                role = "Admin";
+                break;
+            case 2:
+                role = "Manager";
+                break;
+            case 3:
+                role = "Mentor";
+                break;
+            default:
+                role = "Mentee";
+                break;
+        }
+        return role;
+    }
+    
     public boolean isStatus() {
         return status;
     }
@@ -130,4 +149,11 @@ public class AccountDTO {
         this.gender = gender;
     }
 
+    @Override
+    public String toString() {
+        return "AccountDTO{" + "account_id=" + account_id + ", fullName=" + fullName + ", email=" + email + ", password=" + password + ", status=" + status + ", gender=" + gender + ", role_id=" + role_id + '}';
+    }
+
+    
+    
 }

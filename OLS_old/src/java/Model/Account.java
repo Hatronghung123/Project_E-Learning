@@ -13,12 +13,16 @@ package Model;
 public class Account {
 
     private int account_id;
+    private String fullName;
     private String email;
     private String password;
     private boolean status;
+        private boolean gender;
+
     //1 - active 
     //2 - inactive
     private int role_id;
+    
     /*
      role_id = 1 =>ADMIN
                 2 => Manager
@@ -32,6 +36,28 @@ public class Account {
     public Account(String email) {
         this.email = email;
     }
+
+    public Account(int account_id, String fullName, String email, String password, boolean status, int role_id) {
+        this.account_id = account_id;
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.status = status;
+        this.role_id = role_id;
+    }
+
+    public Account(int account_id, String fullName, String email, String password, boolean status, boolean gender, int role_id) {
+        this.account_id = account_id;
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.status = status;
+        this.gender = gender;
+        this.role_id = role_id;
+    }
+    
+    
+    
 
     public Account(int account_id, String email, String password, boolean status, int role_id) {
         this.account_id = account_id;
@@ -111,6 +137,27 @@ public class Account {
     public void setRole_id(int role_id) {
         this.role_id = role_id;
     }
+    
+    public String getRoleName() {
+        String role_name = "";
+        switch (getRole_id()) {
+            case 1:
+                role_name = "Admin";
+                break;
+            case 2:
+                role_name = "Manager";
+                break;
+            case 3:
+                role_name ="Mentor";
+                break;
+            default:
+                role_name = "mentee";
+                break;
+        }
+        
+        return role_name;
+        
+    }
 
     public boolean isStatus() {
         return status;
@@ -120,6 +167,26 @@ public class Account {
         this.status = status;
     }
 
+    
+    
+    public String getFullName() {
+        return fullName;
+    }
+
+   
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public boolean isGender() {
+        return gender;
+    }
+
+    public void setGender(boolean gender) {
+        this.gender = gender;
+    }
+
+    
     
 
 

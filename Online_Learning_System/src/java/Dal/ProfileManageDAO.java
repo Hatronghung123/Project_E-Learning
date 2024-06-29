@@ -4,6 +4,7 @@
  */
 package Dal;
 
+
 import Model.AccountDTO;
 import Model.CourseManageDTO;
 import Model.ProfileDTO;
@@ -18,6 +19,7 @@ public class ProfileManageDAO extends DBContext{
     public static void main(String[] args) {
         ProfileManageDAO dao = new ProfileManageDAO();
         ArrayList<ProfileDTO> list = dao.getMyListManagedMentor(2);
+
         System.out.println(list.get(0).isGender());
         
     }

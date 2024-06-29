@@ -53,7 +53,9 @@ public class CourseManageDAO extends DBContext {
         return null;
     }
 
+
     public boolean deleteCourse(String cid) {
+
         connection = getConnection();
         String sql = """
                        update Course
@@ -63,12 +65,15 @@ public class CourseManageDAO extends DBContext {
             statement.setString(1, cid);
             // thực thi câu lệnh
             statement.executeUpdate();
+
             return true;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return false;
     }
+    
+    
     public boolean activateCourse(String cid) {
         connection = getConnection();
         String sql = """
@@ -84,11 +89,16 @@ public class CourseManageDAO extends DBContext {
             ex.printStackTrace();
         }
         return false;
+
     }
 
     public static void main(String[] args) {
         CourseManageDAO course_manage_DAO = new CourseManageDAO();
-        
+
+
+        ArrayList<CourseManageDTO> list = course_manage_DAO.getMyManagedCourse(2);
+        for(int i=0; i<list.size(); i++)
+        System.out.println(list.get(i).getCourse_name());
 //        course_manage_DAO.insertCourse(2, new CourseManageDTO("abc", "abccc", null, 0, 0, "IT", "0h"));
     }
 
@@ -104,7 +114,6 @@ public class CourseManageDAO extends DBContext {
                                         ,[CourseCategoryId]
                                         ,[CreatedBy]
                                         ,[DateCreated]
-                                        
                                         ,[Status])
                                   VALUES
                                         (?

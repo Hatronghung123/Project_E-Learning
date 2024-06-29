@@ -97,7 +97,10 @@ public class getBillServlet extends HttpServlet {
                 dao.insertBillPayment(payment);
                 dao.insertEnrollment(enrollment);
                 long lessonid = dao.getLessonIdByCourseId(Integer.parseInt(coureId));
-                response.sendRedirect("lesson?cid="+coureId+"&lessonid="+lessonid);
+
+                long createBY = dao.getCreateByByCourseId(Integer.parseInt(coureId));
+                response.sendRedirect("lesson?cid="+coureId+"&lessonid="+lessonid+"&createBy="+createBY);
+
             } catch (SQLException ex) {
                 Logger.getLogger(getBillServlet.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception e) {
