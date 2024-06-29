@@ -27,14 +27,16 @@ public class Course {
     private int amountSudentJoin;
     private double star;
     private double sumOfRating;
+
     private int leture;
     private int firstlessonid;
 
+
     public Course() {
     }
-
-    //Dùng để get new course 
-    public Course(int course_id, String course_name, String description, String instructor, String image, int price, String course_category_id, int create_by, Date date, String study_time, int is_active, int firstlessonid) {
+    
+    //Dùng để get new course và get course detail 
+        public Course(int course_id, String course_name, String description, String instructor, String image, int price, String course_category_id, int create_by, Date date, String study_time, int is_active) {
         this.course_id = course_id;
         this.course_name = course_name;
         this.description = description;
@@ -46,6 +48,24 @@ public class Course {
         this.date = date;
         this.study_time = study_time;
         this.is_active = is_active;
+    }
+
+
+    //Dùng để get new course 
+    public Course(int course_id, String course_name, String description, String instructor, String image, int price, String course_category_id, int create_by, Date date, String study_time, int is_active, int firstlessonid) {
+
+        this.course_id = course_id;
+        this.course_name = course_name;
+        this.description = description;
+        this.instructor = instructor;
+        this.image = image;
+        this.price = price;
+        this.course_category_id = course_category_id;
+        this.create_by = create_by;
+        this.date = date;
+        this.study_time = study_time;
+        this.is_active = is_active;
+
         this.firstlessonid = firstlessonid;
     }
 
@@ -80,7 +100,9 @@ public class Course {
         this.study_time = study_time;
         this.is_active = is_active;
         this.leture = leture;
+
     }
+    
 
     public Course(String course_name, String image, int create_by) {
         this.course_name = course_name;
@@ -208,6 +230,7 @@ public class Course {
         this.sumOfRating = sumOfRating;
     }
 
+
     public int getLeture() {
         return leture;
     }
@@ -227,8 +250,13 @@ public class Course {
     @Override
     public String toString() {
         return "Course{" + "course_id=" + course_id + ", course_name=" + course_name + ", description=" + description + ", instructor=" + instructor + ", image=" + image + ", price=" + price + ", course_category_id=" + course_category_id + ", create_by=" + create_by + ", date=" + date + ", study_time=" + study_time + ", formattedPrice=" + formattedPrice + ", is_active=" + is_active + ", amountSudentJoin=" + amountSudentJoin + ", star=" + star + ", sumOfRating=" + sumOfRating + ", leture=" + leture + ", firstlessonid=" + firstlessonid + '}';
+
     }
     
+    
+
+
+
     
 
 

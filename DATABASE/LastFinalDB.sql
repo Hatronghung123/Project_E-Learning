@@ -265,12 +265,12 @@ create table Payment(
 );
 
 
-
+--Tuong insert ModuleNumber
 create table Module(
 	ModuleId int primary key identity(1,1),
 	ModuleName nvarchar(255),
 	CourseId int foreign key references Course(CourseId),
-
+	ModuleNumber int 
 );
 
 insert into Module 
@@ -368,7 +368,6 @@ create table QuestionChoices(
 create table AnswerQuestion(
 	AccountId int references Account(AccountId),
 	QuestionId int references Question(QuestionId),
-	primary key(AccountId, QuestionId),
 	Answer text,
 	IsCorrect bit,
 );

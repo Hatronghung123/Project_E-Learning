@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Profile</title>
+        <title>Add New Course</title>
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
@@ -157,16 +157,12 @@
                                                 <h3 style="color: red">${requestScope.error_category}</h3>
                                                 <label class="form-label">Category</label>
                                                 <select name="category" class="custom-select">
+                                                    <option value="" selected >Choose one</option>
                                                     <c:forEach items="${listCategory}" var="o">
                                                         <option value="${o.category_id}" <c:if test="${requestScope.category} == null}">selected</c:if>>${o.getCategory_name()}</option>
                                                     </c:forEach>
                                                 </select>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="form-label">Study Time Recommend:</label>
-                                                <input name="studyTime" type="text" class="form-control" value="${requestScope.study_time}">
-                                            </div>
-
                                         </div><br>
                                     </div>
                                 </div>
@@ -174,16 +170,20 @@
                         </div>
                     </div>
                     <div class="text-right mt-3">
-                        <button type="submit" name="cancel" class="btn btn-outline-danger md-btn-flat">Cancel</button>
+                        <a onclick="cancel(event)" href="#" name="cancel" class="btn btn-outline-danger md-btn-flat">Cancel</a>
                         <button type="submit" name="add" class="btn btn-primary">Add Course</button>&nbsp;
-                        <!--                    <button type="button" class="btn btn-secondary">Cancel</button>-->
                     </div>
                 </div>
             </form>
             <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
             <script type="text/javascript">
-
+                            function cancel(event) {
+                                event.preventDefault();
+                                if (confirm("Are you sure you want to exit?")) {
+                                    window.location.href = "course-manage";
+                                }
+                            }
             </script>
 
         </div>
@@ -215,3 +215,5 @@
     </body>
 </body>
 </html>
+
+

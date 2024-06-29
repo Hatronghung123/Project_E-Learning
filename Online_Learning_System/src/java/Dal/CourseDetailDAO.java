@@ -145,6 +145,7 @@ public class CourseDetailDAO {
 
     //Lấy course theo course ID
     public Course getCourseById(int courseId) throws SQLException {
+
         String sql = """
                      SELECT cr.[CourseId],
                             cr.[CourseName],
@@ -174,6 +175,7 @@ public class CourseDetailDAO {
                             cr.[StudyTime],
                             cr.[Status],
                             pro.FullName""";
+
         try {
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
@@ -198,6 +200,7 @@ public class CourseDetailDAO {
             e.printStackTrace();
             System.out.println("Lỗi");
         }
+        
 
         return null;
     }
@@ -250,7 +253,10 @@ public class CourseDetailDAO {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         CourseDetailDAO dao = new CourseDetailDAO();
+
         System.out.println(dao.getCourseById(4));
+
+
     }
 
 }

@@ -4,7 +4,9 @@
  */
 package Dal;
 
-import Model.Account;
+
+import Model.AccountDTO;
+
 import Model.ProfileDTO;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,15 +21,17 @@ public class AccountDAO extends DBContext {
         AccountDAO dao = new AccountDAO();
         System.out.println((dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010")).getEmail());
         System.out.println(dao.checkAccountExist("tuong0505ht@gmail.com"));
-//        dao.insertUser(new Account("tuongdeptrai@gmail.com", "67676767", 4), new Profile("Pham Cat Tuong", 0));
-        Account a = dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010");
-        System.out.println(dao.CheckActiveOrInActive(12));
+
+//        dao.insertUser(new AccountDTO("tuongdeptrai@gmail.com", "67676767", 4), new Profile("Pham Cat Tuong", 0));
+        AccountDTO a = dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010");
+        System.out.println(dao.getAllAccount());
+
         System.out.println("Succesfully");
         dao.activeOrInactiveAccount(12, 0);
     }
 
     //tra ve account theo EMAIL & PASS
-    public Account getAccountByEmailPass(String email, String password) {
+    public AccountDTO getAccountByEmailPass(String email, String password) {
         connection = getConnection();
         String sql = """
                      SELECT [AccountId]
@@ -48,7 +52,7 @@ public class AccountDAO extends DBContext {
                 int role_id = resultSet.getInt(5);
                 boolean status = resultSet.getBoolean(4);
 
-                return new Account(account_id, email_in_db, password_in_db, status, role_id);
+                return new AccountDTO(account_id, email_in_db, password_in_db, status, role_id);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -57,7 +61,7 @@ public class AccountDAO extends DBContext {
     }
 
     // login with google
-    public Account getAccountGoogle(String email) {
+    public AccountDTO getAccountGoogle(String email) {
         connection = getConnection();
         String sql = """
                      SELECT [AccountId]
@@ -77,7 +81,7 @@ public class AccountDAO extends DBContext {
                 int role_id = resultSet.getInt(5);
                 boolean status = resultSet.getBoolean(4);
 
-                return new Account(account_id, email_in_db, password_in_db, status, role_id);
+                return new AccountDTO(account_id, email_in_db, password_in_db, status, role_id);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -85,13 +89,15 @@ public class AccountDAO extends DBContext {
         return null;
     }
 
-    public void insertUser(Account account, ProfileDTO profile) {
+
+    public void insertUser(AccountDTO account, ProfileDTO profile) {
+
         insertAccount(account);
-        Account new_insert_account = getAccountByEmailPass(account.getEmail(), account.getPassword());
+        AccountDTO new_insert_account = getAccountByEmailPass(account.getEmail(), account.getPassword());
         insertProfile(profile, new_insert_account.getAccount_id());
     }
 
-    public void insertAccount(Account account) {
+    public void insertAccount(AccountDTO account) {
         connection = getConnection();
         String sql_account = """
                              INSERT INTO [dbo].[Account]
@@ -143,7 +149,9 @@ public class AccountDAO extends DBContext {
         }
     }
 
-    public ProfileDTO getProfile(Account account_login) {
+
+    public ProfileDTO getProfile(AccountDTO account_login) {
+
         connection = getConnection();
         String sql = """
                      SELECT [ProfileId]
@@ -173,7 +181,7 @@ public class AccountDAO extends DBContext {
         return null;
     }
 
-//    public Account checkAccountIsExit(Account account) {
+//    public AccountDTO checkAccountIsExit(AccountDTO account) {
 //        connection = getConnection();
 //        String sql = "SELECT [uid]\n"
 //                + "      ,[username]\n"
@@ -196,7 +204,7 @@ public class AccountDAO extends DBContext {
 //                double amount = resultSet.getDouble(5);
 //                String code = resultSet.getString(6);
 //                int roleid = resultSet.getInt(7);
-//                Account accountCheckIsExit = new Account(uid, fullname, password, email, amount, code, roleid);
+//                AccountDTO accountCheckIsExit = new AccountDTO(uid, fullname, password, email, amount, code, roleid);
 //                return accountCheckIsExit;
 //            }
 //        } catch (SQLException e) {
@@ -222,7 +230,7 @@ public class AccountDAO extends DBContext {
         return false;
     }
 
-    public void updatePassword(Account account) {
+    public void updatePassword(AccountDTO account) {
         connection = getConnection();
         String sql = """
                      UPDATE [dbo].[Account]
@@ -260,7 +268,7 @@ public class AccountDAO extends DBContext {
 
 //    public void updateEmail_ByAccId(String email, int account_id) {
 //        connection = getConnection();
-//        String sql = "UPDATE Account\n"
+//        String sql = "UPDATE AccountDTO\n"
 //                + "   SET \n"
 //                + "      [Email] = ?\n"
 //                + "      \n"
@@ -330,8 +338,10 @@ public class AccountDAO extends DBContext {
     //===========Admin=================
     
     //Lấy ra tất cả tài khoản
-        public ArrayList<Account> getAllAccount() {
-            ArrayList<Account> list = new ArrayList<>();
+
+        public ArrayList<AccountDTO> getAllAccount() {
+            ArrayList<AccountDTO> list = new ArrayList<>();
+
         connection = getConnection();
         String sql = """
                      SELECT [AccountId]
@@ -350,10 +360,13 @@ public class AccountDAO extends DBContext {
                 String fullName = resultSet.getString(2);
                 String email_in_db = resultSet.getString(3);
                 String password_in_db = resultSet.getString(4);
-                int role_id = resultSet.getInt(6);
                 boolean status = resultSet.getBoolean(5);
+                int role_id = resultSet.getInt(6);
+                
 
-                list.add(new Account(account_id,fullName, email_in_db, password_in_db, status, role_id));
+
+                list.add(new AccountDTO(account_id,fullName, email_in_db, password_in_db, status, role_id));
+
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -364,9 +377,11 @@ public class AccountDAO extends DBContext {
         
         
         
-       public void insertUserByAdmin(Account account, ProfileDTO profile) {
+
+       public void insertUserByAdmin(AccountDTO account, ProfileDTO profile) {
         insertAccount(account);
-        Account new_insert_account = getAccountByEmailPass(account.getEmail(), account.getPassword());
+        AccountDTO new_insert_account = getAccountByEmailPass(account.getEmail(), account.getPassword());
+
         insertProfileByAdmin(profile, new_insert_account.getAccount_id());
     }
 
@@ -404,7 +419,9 @@ public class AccountDAO extends DBContext {
 
 
     //lấy account theo id để admin có thể sửa thông tin tài khoản
-     public Account getAccountById(int accountId) {
+
+     public AccountDTO getAccountById(int accountId) {
+
         connection = getConnection();
         String sql = """
                      SELECT  [AccountId]
@@ -429,7 +446,9 @@ public class AccountDAO extends DBContext {
                 boolean status = resultSet.getBoolean(5);
                 boolean gender = resultSet.getBoolean(6);
                 int role = resultSet.getInt(7);
-                return new Account(acc_id, fullname, email, pass, status, gender, role) ;
+
+                return new AccountDTO(acc_id, fullname, email, pass, status, gender, role) ;
+
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -439,7 +458,9 @@ public class AccountDAO extends DBContext {
 
      
      
-     public void updateAccount(Account account, ProfileDTO profile) {
+
+     public void updateAccount(AccountDTO account, ProfileDTO profile) {
+
          updateProfile(profile);
         connection = getConnection();
         String sql = """
@@ -459,7 +480,9 @@ public class AccountDAO extends DBContext {
         }
     }
      
-    public void updateProfile(ProfileDTO profile) {
+
+          public void updateProfile(ProfileDTO profile) {
+
         connection = getConnection();
         String sql = """
                        UPDATE[dbo].[Profile]
@@ -480,6 +503,7 @@ public class AccountDAO extends DBContext {
         }
     }
     
+
           
           
    //kiểm tra xem tài khoản active hay inactive
@@ -530,5 +554,6 @@ public class AccountDAO extends DBContext {
     }
           
           
+
 
 }

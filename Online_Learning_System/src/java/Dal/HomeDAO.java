@@ -4,6 +4,7 @@
  */
 package Dal;
 
+
 import Model.Category;
 import Model.Course;
 import java.sql.Date;
@@ -30,6 +31,7 @@ public class HomeDAO {
     // Lấy tất cả course
     public ArrayList<Course> getAllCourses() {
         ArrayList<Course> courses = new ArrayList<>();
+
         String sql = """
                      SELECT 
                          cr.[CourseId],
@@ -85,6 +87,7 @@ public class HomeDAO {
                 int amountSudentJoin = rs.getInt(12);
                 int firsrLessonid = rs.getInt(13);
                 Course course = new Course(courseId, courseName, description, instructor, image, price, courseCategoryId, createdBy, dateCreated, studyTime, status, amountSudentJoin, firsrLessonid);
+
                 courses.add(course);
             }
         } catch (SQLException e) {
@@ -120,6 +123,7 @@ public class HomeDAO {
 
     public ArrayList<Course> getCourseByCategoryId(String cateId) {
         ArrayList<Course> courses = new ArrayList<>();
+
         String sql = """
                      	SELECT 
                          cr.[CourseId],
@@ -188,6 +192,7 @@ public class HomeDAO {
                     int firsrLessonid = rs.getInt(13);
 
                     courses.add(new Course(courseId, courseName, description, instructor, image, price, courseCategoryId, createdBy, dateCreated, studyTime, status, amountSudentJoin, firsrLessonid));
+
                 }
             }
 
@@ -199,6 +204,7 @@ public class HomeDAO {
 
     public ArrayList<Course> getNewCourse() throws SQLException {
         ArrayList<Course> list = new ArrayList<>();
+
         String sql = """
                      	SELECT TOP 2 
                          cr.[CourseId],
@@ -227,6 +233,7 @@ public class HomeDAO {
                          [dbo].[Profile] pro ON pro.[ProfileId] = te.[MentorId]
                      ORDER BY 
                          cr.[CourseId] DESC;""";
+
         try {
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
@@ -257,6 +264,7 @@ public class HomeDAO {
 
     public ArrayList<Course> getPopulerCourse() throws SQLException {
         ArrayList<Course> list = new ArrayList<>();
+
         String sql = """
                      	SELECT TOP (3) 
                          cr.[CourseId],
@@ -300,6 +308,7 @@ public class HomeDAO {
                          pro.[FullName]
                      ORDER BY 
                          StudentCount DESC;""";
+
         try {
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
@@ -319,7 +328,8 @@ public class HomeDAO {
                 int amountSudentJoin = rs.getInt(12);
                 int firsrLessonid = rs.getInt(13);
 
-                list.add(new Course(course_id, course_name, description, instructor, image, price, cate_id, create_by, date, studyTime, status, amountSudentJoin,firsrLessonid));
+                list.add(new Course(course_id, course_name, description, instructor, image, price, cate_id, create_by, date, studyTime, status, amountSudentJoin, firsrLessonid));
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -333,6 +343,7 @@ public class HomeDAO {
     //Lấy ra những sản phẩm khi search
     public ArrayList<Course> searchByName(String txtSearch) throws SQLException {
         ArrayList<Course> list = new ArrayList<>();
+
         String sql = """
                      SELECT 
                          cr.[CourseId],
@@ -384,6 +395,7 @@ public class HomeDAO {
         ps.setString(1, "%" + txtSearch + "%");
         rs = ps.executeQuery();
         while (rs.next()) {
+
             int course_id = rs.getInt(1);
             String course_name = rs.getString(2);
             String description = rs.getString(3);
@@ -405,6 +417,7 @@ public class HomeDAO {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         HomeDAO dao = new HomeDAO();
-        System.out.println(dao.getCourseByCategoryId("IT"));
+        System.out.println(dao.getAllCategory().get(1));
+
     }
 }

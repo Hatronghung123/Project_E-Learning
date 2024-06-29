@@ -7,13 +7,15 @@ package Controller;
 import Dal.CourseDetailDAO;
 import Dal.HomeDAO;
 import Dal.LessonDAO;
+
 import Dal.LessonManageDAO;
 import Dal.WishlistDAO;
-import Model.Account;
+import Model.AccountDTO;
 import Model.Category;
 import Model.Course;
 import Model.Enrollment;
-import Model.Lesson;
+import Model.LessonDTO;
+
 import Model.StarRatingDTO;
 import Model.WishlistDTO;
 import Util.AVGOfRaing;
@@ -78,7 +80,9 @@ public class CourseDetailServelet extends HttpServlet {
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
-        Account acc = (Account) session.getAttribute("account");
+
+        AccountDTO acc = (AccountDTO) session.getAttribute("account");
+
         CourseDetailDAO cdDao = new CourseDetailDAO();
         LessonDAO lessondao = new LessonDAO();
         try {
@@ -103,12 +107,14 @@ public class CourseDetailServelet extends HttpServlet {
             }
 
             //Định dạng khóa học theo giá tiền Việt Nam và set tổng số h của khóa học
+
             for (Course course : listCourst_Relate) {
                 course.setFormattedPrice(formartPrice(course.getPrice()));
                 course.setStudy_time(sumOfDurationInCourseInHrs(course.getCourse_id()));
 
             }
             getCourseByID.setFormattedPrice(formartPrice(getCourseByID.getPrice()));
+
             getCourseByID.setStudy_time(sumOfDurationInCourseInHrs(course_Id));
             
             //Set số sao và lượt đánh giá cho từng khóa học
@@ -124,6 +130,7 @@ public class CourseDetailServelet extends HttpServlet {
             displaycategory(request, response);
             //lấy ra số lượng sao trung bình và tổng số lượng đánh giá của khóa học
             displayRatingCourse(request, response, listRatings, course_Id);
+
 
             request.setAttribute("cid", course_Id);
             request.setAttribute("lessonid", lessonid);
@@ -206,6 +213,7 @@ public class CourseDetailServelet extends HttpServlet {
         }
     }
 
+
     //tính tổng thời gian học khóa học
     private String sumOfDurationInCourseInHrs(int course_id)
             throws ServletException, IOException {
@@ -213,8 +221,8 @@ public class CourseDetailServelet extends HttpServlet {
         int sumDuration = 0;
         try {
 
-            ArrayList<Lesson> listLesson = dao.getListlessonByCid(course_id);
-            for (Lesson lesson : listLesson) {
+            ArrayList<LessonDTO> listLesson = dao.getListlessonByCid(course_id);
+            for (LessonDTO lesson : listLesson) {
                 sumDuration += lesson.getDuration();
             }
 
@@ -228,5 +236,6 @@ public class CourseDetailServelet extends HttpServlet {
 
         return before_hours + String.format(".%02d", after_hourse) + " Hrs";
     }
+
 
 }

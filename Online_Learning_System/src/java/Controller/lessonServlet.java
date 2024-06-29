@@ -9,12 +9,14 @@ import Dal.DisscussionDAO;
 import Dal.HomeDAO;
 import Dal.LessonDAO;
 import Dal.LessonManageDAO;
-import Model.Account;
+
+import Model.AccountDTO;
+
 import Model.Category;
 import YoutubeAPI.YoutubeDuration;
 import Model.DiscussionLesson;
 import Model.Enrollment;
-import Model.Lesson;
+import Model.LessonDTO;
 import Model.StarRatingDTO;
 import Util.AVGOfRaing;
 import java.io.IOException;
@@ -82,7 +84,9 @@ public class lessonServlet extends HttpServlet {
         LessonDAO dao = new LessonDAO();
         DisscussionDAO discussDao = new DisscussionDAO();
         HttpSession session = request.getSession();
-        Account acc = (Account) session.getAttribute("account");
+
+        AccountDTO acc = (AccountDTO) session.getAttribute("account");
+
         String createBy = request.getParameter("createBy");
         String courseid_str = request.getParameter("cid");
         String lessonid_str = request.getParameter("lessonid");
@@ -117,7 +121,8 @@ public class lessonServlet extends HttpServlet {
                     }
                     // Nếu vẫn không có lessonid, đặt bài học đầu tiên là mặc định
                     if (lessonid_str == null) {
-                         ArrayList<Lesson> lessonList = dao.getListModulByCidd(course_id);
+                         ArrayList<LessonDTO> lessonList = dao.getListModulByCidd(course_id);
+
                         if (!lessonList.isEmpty()) {
                             lesson_id = lessonList.get(0).getLessonid();
                         }
@@ -141,10 +146,12 @@ public class lessonServlet extends HttpServlet {
                         return;
                     }
 
+
                 }
-                ArrayList<Lesson> lessonList = dao.getListModulByCidd(course_id);
-                ArrayList<Model.Module> moduleList = dao.getListModulByCid(course_id);
-                Lesson lesson = dao.getlessonByCid(course_id, lesson_id);
+                ArrayList<LessonDTO> lessonList = dao.getListModulByCidd(course_id);
+                ArrayList<Model.ModuleDTO> moduleList = dao.getListModulByCid(course_id);
+                LessonDTO lesson = dao.getlessonByCid(course_id, lesson_id);
+
 
                 
                 
@@ -196,6 +203,7 @@ public class lessonServlet extends HttpServlet {
                 lastLessonCookie.setPath("/");
                 response.addCookie(lastLessonCookie);
                 session.setAttribute("lastLessonId_"+course_id, lesson_id);
+
 
             } catch (SQLException ex) {
                 Logger.getLogger(lessonServlet.class.getName()).log(Level.SEVERE, null, ex);
@@ -272,7 +280,9 @@ public class lessonServlet extends HttpServlet {
         String createBy = request.getParameter("createBy");
         String comment = request.getParameter("content");
         String cid = request.getParameter("cid");
-        Account acc = (Account) session.getAttribute("account");
+        
+        AccountDTO acc = (AccountDTO) session.getAttribute("account");
+
         String lession_id = request.getParameter("lessonid");
 
         DisscussionDAO dao = new DisscussionDAO();
@@ -335,8 +345,9 @@ public class lessonServlet extends HttpServlet {
         long sumDuration = 0;
         try {
 
-            ArrayList<Lesson> listLesson = dao.getListlessonByCid(course_id);
-            for (Lesson lesson : listLesson) {
+
+            ArrayList<LessonDTO> listLesson = dao.getListlessonByCid(course_id);
+            for (LessonDTO lesson : listLesson) {
                 sumDuration += lesson.getDuration();
             }
 

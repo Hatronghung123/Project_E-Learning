@@ -6,7 +6,9 @@ package Controller.Admin;
 
 import Dal.ProfileManageDAO;
 import Dal.StatisticalDAO;
-import Model.Account;
+
+import Model.AccountDTO;
+
 import Model.Category;
 import Model.Payment;
 import Model.ProfileDTO;
@@ -69,7 +71,9 @@ public class StatisticalSeverlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Account my_account = (Account) session.getAttribute("account");
+
+        AccountDTO my_account = (AccountDTO) session.getAttribute("account");
+
         StatisticalDAO admin_manage_DAO = new StatisticalDAO();
         try {
             ArrayList<Payment> TotalEarningPerMonth = admin_manage_DAO.getTotalEarningPerMonth();

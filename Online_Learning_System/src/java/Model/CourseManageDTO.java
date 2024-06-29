@@ -41,7 +41,9 @@ public class CourseManageDTO {
         this.status = status;
         this.number_enrollment = number_enrollment;
     }
+
     public CourseManageDTO(String course_name, String description, String image, float price, float discount, String course_category_id, String study_time) {
+
         this.course_name = course_name;
         this.description = description;
         this.image = image;
@@ -49,7 +51,21 @@ public class CourseManageDTO {
         this.discount = discount;
         this.course_category_id = course_category_id;
         this.study_time = study_time;
+
     }
+    
+        public CourseManageDTO( String course_name, String description,  String image, float price, float discount, String course_category_id) {
+
+        this.course_name = course_name;
+        this.description = description;
+        this.image = image;
+        this.price = price;
+        this.discount = discount;
+        this.course_category_id = course_category_id;
+
+    }
+    
+    
 
     public int getCourse_id() {
         return course_id;

@@ -4,10 +4,12 @@
  */
 package Controller.User.Manager;
 
-import Model.Module;
+
+import Model.ModuleDTO;
 
 import Dal.LessonManageDAO;
-import Model.Lesson;
+import Model.LessonDTO;
+
 import YoutubeAPI.YoutubeDuration;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -66,15 +68,16 @@ public class LessonMangeServelet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         LessonManageDAO dao = new LessonManageDAO();
-        ArrayList<Lesson> lessonList = null;
+        ArrayList<LessonDTO> lessonList = null;
         String course_id = request.getParameter("cid");
 
         String action = (request.getParameter("action") == null) ? "" : request.getParameter("action");
 
         try {
             //Lấy ra được list module theo course id khi add hoặc update
-            ArrayList<Module> listModule = dao.getListModuleByCid(Integer.parseInt(course_id));
+            ArrayList<ModuleDTO> listModule = dao.getListModuleByCid(Integer.parseInt(course_id));
             switch (action) {
 
                 case "addlesson":
@@ -104,11 +107,13 @@ public class LessonMangeServelet extends HttpServlet {
                 //o.print(lessonList);
 
             }
+
         } catch (SQLException ex) {
             Logger.getLogger(LessonMangeServelet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     /**
@@ -157,6 +162,7 @@ public class LessonMangeServelet extends HttpServlet {
         return duration;
     }
 
+
     //thêm một lesson mới vào database
     private void AddLesson(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -170,15 +176,16 @@ public class LessonMangeServelet extends HttpServlet {
         String videoLink = request.getParameter("videoLink");
         long duration = getDuraton(videoLink);
         LessonManageDAO dao = new LessonManageDAO();
+
         //Lấy ra được list module theo course id khi add hoặc update
 
         String msg = "";
         try {
-            ArrayList<Module> listModule = dao.getListModuleByCid(Integer.parseInt(cid));
+            ArrayList<ModuleDTO> listModule = dao.getListModuleByCid(Integer.parseInt(cid));
             if (dao.checkLessonExist(lessonName) != null) {
                 msg = "Lesson was exist";
             } else {
-                Lesson lesson = new Lesson(Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
+                LessonDTO lesson = new LessonDTO(Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
                 dao.InsertLesson(lesson);
                 response.sendRedirect("course-manage?cid=" + cid + "&action=update");
                 return;
@@ -197,6 +204,7 @@ public class LessonMangeServelet extends HttpServlet {
 
         } catch (Exception e) {
         }
+
     }
 
     //xóa lesson ra khỏi database
@@ -219,7 +227,9 @@ public class LessonMangeServelet extends HttpServlet {
         String lessonid = request.getParameter("lessonid");
 
         LessonManageDAO dao = new LessonManageDAO();
-        Lesson lesson = null;
+
+        LessonDTO lesson = null;
+
         try {
             lesson = dao.getlessonByLessonid(Integer.parseInt(lessonid));
         } catch (SQLException ex) {
@@ -243,7 +253,8 @@ public class LessonMangeServelet extends HttpServlet {
         long duration = getDuraton(videoLink);
         LessonManageDAO dao = new LessonManageDAO();
         try {
-            Lesson lesson = new Lesson(Integer.parseInt(lessonid), Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
+            LessonDTO lesson = new LessonDTO(Integer.parseInt(lessonid), Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
+
             dao.updateLesson(lesson);
             response.sendRedirect("course-manage?cid=" + cid + "&action=update");
         } catch (Exception e) {

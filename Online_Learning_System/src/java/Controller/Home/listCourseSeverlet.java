@@ -10,11 +10,12 @@ import Dal.HomeDAO;
 import Dal.LessonDAO;
 import Dal.LessonManageDAO;
 import Dal.WishlistDAO;
-import Model.Account;
+import Model.AccountDTO;
 import Model.Category;
 import Model.Course;
 import Model.Enrollment;
-import Model.Lesson;
+import Model.LessonDTO;
+
 import Model.StarRatingDTO;
 import Model.WishlistDTO;
 import Util.AVGOfRaing;
@@ -83,7 +84,9 @@ public class listCourseSeverlet extends HttpServlet {
         HomeDAO dao = new HomeDAO();
         CourseDetailDAO cdDao = new CourseDetailDAO();
         String action = request.getParameter("action");
-        Account acc = (Account) session.getAttribute("account");
+
+        AccountDTO acc = (AccountDTO) session.getAttribute("account");
+
         String cid = request.getParameter("cateid");
 
         try {
@@ -105,18 +108,20 @@ public class listCourseSeverlet extends HttpServlet {
                 course.setFormattedPrice(formartPrice(course.getPrice()));
                 course.setStudy_time(sumOfDurationInCourseInHrs(course.getCourse_id()));
 
+
             }
 
             for (Course course : listAllCourse) {
                 course.setFormattedPrice(formartPrice(course.getPrice()));
                 course.setStudy_time(sumOfDurationInCourseInHrs(course.getCourse_id()));
-
             }
 
 //            có thể viết hàm riêng
             //list All course
             if (cid.equals("all")) {
+
                 //Set số sao và lượt đánh giá cho từng khóa học và set tổng số h của khóa học
+
                 for (Course course : listAllCourse) {
                     ArrayList<StarRatingDTO> listRating = cdDao.getRatings(course.getCourse_id());
                     course.setStar(AVGOfRaing.AvgRatingCourse(listRating).get(0));
@@ -159,7 +164,9 @@ public class listCourseSeverlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
-            Account acc = (Account) session.getAttribute("account");
+
+            AccountDTO acc = (AccountDTO) session.getAttribute("account");
+
             String action = request.getParameter("action");
 
             String search = request.getParameter("search");
@@ -188,8 +195,6 @@ public class listCourseSeverlet extends HttpServlet {
                 course.setStar(AVGOfRaing.AvgRatingCourse(listRating).get(0));
                 course.setSumOfRating(AVGOfRaing.AvgRatingCourse(listRating).get(1));
             }
-
-           
 
             request.setAttribute("action", action);
             request.setAttribute("listCourseBySearch", listCourseBySearch);
@@ -229,6 +234,7 @@ public class listCourseSeverlet extends HttpServlet {
         request.setAttribute("CourseIdList", CourseIdList);
     }
 
+
     //tính tổng thời gian học khóa học
     private String sumOfDurationInCourseInHrs(int course_id)
             throws ServletException, IOException {
@@ -236,8 +242,8 @@ public class listCourseSeverlet extends HttpServlet {
         int sumDuration = 0;
         try {
 
-            ArrayList<Lesson> listLesson = dao.getListlessonByCid(course_id);
-            for (Lesson lesson : listLesson) {
+            ArrayList<LessonDTO> listLesson = dao.getListlessonByCid(course_id);
+            for (LessonDTO lesson : listLesson) {
                 sumDuration += lesson.getDuration();
             }
 

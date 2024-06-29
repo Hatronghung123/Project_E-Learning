@@ -4,18 +4,18 @@
  */
 package Controller.Home;
 
-import Controller.lessonServlet;
+
 import Dal.AccountDAO;
 import Dal.CourseDetailDAO;
 import Dal.HomeDAO;
-import Dal.LessonDAO;
 import Dal.LessonManageDAO;
 import Dal.WishlistDAO;
-import Model.Account;
+import Model.AccountDTO;
 import Model.Category;
 import Model.Course;
 import Model.Enrollment;
-import Model.Lesson;
+import Model.LessonDTO;
+
 import Model.ProfileDTO;
 import Model.StarRatingDTO;
 import Model.WishlistDTO;
@@ -80,7 +80,9 @@ public class homeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Account acc = (Account) session.getAttribute("account");
+
+        AccountDTO acc = (AccountDTO) session.getAttribute("account");
+
         String action = request.getParameter("action");
         PrintWriter out = response.getWriter();
 
@@ -93,6 +95,7 @@ public class homeServlet extends HttpServlet {
             if (acc != null) {
                 ArrayList<Enrollment> listEnrollment = cdDao.getEnrollmentByAccountId(acc.getAccount_id());
                 request.setAttribute("listEnrollment", listEnrollment);
+
 
                 //Lấy ra list wishList để check is active icon
                 getCidFromWishlistByAccId(request, response, acc.getAccount_id());
@@ -110,6 +113,7 @@ public class homeServlet extends HttpServlet {
                 course.setStar(AVGOfRaing.AvgRatingCourse(listRating).get(0));
                 course.setSumOfRating(AVGOfRaing.AvgRatingCourse(listRating).get(1));
             }
+
 
 
 
@@ -182,7 +186,7 @@ public class homeServlet extends HttpServlet {
         if (check_remember_email && check_remember_password) {
             AccountDAO accountDAO = new AccountDAO();
             HttpSession session = request.getSession();
-            Account account_login = accountDAO.getAccountByEmailPass(email, password);
+            AccountDTO account_login = accountDAO.getAccountByEmailPass(email, password);
             if (account_login != null) {
                 ProfileDTO profile = accountDAO.getProfile(account_login);
                 session.setAttribute("profile", profile);
@@ -198,8 +202,10 @@ public class homeServlet extends HttpServlet {
         return formatTer.format(price);
     }
 
+
     //kiểm tra xem heart active or inactive
     public void getCidFromWishlistByAccId(HttpServletRequest request, HttpServletResponse response, int acc_id)
+
             throws ServletException, IOException {
         WishlistDAO dao = new WishlistDAO();
         ArrayList<WishlistDTO> listWishListCoursId = dao.getCidFromWishListByAccId(acc_id);
@@ -220,13 +226,13 @@ public class homeServlet extends HttpServlet {
         int sumDuration = 0;
         try {
 
-            ArrayList<Lesson> listLesson = dao.getListlessonByCid(course_id);
-            for (Lesson lesson : listLesson) {
+            ArrayList<LessonDTO> listLesson = dao.getListlessonByCid(course_id);
+            for (LessonDTO lesson : listLesson) {
                 sumDuration += lesson.getDuration();
             }
 
-        } catch (SQLException ex) {
-            Logger.getLogger(lessonServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch(SQLException e) {
+            
         }
         
         double hours = (double)sumDuration / 3600;
@@ -239,4 +245,5 @@ public class homeServlet extends HttpServlet {
 
     
     
+
 }

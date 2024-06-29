@@ -4,7 +4,7 @@
  */
 package Dal;
 
-import Model.Account;
+import Model.AccountDTO;
 import Model.Course;
 import java.sql.*;
 import java.util.ArrayList;
@@ -32,6 +32,7 @@ public class DBContext {
             String user = "sa";
             String password = "Tuan2003";
 
+
             connection = DriverManager.getConnection(url, user, password);
             return connection;
         } catch (SQLException | ClassNotFoundException e) {
@@ -45,7 +46,7 @@ public class DBContext {
         test.connection = test.getConnection();
         System.out.println(test.connection);
         AccountDAO accDao = new AccountDAO();
-        Account a = accDao.getAccountByEmailPass("tuong0505ht@gmail.com","10101010");
+        AccountDTO a = accDao.getAccountByEmailPass("tuong0505ht@gmail.com","10101010");
         System.out.println(a.getEmail());
     }
 }

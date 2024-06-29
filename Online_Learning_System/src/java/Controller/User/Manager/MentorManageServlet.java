@@ -7,7 +7,8 @@ package Controller.User.Manager;
 
 import Dal.CourseManageDAO;
 import Dal.ProfileManageDAO;
-import Model.Account;
+
+import Model.AccountDTO;
 import Model.CourseManageDTO;
 import Model.ProfileDTO;
 import java.io.IOException;
@@ -63,7 +64,9 @@ public class MentorManageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Account my_account = (Account) session.getAttribute("account");
+
+        AccountDTO my_account = (AccountDTO) session.getAttribute("account");
+
         ProfileManageDAO mentor_manage_DAO = new ProfileManageDAO();
         ArrayList<ProfileDTO> list_managed_mentor = mentor_manage_DAO.getMyListManagedMentor(my_account.getAccount_id());
         

@@ -108,7 +108,7 @@
                 height: 80px;
                 border-radius: 50%;
             }
-            
+
         </style>
 
         <script>
@@ -135,15 +135,15 @@
                         </div>
                     </div>
                 </div>
-                <form action="profile" method="post" enctype="multipart/form-data">
+                <form action="profile?action=general" method="post" enctype="multipart/form-data">
                     <div class="container light-style flex-grow-1 container-p-y">
 
                         <div class=" overflow-hidden">
                             <div class="row no-gutters row-bordered row-border-light">
                                 <div class="col-md-3 pt-0">
                                     <div class="list-group list-group-flush account-settings-links">
-                                        <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-general">General</a>
-                                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">Change password</a>
+                                        <a class="list-group-item list-group-item-action active" href="profile?action=general">General</a>
+                                        <a class="list-group-item list-group-item-action" href="profile?action=change_password">Change password</a>
                                         <!-- <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-info">Information</a>-->
                                         <!--                                <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-social-links">Social links</a>
                                                                         <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-connections">Connections</a>-->
@@ -153,9 +153,11 @@
                                 <div class="col-md-9 card_mine">
                                     <div class="tab-content">
                                         <div class="tab-pane fade active show" id="account-general">
-                                            <h3 style="color: red">${requestScope.error}</h3>
-                                        <div class="card-body media align-items-center">
-                                            <img src="${sessionScope.profile.avt}" id="image" alt="avatar" class=" iamge d-block ui-w-80">
+
+                                            <h4 style="color: #339900">${requestScope.success_avatar}</h4>
+                                            <div class="card-body media align-items-center">
+                                                <img src="${sessionScope.profile.avt}" id="image" alt="avatar" class=" iamge d-block ui-w-80">
+
                                             <div class="media-body ml-4">
                                                 <input type="file" class="" name="avt" onchange="chooseFile(this)">
                                                 <div class="text-black-50 small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
@@ -166,6 +168,8 @@
 
                                             <div class="form-group">
                                                 <label class="form-label">Name</label>
+                                                <h4 style="color: red">${requestScope.error_name}</h4>
+                                                <h4 style="color: #339900">${requestScope.success_name}</h4>
                                                 <input name="fullname" type="text" class="form-control" value="${sessionScope.profile.fullname}">
                                             </div>
                                             <div class="form-group">
@@ -182,8 +186,8 @@
                                                                                     </div>-->
                                             <div class="form-group">
                                                 <label class="form-label">Gender</label>
+                                                <h4 style="color: #339900">${requestScope.success_gender}</h4>
                                                 <select name="gender" class="custom-select">
-                                                    <option <c:if test="${sessionScope.profile.gender == null}">selected</c:if>>Choose</option>
                                                     <option <c:if test="${sessionScope.profile.gender}">selected</c:if> value="male">Male</option>
                                                     <option <c:if test="${!sessionScope.profile.gender}">selected</c:if> value="female">Female</option>
                                                     </select>
@@ -225,6 +229,7 @@
                                                                                     </div>
                                                                                 </div>-->
                                         </div>
+<<<<<<< HEAD
 
 
                                         <div class="tab-pane fade" id="account-change-password">
@@ -388,6 +393,7 @@
 
                                             </div>
                                         </div>
+
 
                                     </div>
                                 </div>

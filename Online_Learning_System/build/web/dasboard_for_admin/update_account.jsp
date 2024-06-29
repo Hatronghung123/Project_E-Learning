@@ -50,6 +50,7 @@
 
             <jsp:include page="menuDasboard.jsp"></jsp:include>
 
+
                 <!-- Content Wrapper -->
                 <div id="content-wrapper" class="d-flex flex-column">
 
@@ -99,10 +100,12 @@
                                                     <button class="btn btn-primary" type="button">
                                                         <i class="fas fa-search fa-sm"></i>
                                                     </button>
+
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
+
                                 </li>
 
                                 <!-- Nav Item - Alerts -->
@@ -337,16 +340,19 @@
                                             </form>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <!--**********************************
                         Content body end
                     ***********************************-->
 
 
                     <!-- Footer -->
+
                     <footer class="sticky-footer bg-white">
                         <div class="container my-auto">
                             <div class="copyright text-center my-auto">
@@ -354,6 +360,7 @@
                             </div>
                         </div>
                     </footer>
+
                     <!--**********************************
                         Footer end
                     ***********************************-->
@@ -372,6 +379,7 @@
                 window.location.href = '/Project_E-Learning/dasboard_for_admin/manageAccount';
             }
         </script>
+
 
 
         <!-- Bootstrap core JavaScript-->

@@ -1,6 +1,7 @@
 package Dal;
 
-import Model.Account;
+
+import Model.AccountDTO;
 import Model.Messenger;
 
 import Model.ProfileDTO;

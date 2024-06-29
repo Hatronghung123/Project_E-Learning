@@ -4,7 +4,7 @@
  */
 package Dal;
 
-import Model.Account;
+import Model.AccountDTO;
 import Model.Answer;
 import Model.Category;
 import Model.Modules;
