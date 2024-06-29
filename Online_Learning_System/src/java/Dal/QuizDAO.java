@@ -10,6 +10,7 @@ import Model.Category;
 import Model.Modules;
 import Model.Questions;
 import Model.Quiz;
+import Model.ScoreQuiz;
 import Model.UserAnswer;
 import java.beans.Statement;
 import java.sql.Array;
@@ -353,23 +354,13 @@ public class QuizDAO extends DBContext {
             String[] anw_string = new String[ans.size()];
             for (int j = 0; j < ans.size(); j++) {
                 anw_string[j] = ans.get(j).getChoices().toString();
-                System.out.println((String.valueOf(list_question.get(i).getQuestionId())+" "+ anw_string[j]));
+                System.out.println((String.valueOf(list_question.get(i).getQuestionId()) + " " + anw_string[j]));
             }
             new_map.put(String.valueOf(list_question.get(i).getQuestionId()), anw_string);
         }
         return new_map;
     }
 
-    public static void main(String[] args) {
-        QuizDAO dao = new QuizDAO();
-//        ArrayList<UserAnswer> listUserAnswer = new ArrayList<>();
-//        listUserAnswer.add(new UserAnswer(4, 273, false));
-//        listUserAnswer.add(new UserAnswer(4, 274, true));
-//        listUserAnswer.add(new UserAnswer(4, 275, true));
-//
-//        dao.insertUserAnser(listUserAnswer);
-        
-    }
 
     // get list Answer by module id
     public ArrayList<Answer> getlistAnswerByModuleId(int moduleId) {
@@ -532,4 +523,31 @@ public class QuizDAO extends DBContext {
         }
     }
 
+    public void insertScoreQuiz(ScoreQuiz scorequiz) {
+        connection = getConnection();
+        String sql = "INSERT INTO [dbo].[ScoreQuiz]\n"
+                + "           ([AccountId]\n"
+                + "           ,[QuizId]\n"
+                + "           ,[Score])\n"
+                + "     VALUES\n"
+                + "           (?,?,?)";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, scorequiz.getAccountId());
+            statement.setInt(2, scorequiz.getQuizId());
+            statement.setFloat(3, scorequiz.getScore());
+            statement.executeQuery();
+            statement.close();
+            connection.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+    }
+    
+    public static void main(String[] args) {
+        QuizDAO dao = new QuizDAO();
+        ScoreQuiz score = new ScoreQuiz(3, 269, 10);
+        dao.insertScoreQuiz(score);
+    }
 }

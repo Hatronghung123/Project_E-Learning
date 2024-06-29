@@ -10,6 +10,7 @@ import Model.UserAnswer;
 import Model.Answer;
 import Model.Questions;
 import Model.Quiz;
+import Model.ScoreQuiz;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -70,11 +71,12 @@ public class DoQuizServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Account acc = (Account) session.getAttribute("Account");
-//        if (acc == null) {
-//            response.sendRedirect("join?action=login");
-//            return;
-//        }
+        Account acc = (Account) session.getAttribute("account");
+        if (acc == null) {
+            response.sendRedirect("join?action=login");
+            return;
+        }
+        else{
         QuizDAO quizDAO = new QuizDAO();
         int moduleId = Integer.parseInt(request.getParameter("mid"));
         Quiz quiz = quizDAO.findQuizByModuleId(moduleId);
@@ -85,6 +87,7 @@ public class DoQuizServlet extends HttpServlet {
         request.setAttribute("listAnswerByMId", listAnswerByModuleId);
         request.getRequestDispatcher("do_quiz/do_quiz.jsp").forward(request, response);
     }
+   }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -99,10 +102,11 @@ public class DoQuizServlet extends HttpServlet {
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
-        Account acc = (Account) session.getAttribute("Account");
-        
+        Account acc = (Account) session.getAttribute("account");
+
         int moduleId = Integer.parseInt(request.getParameter("mid"));
         QuizDAO quizDAO = new QuizDAO();
+        ArrayList<Questions> listQuestionByModuleId = quizDAO.getListQuestionsByModuleId(moduleId);
         //LIST CAU DUNG
         ArrayList<Answer> listAnswerCorrectByModuleId = quizDAO.getlistAnswerCorrectByModuleId(moduleId);
 
@@ -122,25 +126,36 @@ public class DoQuizServlet extends HttpServlet {
         }
 
         ArrayList<UserAnswer> listUserAnswer = new ArrayList<>();
-
+        int score = 0;
 // Process the user's answers and compare them with the correct answers
         for (Map.Entry<String, String[]> entry : questionAnswersMap.entrySet()) {
             int questionId = Integer.parseInt(entry.getKey());
             String[] userAnswers = entry.getValue();
             String[] correctAnswers = questionAnswersCorrect.get(entry.getKey());
 
+            Set<String> userAnswersSet = new HashSet<>(Arrays.asList(userAnswers));
+            Set<String> correctAnswersSet = new HashSet<>(Arrays.asList(correctAnswers));
+            if (userAnswersSet.equals(correctAnswersSet)) {
+                score++;
+            }
             // Add the user's answers to the list
             for (String userAnswer : userAnswers) {
                 boolean isCorrectUserAnswer = isAnswerCorrect(userAnswer, correctAnswers);
-                listUserAnswer.add(new UserAnswer(acc.getAccount_id(), questionId, userAnswer, isCorrectUserAnswer));
+                listUserAnswer.add(new UserAnswer(2, questionId, userAnswer, isCorrectUserAnswer));
             }
         }
 
 //         Insert danh sách đáp án của người dùng vào database
 // nhớ xóa primary key của bảng answer question đi!
         quizDAO.insertUserAnser(listUserAnswer);
+
+        float totalScore = (float) score / listQuestionByModuleId.size() * 10;
+        Quiz quiz = quizDAO.findQuizByModuleId(moduleId);
+        ScoreQuiz scorequiz = new ScoreQuiz(2, quiz.getQuizId(), totalScore);
+
+        quizDAO.insertScoreQuiz(scorequiz);
 //         Chuyển hướng sau khi xử lý
-        request.getRequestDispatcher("do_quiz/do_quiz.jsp").forward(request, response);
+        response.sendRedirect("do_quiz/do_quiz.jsp");
     }
 
     /**
@@ -152,18 +167,6 @@ public class DoQuizServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-    private boolean areAnswersCorrect(String[] userAnswers, String[] correctAnswers) {
-        if (userAnswers == null || correctAnswers == null) {
-            return false;
-        }
-
-        // Convert arrays to sets to ignore the order of answers
-        Set<String> userAnswerSet = new HashSet<>(Arrays.asList(userAnswers));
-        Set<String> correctAnswerSet = new HashSet<>(Arrays.asList(correctAnswers));
-
-        return userAnswerSet.equals(correctAnswerSet);
-    }
 
     private boolean isAnswerCorrect(String userAnswer, String[] correctAnswers) {
         if (userAnswer == null || correctAnswers == null) {
@@ -178,4 +181,5 @@ public class DoQuizServlet extends HttpServlet {
 
         return false;
     }
+
 }
