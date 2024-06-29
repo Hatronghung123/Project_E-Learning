@@ -5,7 +5,7 @@
 package Controller;
 
 import Dal.AccountDAO;
-import Model.Account;
+import Model.AccountDTO;
 import Model.AccountGoogle;
 import Model.ProfileDTO;
 import Util.SendEmail;
@@ -79,11 +79,11 @@ public class LoginGoogleHandler extends HttpServlet {
         String password = generateRandomPassword();
         AccountDAO accountDAO = new AccountDAO();
 
-        Account account_register = null;
+        AccountDTO account_register = null;
         ProfileDTO profile_register = null;
         //kiem tra xem email co trong DB khong
         if (!accountDAO.checkAccountExist(acc_gg.getEmail())) {
-            account_register = new Account(acc_gg.getEmail(), password, 4);
+            account_register = new AccountDTO(acc_gg.getEmail(), password, 4);
             profile_register = new ProfileDTO(acc_gg.getName(), 0);
 
             accountDAO.insertUser(account_register, profile_register);

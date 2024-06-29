@@ -8,7 +8,7 @@ import Dal.CourseDetailDAO;
 import Dal.HomeDAO;
 import Dal.LessonDAO;
 import Dal.WishlistDAO;
-import Model.Account;
+import Model.AccountDTO;
 import Model.Category;
 import Model.Course;
 import Model.Enrollment;
@@ -76,7 +76,7 @@ public class CourseDetailServelet extends HttpServlet {
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
-        Account acc = (Account) session.getAttribute("account");
+        AccountDTO acc = (AccountDTO) session.getAttribute("account");
         CourseDetailDAO cdDao = new CourseDetailDAO();
         LessonDAO lessondao = new LessonDAO();
         try {

@@ -5,7 +5,7 @@
 package Controller.Admin;
 
 import Dal.AccountDAO;
-import Model.Account;
+import Model.AccountDTO;
 import Model.ProfileDTO;
 import Util.SendEmail;
 import java.io.IOException;
@@ -90,7 +90,7 @@ public class ManageAccountByAdminServlet extends HttpServlet {
                     request.getRequestDispatcher("add_account.jsp").forward(request, response);
                     break;
                 case "updateAccount":
-                    Account account = accDao.getAccountById(Integer.parseInt(accountId));
+                    AccountDTO account = accDao.getAccountById(Integer.parseInt(accountId));
                     
                     request.setAttribute("accid", accountId);
                     request.setAttribute("account", account);
@@ -98,7 +98,7 @@ public class ManageAccountByAdminServlet extends HttpServlet {
                     break;
                 default:
 //                    read
-                    ArrayList<Account> listAllAccount = accDao.getAllAccount();
+                    ArrayList<AccountDTO> listAllAccount = accDao.getAllAccount();
 
                     request.setAttribute("listAllAccount", listAllAccount);
                     request.getRequestDispatcher("manageAccount.jsp").forward(request, response);
@@ -176,7 +176,7 @@ public class ManageAccountByAdminServlet extends HttpServlet {
                 String password = generateRandomPassword(8);
 
                 // Tạo đối tượng tài khoản và hồ sơ
-                Account account = new Account(email, password, 3);
+                AccountDTO account = new AccountDTO(email, password, 3);
                 ProfileDTO profile = new ProfileDTO(fullname, manageBy);
 
                 // Thêm vào database
@@ -219,7 +219,7 @@ public class ManageAccountByAdminServlet extends HttpServlet {
         String gender_str = request.getParameter("gender");
         String role = request.getParameter("role");
         //String avatar = request.getParameter("");
-        Account accSession = (Account) session.getAttribute("account");
+        AccountDTO accSession = (AccountDTO) session.getAttribute("account");
 
         String msg = "";
         boolean gender = false;
@@ -235,7 +235,7 @@ public class ManageAccountByAdminServlet extends HttpServlet {
             msg = "Account was exist";
         } else {
             try {
-                Account account = new Account(email, pass, Integer.parseInt(role));
+                AccountDTO account = new AccountDTO(email, pass, Integer.parseInt(role));
                 ProfileDTO profile = new ProfileDTO(fullname, gender, 0, accSession.getAccount_id());
                 accDao.insertUserByAdmin(account, profile);
                 response.sendRedirect("manageAccount");
@@ -279,7 +279,7 @@ public class ManageAccountByAdminServlet extends HttpServlet {
             msg = "The length password must be longer 8 character";
         } else {
             try {
-                Account account = new Account(email, pass, Integer.parseInt(role));
+                AccountDTO account = new AccountDTO(email, pass, Integer.parseInt(role));
                 ProfileDTO profile = new ProfileDTO(Integer.parseInt(profiId), fullname, gender);
                 accDao.updateAccount(account, profile);
                 response.sendRedirect("manageAccount");

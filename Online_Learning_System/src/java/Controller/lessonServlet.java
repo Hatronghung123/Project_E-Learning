@@ -9,7 +9,7 @@ import Dal.DisscussionDAO;
 import Dal.HomeDAO;
 import Dal.LessonDAO;
 import Dal.LessonManageDAO;
-import Model.Account;
+import Model.AccountDTO;
 import Model.Category;
 import YoutubeAPI.YoutubeDuration;
 import Model.DiscussionLesson;
@@ -82,7 +82,7 @@ public class lessonServlet extends HttpServlet {
         LessonDAO dao = new LessonDAO();
         DisscussionDAO discussDao = new DisscussionDAO();
         HttpSession session = request.getSession();
-        Account acc = (Account) session.getAttribute("account");
+        AccountDTO acc = (AccountDTO) session.getAttribute("account");
         String createBy = request.getParameter("createBy");
         String courseid_str = request.getParameter("cid");
         String lessonid_str = request.getParameter("lessonid");
@@ -271,7 +271,7 @@ public class lessonServlet extends HttpServlet {
         String createBy = request.getParameter("createBy");
         String comment = request.getParameter("content");
         String cid = request.getParameter("cid");
-        Account acc = (Account) session.getAttribute("account");
+        AccountDTO acc = (AccountDTO) session.getAttribute("account");
         String lession_id = request.getParameter("lessonid");
 
         DisscussionDAO dao = new DisscussionDAO();

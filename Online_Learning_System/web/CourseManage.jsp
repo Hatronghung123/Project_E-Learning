@@ -169,13 +169,13 @@
                                                         <label class="form-label" style="color: #000; font-size: 15px ">Number of enrollment: ${c.number_enrollment}</label><br>
                                                     </div>
                                                     <c:if test="${c.status}">
-                                                        <div class="col-lg-1">
+                                                        <div class="col-lg-1 delete">
                                                             <button onclick="deleteCourse('${c.course_id}')" class="btn btn-outline-danger">Delete</button>
                                                         </div>
                                                     </c:if>
                                                     <c:if test="${!c.status}">
-                                                        <div class="col-lg-1">
-                                                            <button onclick="deleteCourse('${c.course_id}')" class="btn btn-outline-success">Active</button>
+                                                        <div class="col-lg-1 active">
+                                                            <button onclick="activeCourse('${c.course_id}')" class="btn btn-outline-success">Active</button>
                                                         </div>
                                                     </c:if>
                                                     <div class="col-lg-1">
@@ -215,9 +215,9 @@
                                         if (statusLabel) {
                                             statusLabel.style.color = '#cc0033';
                                             statusLabel.textContent = 'Inactive';
+                                            alert('Course deleted successfully');
+                                            window.location.reload();
                                         }
-                                        // Hoặc nếu bạn muốn ẩn phần tử:
-                                        // courseElement.style.display = 'none';
                                     } else {
                                         alert('An error occurred while deleting the course');
                                     }
@@ -225,6 +225,35 @@
                                 .catch(error => {
                                     console.error('Error:', error);
                                     alert('An error occurred while deleting the course');
+                                });
+                    }
+                }
+                function activeCourse(courseId) {
+                    if (confirm('Are you sure you want to active this course?')) {
+                        fetch('course-manage?action=activate&cid=' + courseId, {
+                            method: 'POST'
+                        })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        // Cập nhật UI
+                                        const courseElement = document.getElementById('course-' + courseId);
+                                        var statusLabel = courseElement.querySelector('label[style="color: #cc0033; font-size: 15px "]');
+                                        const activeButton = document.getElementById('activeBtn-' + courseId);
+                                        const deleteButton = document.getElementById('deleteBtn-' + courseId);
+                                        if (statusLabel) {
+                                            statusLabel.style.color = '#00cc66';
+                                            statusLabel.textContent = 'Active';
+                                            alert('Course activated successfully');
+                                            window.location.reload();
+                                        }
+                                    } else {
+                                        alert('An error occurred while activating the course');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    alert('An error occurred while activating the course');
                                 });
                     }
                 }

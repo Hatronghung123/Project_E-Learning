@@ -10,34 +10,33 @@ package Model;
  * ,[managed_by] FROM [dbo].[tbl_account]
  *
  */
-public class Account {
+public class AccountDTO {
 
     private int account_id;
     private String fullName;
     private String email;
     private String password;
     private boolean status;
-        private boolean gender;
+    private boolean gender;
 
     //1 - active 
     //2 - inactive
     private int role_id;
-    
+
     /*
      role_id = 1 =>ADMIN
                 2 => Manager
                 3 => Mentor
                 4 => Mentee
      */
-
-    public Account() {
+    public AccountDTO() {
     }
 
-    public Account(String email) {
+    public AccountDTO(String email) {
         this.email = email;
     }
 
-    public Account(int account_id, String fullName, String email, String password, boolean status, int role_id) {
+    public AccountDTO(int account_id, String fullName, String email, String password, boolean status, int role_id) {
         this.account_id = account_id;
         this.fullName = fullName;
         this.email = email;
@@ -46,7 +45,7 @@ public class Account {
         this.role_id = role_id;
     }
 
-    public Account(int account_id, String fullName, String email, String password, boolean status, boolean gender, int role_id) {
+    public AccountDTO(int account_id, String fullName, String email, String password, boolean status, boolean gender, int role_id) {
         this.account_id = account_id;
         this.fullName = fullName;
         this.email = email;
@@ -55,53 +54,22 @@ public class Account {
         this.gender = gender;
         this.role_id = role_id;
     }
-    
-    
-    
 
-    public Account(int account_id, String email, String password, boolean status, int role_id) {
+    public AccountDTO(int account_id, String email, String password, boolean status, int role_id) {
         this.account_id = account_id;
         this.email = email;
         this.password = password;
         this.status = status;
         this.role_id = role_id;
     }
-    public Account(String email, String password, int role_id) {
+
+    public AccountDTO(String email, String password, int role_id) {
         this.email = email;
         this.password = password;
         this.role_id = role_id;
     }
-    
 
-    
-
-    
-
-//    public Account(String fullname, String password, String email, double amount, String code) {
-//        this.fullname = fullname;
-//        this.password = password;
-//        this.email = email;
-//        this.amount = amount;
-//        this.code = code;
-//    }
-
-//    public Account(int uid, String fullname, String password, String email, double amount, String code, int roleid) {
-//        this.uid = uid;
-//        this.fullname = fullname;
-//        this.password = password;
-//        this.email = email;
-//        this.amount = amount;
-//        this.code = code;
-//        this.roleid = roleid;
-//    }
-
-//    public Account(String fullname, String password, String email) {
-//        this.fullname = fullname;
-//        this.password = password;
-//        this.email = email;
-//    }
-
-    public Account(String email, String password) {
+    public AccountDTO(String email, String password) {
         this.email = email;
         this.password = password;
     }
@@ -161,9 +129,5 @@ public class Account {
     public void setGender(boolean gender) {
         this.gender = gender;
     }
-
-    
-    
-
 
 }

@@ -8,7 +8,7 @@ import Dal.CourseDetailDAO;
 import Dal.CourseManageDAO;
 import Dal.HomeDAO;
 import Dal.LessonManageDAO;
-import Model.Account;
+import Model.AccountDTO;
 import Model.Category;
 import Model.CourseManageDTO;
 import Model.Lesson;
@@ -80,15 +80,13 @@ public class CourseManageServlet extends HttpServlet {
         PrintWriter o = response.getWriter();
         String cid = (String) request.getParameter("cid") == null ? "" : (String) request.getParameter("cid");
         String action = (String) request.getParameter("action") == null ? "" : (String) request.getParameter("action");
-        
-        
+
         HttpSession session = request.getSession();
-        Account my_account = (Account) session.getAttribute("account");
+        AccountDTO my_account = (AccountDTO) session.getAttribute("account");
         CourseManageDAO course_manage_DAO = new CourseManageDAO();
         ArrayList<CourseManageDTO> list_managed_course = course_manage_DAO.getMyManagedCourse(my_account.getAccount_id());
         request.setAttribute("list_managed_couse", list_managed_course);
-        
-        
+
 //        read data lesson from database
         LessonManageDAO dao = new LessonManageDAO();
         ArrayList<Lesson> lessonList = null;
@@ -97,16 +95,15 @@ public class CourseManageServlet extends HttpServlet {
             //o.print(lessonList);
         } catch (SQLException ex) {
             Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }catch (Exception e) {
-            
+        } catch (Exception e) {
+
         }
-        
 
         if (!(cid.isEmpty() && action.isEmpty())) {
             switch (action) {
                 case "update":
                     request.setAttribute("cid", cid);
-                    if(lessonList != null) {
+                    if (lessonList != null) {
                         request.setAttribute("lessonList", lessonList);
                     }
                     request.getRequestDispatcher("UpdateCourse.jsp").forward(request, response);
@@ -151,6 +148,9 @@ public class CourseManageServlet extends HttpServlet {
             case "delete":
                 deleteCourse(cid, request, response);
                 break;
+            case "activate":
+                activateCourse(cid, request, response);
+                return;
             default:
                 throw new AssertionError();
         }
@@ -177,6 +177,17 @@ public class CourseManageServlet extends HttpServlet {
         out.print("{\"success\": true}");
         out.flush();
     }
+
+    private void activateCourse(String cid, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        CourseManageDAO course_manage_DAO = new CourseManageDAO();
+        boolean success = course_manage_DAO.activateCourse(cid);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print("{\"success\": " + success + "}");
+        out.flush();
+    }
 //    public static void main(String[] args) {
 //        CourseManageServlet c = new CourseManageServlet();
 //        c.deleteCourse("1");
@@ -189,53 +200,6 @@ public class CourseManageServlet extends HttpServlet {
 
         request.setAttribute("listCategory", listCategory);
         request.getRequestDispatcher("AddNewCourse.jsp").forward(request, response);
-    }
-
-    private String createFileNameRandom(Part file_image_course) {
-        String image_file_name = file_image_course.getSubmittedFileName();
-        String[] image_file_name_split = image_file_name.split("\\.");
-
-        image_file_name_split[0] = image_file_name_split[0] + (int) (Math.random() * 10000);
-        image_file_name = image_file_name_split[0] + "." + image_file_name_split[1];
-
-        return image_file_name;
-    }
-
-    private String insertImageIntoServer(HttpServletRequest request, String image_file_name, Part file_image_course) {
-        String upload_directory = "/image_course"; // folder goc cua web khi builded
-        //tra ve folder khi not_build
-        String upload_path_to_project = ServerPath.getPathImageCouse() + File.separator + image_file_name;
-        String upload_path_to_server = request.getServletContext().getRealPath(upload_directory).replaceFirst("build", "") + File.separator + image_file_name;
-
-        String replacedPath = upload_path_to_project.replace("\\", "/");
-        String replacePath_not_build = replacedPath.replaceFirst("//", "/");
-
-//        String replacedPath_server = upload_path_to_server.replace("\\", "/");
-        String replacePath_server_not_build = upload_path_to_server.replaceFirst("//", "/");
-        try {
-            FileOutputStream fos = new FileOutputStream(replacePath_not_build);
-            InputStream is = file_image_course.getInputStream();
-
-            byte[] data = new byte[is.available()];
-            is.read(data);
-            fos.write(data);
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            FileOutputStream fos = new FileOutputStream(replacePath_server_not_build);
-            InputStream is = file_image_course.getInputStream();
-
-            byte[] data = new byte[is.available()];
-            is.read(data);
-            fos.write(data);
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return replacePath_not_build;
     }
 
     private void addNewCouseDoPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -253,12 +217,10 @@ public class CourseManageServlet extends HttpServlet {
         request.setAttribute("discount", discount);
         request.setAttribute("study_time", study_time);
 
-        String avt_path_in_server = "";
+        String image_file_name = "";
         if (file_image_course != null && file_image_course.getSize() > 0) {
-            String image_file_name = createFileNameRandom(file_image_course);
-            insertImageIntoServer(request, image_file_name, file_image_course);
-            avt_path_in_server = "image_course/" + image_file_name;
-            request.setAttribute("image", avt_path_in_server);
+            image_file_name = Validation.inputFile(request, file_image_course, "image_course");
+            request.setAttribute("image", image_file_name);
         }
         request.setAttribute("study_time", study_time);
         if (!Validation.checkString(course_name)) {
@@ -279,9 +241,9 @@ public class CourseManageServlet extends HttpServlet {
         }
         if (Validation.checkStringArray(fullFields)) {
             HttpSession session = request.getSession();
-            Account my_account = (Account) session.getAttribute("account");
+            AccountDTO my_account = (AccountDTO) session.getAttribute("account");
             CourseManageDAO course_manage_DAO = new CourseManageDAO();
-            CourseManageDTO new_course = new CourseManageDTO(course_name, description, avt_path_in_server, Float.parseFloat(price), Float.parseFloat(discount), category, study_time);
+            CourseManageDTO new_course = new CourseManageDTO(course_name, description, image_file_name, Float.parseFloat(price), Float.parseFloat(discount), category, study_time);
             course_manage_DAO.insertCourse(my_account.getAccount_id(), new_course);
             response.sendRedirect("course-manage");
         }

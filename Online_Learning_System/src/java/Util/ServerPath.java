@@ -10,10 +10,10 @@ package Util;
  */
 public class ServerPath {
     
-    public static String getPathAvatar(){
-        return "E:\\Project_E-Learning\\V05.1.2_MergeCodeComentAndWishList\\web\\images";
-    }
-     public static String getPathImageCouse(){
-        return "E:\\Project_E-Learning\\V05.1.2_MergeCodeComentAndWishList\\web\\image_course";
+//    public static String getPathAvatar(){
+//        return "E:\\Project_E-Learning\\Online_Learning_System\\web";
+//    }
+     public static String getPathImage(){
+        return "E:\\Project_E-Learning\\Online_Learning_System\\web";
     }
 }
