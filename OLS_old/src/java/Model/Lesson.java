@@ -24,7 +24,11 @@ public class Lesson {
     private String avatar;
     private int courseid;
     private long duration;
+<<<<<<< HEAD
+
+=======
     private int createby;
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
     public Lesson() {
     }
 
@@ -37,14 +41,26 @@ public class Lesson {
         this.duration = duration;
     }
     
+<<<<<<< HEAD
+       //dùng để read và update lesson
+    public Lesson(int lessonid, int moduleid, String lessonname, String lessoncontent, String lessonvideo, long duration) {
+=======
        //dùng để read
     public Lesson(int lessonid, int moduleid, String lessonname, String lessoncontent, String lessonvideo, long duration, String modulname) {
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
         this.lessonid = lessonid;
         this.moduleid = moduleid;
         this.lessonname = lessonname;
         this.lessoncontent = lessoncontent;
         this.lessonvideo = lessonvideo;
         this.duration = duration;
+<<<<<<< HEAD
+    }
+    
+    
+
+    public Lesson(int lessonid, String modulname, String lessonname, String lessoncontent, String lessonvideo, String coursename, String mentorname, String avatar, int courseid, long duration,int profile_id) {
+=======
         this.modulname = modulname;
     }
            //dùng để update lesson
@@ -62,6 +78,7 @@ public class Lesson {
 //Dùng để lấy dữ liệu trong lesson
 
     public Lesson(int lessonid, String modulname, String lessonname, String lessoncontent, String lessonvideo, String coursename, String mentorname, String avatar, int courseid, long duration,int profile_id, int createby) {
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
         this.lessonid = lessonid;
         this.modulname = modulname;
         this.lessonname = lessonname;
@@ -73,7 +90,11 @@ public class Lesson {
         this.avatar = avatar;
         this.courseid = courseid;
         this.duration = duration;
+<<<<<<< HEAD
+        this.profile_id = profile_id;
+=======
         this.createby = createby;
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
     }
     
     
@@ -181,6 +202,14 @@ public class Lesson {
     public void setProfile_id(int profile_id) {
         this.profile_id = profile_id;
     }
+<<<<<<< HEAD
+
+    
+    @Override
+    public String toString() {
+        return "Lesson{" + "lessonid=" + lessonid + ", modulname=" + modulname + ", lessonname=" + lessonname + ", lessoncontent=" + lessoncontent + ", lessonvideo=" + lessonvideo + ", coursename=" + coursename + ", mentorname=" + mentorname + ", avatar=" + avatar + ", courseid=" + courseid + ", duration=" + duration + '}';
+    }
+=======
 
     public int getCreateby() {
         return createby;
@@ -199,5 +228,6 @@ public class Lesson {
 
     
 
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
 
 }

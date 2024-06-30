@@ -128,6 +128,9 @@
 
     <body>
 
+<<<<<<< HEAD
+
+=======
         <%
             String courseId =request.getParameter("cid");
                 String lastLessonId = null;
@@ -148,6 +151,7 @@
             lastLessonId = lessonid; 
             }
         %>
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
 
         <jsp:include page="common/menu.jsp"></jsp:include>
 
@@ -226,7 +230,10 @@
 
                                                     </c:when>
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
                                                     <c:otherwise><!--Nguoi dung da dang nhap-->
 
                                                         <!--Nguoi này là ngươi tao ra khoa hoc duoc join truc tiep-->
@@ -236,6 +243,9 @@
                                                             </c:when>
 
                                                             <c:otherwise>
+<<<<<<< HEAD
+                                                                <a href="vnpay_pay.jsp?price=${o.getPrice()}&cid=${o.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+=======
 
 
                                                                 <c:set var="currentCourseId" value="${o.getCourse_id()}"/>
@@ -256,6 +266,7 @@
                                                                     </c:otherwise>
 
                                                                 </c:choose> 
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </c:otherwise>
@@ -362,10 +373,24 @@
                             <c:if test="${sessionScope.account != null}">
                                 <!--Nguoi này là ngươi tao ra khoa hoc duoc join truc tiep-->
                                 <c:choose>
+<<<<<<< HEAD
+
+                                    <c:when test="${fn:length(listEnrollment) > 0}">
+                                        <c:forEach items="${listEnrollment}" var="o">
+                                            <c:if test="${currentCourseId == o.getCourseid()}">
+                                                <div class="py-3 px-4">
+                                                    <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="lesson?cid=${currentCourseId}&lessonid=1" >Resume</a>
+                                                </div>
+                                                <c:set var="isPaid" value="true"/>
+                                            </c:if>
+                                        </c:forEach>
+
+=======
                                     <c:when test="${sessionScope.account.getAccount_id() == getCourseByID.getCreate_by()}">
                                         <div class="py-3 px-4">
                                             <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="lesson?cid=${getCourseByID.getCourse_id()}&lessonid=<%=lastLessonId%>&createBy=${getCourseByID.getCreate_by()}">Join Now</a>
                                         </div>
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
                                     </c:when>
                                         
                                     <c:otherwise>
@@ -398,7 +423,21 @@
                                             </div>
                                         </c:if>
                                     </c:otherwise>
+<<<<<<< HEAD
+
+
+
+
+                                </c:choose> 
+
+                                <c:if test="${isPaid != true}">
+                                    <div class="py-3 px-4">
+                                        <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="vnpay_pay.jsp?price=${getCourseByID.getPrice()}&cid=${getCourseByID.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" >Enroll Now</a>
+                                    </div>
+                                </c:if>
+=======
                                 </c:choose>
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
                             </c:if>
 
 

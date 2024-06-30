@@ -115,62 +115,69 @@
     function editQuestionModal(button, id) {
         let inputId = document.querySelector("#idEditInput");
         inputId.value = id;
-    // Find the closest question-number element
-    var questionElement = $(button).closest('.media').find('.question-number');
+        // Find the closest question-number element
+        var questionElement = $(button).closest('.media').find('.question-number');
 
-    // Extract question data from data-* attributes
-    var questionId = questionElement.data('question-id');
-    var questionName = questionElement.data('question-name');
-    var questionNum = questionElement.data('question-num');
+        // Extract question data from data-* attributes
+        var questionId = questionElement.data('question-id');
+        var questionName = questionElement.data('question-name');
+        var questionNum = questionElement.data('question-num');
 
-    // Set the extracted data in the modal inputs
-    $('#questionNoEditInput').val(questionNum);
-    $('#titleEditInput').val(questionName);
+        // Set the extracted data in the modal inputs
+        $('#questionNoEditInput').val(questionNum);
+        $('#titleEditInput').val(questionName);
 
-    // Find all answers associated with the question
-    var answerElements = $(button).closest('.media').find('.answer');
+        // Find all answers associated with the question
+        var answerElements = $(button).closest('.media').find('.answer');
 
-    // Clear existing answers in the modal
-    $('#answers-container-edit').empty();
+        // Clear existing answers in the modal
+        $('#answers-container-edit').empty();
 
-    // Populate the modal with the answers
-    answerElements.each(function (index) {
-        var answerChoice = $(this).data('answer-choice');
-        var isCorrect = $(this).data('is-correct');
+        // Populate the modal with the answers
+        answerElements.each(function (index) {
+            var answerChoice = $(this).data('answer-choice');
+            var isCorrect = $(this).data('is-correct');
 
-        // Create a new answer row
-        var answerRow = $('<div>').addClass('answer-row d-flex align-items-center mb-2');
+            // Create a new answer row
+            var answerRow = $('<div>').addClass('answer-row d-flex align-items-center mb-2');
 
-        // Create the input for the answer text
-        var answerInput = $('<input>')
-            .attr('type', 'text')
-            .attr('name', 'answer')
-            .addClass('form-control me-2')
-            .val(answerChoice);
+            // Create the input for the answer text
+            var answerInput = $('<input>')
+                .attr('type', 'text')
+                .attr('name', 'answer')
+                .addClass('form-control me-2')
+                .val(answerChoice);
 
-        // Create the checkbox/radio for the correct answer
-        var correctAnswerInput = $('<input>')
-            .attr('type', $('#typeQuestion').val() === 'checkBox' ? 'checkbox' : 'radio')
-            .attr('name', 'correctAnswer' + (index + 1)) // Ensure unique names
-            .addClass('form-check-input me-2')
-            .prop('checked', isCorrect);
+            // Create the checkbox/radio for the correct answer
+            var correctAnswerInput = $('<input>')
+                .attr('type', $('#typeQuestion').val() === 'checkBox' ? 'checkbox' : 'radio')
+                .attr('name', 'correctAnswer' + (index + 1)) // Ensure unique names
+                .addClass('form-check-input me-2')
+                .prop('checked', isCorrect);
 
-        // Create the remove button for the answer
-        var removeButton = $('<button>')
-            .attr('type', 'button')
-            .addClass('btn btn-danger btn-sm')
-            .text('x')
-            .on('click', function () {
-                answerRow.remove();
-            });
+            // Create the remove button for the answer
+            var removeButton = $('<button>')
+                .attr('type', 'button')
+                .addClass('btn btn-danger btn-sm')
+                .text('x')
+                .on('click', function () {
+                    answerRow.remove();
+                    updateAnswerNames();
+                });
 
-        // Append the elements to the answer row
-        answerRow.append(removeButton, answerInput, correctAnswerInput);
+            // Append the elements to the answer row
+            answerRow.append(removeButton, answerInput, correctAnswerInput);
 
-        // Append the answer row to the container
-        $('#answers-container-edit').append(answerRow);
-    });
-}
+            // Append the answer row to the container
+            $('#answers-container-edit').append(answerRow);
+        });
+    }
+
+    function updateAnswerNames() {
+        $('#answers-container-edit .answer-row').each(function (index) {
+            $(this).find('input[type="checkbox"], input[type="radio"]').attr('name', 'correctAnswer' + (index + 1));
+        });
+    }
 
     function updateAnswerType() {
         const typeQuestion = document.getElementById('typeQuestion').value;
@@ -216,6 +223,7 @@
             deleteButton.innerHTML = '&times;';
             deleteButton.addEventListener('click', function () {
                 container.removeChild(answerRow);
+                updateAnswerNames();
             });
 
             answerRow.appendChild(deleteButton);

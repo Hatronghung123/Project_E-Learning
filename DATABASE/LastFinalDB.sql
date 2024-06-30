@@ -366,17 +366,19 @@ create table QuestionChoices(
 );
 
 create table AnswerQuestion(
+	AnswerQuestion int identity(1,1) primary key,
 	AccountId int references Account(AccountId),
 	QuestionId int references Question(QuestionId),
 	Answer text,
 	IsCorrect bit,
 );
 
+--Hatro edit
 create table ScoreQuiz(
+	ScoreQuizId int identity(1,1) primary key,
 	AccountId int references Account(AccountId),
 	QuizId int references Quiz(QuizId),
-	primary key(AccountId,QuizId),
-	Score int,
+	Score float,
 );
 
 create table DiscussionLesson(

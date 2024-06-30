@@ -168,6 +168,11 @@
                                                         </c:if>
                                                         <label class="form-label" style="color: #000; font-size: 15px ">Number of enrollment: ${c.number_enrollment}</label><br>
                                                     </div>
+<<<<<<< HEAD
+                                                    <div class="col-lg-1">
+                                                        <button onclick="deleteCourse('${c.course_id}')" class="btn btn-outline-danger">Delete</button>
+                                                    </div>
+=======
                                                     <c:if test="${c.status}">
                                                         <div class="col-lg-1">
                                                             <button onclick="deleteCourse('${c.course_id}')" class="btn btn-outline-danger">Delete</button>
@@ -178,6 +183,7 @@
                                                             <button onclick="deleteCourse('${c.course_id}')" class="btn btn-outline-success">Active</button>
                                                         </div>
                                                     </c:if>
+>>>>>>> 794417edd24f2c986b41f7b0c5f132bbff2cb7a9
                                                     <div class="col-lg-1">
                                                         <a href="course-manage?cid=${c.course_id}&action=update" class="btn btn-outline-primary">Update</a>
                                                     </div>
