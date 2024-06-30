@@ -142,7 +142,7 @@ public class DoQuizServlet extends HttpServlet {
             // Add the user's answers to the list
             for (String userAnswer : userAnswers) {
                 boolean isCorrectUserAnswer = isAnswerCorrect(userAnswer, correctAnswers);
-                listUserAnswer.add(new UserAnswer(2, questionId, userAnswer, isCorrectUserAnswer));
+                listUserAnswer.add(new UserAnswer(acc.getAccount_id(), questionId, userAnswer, isCorrectUserAnswer));
             }
         }
 
@@ -152,7 +152,7 @@ public class DoQuizServlet extends HttpServlet {
 
         float totalScore = (float) score / listQuestionByModuleId.size() * 10;
         Quiz quiz = quizDAO.findQuizByModuleId(moduleId);
-        ScoreQuiz scorequiz = new ScoreQuiz(2, quiz.getQuizId(), totalScore);
+        ScoreQuiz scorequiz = new ScoreQuiz(acc.getAccount_id(), quiz.getQuizId(), totalScore);
 
         quizDAO.insertScoreQuiz(scorequiz);
 //         Chuyển hướng sau khi xử lý
