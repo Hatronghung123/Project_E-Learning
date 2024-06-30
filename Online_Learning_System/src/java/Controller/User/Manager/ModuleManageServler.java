@@ -55,7 +55,6 @@ public class ModuleManageServler extends HttpServlet {
     throws ServletException, IOException {
         request.getRequestDispatcher("EditModule.jsp").forward(request, response);
     } 
-
     /** 
      * Handles the HTTP <code>POST</code> method.
      * @param request servlet request
