@@ -81,7 +81,7 @@ public class LessonMangeServelet extends HttpServlet {
 
                 case "addlesson":
                     request.setAttribute("listModule", listModule);
-                     request.setAttribute("moduleid",moduleid);
+                    request.setAttribute("moduleid",moduleid);
                     request.setAttribute("action", action);
                     request.setAttribute("cid", course_id);
                     request.getRequestDispatcher("mentor_add_lesson.jsp").forward(request, response);

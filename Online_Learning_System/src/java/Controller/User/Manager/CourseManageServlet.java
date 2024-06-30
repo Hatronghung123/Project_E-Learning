@@ -101,7 +101,7 @@ public class CourseManageServlet extends HttpServlet {
                 try {
                     ArrayList<ModuleDTO> list_module = module_dao.getListModulByCid(cid);
                     ArrayList<LessonDTO> list_lesson = lesson_manage_dao.getListlessonByCid(Integer.parseInt(cid));
-                    CourseManageDTO my_managed_course = course_manage_DAO.getMyManagedCourseById(my_account.getAccount_id(),cid);
+                    CourseManageDTO my_managed_course = course_manage_DAO.getMyManagedCourseById(my_account.getAccount_id(), cid);
                     request.setAttribute("list_module", list_module);
                     request.setAttribute("list_lesson", list_lesson);
                     request.setAttribute("my_managed_course", my_managed_course);
@@ -118,11 +118,11 @@ public class CourseManageServlet extends HttpServlet {
 
             case "add_new_course":
                 try {
-                    addCourse(request, response);
-                } catch (SQLException ex) {
-                    Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                return;
+                addCourse(request, response);
+            } catch (SQLException ex) {
+                Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return;
             default:
                 request.getRequestDispatcher("CourseManage.jsp").forward(request, response);
         }
@@ -176,15 +176,25 @@ public class CourseManageServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private void deleteCourse(String cid, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        CourseManageDAO course_manage_DAO = new CourseManageDAO();
-        boolean success = course_manage_DAO.deleteCourse(cid);
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
-        out.print("{\"success\":" + success + "}");
-        out.flush();
+    private void deleteCourse(String cid, HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    CourseManageDAO courseManageDAO = new CourseManageDAO();
+    String msg = "";
+    boolean success = false;
+
+    // kiểm tra nếu true thì có thể thay đổi trạng thái khóa học
+    if (courseManageDAO.canChangeStatusCourse(cid)) {
+        success = courseManageDAO.deleteCourse(cid);
+    } else {
+        msg = "Can't change status of this course because there are still students enrolled.";
     }
+
+    response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
+    PrintWriter out = response.getWriter();
+    out.print("{\"success\":" + success + ", \"message\":\"" + msg + "\"}");
+    out.flush(); 
+}
 
     private void activateCourse(String cid, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -254,7 +264,7 @@ public class CourseManageServlet extends HttpServlet {
     private void addNewModuleDoPost(HttpServletRequest request, HttpServletResponse response, String cid) throws IOException, ServletException {
         String module_name = request.getParameter("module_name") == null ? "" : request.getParameter("module_name");
         String module_number = request.getParameter("module_number") == null ? "" : request.getParameter("module_number");
-        
+
         String[] fullFields = {module_name, module_number};
         PrintWriter o = response.getWriter();
         if (!Validation.checkString(module_name)) {
@@ -272,12 +282,10 @@ public class CourseManageServlet extends HttpServlet {
             ModuleDAO module_DAO = new ModuleDAO();
             ModuleDTO new_module = new ModuleDTO(module_name, Integer.parseInt(module_number));
             module_DAO.insertModule(cid, new_module);
-            response.sendRedirect("course-manage?cid="+cid+"&action=update");
+            response.sendRedirect("course-manage?cid=" + cid + "&action=update");
         } else {
             request.getRequestDispatcher("AddNewModule.jsp").forward(request, response);
         }
     }
 
 }
-
-

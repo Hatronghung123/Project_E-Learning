@@ -125,15 +125,9 @@ public class CourseManageDAO extends DBContext {
 
     }
 
-    public static void main(String[] args) {
-        CourseManageDAO course_manage_DAO = new CourseManageDAO();
-        ArrayList<CourseManageDTO> list = course_manage_DAO.getMyManagedCourses(2);
-        for (int i = 0; i < list.size(); i++) {
-            System.out.println(list.get(i).getCourse_name());
-        }
 
 //        course_manage_DAO.insertCourse(2, new CourseManageDTO("abc", "abccc", null, 0, 0, "IT", "0h"));
-    }
+    
 
     public void insertCourse(int managerId, CourseManageDTO newCourse) {
         connection = getConnection();
@@ -173,6 +167,35 @@ public class CourseManageDAO extends DBContext {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+    
+    
+    
+    //kiểm tra xem có sinh viên đang tham gia khóa học hay không
+     public boolean canChangeStatusCourse(String cid) {
+        connection = getConnection();
+        String sql = """
+                         SELECT COUNT(*) 
+                          FROM [dbo].[Enrollment]
+                          WHERE CourseId = ? AND Progress < 100 """;
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, cid);
+            // thực thi câu lệnh
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {                
+                return resultSet.getInt(1) == 0; // Trả về true nếu tất cả sinh viên dã hoàn thành khóa học hoặc chưa tham gia khóa học
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+
+    }
+     
+     public static void main(String[] args)  {
+        CourseManageDAO dao = new CourseManageDAO();
+         System.out.println(dao.canChangeStatusCourse("1"));
     }
 
 }
