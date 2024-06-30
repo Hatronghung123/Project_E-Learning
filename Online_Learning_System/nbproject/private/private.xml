@@ -12,8 +12,12 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/PEOJECT_DEMO/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/ModuleManageServler.java</file>
-            <file>file:/D:/PEOJECT_DEMO/Project_E-Learning/Online_Learning_System/web/EditModule.jsp</file>
+            <file>file:/D:/SWP391/check%20loi/Project_E-Learning/Online_Learning_System/src/java/Dal/DBContext.java</file>
+            <file>file:/D:/SWP391/check%20loi/Project_E-Learning/Online_Learning_System/web/MyCertificate.jsp</file>
+            <file>file:/D:/SWP391/check%20loi/Project_E-Learning/Online_Learning_System/src/java/Controller/CertificateDetailSeverlet.java</file>
+            <file>file:/D:/SWP391/check%20loi/Project_E-Learning/Online_Learning_System/web/CertificateDetail.jsp</file>
+            <file>file:/D:/SWP391/check%20loi/Project_E-Learning/Online_Learning_System/src/java/Controller/User/certificateSeverlet.java</file>
+            <file>file:/D:/SWP391/check%20loi/Project_E-Learning/Online_Learning_System/web/common/menu.jsp</file>
         </group>
     </open-files>
 </project-private>
