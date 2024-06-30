@@ -5,53 +5,19 @@
             <url>src/java/Controller/Admin/ManageAccountByAdminServlet.java</url>
             <bookmark id="1">
                 <name/>
-                <line>98</line>
+                <line>96</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/getBillServlet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Model/Course.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/LessonMangeServelet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Dal/DBContext.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/web/UpdateCourse.jsp</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/CreateQuizServlet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/web/dasboard_for_admin/update_account.jsp</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/Admin/ManageAccountByAdminServlet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/User/profileServlet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/web/dasboard_for_admin/add_account.jsp</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/lessonServlet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/Home/homeServlet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Model/CourseManageDTO.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Model/LessonDTO.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/web/dasboard_for_admin/manageAccount.jsp</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/web/Profile.jsp</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/searchServlet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/MessengerSeverlet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/web/Courses.jsp</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/joinServlet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/LoginGoogleHandler.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/Admin/StatisticalSeverlet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/ControllerQuestionServlet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/Home/listCourseSeverlet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/StarRatingServelet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/Home/dataTransferLessonServlet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/CreateQuestionsServlet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/web/mentor_update_lesson.jsp</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/MentorManageServlet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Util/Validation.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/CourseDetailServelet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/web/CourseManage.jsp</file>
             <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/web/detail.jsp</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/CourseManageServlet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Util/ServerPath.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/web/mentee_my_lesson.jsp</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/web/dasboard_for_admin/dasboard_home.jsp</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/User/courseServlet.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Dal/AccountDAO.java</file>
-            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/web/mentor_add_lesson.jsp</file>
+            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Dal/HomeDAO.java</file>
+            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/web/Profile.jsp</file>
+            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/web/Courses.jsp</file>
+            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Dal/CourseDetailDAO.java</file>
+            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/CourseDetailServelet.java</file>
         </group>
     </open-files>
 </project-private>
