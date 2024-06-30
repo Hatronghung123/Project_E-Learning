@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  */
 public class ModuleDAO extends DBContext{
     //Lấy lisst module theo course ID
-    public ArrayList<Model.ModuleDTO> getListModulByCid(String courseId) throws SQLException {
+    public ArrayList<Model.ModuleDTO> getListModulByCid(String courseId) {
         connection = getConnection();
         ArrayList<Model.ModuleDTO> list = new ArrayList<>();
         String sql = """
