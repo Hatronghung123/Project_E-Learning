@@ -361,7 +361,6 @@ public class QuizDAO extends DBContext {
         return new_map;
     }
 
-
     // get list Answer by module id
     public ArrayList<Answer> getlistAnswerByModuleId(int moduleId) {
         ArrayList<Answer> listFound = new ArrayList<>();
@@ -523,7 +522,13 @@ public class QuizDAO extends DBContext {
         }
     }
 
-    public void insertScoreQuiz(ScoreQuiz scorequiz) {
+    public static void main(String[] args) {
+        QuizDAO dao = new QuizDAO();
+        ScoreQuiz score = new ScoreQuiz(3, 269, 10);
+//        dao.insertScoreQuiz(score);
+    }
+
+    public void insertlistScoreQuiz(ArrayList<ScoreQuiz> listScoreQuiz) {
         connection = getConnection();
         String sql = "INSERT INTO [dbo].[ScoreQuiz]\n"
                 + "           ([AccountId]\n"
@@ -533,21 +538,74 @@ public class QuizDAO extends DBContext {
                 + "           (?,?,?)";
         try {
             statement = connection.prepareStatement(sql);
-            statement.setInt(1, scorequiz.getAccountId());
-            statement.setInt(2, scorequiz.getQuizId());
-            statement.setFloat(3, scorequiz.getScore());
-            statement.executeQuery();
+
+            for (ScoreQuiz score : listScoreQuiz) {
+                statement.setInt(1, score.getAccountId());
+                statement.setInt(2, score.getQuizId());
+                statement.setFloat(3, score.getScore());
+
+                statement.addBatch();
+            }
+
+            statement.executeBatch();
             statement.close();
             connection.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    // get list user answer để so sánh với answer đúng để hiển thị ra rằng correct or incorrect
+    public ArrayList<UserAnswer> getListUserAnswersByID(Questions questions) {
+        ArrayList<UserAnswer> listFound = new ArrayList<>();
+        // connect with DB
+        connection = getConnection();
+        // viết câu lệnh sql
+        String sql = "SELECT [AccountId]\n"
+                + "      ,[QuestionId]\n"
+                + "      ,[Answer]\n"
+                + "      ,[IsCorrect]\n"
+                + "  FROM [dbo].[AnswerQuestion]\n"
+                + "    where QuestionId = ?";
+        try {
+            // tạo đối tượng preparestatement
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, questions.getQuestionId());
+            // thực thi câu lệnh
+            resultSet = statement.executeQuery();
+            // trả về kết quả
+            while (resultSet.next()) {
+                int accountId = resultSet.getInt("accountId");
+                int questionId = resultSet.getInt("questionId");
+                String answer = resultSet.getString("answer");
+                Boolean isCorrectUserAnswer = resultSet.getBoolean("isCorrectUserAnswer");
+
+                UserAnswer ua = new UserAnswer(accountId, questionId, answer, true);
+                listFound.add(ua);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return listFound;
 
     }
-    
-    public static void main(String[] args) {
-        QuizDAO dao = new QuizDAO();
-        ScoreQuiz score = new ScoreQuiz(3, 269, 10);
-        dao.insertScoreQuiz(score);
+
+    public Map<Integer, String[]> getListQuestionAnswerQuizSubmit(int moduleId) {
+        Map<Integer, String[]> new_map = new HashMap<>();
+        ArrayList<Questions> list_question = getListQuestionsByModuleId(moduleId);
+
+        for (Questions question : list_question) {
+            ArrayList<Answer> ans = getListAnswersByID(question);
+            String[] anw_string = new String[ans.size()];
+            for (int j = 0; j < ans.size(); j++) {
+                anw_string[j] = ans.get(j).getChoices().toString();
+                System.out.println(question.getQuestionId() + " " + anw_string[j]);
+            }
+            new_map.put(question.getQuestionId(), anw_string);
+        }
+
+        return new_map;
     }
+
 }
