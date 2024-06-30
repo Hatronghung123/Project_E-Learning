@@ -55,6 +55,10 @@ public class AccountDTO {
         this.role_id = role_id;
     }
 
+    public AccountDTO(int account_id) {
+        this.account_id = account_id;
+    }
+
     public AccountDTO(int account_id, String email, String password, boolean status, int role_id) {
         this.account_id = account_id;
         this.email = email;

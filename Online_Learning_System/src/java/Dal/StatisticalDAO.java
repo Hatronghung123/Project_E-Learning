@@ -4,6 +4,7 @@
  */
 package Dal;
 
+import Model.AccountDTO;
 import Model.Category;
 import Model.Course;
 import Model.Payment;
@@ -26,8 +27,10 @@ public class StatisticalDAO {
 
     public static void main(String[] args) {
         StatisticalDAO test = new StatisticalDAO();
+        System.out.println(test.getPaymentPerYear());
+        System.out.println(test.CountAccStillActive());
         try {
-            System.out.println(test.getPercentCategory());
+
         } catch (Exception e) {
         }
     }
@@ -66,6 +69,109 @@ public class StatisticalDAO {
         return list;
     }
 
+    public Payment getPaymentPerMonth() {
+        String sql = "		SELECT\n"
+                + "    DATENAME(month, DATEADD(month, MONTH(PaymentDate) - 1, CAST('2000-01-01' AS datetime))) AS PaymentMonth,\n"
+                + "    SUM(Money) AS TotalEarnings\n"
+                + "FROM [Project Online Learning].[dbo].[Payment]\n"
+                + "WHERE MONTH(PaymentDate) = MONTH(GETDATE())\n"
+                + "GROUP BY\n"
+                + "   \n"
+                + "    MONTH(PaymentDate)\n"
+                + "ORDER BY\n"
+                + "    \n"
+                + "    MONTH(PaymentDate);";
+
+        try {
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String month = rs.getString(1);
+                int total_earnings = rs.getInt(2);
+                return new Payment(total_earnings, month);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Lỗi");
+        }
+
+        return null;
+
+    }
+
+    public Payment getPaymentPerYear() {
+        String sql = "	SELECT\n"
+                + "    CONVERT(VARCHAR, YEAR(PaymentDate)) AS PaymentYearString,\n"
+                + "    SUM(Money) AS TotalEarnings\n"
+                + "FROM [Project Online Learning].[dbo].[Payment]\n"
+                + "GROUP BY\n"
+                + "    CONVERT(VARCHAR, YEAR(PaymentDate))\n"
+                + "ORDER BY\n"
+                + "    CONVERT(VARCHAR, YEAR(PaymentDate));";
+
+        try {
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String year = rs.getString(1);
+                int total_earnings = rs.getInt(2);
+                return new Payment(total_earnings, year);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Lỗi");
+        }
+
+        return null;
+
+    }
+
+    public AccountDTO CountAccStillActive() {
+        String sql = "SELECT COUNT(*) AS TotalAccounts\n"
+                + "FROM [Project Online Learning].[dbo].[Account]\n"
+                + "WHERE [Status] = 1;";
+
+        try {
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int total_acc = rs.getInt(1);
+                return new AccountDTO(total_acc);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Lỗi");
+        }
+
+        return null;
+
+    }
+
+    public Course CountCourseStillActive() {
+        String sql = "SELECT COUNT(*) AS TotalCourse\n"
+                + "FROM [Project Online Learning].[dbo].Course\n"
+                + "WHERE [Status] = 1;";
+
+        try {
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int total_course = rs.getInt(1);
+                return new Course(total_course);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Lỗi");
+        }
+
+        return null;
+
+    }
+
     public ArrayList<Category> getPercentCategory() throws SQLException {
         ArrayList<Category> list = new ArrayList<>();
         String sql = "DECLARE @TotalCount INT;\n"
@@ -92,7 +198,6 @@ public class StatisticalDAO {
         try {
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
-
             rs = ps.executeQuery();
             while (rs.next()) {
                 String category_name = rs.getString("CategoryName");
