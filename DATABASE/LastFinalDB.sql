@@ -30,7 +30,11 @@ values
 ('manager@gmail.com','123123123',1,2),
 ('mentor001@gmail.com','123123123',1,3),
 ('mentee001@gmail.com','123123123',1,4),
-('howkteam@gmail.com','12345678',1,3);
+('howkteam@gmail.com','12345678',1,3),
+('mentor002@gmail.com','123123123',1,3),
+('mentor003@gmail.com','123123123',1,3),
+('mentor004@gmail.com','123123123',1,3);
+
 
 create table Profile(
 	ProfileId int primary key not null,
@@ -48,7 +52,10 @@ values
 (2,'Manager001',2,null,99999,null),
 (3,'Mentor001',0,null,100,2),
 (4,'Mentee001',0,null,100,null),
-(5, 'HowKTeam', 1,null,9999,null);
+(5,'HowKTeam', 1,null,9999,2),
+(6,'Mentor002',0,null,100,2),
+(7,'Mentor003',0,null,100,2),
+(8,'Mentor004',0,null,100,2);
 
 
 create table CourseCategory(
