@@ -124,8 +124,21 @@
 
             input[type="radio"]:checked+label:before,
             input[type="checkbox"]:checked+label:before {
-                background: #000;
-                border-color: #000;
+                background: #00cc66;
+                border-color: #00cc66;
+            }
+
+            input[type="checkbox"]:checked+label:before {
+                content: '✔';
+                color: white;
+                font-size: 16px;
+                text-align: center;
+                line-height: 20px;
+            }
+
+            input[type="radio"]:checked+label:before {
+                background: #00cc66;
+                border-color: #00cc66;
             }
 
             input[type="radio"]+label:hover:before,
@@ -188,7 +201,7 @@
                                                    checked
                                                </c:if>
                                            </c:forEach>
-                                           onchange="updateAnsweredCount()">
+                                           onchange="updateAnsweredCount()" disabled/>
                                     <label for="${answer.getQuestionId()}${answer.getChoices()}">${answer.getChoices()}</label>
                                 </li>
                             </c:if>
@@ -200,19 +213,17 @@
                                 <span style="color: green;">Correct</span>
                             </c:when>
                             <c:otherwise>
-                                <span style="color: red;">Incorrect</span>
+                                <span style="color: red;">Incorrect</span> </br>
+                                <c:forEach items="${listAnswersCorrect}" var="correct">
+                                    <c:if test="${correct.getQuestionId() == question.getQuestionId()}">
+                                        ${correct.getChoices()}</br>
+                                    </c:if>
+                                </c:forEach>
                             </c:otherwise>
                         </c:choose>
                     </div>
                     <div>
-                        <c:choose>
-                            <c:when test="${questionResultMap[question.getQuestionId()] == 'Correct'}">
-                                <span style="color: green;">Correct</span>
-                            </c:when>
-                            <c:otherwise>
-                                <span style="color: red;">Incorrect</span>
-                            </c:otherwise>
-                        </c:choose>
+
                     </div>
                 </div>
             </c:forEach>

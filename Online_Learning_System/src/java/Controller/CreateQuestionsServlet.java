@@ -106,6 +106,7 @@ public class CreateQuestionsServlet extends HttpServlet {
             answers.add(new Answer(questions.getQuestionId(), choices[i - 1], correctAnswer));
         }
         quizDAO.insertAnswers(answers);
+        quizDAO.updateTypeQuestion(questions);
         session.setAttribute("questions", questions);
 
     }
@@ -140,6 +141,7 @@ public class CreateQuestionsServlet extends HttpServlet {
         }
         //o.println(choices[1]);
         quizDAO.editAnswers(answers);
+        quizDAO.updateTypeQuestion(questions);
     }
 
 }

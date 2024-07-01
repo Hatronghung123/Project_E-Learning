@@ -180,7 +180,7 @@ public class QuizDAO extends DBContext {
 
     }
 
-    public ArrayList<Answer> getListAnswersByID(Questions questions) {
+    public ArrayList<Answer> getListAnswersCorrectByQuestionId(Questions questions) {
         ArrayList<Answer> listFound = new ArrayList<>();
         // connect with DB
         connection = getConnection();
@@ -346,21 +346,6 @@ public class QuizDAO extends DBContext {
         return listFound;
     }
 
-    public Map<String, String[]> getListQuestionAnswer(int moduleId) {
-        Map<String, String[]> new_map = new HashMap<String, String[]>();
-        ArrayList<Questions> list_question = getListQuestionsByModuleId(moduleId);
-        for (int i = 0; i < list_question.size(); i++) {
-            ArrayList<Answer> ans = getListAnswersByID(list_question.get(i));
-            String[] anw_string = new String[ans.size()];
-            for (int j = 0; j < ans.size(); j++) {
-                anw_string[j] = ans.get(j).getChoices().toString();
-                System.out.println((String.valueOf(list_question.get(i).getQuestionId()) + " " + anw_string[j]));
-            }
-            new_map.put(String.valueOf(list_question.get(i).getQuestionId()), anw_string);
-        }
-        return new_map;
-    }
-
     // get list Answer by module id
     public ArrayList<Answer> getlistAnswerByModuleId(int moduleId) {
         ArrayList<Answer> listFound = new ArrayList<>();
@@ -426,10 +411,11 @@ public class QuizDAO extends DBContext {
     // select questionId where question have one or more than 2 correct question
     public void updateTypeQuestion(Questions questions1) {
         connection = getConnection();
-        String sql = "select * from (SELECT QuestionId, COUNT(*) AS CorrectCount\n"
-                + "FROM QuestionChoices\n"
-                + "WHERE isCorrect = 1\n"
-                + "GROUP BY QuestionId) tbl1 where tbl1.QuestionId = ?";
+        String sql = """
+                     select * from (SELECT QuestionId, COUNT(*) AS CorrectCount
+                     FROM QuestionChoices
+                     WHERE isCorrect = 1
+                     GROUP BY QuestionId) tbl1 where tbl1.QuestionId = ?""";
         try {
             statement = connection.prepareStatement(sql);
             statement.setInt(1, questions1.getQuestionId());
@@ -460,6 +446,7 @@ public class QuizDAO extends DBContext {
         }
     }
 
+    // lấy ra danh sách câu trả lời đúng của câu hỏi dựa trên moduleId
     public ArrayList<Answer> getlistAnswerCorrectByModuleId(int moduleId) {
         ArrayList<Answer> listFound = new ArrayList<>();
         // connect with DB
@@ -491,6 +478,7 @@ public class QuizDAO extends DBContext {
         return listFound;
     }
 
+    // lưu trữ danh sách câu trả lời của sinh viên 
     public void insertUserAnser(ArrayList<UserAnswer> userAnswer) {
         connection = getConnection();
         String sql = "INSERT INTO [dbo].[AnswerQuestion]\n"
@@ -522,12 +510,8 @@ public class QuizDAO extends DBContext {
         }
     }
 
-    public static void main(String[] args) {
-        QuizDAO dao = new QuizDAO();
-        ScoreQuiz score = new ScoreQuiz(3, 269, 10);
-//        dao.insertScoreQuiz(score);
-    }
-
+    // inser list Score list này để lư trữ điểm số của sinh viên khi làm quiz nhiều lần
+    // dùng list để có thể lấy ra điểm lần cuối cùng của sv khi làm quiz
     public void insertlistScoreQuiz(ArrayList<ScoreQuiz> listScoreQuiz) {
         connection = getConnection();
         String sql = "INSERT INTO [dbo].[ScoreQuiz]\n"
@@ -555,57 +539,46 @@ public class QuizDAO extends DBContext {
         }
     }
 
-    // get list user answer để so sánh với answer đúng để hiển thị ra rằng correct or incorrect
-    public ArrayList<UserAnswer> getListUserAnswersByID(Questions questions) {
-        ArrayList<UserAnswer> listFound = new ArrayList<>();
-        // connect with DB
-        connection = getConnection();
-        // viết câu lệnh sql
-        String sql = "SELECT [AccountId]\n"
-                + "      ,[QuestionId]\n"
-                + "      ,[Answer]\n"
-                + "      ,[IsCorrect]\n"
-                + "  FROM [dbo].[AnswerQuestion]\n"
-                + "    where QuestionId = ?";
-        try {
-            // tạo đối tượng preparestatement
-            statement = connection.prepareStatement(sql);
-            statement.setInt(1, questions.getQuestionId());
-            // thực thi câu lệnh
-            resultSet = statement.executeQuery();
-            // trả về kết quả
-            while (resultSet.next()) {
-                int accountId = resultSet.getInt("accountId");
-                int questionId = resultSet.getInt("questionId");
-                String answer = resultSet.getString("answer");
-                Boolean isCorrectUserAnswer = resultSet.getBoolean("isCorrectUserAnswer");
-
-                UserAnswer ua = new UserAnswer(accountId, questionId, answer, true);
-                listFound.add(ua);
-            }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return listFound;
-
-    }
-
-    public Map<Integer, String[]> getListQuestionAnswerQuizSubmit(int moduleId) {
-        Map<Integer, String[]> new_map = new HashMap<>();
+    // Map chứa id câu hỏi và câu trả lời đúng dùng để insert
+    public Map<String, String[]> getListQuestionAnswer(int moduleId) {
+        Map<String, String[]> new_map = new HashMap<String, String[]>();
         ArrayList<Questions> list_question = getListQuestionsByModuleId(moduleId);
-
-        for (Questions question : list_question) {
-            ArrayList<Answer> ans = getListAnswersByID(question);
+        for (int i = 0; i < list_question.size(); i++) {
+            ArrayList<Answer> ans = getListAnswersCorrectByQuestionId(list_question.get(i));
             String[] anw_string = new String[ans.size()];
             for (int j = 0; j < ans.size(); j++) {
                 anw_string[j] = ans.get(j).getChoices().toString();
-                System.out.println(question.getQuestionId() + " " + anw_string[j]);
             }
+            new_map.put(String.valueOf(list_question.get(i).getQuestionId()), anw_string);
+        }
+        return new_map;
+    }
+
+    // Map chứa id câu hỏi và câu trả lời đúng
+    public Map<Integer, String[]> getListQuestionAnswerQuizSubmit(int moduleId) {
+        // tạo map để lưu trữ câu hỏi và câu trả lời 
+        Map<Integer, String[]> new_map = new HashMap<>();
+        // lấy ra list câu hỏi dựa trên moduleId
+        ArrayList<Questions> list_question = getListQuestionsByModuleId(moduleId);
+        // duyệt qua từng phần tử trong danh sách question
+        for (Questions question : list_question) {
+            // lấy ra danh sách câu trả lời đúng
+            ArrayList<Answer> ans = getListAnswersCorrectByQuestionId(question);
+            // tạo mảng để lưu trữ câu trả lời dưới dạng chuỗi
+            String[] anw_string = new String[ans.size()];
+            // duyệt qua từng phần tử trong list ans và chuyển nó thành chuỗi
+            for (int j = 0; j < ans.size(); j++) {
+                anw_string[j] = ans.get(j).getChoices().toString();
+            }
+            // đưa câu hỏi và mảng câu trả lời vào map
             new_map.put(question.getQuestionId(), anw_string);
         }
-
         return new_map;
+    }
+    
+    public static void main(String[] args) {
+        QuizDAO dao = new QuizDAO();
+        dao.updateTypeQuestion(new Questions(295, 1, 289, "Hello Elearning", true));
     }
 
 }

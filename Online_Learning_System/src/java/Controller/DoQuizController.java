@@ -85,7 +85,7 @@ public class DoQuizController extends HttpServlet {
         Quiz quiz = quizDAO.findQuizByModuleId(moduleId);
         ArrayList<Questions> listQuestionByModuleId = quizDAO.getListQuestionsByModuleId(moduleId);
         ArrayList<Answer> listAnswerByModuleId = quizDAO.getlistAnswerByModuleId(moduleId);
-
+        ArrayList<Answer> listAnswersCorrect = quizDAO.getlistAnswerCorrectByModuleId(moduleId);
         UserAnswer userAnswer = listUserAnswer.get(listUserAnswer.size() - 1);
         ScoreQuiz scoreQuiz = listScoreQuiz.get(listScoreQuiz.size() - 1);
 
@@ -132,6 +132,7 @@ public class DoQuizController extends HttpServlet {
         }
 
         // Đặt các thuộc tính và chuyển tiếp yêu cầu
+        request.setAttribute("listAnswersCorrect", listAnswersCorrect);
         request.setAttribute("questionResultMap", questionResultMap);
         request.setAttribute("listUserAnswer", listUserAnswer);
         request.setAttribute("countAnswer", countAnswer);
