@@ -81,10 +81,18 @@ public class ManageAccountByAdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //response.getWriter().println("Mentor accounts imported and activated successfully.");
+        HttpSession session = request.getSession();
         String accountId = request.getParameter("accountid");
         String action = (request.getParameter("action") == null ? "" : request.getParameter("action"));
         AccountDAO accDao = new AccountDAO();
-
+        
+        AccountDTO acc = (AccountDTO) session.getAttribute("account");
+        if(acc == null || acc.getRole_id()!= 1 ) {
+            response.sendRedirect("../home");
+            return;
+        }
+        
+        
         try {
 
             switch (action) {
