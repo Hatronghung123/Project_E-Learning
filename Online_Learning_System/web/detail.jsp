@@ -414,7 +414,7 @@
                             <ul class="list-group list-group-flush"> 
                                 <c:forEach items="${listAllCategory}" var="o">
                                     <li class="list-group-item d-flex justify-content-between align-items-center px-0 wow animate__animated animate__fadeInUp" data-wow-delay="0.2s">
-                                        <a href="listCourseSeverlet?cateid=${o.getCategory_id()}" class="text-decoration-none h6 m-0">${o.getCategory_name()}</a>
+                                        <a href="listCourseSeverlet?cid=${o.getCategory_id()}" class="text-decoration-none h6 m-0">${o.getCategory_name()}</a>
                                         <span style="background-color: #06bbcc;
                                               border-radius: 4px;" class="badge badge-primary badge-pill">${o.getNumberofCate()}</span>
                                     </li>

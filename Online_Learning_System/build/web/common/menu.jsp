@@ -79,7 +79,6 @@
                         <c:if test="${sessionScope.account.role_id == 3}">
                             <a class="dropdown-item" href="messenger?sender_id=${sessionScope.account.getAccount_id()}&receiver_id=0">Messenger</a>
                         </c:if>
-                             <a class="dropdown-item" href="certificate">My Certificate</a>
                         <a class="dropdown-item" href="my-courses">My Courses</a>
                         <a class="dropdown-item" href="join?action=logout">Log Out</a>
                     </div>

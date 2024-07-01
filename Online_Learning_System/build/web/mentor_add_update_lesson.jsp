@@ -121,9 +121,6 @@
                 border-color: #06BBCC
             }
 
-            .page-heading{
-                margin-top: 20px
-            }
         </style>
 
     </head>
@@ -134,15 +131,8 @@
 
             <div class="container">
 
-            <c:choose>
-                <c:when test="${action == 'updatelesson'}">
-                    <h1 class="page-heading h2">Update Lesson</h1>
-                </c:when>
-                
-                <c:otherwise>
-                    <h1 class="page-heading h2">Add Lesson</h1>
-                </c:otherwise>
-            </c:choose>
+
+                <h1 class="page-heading h2">Add Lesson</h1>
                 <div class="card">
                     <div class="card-body">
                         <form action="LessonManage" method="post">
@@ -150,7 +140,7 @@
                         <div class="form-group row">
                             <label for="" class="form-control-label col-md-3">Lesson Name:</label>
                             <div class="col-md-6">
-                                <input required="" value="${lessonName}" type="text" name="lessonName" class="form-control" placeholder="Write an awesome title">
+                                <input required="" value="${lesson.getLessonname()}" type="text" name="lessonName" class="form-control" placeholder="Write an awesome title">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -159,7 +149,7 @@
                                 <select required="" class="custom-control custom-select form-control" name="module">
                                     <c:forEach items="${listModule}" var="o">
                                         <option value="${o.getModuleid()}"
-                                                ${o.getModuleid() == moduleid ? "selected" : ""}>${o.getModulename()}
+                                                ${o.getModuleid() == lesson.getModuleid() ? "selected" : ""}>${o.getModulename()}
                                         </option>
                                     </c:forEach>
                                 </select>
@@ -168,7 +158,7 @@
                         <div class="form-group row">
                             <label for="" class="form-control-label col-md-3">Lesson Content:</label>
                             <div class="col-md-6">
-                                <textarea required=""e type="text" name="lessonContent" class="form-control textContent" placeholder="Write any thing in here">${lessonContent}</textarea>
+                                <textarea required=""e type="text" name="lessonContent" class="form-control textContent" placeholder="Write any thing in here">${lesson.getLessoncontent()}</textarea>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -177,21 +167,20 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <input required="" type="text" name="videoLink" id="videoLink" class="form-control" value="${videoLink}" />
+                                            <input required="" type="text" name="videoLink" id="videoLink" class="form-control" value="${lesson.getLessonvideo()}" />
                                             <small class="help-block text-muted-light"><i class="material-icons md-18">ondemand_video</i> <span class="icon-text">Paste Video</span></small>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <div class="embed-responsive embed-responsive-16by9">
-                                                <iframe  id="videoFrame" class="embed-responsive-item" src="${videoLink}" allowfullscreen=""></iframe>
+                                                <iframe  id="videoFrame" class="embed-responsive-item" src="${lesson.getLessonvideo()}" allowfullscreen=""></iframe>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                                            <p class="text-danger">${msg}</p>
                         <div class="text-right mt-3">
                             <c:if test="${action == 'addlesson'}">
                                 <input type="hidden" value="addlesson" name="action">

@@ -192,13 +192,17 @@
                             </div>
                         </div>
                         <div class="text-right mt-3">
+                            <c:if test="${action == 'addlesson'}">
+                                <input type="hidden" value="addlesson" name="action">
+                                <button type="submit" name="add" class="btn btn-primary">Add Course</button>&nbsp;
+                            </c:if>
                             <c:if test="${action == 'updatelesson'}">
                                 <input type="hidden" value="updatelesson" name="action">
                                 <input type="hidden" value="${lesson.getLessonid()}" name="lessonid">
                                 <button type="submit" name="save" class="btn btn-primary">Save Course</button>&nbsp;
                             </c:if>
 
-                            <button type="button" onclick="cancelEdit(${cid}, ${lesson.getModuleid()})" name="cancel" class="btn btn-outline-danger md-btn-flat">Cancel</button>
+                            <button type="button" onclick="cancelAdd(${cid})" name="cancel" class="btn btn-outline-danger md-btn-flat">Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -235,8 +239,8 @@
         </script>
 
         <script>
-            function cancelEdit(cid, moduleid) {
-                window.location.href = '/Project_E-Learning/ModuleManage?moduleId=' + moduleid + '&cid='+cid;
+            function cancelAdd(cid) {
+                window.location.href = '/Project_E-Learning/course-manage?cid=' + cid + '&action=update';
             }
         </script>
 

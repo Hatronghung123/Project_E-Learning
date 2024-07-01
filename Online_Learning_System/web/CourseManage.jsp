@@ -218,7 +218,6 @@
                         })
                                 .then(response => response.json())
                                 .then(data => {
-                                    console.log('Response data:', data);
                                     if (data.success) {
                                         // Cập nhật UI
                                         var courseElement = document.getElementById('course-' + courseId);
@@ -232,7 +231,7 @@
                                         }
 
                                     } else {
-                                        alert('Error: '+ data.message);
+                                        alert('An error occurred while deleting the course');
                                     }
                                 })
                                 .catch(error => {

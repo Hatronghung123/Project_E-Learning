@@ -90,21 +90,31 @@ public class CourseManageServlet extends HttpServlet {
         AccountDTO my_account = (AccountDTO) session.getAttribute("account");
         CourseManageDAO course_manage_DAO = new CourseManageDAO();
 
-        ArrayList<CourseManageDTO> list_managed_course = course_manage_DAO.getMyManagedCourses(my_account.getAccount_id());
+        ArrayList<CourseManageDTO> list_managed_course = course_manage_DAO.getMyManagedCourse(my_account.getAccount_id());
         request.setAttribute("list_managed_couse", list_managed_course);
 
+////        read data lesson from database
+//        LessonManageDAO dao = new LessonManageDAO();
+//        ArrayList<Lesson> lessonList = null;
+//        try {
+//            lessonList = dao.getListlessonByCid(Integer.parseInt(cid));
+//        } catch (SQLException ex) {
+//            Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (NumberFormatException e) {
+//        }
         switch (action) {
             case "update":
                 request.setAttribute("cid", cid);
+//                if (lessonList != null) {
+//                    request.setAttribute("lessonList", lessonList);
+//                }
                 ModuleDAO module_dao = new ModuleDAO();
                 LessonManageDAO lesson_manage_dao = new LessonManageDAO();
                 try {
                     ArrayList<ModuleDTO> list_module = module_dao.getListModulByCid(cid);
                     ArrayList<LessonDTO> list_lesson = lesson_manage_dao.getListlessonByCid(Integer.parseInt(cid));
-                    CourseManageDTO my_managed_course = course_manage_DAO.getMyManagedCourseById(my_account.getAccount_id(), cid);
                     request.setAttribute("list_module", list_module);
                     request.setAttribute("list_lesson", list_lesson);
-                    request.setAttribute("my_managed_course", my_managed_course);
                 } catch (SQLException ex) {
                     Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -196,6 +206,7 @@ public class CourseManageServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         out.print("{\"success\":" + success + ", \"message\":\"" + msg + "\"}");
+
         out.flush();
     }
 
@@ -267,7 +278,7 @@ public class CourseManageServlet extends HttpServlet {
     private void addNewModuleDoPost(HttpServletRequest request, HttpServletResponse response, String cid) throws IOException, ServletException {
         String module_name = request.getParameter("module_name") == null ? "" : request.getParameter("module_name");
         String module_number = request.getParameter("module_number") == null ? "" : request.getParameter("module_number");
-
+        
         String[] fullFields = {module_name, module_number};
         PrintWriter o = response.getWriter();
         if (!Validation.checkString(module_name)) {
@@ -285,7 +296,7 @@ public class CourseManageServlet extends HttpServlet {
             ModuleDAO module_DAO = new ModuleDAO();
             ModuleDTO new_module = new ModuleDTO(module_name, Integer.parseInt(module_number));
             module_DAO.insertModule(cid, new_module);
-            response.sendRedirect("course-manage?cid=" + cid + "&action=update");
+            response.sendRedirect("course-manage?cid="+cid+"&action=update");
         } else {
             request.getRequestDispatcher("AddNewModule.jsp").forward(request, response);
         }
@@ -341,3 +352,5 @@ public class CourseManageServlet extends HttpServlet {
     }
 
 }
+
+
