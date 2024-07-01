@@ -92,6 +92,7 @@ public class homeServlet extends HttpServlet {
             ArrayList<Category> listCategory = dao.getAllCategory();
             ArrayList<Course> listNewCourse = dao.getNewCourse();
             ArrayList<Course> listPopulerCourse = dao.getPopulerCourse();
+            ArrayList<Category> listCategoryAndCountCourse = dao.getCategoryAndCountCourse();
             if (acc != null) {
                 ArrayList<Enrollment> listEnrollment = cdDao.getEnrollmentByAccountId(acc.getAccount_id());
                 request.setAttribute("listEnrollment", listEnrollment);
@@ -118,6 +119,7 @@ public class homeServlet extends HttpServlet {
 
 
             request.setAttribute("action", action);
+            request.setAttribute("listCategoryAndCountCourse", listCategoryAndCountCourse);
             request.setAttribute("listPopulerCourse", listPopulerCourse);
             request.setAttribute("listNewCourse", listNewCourse);
             request.setAttribute("listCategory", listCategory);
