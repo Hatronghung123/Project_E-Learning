@@ -149,7 +149,7 @@
                                 <div class="tab-pane fade active show" id="Courses">
                                     <h3 style="color: red">${requestScope.error}</h3>
 
-                                    <form action="course-manage?action=update&cid=${my_managed_course.course_id}" method="post" enctype="multipart/form-data">
+                                    <form id="updateCourseForm" action="course-manage?cid=${my_managed_course.course_id}&action=update" method="post" enctype="multipart/form-data">
                                         <div>
                                             <div class="form-group">
                                                 <h3 style="color: red">${requestScope.error_images}</h3>
@@ -159,6 +159,7 @@
                                                     <input type="file" class="" name="image">
                                                     <div class="text-black-50 small mt-1">Allowed JPG or PNG. Max size of 800K</div>
                                                 </div>
+                                                <input type="hidden" name="current_image" value="${requestScope.my_managed_course.image}">
                                             </div>
                                             <div class="form-group">
                                                 <h3 style="color: red">${requestScope.error_name}</h3>
@@ -174,7 +175,7 @@
                                                 <label class="form-label">Price</label>
                                                 <input name="price" type="number" min="0" max="999999999" class="form-control" value="${requestScope.my_managed_course.price}">
                                             </div>
-                                            <div class="form-group" style="width: 5%">
+                                            <div class="form-group" style="width: 10%">
                                                 <label class="form-label">Discount</label>
                                                 <input name="discount" type="number" min="0" max="100" class="form-control" value="${requestScope.my_managed_course.discount}"%">
                                             </div>
@@ -189,6 +190,13 @@
                                                         <option value="${o.category_id}"<c:if test="${not empty requestScope.my_managed_course and requestScope.my_managed_course.course_category_id == o.category_id}">selected</c:if> >${o.getCategory_name()}</option>
                                                     </c:forEach>
                                                 </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label">Assign Mentor</label><br>
+                                                <input class="search-input" style="" type="text" name="search"  placeholder="Search Mentor">
+                                                <c:forEach items="${list_mentor}" var="mentor">
+                                                    ${mentor.fullname}, ${mentor.email}<br>
+                                                </c:forEach>
                                             </div>
                                             <br>
                                             <div class="form-group">
@@ -226,6 +234,17 @@
                         autoResize(textarea);
                     });
                 });
+                document.addEventListener('DOMContentLoaded', function () {
+                    var form = document.getElementById('updateCourseForm');
+                    form.addEventListener('submit', function (event) {
+                        event.preventDefault(); // Prevent the form from submitting immediately
+
+                        if (confirm('Are you sure you want to save these changes?')) {
+                            this.submit(); // If user confirms, submit the form
+                        }
+                    });
+                });
+
             </script>
 
         </div>

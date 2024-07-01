@@ -168,30 +168,17 @@ public class CourseManageDAO extends DBContext {
 
     public void updateCourse(int managerId, CourseManageDTO newCourse) {
         connection = getConnection();
-        String sql_account = """
-                                 INSERT INTO [dbo].[Course]
-                                        ([CourseName]
-                                        ,[Description]
-                                        ,[Image]
-                                        ,[Price]
-                                        ,[Discount]
-                                        ,[CourseCategoryId]
-                                        ,[CreatedBy]
-                                        ,[DateCreated]
-
-                                        ,[Status])
-                                  VALUES
-                                        (?
-                                        ,?
-                                        ,?
-                                        ,?
-                                        ,?
-                                        ,?
-                                        ,?
-                                        ,GETDATE()
-                                        ,1)""";
+        String sql = """
+                     UPDATE [dbo].[Course]
+                        SET [CourseName] = ?
+                           ,[Description] = ?
+                           ,[Image] = ?
+                           ,[Price] = ?
+                           ,[Discount] = ?
+                           ,[CourseCategoryId] = ?
+                      WHERE CreatedBy = ? and CourseId = ?""";
         try {
-            statement = connection.prepareStatement(sql_account);
+            statement = connection.prepareStatement(sql);
             statement.setString(1, newCourse.getCourse_name());
             statement.setString(2, newCourse.getDescription());
             statement.setString(3, newCourse.getImage());
@@ -199,6 +186,7 @@ public class CourseManageDAO extends DBContext {
             statement.setFloat(5, newCourse.getDiscount());
             statement.setString(6, newCourse.getCourse_category_id());
             statement.setInt(7, managerId);
+            statement.setInt(8, newCourse.getCourse_id());
             // thực thi câu lệnh
             statement.executeUpdate();
         } catch (SQLException ex) {

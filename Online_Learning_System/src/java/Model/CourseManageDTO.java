@@ -27,6 +27,19 @@ public class CourseManageDTO {
     public CourseManageDTO() {
     }
 
+    public CourseManageDTO(int course_id, String course_name, String description, String mentor_name, String image, float price, float discount, String course_category_id) {
+        this.course_id = course_id;
+        this.course_name = course_name;
+        this.description = description;
+        this.mentor_name = mentor_name;
+        this.image = image;
+        this.price = price;
+        this.discount = discount;
+        this.course_category_id = course_category_id;
+    }
+    
+    
+
     public CourseManageDTO(int course_id, String course_name, String description, String mentor_name, String image, float price, float discount, String course_category_id, String create_date, String study_time, boolean status, int number_enrollment) {
         this.course_id = course_id;
         this.course_name = course_name;

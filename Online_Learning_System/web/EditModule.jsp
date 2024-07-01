@@ -135,9 +135,11 @@
                         <div class="col-md-3 pt-0">
                             <div class="list-group list-group-flush account-settings-links" id="moduleList">
                                 <a class="list-group-item list-group-item-action" href="course-manage?cid=${cid}&action=update"">Edit Course Information</a>
+                                <h5>Modules</h5>
                                 <c:forEach items="${list_module}" var="module">
-                                    <a class="list-group-item list-group-item-action" href="ModuleManage?moduleId=${module.moduleid}&cid=${cid}" data-module-id="${module.moduleid}">${module.modulename}</a>
+                                    <a class="list-group-item list-group-item-action" href="ModuleManage?moduleId=${module.moduleid}&cid=${my_managed_course.course_id}" data-module-id="${module.moduleid}">${module.modulename}</a>
                                 </c:forEach>
+                                <h5>Quizzes</h5>
                             </div>
                         </div>
                         <div class="col-md-9 card_mine">
@@ -147,6 +149,7 @@
 
                                     <div>
                                         <a href="LessonManage?action=addlesson&cid=${cid}&moduleid=${module}" class="btn btn-outline-success">Add New Lesson</a>
+                                        <a href="QuizManage?action=addQuiz&cid=${cid}&moduleid=${module}" class="btn btn-outline-info">Add New Quiz</a>
                                     </div>
 
                                     <div class="tab-pane fade show" id="Courses">
@@ -155,7 +158,7 @@
 
                                                 <div id="course-${lesson.lessonname}" class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
                                                     <div class="col-lg-2">
-                                                      
+                                                    
                                                         <div class="embed-responsive embed-responsive-16by9">
                                                             <iframe  id="videoFrame" class="embed-responsive-item" src="${lesson.lessonvideo}"  width="100%" height="auto" allowfullscreen=""></iframe>
                                                         </div>
