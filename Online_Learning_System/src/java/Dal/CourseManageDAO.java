@@ -125,10 +125,7 @@ public class CourseManageDAO extends DBContext {
 
     }
 
-
 //        course_manage_DAO.insertCourse(2, new CourseManageDTO("abc", "abccc", null, 0, 0, "IT", "0h"));
-    
-
     public void insertCourse(int managerId, CourseManageDTO newCourse) {
         connection = getConnection();
         String sql_account = """
@@ -168,11 +165,49 @@ public class CourseManageDAO extends DBContext {
             ex.printStackTrace();
         }
     }
-    
-    
-    
+
+    public void updateCourse(int managerId, CourseManageDTO newCourse) {
+        connection = getConnection();
+        String sql_account = """
+                                 INSERT INTO [dbo].[Course]
+                                        ([CourseName]
+                                        ,[Description]
+                                        ,[Image]
+                                        ,[Price]
+                                        ,[Discount]
+                                        ,[CourseCategoryId]
+                                        ,[CreatedBy]
+                                        ,[DateCreated]
+
+                                        ,[Status])
+                                  VALUES
+                                        (?
+                                        ,?
+                                        ,?
+                                        ,?
+                                        ,?
+                                        ,?
+                                        ,?
+                                        ,GETDATE()
+                                        ,1)""";
+        try {
+            statement = connection.prepareStatement(sql_account);
+            statement.setString(1, newCourse.getCourse_name());
+            statement.setString(2, newCourse.getDescription());
+            statement.setString(3, newCourse.getImage());
+            statement.setFloat(4, newCourse.getPrice());
+            statement.setFloat(5, newCourse.getDiscount());
+            statement.setString(6, newCourse.getCourse_category_id());
+            statement.setInt(7, managerId);
+            // thực thi câu lệnh
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     //kiểm tra xem có sinh viên đang tham gia khóa học hay không
-     public boolean canChangeStatusCourse(String cid) {
+    public boolean canChangeStatusCourse(String cid) {
         connection = getConnection();
         String sql = """
                          SELECT COUNT(*) 
@@ -183,7 +218,7 @@ public class CourseManageDAO extends DBContext {
             statement.setString(1, cid);
             // thực thi câu lệnh
             resultSet = statement.executeQuery();
-            while (resultSet.next()) {                
+            while (resultSet.next()) {
                 return resultSet.getInt(1) == 0; // Trả về true nếu tất cả sinh viên dã hoàn thành khóa học hoặc chưa tham gia khóa học
             }
         } catch (SQLException ex) {
@@ -192,10 +227,10 @@ public class CourseManageDAO extends DBContext {
         return false;
 
     }
-     
-     public static void main(String[] args)  {
+
+    public static void main(String[] args) {
         CourseManageDAO dao = new CourseManageDAO();
-         System.out.println(dao.canChangeStatusCourse("1"));
+        System.out.println(dao.getMyManagedCourseById(2, "2").getCourse_category_id());
     }
 
 }

@@ -118,11 +118,11 @@ public class CourseManageServlet extends HttpServlet {
 
             case "add_new_course":
                 try {
-                addCourse(request, response);
-            } catch (SQLException ex) {
-                Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            return;
+                    addCourse(request, response);
+                } catch (SQLException ex) {
+                    Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return;
             default:
                 request.getRequestDispatcher("CourseManage.jsp").forward(request, response);
         }
@@ -148,6 +148,9 @@ public class CourseManageServlet extends HttpServlet {
         String cid = (String) request.getParameter("cid") == null ? "" : (String) request.getParameter("cid");
         PrintWriter o = response.getWriter();
         switch (action) {
+            case "update":
+                updateCourseDoPost(request, response, cid);
+                break;
             case "add_new_module":
                 addNewModuleDoPost(request, response, cid);
                 break;
@@ -177,24 +180,24 @@ public class CourseManageServlet extends HttpServlet {
     }// </editor-fold>
 
     private void deleteCourse(String cid, HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    CourseManageDAO courseManageDAO = new CourseManageDAO();
-    String msg = "";
-    boolean success = false;
+            throws ServletException, IOException {
+        CourseManageDAO courseManageDAO = new CourseManageDAO();
+        String msg = "";
+        boolean success = false;
 
-    // kiểm tra nếu true thì có thể thay đổi trạng thái khóa học
-    if (courseManageDAO.canChangeStatusCourse(cid)) {
-        success = courseManageDAO.deleteCourse(cid);
-    } else {
-        msg = "Can't change status of this course because there are still students enrolled.";
+        // kiểm tra nếu true thì có thể thay đổi trạng thái khóa học
+        if (courseManageDAO.canChangeStatusCourse(cid)) {
+            success = courseManageDAO.deleteCourse(cid);
+        } else {
+            msg = "Can't change status of this course because there are still students enrolled.";
+        }
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print("{\"success\":" + success + ", \"message\":\"" + msg + "\"}");
+        out.flush();
     }
-
-    response.setContentType("application/json");
-    response.setCharacterEncoding("UTF-8");
-    PrintWriter out = response.getWriter();
-    out.print("{\"success\":" + success + ", \"message\":\"" + msg + "\"}");
-    out.flush(); 
-}
 
     private void activateCourse(String cid, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -285,6 +288,55 @@ public class CourseManageServlet extends HttpServlet {
             response.sendRedirect("course-manage?cid=" + cid + "&action=update");
         } else {
             request.getRequestDispatcher("AddNewModule.jsp").forward(request, response);
+        }
+    }
+
+    private void updateCourseDoPost(HttpServletRequest request, HttpServletResponse response, String cid) throws ServletException, IOException {
+//get data form        
+        Part file_image_course = request.getPart("image");
+        String course_name = request.getParameter("courseName") == null ? "" : request.getParameter("courseName");
+        String description = request.getParameter("description") == null ? "" : request.getParameter("description");
+        String price = request.getParameter("price") == null ? "0" : request.getParameter("price");
+        String discount = request.getParameter("discount") == null ? "0" : request.getParameter("discount");
+        String category = request.getParameter("category") == null ? "" : request.getParameter("category");
+//create string[] to check input all fields
+        String[] fullFields = {course_name, description, category};
+//set attribute price, discount 
+        request.setAttribute("price", price);
+        request.setAttribute("discount", discount);
+//update course
+//check invalid
+        String image_file_name = "";
+        if (file_image_course != null && file_image_course.getSize() > 0) {
+            if (file_image_course.getSize() < 820000) {
+                request.setAttribute("error_images", "Your photo exceeds the allowed size!");
+            } else {
+                image_file_name = Validation.inputFile(request, file_image_course, "image_course");
+                request.setAttribute("image", image_file_name);
+            }
+        }
+        if (!Validation.checkString(course_name)) {
+            request.setAttribute("course_name", course_name);
+            request.setAttribute("error_name", "You must input a valid course name!");
+        }
+        if (!Validation.checkString(description)) {
+            request.setAttribute("description", description);
+            request.setAttribute("error_desciption", "You must input a valid desciption!");
+        }
+        if (!Validation.checkString(category)) {
+            request.setAttribute("category", category);
+            request.setAttribute("error_category", "You must choose category!");
+        }
+//valid        
+        if (Validation.checkStringArray(fullFields)) {
+            HttpSession session = request.getSession();
+            AccountDTO my_account = (AccountDTO) session.getAttribute("account");
+            CourseManageDAO course_manage_DAO = new CourseManageDAO();
+            CourseManageDTO new_course = new CourseManageDTO(course_name, description, image_file_name, Float.parseFloat(price), Float.parseFloat(discount), category);
+            course_manage_DAO.insertCourse(my_account.getAccount_id(), new_course);
+            response.sendRedirect("course-manage");
+        } else {
+            request.getRequestDispatcher("AddNewCourse.jsp").forward(request, response);
         }
     }
 

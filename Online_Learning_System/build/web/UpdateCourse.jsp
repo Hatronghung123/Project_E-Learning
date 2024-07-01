@@ -135,9 +135,11 @@
                         <div class="col-md-3 pt-0">
                             <div class="list-group list-group-flush account-settings-links" id="moduleList">
                                 <a class="list-group-item list-group-item-action active" href="#"">Edit Course Information</a>
+                                <h5>Modules</h5>
                                 <c:forEach items="${list_module}" var="module">
                                     <a class="list-group-item list-group-item-action" href="ModuleManage?moduleId=${module.moduleid}&cid=${my_managed_course.course_id}" data-module-id="${module.moduleid}">${module.modulename}</a>
                                 </c:forEach>
+                                <h5>Quizzes</h5>
                             </div>
                         </div>
 
@@ -146,49 +148,53 @@
                             <div class="tab-content">
                                 <div class="tab-pane fade active show" id="Courses">
                                     <h3 style="color: red">${requestScope.error}</h3>
+                                    <form action="course-manage?action=update&cid=${my_managed_course.course_id}" method="post" enctype="multipart/form-data">
+                                        <div>
+                                            <div class="form-group">
+                                                <h3 style="color: red">${requestScope.error_images}</h3>
+                                                <img style="width: 200px; height: auto; border-radius: 17px" src="${requestScope.my_managed_course.image}" id="image" alt="course image" class=" iamge d-block">
+                                                <label class="form-label">Change Image</label>
+                                                <div class="media-body ml-4">
+                                                    <input type="file" class="" name="image">
+                                                    <div class="text-black-50 small mt-1">Allowed JPG or PNG. Max size of 800K</div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <h3 style="color: red">${requestScope.error_name}</h3>
+                                                <label class="form-label">Course Name</label>
+                                                <input name="courseName" type="text" class="form-control" value="${requestScope.my_managed_course.course_name}">
+                                            </div>
+                                            <div class="form-group">
+                                                <h3 style="color: red">${requestScope.error_desciption}</h3>
+                                                <label class="form-label">Description</label>
+                                                <textarea id="description" name="description" class="form-control auto-resize">${requestScope.my_managed_course.description}</textarea>
+                                            </div>
+                                            <div class="form-group" style="width: 15%">
+                                                <label class="form-label">Price</label>
+                                                <input name="price" type="number" min="0" max="999999999" class="form-control" value="${requestScope.my_managed_course.price}">
+                                            </div>
+                                            <div class="form-group" style="width: 5%">
+                                                <label class="form-label">Discount</label>
+                                                <input name="discount" type="number" min="0" max="100" class="form-control" value="${requestScope.my_managed_course.discount}"%">
+                                            </div>
+                                            <div class="form-group">
+                                                ${requestScope.my_managed_course.course_category_id}
+                                                <h3 style="color: red">${requestScope.error_category}</h3>
+                                                <label class="form-label">Category</label>
 
-                                    <div>
-                                        <div class="form-group">
-                                            <label class="form-label">Change Image</label>
-                                            <div class="media-body ml-4">
-                                                <input type="file" class="" name="image">
-                                                <div class="text-black-50 small mt-1">Allowed JPG or PNG. Max size of 800K</div>
+                                                <select name="category" class="custom-select">
+                                                    <option value="" >Choose one</option>
+                                                    <c:forEach items="${listCategory}" var="o">
+                                                        <option value="${o.category_id}"<c:if test="${not empty requestScope.my_managed_course and requestScope.my_managed_course.course_category_id == o.category_id}">selected</c:if> >${o.getCategory_name()}</option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                            <br>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-outline-primary">Save Change</button>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <h3 style="color: red">${requestScope.error_name}</h3>
-                                            <label class="form-label">Course Name</label>
-                                            <input name="courseName" type="text" class="form-control" value="${requestScope.my_managed_course.course_name}">
-                                        </div>
-                                        <div class="form-group">
-                                            <h3 style="color: red">${requestScope.error_desciption}</h3>
-                                            <label class="form-label">Description</label>
-                                            <textarea name="description" rows="7" class="form-control" value="${requestScope.desciption}"></textarea>
-                                        </div>
-                                        <div class="form-group" style="width: 15%">
-                                            <label class="form-label">Price</label>
-                                            <input name="price" type="number" min="0" max="999999999" class="form-control" value="${requestScope.my_managed_course.price}">
-                                        </div>
-                                        <div class="form-group" style="width: 5%">
-                                            <label class="form-label">Discount</label>
-                                            <input name="discount" type="number" min="0" max="100" class="form-control" value="${requestScope.my_managed_course.discount}"%">
-                                        </div>
-                                        <div class="form-group">
-                                            <h3 style="color: red">${requestScope.error_category}</h3>
-                                            <label class="form-label">Category</label>
-                                            <select name="category" class="custom-select">
-                                                <option value="" selected >Choose one</option>
-                                                <c:forEach items="${listCategory}" var="o">
-                                                    <option value="${o.category_id}" <c:if test="${requestScope.my_managed_course.course_category_id} == ${o.category_id}}">selected</c:if>>${o.getCategory_name()}</option>
-                                                </c:forEach>
-                                            </select>
-                                        </div>
-                                            <br>
-                                        <div class="form-group">
-                                            <button onclick="submitForm()" class="btn btn-outline-primary">Save Change</button>
-                                        </div>
-                                    </div>
-                                    
+                                    </form>
 
                                 </div>
 
@@ -203,90 +209,22 @@
             <script type="text/javascript">
             </script>
             <script>
-                function deleteCourse(courseId) {
-                    if (confirm('Are you sure you want to delete this course?')) {
-                        fetch('course-manage?action=delete&cid=' + courseId, {
-                            method: 'POST'
-                        })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.success) {
-                                        // Cập nhật UI
-                                        var courseElement = document.getElementById('course-' + courseId);
-                                        var statusLabel = courseElement.querySelector('label[style="color: #00cc66; font-size: 15px "]');
-                                        if (statusLabel) {
-                                            statusLabel.style.color = '#cc0033';
-                                            statusLabel.textContent = 'Inactive';
-
-                                            alert('Course deleted successfully');
-                                            window.location.reload();
-                                        }
-
-                                    } else {
-                                        alert('An error occurred while deleting the course');
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Error:', error);
-                                    alert('An error occurred while deleting the course');
-                                });
-                    }
-                }
-
-                function activeCourse(courseId) {
-                    if (confirm('Are you sure you want to active this course?')) {
-                        fetch('course-manage?action=activate&cid=' + courseId, {
-                            method: 'POST'
-                        })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.success) {
-                                        // Cập nhật UI
-                                        const courseElement = document.getElementById('course-' + courseId);
-                                        var statusLabel = courseElement.querySelector('label[style="color: #cc0033; font-size: 15px "]');
-                                        const activeButton = document.getElementById('activeBtn-' + courseId);
-                                        const deleteButton = document.getElementById('deleteBtn-' + courseId);
-                                        if (statusLabel) {
-                                            statusLabel.style.color = '#00cc66';
-                                            statusLabel.textContent = 'Active';
-                                            alert('Course activated successfully');
-                                            window.location.reload();
-                                        }
-                                    } else {
-                                        alert('An error occurred while activating the course');
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Error:', error);
-                                    alert('An error occurred while activating the course');
-                                });
-                    }
-                }
-
                 document.addEventListener('DOMContentLoaded', function () {
-                    var moduleList = document.getElementById('moduleList');
-                    var links = moduleList.getElementsByClassName('list-group-item');
-
-                    // Lấy moduleId từ URL (nếu có)
-                    var urlParams = new URLSearchParams(window.location.search);
-                    var currentModuleId = urlParams.get('moduleId');
-
-                    for (var i = 0; i < links.length; i++) {
-                        links[i].addEventListener('click', function (event) {
-                            // Loại bỏ class 'active' từ tất cả các thẻ
-                            for (var j = 0; j < links.length; j++) {
-                                links[j].classList.remove('active');
-                            }
-
-                            // Thêm class 'active' vào thẻ được click
-                            this.classList.add('active');
-                        });
-
-                        // Đặt active cho module hiện tại (nếu có)
-                        if (currentModuleId && links[i].getAttribute('data-module-id') === currentModuleId) {
-                            links[i].classList.add('active');
-                        }
+                    function autoResize(textarea) {
+                        textarea.style.height = 'auto';
+                        textarea.style.height = textarea.scrollHeight + 'px';
                     }
+
+                    var textareas = document.querySelectorAll('.auto-resize');
+                    textareas.forEach(function (textarea) {
+                        textarea.setAttribute('style', 'height:' + (textarea.scrollHeight) + 'px;overflow-y:hidden;');
+                        textarea.addEventListener("input", function () {
+                            autoResize(this);
+                        }, false);
+
+                        // Resize on page load
+                        autoResize(textarea);
+                    });
                 });
             </script>
 

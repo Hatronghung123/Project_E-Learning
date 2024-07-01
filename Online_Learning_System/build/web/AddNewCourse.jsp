@@ -143,7 +143,7 @@
                                             <div class="form-group">
                                                 <h3 style="color: red">${requestScope.error_desciption}</h3>
                                                 <label class="form-label">Description</label>
-                                                <textarea name="description" rows="7" class="form-control" value="${requestScope.desciption}"></textarea>
+                                                <textarea id="description" name="description" rows="7" class="form-control auto-resize" value="${requestScope.desciption}"></textarea>
                                             </div>
                                             <div class="form-group" style="width: 15%">
                                                 <label class="form-label">Price</label>
@@ -184,6 +184,23 @@
                                     window.location.href = "course-manage";
                                 }
                             }
+                            document.addEventListener('DOMContentLoaded', function () {
+                                function autoResize(textarea) {
+                                    textarea.style.height = 'auto';
+                                    textarea.style.height = textarea.scrollHeight + 'px';
+                                }
+
+                                var textareas = document.querySelectorAll('.auto-resize');
+                                textareas.forEach(function (textarea) {
+                                    textarea.setAttribute('style', 'height:' + (textarea.scrollHeight) + 'px;overflow-y:hidden;');
+                                    textarea.addEventListener("input", function () {
+                                        autoResize(this);
+                                    }, false);
+
+                                    // Resize on page load
+                                    autoResize(textarea);
+                                });
+                            });
             </script>
 
         </div>
