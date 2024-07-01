@@ -5,26 +5,23 @@
             <url>src/java/Controller/Admin/ManageAccountByAdminServlet.java</url>
             <bookmark id="1">
                 <name/>
-                <line>98</line>
+                <line>96</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/CourseManageServlet.java</file>
-            <file>file:/E:/Project_E-Learning/Online_Learning_System/web/UpdateCourse.jsp</file>
-            <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Model/CourseManageDTO.java</file>
-            <file>file:/E:/Project_E-Learning/Online_Learning_System/web/AddNewCourse.jsp</file>
-            <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Util/ServerPath.java</file>
-            <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Dal/DBContext.java</file>
-            <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/ModuleManageServler.java</file>
-            <file>file:/E:/Project_E-Learning/Online_Learning_System/web/EditModule.jsp</file>
-            <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Model/ModuleDTO.java</file>
-            <file>file:/E:/recovery/Online_Learning_System/src/java/Controller/DoQuizController.java</file>
-            <file>file:/E:/recovery/Online_Learning_System/src/java/Controller/DoQuizServlet.java</file>
-            <file>file:/E:/recovery/Online_Learning_System/src/java/Dal/QuizDAO.java</file>
-            <file>file:/E:/recovery/Online_Learning_System/src/java/Controller/CreateQuestionsServlet.java</file>
+            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/web/CourseManage.jsp</file>
+            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/Home/homeServlet.java</file>
+            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/ModuleManageServler.java</file>
+            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/LessonMangeServelet.java</file>
+            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Dal/DBContext.java</file>
+            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/CourseManageServlet.java</file>
+            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/web/EditModule.jsp</file>
+            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Dal/CourseManageDAO.java</file>
+            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/src/java/Controller/Home/listCourseSeverlet.java</file>
+            <file>file:/D:/New%20folder/V11/Project_E-Learning/Online_Learning_System/web/mentor_add_lesson.jsp</file>
         </group>
     </open-files>
 </project-private>

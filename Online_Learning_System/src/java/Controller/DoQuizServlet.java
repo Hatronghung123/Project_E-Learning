@@ -101,6 +101,7 @@ public class DoQuizServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
         AccountDTO acc = (AccountDTO) session.getAttribute("account");
 
@@ -144,22 +145,18 @@ public class DoQuizServlet extends HttpServlet {
                 listUserAnswer.add(new UserAnswer(acc.getAccount_id(), questionId, userAnswer, isCorrectUserAnswer));
             }
         }
-        
+
 //         Insert danh sách đáp án của người dùng vào database
 // nhớ xóa primary key của bảng answer question đi!
         quizDAO.insertUserAnser(listUserAnswer);
 
         float totalScore = (float) score / listQuestionByModuleId.size() * 10;
         Quiz quiz = quizDAO.findQuizByModuleId(moduleId);
-        ArrayList<ScoreQuiz> listScoreQuiz = new ArrayList<>();
         ScoreQuiz scorequiz = new ScoreQuiz(acc.getAccount_id(), quiz.getQuizId(), totalScore);
-        listScoreQuiz.add(scorequiz);
-        quizDAO.insertlistScoreQuiz(listScoreQuiz);
-        
-        session.setAttribute("listUserAnswer", listUserAnswer);
-        session.setAttribute("listScoreQuiz", listScoreQuiz);
+
+        quizDAO.insertScoreQuiz(scorequiz);
 //         Chuyển hướng sau khi xử lý
-        response.sendRedirect("doquizsub"+"?mid=1");
+        response.sendRedirect("do_quiz/do_quiz.jsp");
     }
 
     /**

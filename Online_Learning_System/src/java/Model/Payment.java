@@ -18,7 +18,7 @@ public class Payment {
     private Date paymentDate;
     private String paymentmethodid;
     private int amount;
-    private String month;
+    private String paymentDateString;
 
     public Payment() {
     }
@@ -40,10 +40,13 @@ public class Payment {
         this.amount = amount;
     }
 
-    public Payment(int amount, String month) {
+    public Payment(int amount, String paymentDateString) {
         this.amount = amount;
-        this.month = month;
+        this.paymentDateString = paymentDateString;
     }
+
+
+    
 
   
 
@@ -95,20 +98,22 @@ public class Payment {
         this.amount = amount;
     }
 
-    public String getMonth() {
-        return month;
+    public String getPaymentDateString() {
+        return paymentDateString;
     }
 
-    public void setMonth(String month) {
-        this.month = month;
+    public void setPaymentDateString(String paymentDateString) {
+        this.paymentDateString = paymentDateString;
+    }
+
+    @Override
+    public String toString() {
+        return "Payment{" + "amount=" + amount + ", paymentDateString=" + paymentDateString + '}';
     }
 
   
 
-    @Override
-    public String toString() {
-        return "Payment{" + "amount=" + amount + ", month=" + month + '}';
-    }
+  
 
     
     

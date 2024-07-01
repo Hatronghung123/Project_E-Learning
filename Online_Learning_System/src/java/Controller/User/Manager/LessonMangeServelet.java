@@ -4,7 +4,6 @@
  */
 package Controller.User.Manager;
 
-
 import Model.ModuleDTO;
 
 import Dal.LessonManageDAO;
@@ -72,7 +71,7 @@ public class LessonMangeServelet extends HttpServlet {
         LessonManageDAO dao = new LessonManageDAO();
         ArrayList<LessonDTO> lessonList = null;
         String course_id = request.getParameter("cid");
-
+        String moduleid = request.getParameter("moduleid");
         String action = (request.getParameter("action") == null) ? "" : request.getParameter("action");
 
         try {
@@ -82,6 +81,7 @@ public class LessonMangeServelet extends HttpServlet {
 
                 case "addlesson":
                     request.setAttribute("listModule", listModule);
+                    request.setAttribute("moduleid",moduleid);
                     request.setAttribute("action", action);
                     request.setAttribute("cid", course_id);
                     request.getRequestDispatcher("mentor_add_lesson.jsp").forward(request, response);
@@ -95,17 +95,7 @@ public class LessonMangeServelet extends HttpServlet {
                     request.getRequestDispatcher("mentor_update_lesson.jsp").forward(request, response);
                     break;
                 default:
-                    //        read data lesson from database
-//                      Khi nào có create modul thì mới cầnđoaj này 
-                    lessonList = dao.getListlessonByCid(Integer.parseInt(course_id));
-                    request.setAttribute("cid", course_id);
-                    if (lessonList != null) {
-                        request.setAttribute("lessonList", lessonList);
-                    }
-                    request.getRequestDispatcher("UpdateCourse.jsp").forward(request, response);
-                    return;
-                //o.print(lessonList);
-
+                    response.getWriter().print("Vào default rồi");
             }
 
         } catch (SQLException ex) {
@@ -162,7 +152,6 @@ public class LessonMangeServelet extends HttpServlet {
         return duration;
     }
 
-
     //thêm một lesson mới vào database
     private void AddLesson(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -178,7 +167,6 @@ public class LessonMangeServelet extends HttpServlet {
         LessonManageDAO dao = new LessonManageDAO();
 
         //Lấy ra được list module theo course id khi add hoặc update
-
         String msg = "";
         try {
             ArrayList<ModuleDTO> listModule = dao.getListModuleByCid(Integer.parseInt(cid));
@@ -187,7 +175,7 @@ public class LessonMangeServelet extends HttpServlet {
             } else {
                 LessonDTO lesson = new LessonDTO(Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
                 dao.InsertLesson(lesson);
-                response.sendRedirect("course-manage?cid=" + cid + "&action=update");
+                response.sendRedirect("ModuleManage?moduleId=" + moduleid + "&cid=" + cid);
                 return;
             }
 
@@ -211,14 +199,16 @@ public class LessonMangeServelet extends HttpServlet {
     private void deleteLesson(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String lessonid = request.getParameter("lessonid");
+        String moduleid = request.getParameter("module");
         String cid = request.getParameter("cid");
         LessonManageDAO dao = new LessonManageDAO();
+
         try {
             dao.deleteLessonByLessonId(Integer.parseInt(lessonid));
         } catch (Exception e) {
         }
 
-        response.sendRedirect("course-manage?cid=" + cid + "&action=update");
+        response.sendRedirect("ModuleManage?moduleId=" + moduleid + "&cid=" + cid);
     }
 
     //Hiện thị thông tin cua lesson cũ lên form
@@ -256,7 +246,7 @@ public class LessonMangeServelet extends HttpServlet {
             LessonDTO lesson = new LessonDTO(Integer.parseInt(lessonid), Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
 
             dao.updateLesson(lesson);
-            response.sendRedirect("course-manage?cid=" + cid + "&action=update");
+            response.sendRedirect("ModuleManage?moduleId=" + moduleid + "&cid=" + cid);
         } catch (Exception e) {
             e.printStackTrace();
         }

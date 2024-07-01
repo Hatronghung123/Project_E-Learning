@@ -102,6 +102,10 @@ public class Course {
         this.leture = leture;
 
     }
+
+    public Course(int course_id) {
+        this.course_id = course_id;
+    }
     
 
     public Course(String course_name, String image, int create_by) {
