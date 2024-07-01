@@ -43,103 +43,116 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/createQuiz/style.css"/>
 
         <style>
-            .max-width-800 {
-                font-family: Arial, sans-serif;
-                margin: 20px auto;
-                max-width: 800px;
-                padding: 20px;
-                background-color: #f9f9f9;
-                border: 1px solid #ddd;
-                border-radius: 5px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            }
+        .max-width-800 {
+            font-family: Arial, sans-serif;
+            margin: 20px auto;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-            .timer {
-                font-size: 24px;
-                font-weight: bold;
-                margin-bottom: 0px;
-                text-align: center;
-                line-height: 1.5;
-            }
+        .timer {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 0px;
+            text-align: center;
+            line-height: 1.5;
+        }
 
-            .timer span {
-                background-color: #00cc66;
-                color: white;
-                padding: 5px;
-                border-radius: 3px;
-                margin: 0 2px;
-            }
+        .timer span {
+            background-color: #00cc66;
+            color: white;
+            padding: 5px;
+            border-radius: 3px;
+            margin: 0 2px;
+        }
 
-            .question {
-                margin-bottom: 30px;
-                border: 1px solid #ccc;
-                padding: 15px;
-                border-radius: 5px;
-                background-color: #fff;
-            }
+        .question {
+            margin-bottom: 30px;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #fff;
+        }
 
-            .question h3 {
-                margin: 0 0 10px;
-            }
+        .question h3 {
+            margin: 0 0 10px;
+        }
 
-            .options {
-                list-style-type: none;
-                padding: 0;
-            }
+        .options {
+            list-style-type: none;
+            padding: 0;
+        }
 
-            .options li {
-                margin-bottom: 10px;
-            }
+        .options li {
+            margin-bottom: 10px;
+        }
 
-            input[type="radio"],
-            input[type="checkbox"] {
-                display: none;
-            }
+        input[type="radio"],
+        input[type="checkbox"] {
+            display: none;
+        }
 
-            input[type="radio"]+label,
-            input[type="checkbox"]+label {
-                position: relative;
-                padding-left: 30px;
-                cursor: pointer;
-                display: inline-block;
-                line-height: 20px;
-            }
+        input[type="radio"]+label,
+        input[type="checkbox"]+label {
+            position: relative;
+            padding-left: 30px;
+            cursor: pointer;
+            display: inline-block;
+            line-height: 20px;
+        }
 
-            input[type="radio"]+label:before,
-            input[type="checkbox"]+label:before {
-                content: '';
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 20px;
-                height: 20px;
-                border: 2px solid #000;
-                border-radius: 50%;
-                background: #fff;
-            }
+        input[type="radio"]+label:before,
+        input[type="checkbox"]+label:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #000;
+            border-radius: 50%;
+            background: #fff;
+        }
 
-            input[type="checkbox"]+label:before {
-                border-radius: 3px;
-            }
+        input[type="checkbox"]+label:before {
+            border-radius: 3px;
+        }
 
-            input[type="radio"]:checked+label:before,
-            input[type="checkbox"]:checked+label:before {
-                background: #000;
-                border-color: #000;
-            }
+        input[type="radio"]:checked+label:before,
+        input[type="checkbox"]:checked+label:before {
+            background: #00cc66;
+            border-color: #00cc66;
+        }
 
-            input[type="radio"]+label:hover:before,
-            input[type="checkbox"]+label:hover:before {
-                border-color: #555;
-            }
+        input[type="checkbox"]:checked+label:before {
+            content: '✔';
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            line-height: 20px;
+        }
 
-            footer {
-                text-align: center;
-                margin-top: 20px;
-                padding-top: 10px;
-                border-top: 1px solid #ccc;
-            }
-        </style>
+        input[type="radio"]:checked+label:before {
+            background: #00cc66;
+            border-color: #00cc66;
+        }
+
+        input[type="radio"]+label:hover:before,
+        input[type="checkbox"]+label:hover:before {
+            border-color: #555;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ccc;
+        }
+    </style>
         <script>
             // Function to save timer state
             function saveTimerState(timeLeft) {
