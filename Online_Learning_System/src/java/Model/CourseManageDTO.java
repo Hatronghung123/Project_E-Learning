@@ -5,6 +5,7 @@
 package Model;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,7 +15,7 @@ public class CourseManageDTO {
     private int course_id;
     private String course_name;
     private String description;
-    private String mentor_name;
+    private ArrayList<String> mentor_name;
     private String image;
     private float price;
     private float discount;
@@ -27,7 +28,7 @@ public class CourseManageDTO {
     public CourseManageDTO() {
     }
 
-    public CourseManageDTO(int course_id, String course_name, String description, String mentor_name, String image, float price, float discount, String course_category_id) {
+    public CourseManageDTO(int course_id, String course_name, String description, ArrayList<String> mentor_name, String image, float price, float discount, String course_category_id) {
         this.course_id = course_id;
         this.course_name = course_name;
         this.description = description;
@@ -40,11 +41,10 @@ public class CourseManageDTO {
     
     
 
-    public CourseManageDTO(int course_id, String course_name, String description, String mentor_name, String image, float price, float discount, String course_category_id, String create_date, String study_time, boolean status, int number_enrollment) {
+    public CourseManageDTO(int course_id, String course_name, String description, String image, float price, float discount, String course_category_id, String create_date, String study_time, boolean status, int number_enrollment) {
         this.course_id = course_id;
         this.course_name = course_name;
         this.description = description;
-        this.mentor_name = mentor_name;
         this.image = image;
         this.price = price;
         this.discount = discount;
@@ -104,11 +104,11 @@ public class CourseManageDTO {
         this.description = description;
     }
 
-    public String getMentor_name() {
+    public ArrayList<String> getMentor_name() {
         return mentor_name;
     }
 
-    public void setMentor_name(String mentor_name) {
+    public void setMentor_name(ArrayList<String> mentor_name) {
         this.mentor_name = mentor_name;
     }
 

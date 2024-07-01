@@ -92,10 +92,11 @@ public class CourseManageServlet extends HttpServlet {
         AccountDTO my_account = (AccountDTO) session.getAttribute("account");
         CourseManageDAO course_manage_DAO = new CourseManageDAO();
         ProfileManageDAO profile_manage_dao = new ProfileManageDAO();
-        
+
         ArrayList<CourseManageDTO> list_managed_course = course_manage_DAO.getMyManagedCourses(my_account.getAccount_id());
         request.setAttribute("list_managed_couse", list_managed_course);
-
+        ArrayList<ProfileDTO> list_my_mentors = course_manage_DAO.getMyMentors(my_account.getAccount_id());
+        request.setAttribute("list_my_mentors", list_my_mentors);
         switch (action) {
             case "update":
                 request.setAttribute("cid", cid);
@@ -105,11 +106,13 @@ public class CourseManageServlet extends HttpServlet {
                     ArrayList<ModuleDTO> list_module = module_dao.getListModulByCid(cid);
                     ArrayList<LessonDTO> list_lesson = lesson_manage_dao.getListlessonByCid(Integer.parseInt(cid));
                     CourseManageDTO my_managed_course = course_manage_DAO.getMyManagedCourseById(my_account.getAccount_id(), cid);
-                    ArrayList<ProfileDTO> list_mentor = profile_manage_dao.getMyListManagedMentor(my_account.getAccount_id());
+                    ArrayList<ProfileDTO> list_mentor = profile_manage_dao.getMyListManagedMentor(my_account.getAccount_id(), cid);
+                    ArrayList<ProfileDTO> list_mentor_by_courseId = profile_manage_dao.getMyListManagedMentor(my_account.getAccount_id(), cid);
                     request.setAttribute("list_module", list_module);
                     request.setAttribute("list_lesson", list_lesson);
                     request.setAttribute("my_managed_course", my_managed_course);
                     request.setAttribute("list_mentor", list_mentor);
+                    request.setAttribute("list_mentor_by_courseId", list_mentor_by_courseId);
                 } catch (SQLException ex) {
                     Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -189,14 +192,12 @@ public class CourseManageServlet extends HttpServlet {
         CourseManageDAO courseManageDAO = new CourseManageDAO();
         String msg = "";
         boolean success = false;
-
         // kiểm tra nếu true thì có thể thay đổi trạng thái khóa học
         if (courseManageDAO.canChangeStatusCourse(cid)) {
             success = courseManageDAO.deleteCourse(cid);
         } else {
             msg = "Can't change status of this course because there are still students enrolled.";
         }
-
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
@@ -306,6 +307,8 @@ public class CourseManageServlet extends HttpServlet {
         String price = "".equals(request.getParameter("price")) ? "0" : request.getParameter("price");
         String discount = "".equals(request.getParameter("discount")) ? "0" : request.getParameter("discount");
         String category = request.getParameter("category") == null ? "" : request.getParameter("category");
+        String[] list_assigned_mentor = request.getParameterValues("mentors");
+        PrintWriter o = response.getWriter();
 //create string[] to check input all fields
         String[] fullFields = {course_name, description, category};
 //set attribute price, discount 
@@ -315,6 +318,7 @@ public class CourseManageServlet extends HttpServlet {
         HttpSession session = request.getSession();
         AccountDTO my_account = (AccountDTO) session.getAttribute("account");
         CourseManageDAO course_manage_DAO = new CourseManageDAO();
+        ProfileManageDAO profile_manage_dao = new ProfileManageDAO();
 //update course
 //check invalid
         String image_file_name = "";
@@ -340,6 +344,18 @@ public class CourseManageServlet extends HttpServlet {
             request.setAttribute("category", category);
             request.setAttribute("error_category", "You must choose category!");
         }
+        course_manage_DAO.deleteMentorTeaching(cid);
+        if (list_assigned_mentor == null) {
+            list_assigned_mentor = new String[]{""};
+        } else {
+            if (Validation.checkStringArray(list_assigned_mentor)) {
+                for (String mentorId : list_assigned_mentor) {
+                    course_manage_DAO.assignMentorToCourse(mentorId, cid);
+                }
+            } else {
+                System.out.println("Invalid mentor list");
+            }
+        }
 //valid
         if (Validation.checkStringArray(fullFields) && file_image_course.getSize() < 820000) {
             CourseManageDTO new_course = new CourseManageDTO(Integer.parseInt(cid), course_name, description, null, image_file_name, Float.parseFloat(price), Float.parseFloat(discount), category);
@@ -352,9 +368,14 @@ public class CourseManageServlet extends HttpServlet {
                 ArrayList<ModuleDTO> list_module = module_dao.getListModulByCid(cid);
                 ArrayList<LessonDTO> list_lesson = lesson_manage_dao.getListlessonByCid(Integer.parseInt(cid));
                 CourseManageDTO my_managed_course = course_manage_DAO.getMyManagedCourseById(my_account.getAccount_id(), cid);
+                ArrayList<ProfileDTO> list_mentor = profile_manage_dao.getMyListManagedMentor(my_account.getAccount_id(), cid);
+                ArrayList<ProfileDTO> list_mentor_by_courseId = profile_manage_dao.getMyListManagedMentor(my_account.getAccount_id(), cid);
+
                 request.setAttribute("list_module", list_module);
                 request.setAttribute("list_lesson", list_lesson);
                 request.setAttribute("my_managed_course", my_managed_course);
+                request.setAttribute("list_mentor", list_mentor);
+                request.setAttribute("list_mentor_by_courseId", list_mentor_by_courseId);
             } catch (SQLException ex) {
                 Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
