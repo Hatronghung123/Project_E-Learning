@@ -33,6 +33,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.taglibs.standard.lang.jstl.ELException;
@@ -120,8 +121,7 @@ public class CourseManageServlet extends HttpServlet {
                 return;
 
             case "add_module":
-                request.setAttribute("cid", cid);
-                addModule(request, response);
+                addModule(request, response, cid);
                 return;
 
             case "add_new_course":
@@ -267,28 +267,71 @@ public class CourseManageServlet extends HttpServlet {
         }
     }
 
-    private void addModule(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void addModule(HttpServletRequest request, HttpServletResponse response, String cid) throws ServletException, IOException {
+        request.setAttribute("cid", cid);
+        ModuleDAO module_dao = new ModuleDAO();
+        ArrayList<ModuleDTO> list_module = module_dao.getListModulByCid(cid);
+        ArrayList<Integer> list_number_module = new ArrayList<>();
+        if (list_module.isEmpty()) {
+            //nếu chưa có module nào thì request module number = 1
+            list_number_module.add(1);
+        } else {
+            //kiểm tra nếu bị thiếu (đã xóa) module number nào thì có thể chèn vào
+            list_module.sort(Comparator.comparingInt(ModuleDTO::getModule_number));
+            int expectedNumber = 1;
+            for (ModuleDTO module : list_module) {
+                int currentNumber = module.getModule_number();
+                // Thêm tất cả các số thiếu vào list_number_module
+                while (expectedNumber < currentNumber) {
+                    list_number_module.add(expectedNumber);
+                    expectedNumber++;
+                }
+                expectedNumber = currentNumber + 1;
+            }
+            //truyền vào module number cuối cùng tiếp theo
+            list_number_module.add((list_module.getLast().getModule_number()) + 1);
+        }
+        request.setAttribute("list_module_number_valid", list_number_module);
         request.getRequestDispatcher("AddNewModule.jsp").forward(request, response);
     }
 
     private void addNewModuleDoPost(HttpServletRequest request, HttpServletResponse response, String cid) throws IOException, ServletException {
+        request.setAttribute("cid", cid);
         String module_name = request.getParameter("module_name") == null ? "" : request.getParameter("module_name");
         String module_number = request.getParameter("module_number") == null ? "" : request.getParameter("module_number");
-
+        ModuleDAO module_dao = new ModuleDAO();
+        ArrayList<ModuleDTO> list_module = module_dao.getListModulByCid(cid);
+        ArrayList<Integer> list_number_module = new ArrayList<>();
+        if (list_module.isEmpty()) {
+            //nếu chưa có module nào thì request module number = 1
+            list_number_module.add(1);
+        } else {
+            //kiểm tra nếu bị thiếu (đã xóa) module number nào thì có thể chèn vào
+            list_module.sort(Comparator.comparingInt(ModuleDTO::getModule_number));
+            int expectedNumber = 1;
+            for (ModuleDTO module : list_module) {
+                int currentNumber = module.getModule_number();
+                // Thêm tất cả các số thiếu vào list_number_module
+                while (expectedNumber < currentNumber) {
+                    list_number_module.add(expectedNumber);
+                    expectedNumber++;
+                }
+                expectedNumber = currentNumber + 1;
+            }
+            //truyền vào module number cuối cùng tiếp theo
+            list_number_module.add((list_module.getLast().getModule_number()) + 1);
+        }
+        request.setAttribute("list_module_number_valid", list_number_module);
+        
         String[] fullFields = {module_name, module_number};
         PrintWriter o = response.getWriter();
         if (!Validation.checkString(module_name)) {
             request.setAttribute("module_name", module_name);
             request.setAttribute("error_module_name", "You must input module name!");
-        }
-        if (!Validation.checkInt(module_number)) {
             request.setAttribute("module_number", module_number);
-            request.setAttribute("error_module_number", "You must input module number!");
         }
 //da nhap du fields
         if (Validation.checkStringArray(fullFields)) {
-            HttpSession session = request.getSession();
-            AccountDTO my_account = (AccountDTO) session.getAttribute("account");
             ModuleDAO module_DAO = new ModuleDAO();
             ModuleDTO new_module = new ModuleDTO(module_name, Integer.parseInt(module_number));
             module_DAO.insertModule(cid, new_module);

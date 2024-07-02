@@ -148,7 +148,7 @@
                                 <c:forEach items="${list_module}" var="module">
                                     <a class="list-group-item list-group-item-action" href="ModuleManage?moduleId=${module.moduleid}&cid=${my_managed_course.course_id}" data-module-id="${module.moduleid}">${module.modulename}</a>
                                 </c:forEach>
-                                <h5>Quizzes</h5>
+                                    <a class="btn btn-outline-primary" href="course-manage?action=add_module&cid=${my_managed_course.course_id}">Add New Module</a>
                             </div>
                         </div>
 
