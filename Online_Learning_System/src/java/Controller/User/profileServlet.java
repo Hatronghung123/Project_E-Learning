@@ -177,6 +177,7 @@ public class profileServlet extends HttpServlet {
         }
 //update name        
         if (Validation.checkName(fullname)) {
+            fullname = (Validation.validName(fullname)).trim();
             //update db profile name if changed
             if (!fullname.equals(my_profile.getFullname())) {
                 accountDAO.updateFullName_ByAccId(fullname, my_account.getAccount_id());

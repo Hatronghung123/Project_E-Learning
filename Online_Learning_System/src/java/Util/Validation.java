@@ -57,8 +57,31 @@ public class Validation {
         if (name == null || name.isBlank()) {
             return false;
         }
+        String[] name_no_space = name.split(" ");
         String regex = "^[A-Za-z][A-Za-z ]{1,100}$";
-        return name.matches(regex);
+        for (String name_valid : name_no_space) {
+            if (!name_valid.equals("")) {
+                if (!name_valid.matches(regex)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static String validName(String name) {
+        name = name.trim();
+        if (name == null || name.isBlank()) {
+            return "";
+        }
+        String[] name_no_space = name.split(" ");
+        name = "";
+        for (String name_valid : name_no_space) {
+            if (!name_valid.equals("")) {
+                name+=name_valid+" ";
+            }
+        }
+        return name;
     }
 
     public static boolean checkEmail(String email) {
