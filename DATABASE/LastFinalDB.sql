@@ -282,9 +282,9 @@ create table Module(
 
 insert into Module 
 values(N'Kiến thức cơ bản về C#',2,1),
-(N'Loop in C#', 2,1),
-(N'Ref and out in C#',2,1),
-(N'Struct and enum in C#', 2,1)
+(N'Loop in C#', 2,2),
+(N'Ref and out in C#',2,3),
+(N'Struct and enum in C#', 2,4)
 
 create table Lesson(
 	LessonId int primary key identity(1,1),
