@@ -4,7 +4,6 @@
  */
 package Dal;
 
-
 import Model.Category;
 import Model.Course;
 import java.sql.Date;
@@ -112,6 +111,34 @@ public class HomeDAO {
                 String cate_name = rs.getString(2);
 
                 list.add(new Category(cate_id, cate_name));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();  // In chi tiết lỗi ra console
+
+        }
+
+        return list;
+    }
+
+    public ArrayList<Category> getCategoryAndCountCourse() throws SQLException {
+        ArrayList<Category> list = new ArrayList<>();
+        String sql = "SELECT cc.CourseCategoryId,cc.[CategoryName], COUNT(c.[CourseId]) AS CourseCount\n"
+                + "FROM [Project Online Learning].[dbo].[Course] c\n"
+                + "INNER JOIN [Project Online Learning].[dbo].[CourseCategory] cc\n"
+                + "ON c.[CourseCategoryId] = cc.[CourseCategoryId]\n"
+                + "GROUP BY  cc.CourseCategoryId,cc.[CategoryName]\n"
+                + "ORDER BY CourseCount DESC;";
+        try {
+            con = new DBContext().getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+
+                String cate_id = rs.getString(1);
+                String cate_name = rs.getString(2);
+                int count = rs.getInt(3);
+
+                list.add(new Category(cate_id, cate_name ,count));
             }
         } catch (Exception e) {
             e.printStackTrace();  // In chi tiết lỗi ra console
@@ -417,7 +444,7 @@ public class HomeDAO {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         HomeDAO dao = new HomeDAO();
-        System.out.println(dao.getAllCategory().get(1));
+        System.out.println(dao.getCategoryAndCountCourse());
 
     }
 }

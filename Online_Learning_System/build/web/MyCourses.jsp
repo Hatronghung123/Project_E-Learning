@@ -75,7 +75,7 @@
                                                 <div class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
                                                     <div class="col-lg-2">
                                                         <img src="${c.image}"
-                                                             width="100px" height="100px" alt="alt"/>
+                                                             width="100%" height="auto" alt="course image"/>
                                                     </div>
                                                     <div class="col-lg-8">
                                                         <label class="form-label" style="color: black; font-size: 15px">Course | ${c.create_by}</label><br>                                                        
@@ -113,12 +113,12 @@
                                                 <div class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
                                                     <div class="col-lg-2">
                                                         <img src="${w.image}"
-                                                             width="100px" height="100px" alt="alt"/>
+                                                             width="100%" height="auto" alt="course image"/>
                                                     </div>
                                                     <div class="col-lg-8">
                                                         <label class="form-label" style="color: black; font-size: 15px">Course | ${w.create_by}</label>&nbsp;&nbsp;
                                                         <label class="form-label" style="color: black; font-size: 15px ">${w.star} Star</label><br>
-                                                        <br>                                                        
+                                                        <br>
                                                         <label class="form-label" style="color: #06BBCC; font-size: 27px ">${w.course_name}</label><br>
                                                         <label class="form-label" style="color: #06BBCC; font-size: 17px; text-decoration: line-through">${w.price} vnd</label><br>
                                                         <label class="form-label" style="color: #06BBCC; font-size: 15px ">${w.price - (w.price * w.discount)/100} vnd</label>

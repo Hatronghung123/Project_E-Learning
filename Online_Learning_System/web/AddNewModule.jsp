@@ -4,6 +4,7 @@
     Author     : tuong
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -116,22 +117,28 @@
                     </div>
                 </div>
                 <form action="course-manage?action=add_new_module&cid=${requestScope.cid}" method="post" enctype="multipart/form-data">
-                    <div class="container light-style flex-grow-1 container-p-y">
-                        <div class=" overflow-hidden">
-                            <div class="row no-gutters row-bordered row-border-light">
-                                <div class="card_mine">
-                                    <div class="tab-content">
-                                        <div class="tab-pane fade active show" id="account-general">
-                                            <div class="card-body">
-                                                <div class="form-group">
-                                                    <h3 style="color: red">${requestScope.error_name}</h3>
+                <div class="container light-style flex-grow-1 container-p-y">
+                    <div class=" overflow-hidden">
+                        <div class="row no-gutters row-bordered row-border-light">
+                            <div class="card_mine">
+                                <div class="tab-content">
+                                    <div class="tab-pane fade active show" id="account-general">
+                                        <div class="card-body">
+                                            <div class="form-group">
+                                                <h3 style="color: red">${requestScope.error_module_name}</h3>
                                                 <label class="form-label">Module Name</label>
                                                 <input name="module_name" type="text" class="form-control" value="${requestScope.module_name}">
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="form-label">Module Number</label>
-                                                <input style="width: 5%" name="module_number" type="number" min="0" max="100" class="form-control" value="${requestScope.module_number}"%">
+                                                <div style="display: flex; align-items: center;">
+                                                    <select id="module_number_select" name="module_number" class="form-control" style="width: 50%; margin-right: 10px;">
+                                                        <c:forEach items="${list_module_number_valid}" var="module_number">
+                                                            <option value="${module_number}" ${requestScope.module_number == module_number ? 'selected' : ''}>${module_number}</option>
+                                                        </c:forEach>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div><br>
                                     </div>
@@ -148,12 +155,12 @@
             <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
             <script type="text/javascript">
-        function cancel(event, cid) {
-            event.preventDefault();
-            if (confirm("Are you sure you want to exit?")) {
-                window.location.href = "course-manage?cid=" + cid + "&action=update";
-            }
-        }
+                            function cancel(event, cid) {
+                                event.preventDefault();
+                                if (confirm("Are you sure you want to exit?")) {
+                                    window.location.href = "course-manage?cid=" + cid + "&action=update";
+                                }
+                            }
             </script>
         </div>
         <!-- Header End -->
