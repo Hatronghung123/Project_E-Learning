@@ -5,12 +5,17 @@
             <url>src/java/Controller/Admin/ManageAccountByAdminServlet.java</url>
             <bookmark id="1">
                 <name/>
-                <line>96</line>
+                <line>104</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/Admin/StatisticalSeverlet.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/web/SignUp.jsp</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/DBContext.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/Admin/ManageAccountByAdminServlet.java</file>
+        </group>
     </open-files>
 </project-private>
