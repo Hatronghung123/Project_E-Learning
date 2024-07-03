@@ -143,28 +143,42 @@
                             </div>
                         </div>
                         <div class="col-md-9 card_mine">
-                            <div class="tab-content">                   
+                            <div class="tab-content">
                                 <div class="tab-pane fade active show">
                                     <h3 style="color: red">${requestScope.error}</h3>
 
                                     <div style="display: flex; justify-content: space-between; align-items: center;">
                                         <div>
-                                            <a href="LessonManage?action=addlesson&cid=${cid}&moduleid=${module}" class="btn btn-outline-success">Add New Lesson</a>
-                                            <a href="QuizManage?action=addQuiz&cid=${cid}&moduleid=${module}" class="btn btn-outline-primary">Add New Quiz</a>
+                                            <a href="LessonManage?action=addlesson&cid=${cid}&moduleid=${module_id}" class="btn btn-outline-success">Add New Lesson</a>
+                                            <a href="QuizManage?action=addQuiz&cid=${cid}&moduleid=${module_id}" class="btn btn-outline-primary">Add New Quiz</a>
                                         </div>
                                         <div>
-                                            <a href="ModuleManage?action=update&cid=${cid}&moduleid=${module}" class="btn btn-outline-warning">Update Module</a>
-                                            <a href="ModuleManage?action=delete&cid=${cid}&moduleid=${module}" class="btn btn-outline-danger">Delete Module</a>
+                                            <form action="ModuleManage?action=delete&cid=${cid}&moduleId=${module_id}" method="post">
+                                                <a href="ModuleManage?action=update&cid=${cid}&moduleid=${module_id}" class="btn btn-outline-warning">Update Module</a>
+                                                <input type="submit" class="btn btn-outline-danger" value="Delete Module">
+                                            </form>
                                         </div>
                                     </div>
 
                                     <div class="tab-pane fade show" id="Courses">
                                         <div class="card-body pb-2">
+                                            <c:forEach items="${list_module}" var="module">
+                                                <c:if test="${module.moduleid == module_id}">
+                                                    <div>
+                                                        <form action="ModuleManage?action=update&moduleId=${module_id}&cid=${cid}" method="post">
+                                                            <input style="width: 50%" type="text" name="module_name" value="${module.modulename}">
+                                                            <input style="height: 50.38px;
+                                                                   width: auto;
+                                                                   border-radius: 4px;" type="submit" class="btn btn-outline-primary" value="Update Module Name">
+                                                        </form>
+                                                    </div>
+                                                </c:if>
+                                            </c:forEach>
+                                        </div>
+                                        <div class="card-body pb-2">
                                             <c:forEach items="${list_lesson_in_module}" var="lesson">
-
                                                 <div id="course-${lesson.lessonname}" class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
                                                     <div class="col-lg-2">
-
                                                         <div class="embed-responsive embed-responsive-16by9">
                                                             <iframe  id="videoFrame" class="embed-responsive-item" src="${lesson.lessonvideo}"  width="100%" height="auto" allowfullscreen=""></iframe>
                                                         </div>
