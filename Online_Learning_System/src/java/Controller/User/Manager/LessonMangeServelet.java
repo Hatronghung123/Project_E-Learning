@@ -81,7 +81,7 @@ public class LessonMangeServelet extends HttpServlet {
 
                 case "addlesson":
                     request.setAttribute("listModule", listModule);
-                    request.setAttribute("moduleid",moduleid);
+                    request.setAttribute("moduleid", moduleid);
                     request.setAttribute("action", action);
                     request.setAttribute("cid", course_id);
                     request.getRequestDispatcher("mentor_add_lesson.jsp").forward(request, response);
@@ -242,14 +242,29 @@ public class LessonMangeServelet extends HttpServlet {
         String videoLink = request.getParameter("videoLink");
         long duration = getDuraton(videoLink);
         LessonManageDAO dao = new LessonManageDAO();
-        try {
-            LessonDTO lesson = new LessonDTO(Integer.parseInt(lessonid), Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
+        String msg = "";
 
-            dao.updateLesson(lesson);
-            response.sendRedirect("ModuleManage?moduleId=" + moduleid + "&cid=" + cid);
+        try {
+
+            if (dao.checkLessonExist(lessonName) != null) {
+                msg = "Lesson was exist";
+            } else {
+                LessonDTO lesson = new LessonDTO(Integer.parseInt(lessonid), Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
+
+                dao.updateLesson(lesson);
+                response.sendRedirect("ModuleManage?moduleId=" + moduleid + "&cid=" + cid);
+                return;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        LessonDTO lesson = new LessonDTO(Integer.parseInt(lessonid), Integer.parseInt(lessonid), lessonName, lessonContent, videoLink, duration);
+        
+        request.setAttribute("msg", msg);
+        request.setAttribute("lesson", lesson);
+
+         request.getRequestDispatcher("mentor_update_lesson.jsp").forward(request, response);
+
 
     }
 
