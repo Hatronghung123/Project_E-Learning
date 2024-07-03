@@ -16,8 +16,7 @@ import Model.CourseManageDTO;
 import Model.LessonDTO;
 import Model.ModuleDTO;
 import Model.ProfileDTO;
-import Util.HeaderSession;
-import Util.ServerPath;
+import Util.MyCommon;
 import Util.Validation;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -28,15 +27,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.taglibs.standard.lang.jstl.ELException;
 
 /**
  *
@@ -84,8 +79,8 @@ public class CourseManageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter o = response.getWriter();
-        HeaderSession header = new HeaderSession(request, response);
-
+        MyCommon.getHeader(request, response);
+        //get Parameter
         String cid = (String) request.getParameter("cid") == null ? "" : (String) request.getParameter("cid");
         String action = (String) request.getParameter("action") == null ? "" : (String) request.getParameter("action");
 
@@ -100,24 +95,7 @@ public class CourseManageServlet extends HttpServlet {
         request.setAttribute("list_my_mentors", list_my_mentors);
         switch (action) {
             case "update":
-                request.setAttribute("cid", cid);
-                ModuleDAO module_dao = new ModuleDAO();
-                LessonManageDAO lesson_manage_dao = new LessonManageDAO();
-                try {
-                    ArrayList<ModuleDTO> list_module = module_dao.getListModulByCid(cid);
-                    ArrayList<LessonDTO> list_lesson = lesson_manage_dao.getListlessonByCid(Integer.parseInt(cid));
-                    CourseManageDTO my_managed_course = course_manage_DAO.getMyManagedCourseById(my_account.getAccount_id(), cid);
-                    ArrayList<ProfileDTO> list_mentor = profile_manage_dao.getMyListManagedMentor(my_account.getAccount_id(), cid);
-                    ArrayList<ProfileDTO> list_mentor_by_courseId = profile_manage_dao.getMyListManagedMentor(my_account.getAccount_id(), cid);
-                    request.setAttribute("list_module", list_module);
-                    request.setAttribute("list_lesson", list_lesson);
-                    request.setAttribute("my_managed_course", my_managed_course);
-                    request.setAttribute("list_mentor", list_mentor);
-                    request.setAttribute("list_mentor_by_courseId", list_mentor_by_courseId);
-                } catch (SQLException ex) {
-                    Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                request.getRequestDispatcher("UpdateCourse.jsp").forward(request, response);
+                updateCourseDoGet(request, response, cid);
                 return;
 
             case "add_module":
@@ -243,6 +221,7 @@ public class CourseManageServlet extends HttpServlet {
             image_file_name = Validation.inputFile(request, file_image_course, "image_course");
             request.setAttribute("image", image_file_name);
         }
+        course_name = Validation.validName(course_name);
         if (!Validation.checkString(course_name)) {
             request.setAttribute("course_name", course_name);
             request.setAttribute("error_name", "You must input course name!");
@@ -322,9 +301,10 @@ public class CourseManageServlet extends HttpServlet {
             list_number_module.add((list_module.getLast().getModule_number()) + 1);
         }
         request.setAttribute("list_module_number_valid", list_number_module);
-        
+
         String[] fullFields = {module_name, module_number};
         PrintWriter o = response.getWriter();
+        module_name = Validation.validName(module_name);
         if (!Validation.checkString(module_name)) {
             request.setAttribute("module_name", module_name);
             request.setAttribute("error_module_name", "You must input module name!");
@@ -339,6 +319,31 @@ public class CourseManageServlet extends HttpServlet {
         } else {
             request.getRequestDispatcher("AddNewModule.jsp").forward(request, response);
         }
+    }
+
+    private void updateCourseDoGet(HttpServletRequest request, HttpServletResponse response, String cid) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        AccountDTO my_account = (AccountDTO) session.getAttribute("account");
+        CourseManageDAO course_manage_DAO = new CourseManageDAO();
+        ProfileManageDAO profile_manage_dao = new ProfileManageDAO();
+        request.setAttribute("cid", cid);
+        ModuleDAO module_dao = new ModuleDAO();
+        LessonManageDAO lesson_manage_dao = new LessonManageDAO();
+        try {
+            ArrayList<ModuleDTO> list_module = module_dao.getListModulByCid(cid);
+            ArrayList<LessonDTO> list_lesson = lesson_manage_dao.getListlessonByCid(Integer.parseInt(cid));
+            CourseManageDTO my_managed_course = course_manage_DAO.getMyManagedCourseById(my_account.getAccount_id(), cid);
+            ArrayList<ProfileDTO> list_mentor = profile_manage_dao.getMyListManagedMentor(my_account.getAccount_id(), cid);
+            ArrayList<ProfileDTO> list_mentor_by_courseId = profile_manage_dao.getMyListManagedMentor(my_account.getAccount_id(), cid);
+            request.setAttribute("list_module", list_module);
+            request.setAttribute("list_lesson", list_lesson);
+            request.setAttribute("my_managed_course", my_managed_course);
+            request.setAttribute("list_mentor", list_mentor);
+            request.setAttribute("list_mentor_by_courseId", list_mentor_by_courseId);
+        } catch (SQLException ex) {
+            Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        request.getRequestDispatcher("UpdateCourse.jsp").forward(request, response);
     }
 
     private void updateCourseDoPost(HttpServletRequest request, HttpServletResponse response, String cid) throws ServletException, IOException {
@@ -375,6 +380,7 @@ public class CourseManageServlet extends HttpServlet {
         } else {
             image_file_name = currentImage;
         }
+        course_name = Validation.validName(course_name);
         if (!Validation.checkString(course_name)) {
             request.setAttribute("course_name", course_name);
             request.setAttribute("error_name", "You must input a valid course name!");

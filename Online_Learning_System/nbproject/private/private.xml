@@ -13,12 +13,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Controller/User/profileServlet.java</file>
-            <file>file:/E:/Project_E-Learning/Online_Learning_System/web/EditModule.jsp</file>
             <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/CourseManageServlet.java</file>
-            <file>file:/E:/Project_E-Learning/Online_Learning_System/web/UpdateCourse.jsp</file>
-            <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Dal/ModuleDAO.java</file>
             <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Util/Validation.java</file>
             <file>file:/E:/Project_E-Learning/Online_Learning_System/web/AddNewModule.jsp</file>
+            <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Util/MyCommon.java</file>
         </group>
     </open-files>
 </project-private>

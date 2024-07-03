@@ -23,9 +23,9 @@ import java.util.logging.Logger;
  *
  * @author tuong
  */
-public class HeaderSession {
+public class MyCommon {
 
-    public HeaderSession(HttpServletRequest request, HttpServletResponse response) {
+    public MyCommon(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
         ProfileDTO profile = (ProfileDTO) session.getAttribute("profile");
         AccountDTO account = (AccountDTO) session.getAttribute("account");
@@ -39,20 +39,25 @@ public class HeaderSession {
         } catch (SQLException ex) {
             Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
         session.setMaxInactiveInterval(60 * 30);
     }
 
-//    public void displaycategory(HttpServletRequest request, HttpServletResponse response)
-//            throws ServletException, IOException {
-//        try {
-//            HomeDAO dao = new HomeDAO();
-//            ArrayList<Category> listCategory = dao.getAllCategory();
-//            request.setAttribute("listCategory", listCategory);
-//        } catch (SQLException ex) {
-//            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
+    public static void getHeader(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        ProfileDTO profile = (ProfileDTO) session.getAttribute("profile");
+        AccountDTO account = (AccountDTO) session.getAttribute("account");
+        session.setAttribute("profile", profile);
+        session.setAttribute("account", account);
+//get list category
+        try {
+            HomeDAO dao = new HomeDAO();
+            ArrayList<Category> listCategory = dao.getAllCategory();
+            session.setAttribute("listCategory", listCategory);
+        } catch (SQLException ex) {
+            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        session.setMaxInactiveInterval(60 * 30);
+    }
 
 }

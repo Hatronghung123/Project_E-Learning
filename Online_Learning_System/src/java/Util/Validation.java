@@ -58,7 +58,8 @@ public class Validation {
             return false;
         }
         String[] name_no_space = name.split(" ");
-        String regex = "^[A-Za-z][A-Za-z ]{1,100}$";
+        //String regex = "^[A-Za-z][A-Za-z ]{1,100}$";
+        String regex = "^[A-Za-z]{1,100}$";
         for (String name_valid : name_no_space) {
             if (!name_valid.equals("")) {
                 if (!name_valid.matches(regex)) {
@@ -81,7 +82,7 @@ public class Validation {
                 name+=name_valid+" ";
             }
         }
-        return name;
+        return name.trim();
     }
 
     public static boolean checkEmail(String email) {
