@@ -14,7 +14,8 @@ import java.util.logging.Logger;
  *
  * @author tuong
  */
-public class ModuleDAO extends DBContext{
+public class ModuleDAO extends DBContext {
+
     //Lấy lisst module theo course ID
     public ArrayList<Model.ModuleDTO> getListModulByCid(String courseId) {
         connection = getConnection();
@@ -38,8 +39,8 @@ public class ModuleDAO extends DBContext{
         }
         return list;
     }
-    
-    public void insertModule(String courseId, ModuleDTO new_module){
+
+    public void insertModule(String courseId, ModuleDTO new_module) {
         connection = getConnection();
         String sql = """
                       insert into Module
@@ -56,8 +57,40 @@ public class ModuleDAO extends DBContext{
         }
     }
 
+    public void updateModuleName(ModuleDTO module) {
+        connection = getConnection();
+        String sql = """
+                      update Module
+                     set ModuleName = ?
+                     where ModuleId = ?
+                     """;
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, module.getModulename());
+            statement.setInt(2, module.getModuleid());
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteModule(ModuleDTO module) {
+        connection = getConnection();
+        String sql = """
+                      delete Module
+                       where ModuleId = ?
+                     """;
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, module.getModuleid());
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         ModuleDAO dao = new ModuleDAO();
-        dao.insertModule("2", new ModuleDTO("ABC", 7));
+        dao.updateModuleName(new ModuleDTO(9, "pass_ok"));
     }
 }
