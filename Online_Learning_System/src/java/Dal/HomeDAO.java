@@ -181,7 +181,7 @@ public class HomeDAO {
                                               LEFT JOIN 
                                                   Enrollment e ON cr.CourseId = e.CourseId
                                               WHERE 
-                                                  ct.CourseCategoryId = ?
+                                                  ct.CourseCategoryId = ? and cr.Status = 1
                                               GROUP BY 
                                                   cr.[CourseId], 
                                                   cr.[CourseName], 
@@ -255,6 +255,7 @@ public class HomeDAO {
                          
                                               JOIN 
                                                   [dbo].[Profile] pro ON pro.[ProfileId] = cr.CreatedBy
+                                                WHERE cr.Status = 1
                                               ORDER BY 
                                                   cr.[CourseId] DESC;""";
 
