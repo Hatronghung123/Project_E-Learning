@@ -240,13 +240,15 @@ public class LessonMangeServelet extends HttpServlet {
         String moduleid = request.getParameter("module");
         String lessonContent = request.getParameter("lessonContent");
         String videoLink = request.getParameter("videoLink");
+        String action = (request.getParameter("action") == null) ? "" : request.getParameter("action");
+
         long duration = getDuraton(videoLink);
         LessonManageDAO dao = new LessonManageDAO();
         String msg = "";
 
         try {
-
-            if (dao.checkLessonExist(lessonName) != null) {
+            ArrayList<ModuleDTO> listModule = dao.getListModuleByCid(Integer.parseInt(cid));
+            if (dao.checkLessonExist(lessonName) != null && Integer.parseInt(lessonid) != dao.checkLessonExist(lessonName).getLessonid()) {
                 msg = "Lesson was exist";
             } else {
                 LessonDTO lesson = new LessonDTO(Integer.parseInt(lessonid), Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
@@ -255,17 +257,18 @@ public class LessonMangeServelet extends HttpServlet {
                 response.sendRedirect("ModuleManage?moduleId=" + moduleid + "&cid=" + cid);
                 return;
             }
+
+            LessonDTO lesson = new LessonDTO(Integer.parseInt(lessonid), Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
+
+            request.setAttribute("msg", msg);
+            request.setAttribute("lesson", lesson);
+            request.setAttribute("listModule", listModule);
+            request.setAttribute("action", action);
+            request.setAttribute("cid", cid);
+            request.getRequestDispatcher("mentor_update_lesson.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        LessonDTO lesson = new LessonDTO(Integer.parseInt(lessonid), Integer.parseInt(lessonid), lessonName, lessonContent, videoLink, duration);
-        
-        request.setAttribute("msg", msg);
-        request.setAttribute("lesson", lesson);
-
-         request.getRequestDispatcher("mentor_update_lesson.jsp").forward(request, response);
-
-
     }
 
 }
