@@ -5,16 +5,26 @@
             <url>src/java/Controller/Admin/ManageAccountByAdminServlet.java</url>
             <bookmark id="1">
                 <name/>
-                <line>96</line>
+                <line>104</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/E:/Project_E-Learning/Online_Learning_System/web/EditModule.jsp</file>
             <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Util/Validation.java</file>
             <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/ModuleManageServler.java</file>
+=======
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/Admin/StatisticalSeverlet.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/web/SignUp.jsp</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/DBContext.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/Admin/ManageAccountByAdminServlet.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/LessonMangeServelet.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/CourseManageServlet.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Model/ModuleDTO.java</file>
+>>>>>>> 870c1d58f15d978568f7aa1e473bd897df3ffa1f
         </group>
     </open-files>
 </project-private>

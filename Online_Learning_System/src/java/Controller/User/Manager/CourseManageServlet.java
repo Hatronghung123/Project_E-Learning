@@ -268,7 +268,7 @@ public class CourseManageServlet extends HttpServlet {
                 expectedNumber = currentNumber + 1;
             }
             //truyền vào module number cuối cùng tiếp theo
-            list_number_module.add((list_module.getLast().getModule_number()) + 1);
+            list_number_module.add((list_module.get(list_module.size()-1).getModule_number()) + 1);
         }
         request.setAttribute("list_module_number_valid", list_number_module);
         request.getRequestDispatcher("AddNewModule.jsp").forward(request, response);
@@ -298,7 +298,7 @@ public class CourseManageServlet extends HttpServlet {
                 expectedNumber = currentNumber + 1;
             }
             //truyền vào module number cuối cùng tiếp theo
-            list_number_module.add((list_module.getLast().getModule_number()) + 1);
+            list_number_module.add((list_module.get(list_module.size()-1).getModule_number()) + 1);
         }
         request.setAttribute("list_module_number_valid", list_number_module);
 
