@@ -5,6 +5,7 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%><!DOCTYPE html>
 <html>
     <head>
@@ -160,7 +161,13 @@
 
                                                     </div>
                                                     <div class="col-lg-8">
-                                                        <label class="form-label" style="color: black; font-size: 15px">Mentor: ${c.mentor_name}</label><br>                                                        
+                                                            <label class="form-label" style="color: black; font-size: 15px">Mentors:</label>
+                                                        <c:forEach items="${list_my_mentors}" var="mentor">
+                                                            <c:if test="${mentor.teaching_course == c.course_id}">
+                                                                ${mentor.fullname}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                            </c:if>
+                                                        </c:forEach>
+                                                        </label><br> 
                                                         <label class="form-label" style="color: #06BBCC; font-size: 25px ">${c.course_name}</label><br>
                                                         <label class="form-label" style="color: #000; font-size: 15px ">Category: ${c.course_category_id}</label><br>
                                                         <label class="form-label" style="color: #000; font-size: 15px ">Create On: ${c.create_date}</label><br>
@@ -232,7 +239,7 @@
                                         }
 
                                     } else {
-                                        alert('Error: '+ data.message);
+                                        alert('Error: ' + data.message);
                                     }
                                 })
                                 .catch(error => {

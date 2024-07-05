@@ -35,7 +35,7 @@
 
         <!--        search by name-->
         <form action="listCourseSeverlet?action=course" method="post" class="navbar-nav ">
-            <input class="search-input" style="width: 300px;" type="text" name="search"  placeholder="Search courses">
+            <input class="search-input" style="width: 100%;" type="text" name="search"  placeholder="Search courses">
             <input style="border-radius: 4px;" class="btn btn-primary" type="submit" value="Search">
         </form>
 

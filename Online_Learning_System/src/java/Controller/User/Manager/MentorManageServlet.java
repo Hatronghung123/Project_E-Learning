@@ -67,10 +67,10 @@ public class MentorManageServlet extends HttpServlet {
 
         AccountDTO my_account = (AccountDTO) session.getAttribute("account");
 
-        ProfileManageDAO mentor_manage_DAO = new ProfileManageDAO();
-        ArrayList<ProfileDTO> list_managed_mentor = mentor_manage_DAO.getMyListManagedMentor(my_account.getAccount_id());
+//        ProfileManageDAO mentor_manage_DAO = new ProfileManageDAO();
+//        ArrayList<ProfileDTO> list_managed_mentor = mentor_manage_DAO.getMyListManagedMentor(my_account.getAccount_id());
         
-        request.setAttribute("list_managed_mentor", list_managed_mentor);
+        //request.setAttribute("list_managed_mentor", list_managed_mentor);
         request.getRequestDispatcher("MentorManage.jsp").forward(request, response);
     } 
     

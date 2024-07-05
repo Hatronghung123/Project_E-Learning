@@ -167,7 +167,7 @@
                     </c:forEach>
                     <div class="card-header bg-white buttons-container">
                         <a href="#" data-toggle="modal" data-target="#createQuestion" class="btn btn-success">Add Question</a>
-                        <a href="${pageContext.request.contextPath}/home" class="btn btn-danger">Cancel</a>
+                        <a href="ModuleManage?moduleId=${mid}&cid=${cid}" class="btn btn-danger">Cancel</a>
                     </div>
                 </div>
             </form>

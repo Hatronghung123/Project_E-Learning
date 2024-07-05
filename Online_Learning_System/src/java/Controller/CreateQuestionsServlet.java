@@ -72,7 +72,7 @@ public class CreateQuestionsServlet extends HttpServlet {
                 editQuestion(request, response);
             default:
         }
-        response.sendRedirect("controller");
+        response.sendRedirect("controllerquestion");
     }
 
     /**

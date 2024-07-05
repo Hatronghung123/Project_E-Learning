@@ -19,15 +19,16 @@ import java.io.InputStream;
  */
 public class Validation {
 
-
     public Validation() {
     }
 
     public static boolean checkStringArray(String[] str) {
-        for (int i = 0; i < str.length; i++) {
-            str[i] = str[i].trim();
-            if (str[i] == null || str[i].isBlank()) {
-                return false;
+        if (str != null) {
+            for (int i = 0; i < str.length; i++) {
+                str[i] = str[i].trim();
+                if (str[i] == null || str[i].isBlank()) {
+                    return false;
+                }
             }
         }
         return true;
@@ -40,13 +41,13 @@ public class Validation {
         }
         return true;
     }
-    
 
     public static boolean checkInt(String str) {
         str = str.trim();
         for (int i = 0; i < str.length(); i++) {
-            if(str.charAt(i)<'0' || str.charAt(i) >'9')
+            if (str.charAt(i) < '0' || str.charAt(i) > '9') {
                 return false;
+            }
         }
         return true;
     }
@@ -56,8 +57,32 @@ public class Validation {
         if (name == null || name.isBlank()) {
             return false;
         }
-        String regex = "^[A-Za-z][A-Za-z ]{1,100}$";
-        return name.matches(regex);
+        String[] name_no_space = name.split(" ");
+        //String regex = "^[A-Za-z][A-Za-z ]{1,100}$";
+        String regex = "^[A-Za-z]{1,100}$";
+        for (String name_valid : name_no_space) {
+            if (!name_valid.equals("")) {
+                if (!name_valid.matches(regex)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static String validName(String name) {
+        name = name.trim();
+        if (name == null || name.isBlank()) {
+            return "";
+        }
+        String[] name_no_space = name.split(" ");
+        name = "";
+        for (String name_valid : name_no_space) {
+            if (!name_valid.equals("")) {
+                name+=name_valid+" ";
+            }
+        }
+        return name.trim();
     }
 
     public static boolean checkEmail(String email) {
@@ -73,6 +98,7 @@ public class Validation {
         String file_name_random = insertImageIntoTomcatServer(request, folder, file_image);
         return insertImageIntoProject(folder, file_image, file_name_random);
     }
+
     private static String createFileNameRandom(Part file_image) {
 
         String image_file_name = file_image.getSubmittedFileName();
@@ -83,7 +109,6 @@ public class Validation {
 
         return image_file_name;
     }
-
 
     public static String insertImageIntoTomcatServer(HttpServletRequest request, String folder, Part file_image_course) {
         String image_file_name = createFileNameRandom(file_image_course);
@@ -146,5 +171,4 @@ public class Validation {
 //        }
 //        return true;
 //    }
-
 }

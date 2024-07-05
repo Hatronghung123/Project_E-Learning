@@ -4,7 +4,9 @@
  */
 package Controller;
 
+import Dal.ModuleDAO;
 import Dal.QuizDAO;
+import Model.ModuleDTO;
 import Model.Modules;
 import Model.Quiz;
 import java.io.IOException;
@@ -61,7 +63,12 @@ public class CreateQuizServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        int mid = Integer.parseInt(request.getParameter("moduleid"));
+        int cid = Integer.parseInt(request.getParameter("cid"));
+        ModuleDAO module_dao = new ModuleDAO();
+        ModuleDTO this_module = module_dao.FindModuleByModuleId(mid);
+        request.setAttribute("this_module", this_module);
+        request.setAttribute("cid", cid);
         request.getRequestDispatcher("create_quiz/cq.jsp").forward(request, response);
     }
 
@@ -76,8 +83,10 @@ public class CreateQuizServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        int mid = Integer.parseInt(request.getParameter("moduleId"));
+        int cid = Integer.parseInt(request.getParameter("cid"));
+        
         String quizTitle = request.getParameter("quizTitle");
-
         String timeNumber = request.getParameter("timeNumber");
         String timeUnit = request.getParameter("timeUnit");
         int quizScore = Integer.parseInt(request.getParameter("quizScore"));
@@ -111,13 +120,14 @@ public class CreateQuizServlet extends HttpServlet {
         Quiz quiz = null;
         if (quizTime != null) {
             QuizDAO quizDAO = new QuizDAO();
-            quiz = quizDAO.insertQuiz( new Quiz(quizTitle, quizTime, quizScore));
+            quiz = quizDAO.insertQuiz( new Quiz( mid, quizTitle, quizTime, quizScore));
         }
         HttpSession session = request.getSession();
         session.setAttribute("quizId", quiz.getQuizId());
         session.setAttribute("quiz", quiz);
+        request.setAttribute("mid", mid);
+        request.setAttribute("cid", cid);
         request.getRequestDispatcher("create_quiz/cquestions.jsp").forward(request, response);
-//        response.sendRedirect("question?quizId="+quiz.getQuizId() );
     }
 
     /**

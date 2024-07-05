@@ -11,8 +11,7 @@ import Dal.HomeDAO;
 import Model.AccountDTO;
 import Model.Category;
 import Model.ProfileDTO;
-import Util.HeaderSession;
-import Util.ServerPath;
+import Util.MyCommon;
 import Util.Validation;
 
 import java.io.IOException;
@@ -25,14 +24,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.http.client.fluent.Response;
 
 /**
  *
@@ -80,18 +75,8 @@ public class profileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-
         String action = request.getParameter("action") == null ? "" : request.getParameter("action");
-        //        HttpSession session = request.getSession();
-        //        ProfileDTO profile = (ProfileDTO) session.getAttribute("profile");
-        //        AccountDTO account = (AccountDTO) session.getAttribute("account");
-        //
-        //        //hiện thị ra các category trên header
-        //        displaycategory(request, response);
-        //
-        //        session.setAttribute("profile", profile);
-        //        session.setAttribute("account", account);
-        HeaderSession header = new HeaderSession(request, response);
+        MyCommon.getHeader(request, response);
         switch (action) {
             case "general" -> {
                 request.getRequestDispatcher("Profile.jsp").forward(request, response);
@@ -177,6 +162,7 @@ public class profileServlet extends HttpServlet {
         }
 //update name        
         if (Validation.checkName(fullname)) {
+            fullname = (Validation.validName(fullname));
             //update db profile name if changed
             if (!fullname.equals(my_profile.getFullname())) {
                 accountDAO.updateFullName_ByAccId(fullname, my_account.getAccount_id());
@@ -251,17 +237,4 @@ public class profileServlet extends HttpServlet {
         session.setMaxInactiveInterval(60 * 30);
 
     }
-
-    
-        public void displaycategory(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            HomeDAO dao = new HomeDAO();
-            ArrayList<Category> listCategory = dao.getAllCategory();
-            request.setAttribute("listCategory", listCategory);
-        } catch (SQLException ex) {
-            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
 }

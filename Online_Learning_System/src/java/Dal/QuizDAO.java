@@ -39,12 +39,13 @@ public class QuizDAO extends DBContext {
             System.out.println("Failed to make connection!");
             return null;
         }
-        String sql = "INSERT INTO [dbo].[Quiz] ([QuizName], [QuizTime], [PassScore]) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO [dbo].[Quiz] ([QuizName], [QuizTime], [PassScore], [ModuleId]) VALUES (?, ?, ?, ?)";
         try {
             statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setString(1, quiz.getQuizName());
             statement.setTime(2, quiz.getQuizTime());
             statement.setInt(3, quiz.getPassScore());
+            statement.setInt(4, quiz.getModuleId());
 
             int affectedRows = statement.executeUpdate();
 

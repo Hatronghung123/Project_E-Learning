@@ -6,17 +6,13 @@ package Model;
 
 /**
  *
- * @author tuong
- * SELECT TOP (1000) [profile_id]
-      ,[fullname]
-      ,[gender]
-      ,[account_id]
-      ,[avatar]
-      ,[money]
-  FROM [Project_Online_Learning].[dbo].[tbl_profile]
-
+ * @author tuong SELECT TOP (1000) [profile_id] ,[fullname] ,[gender]
+ * ,[account_id] ,[avatar] ,[money] FROM
+ * [Project_Online_Learning].[dbo].[tbl_profile]
+ *
  */
 public class ProfileDTO {
+
     int profile_id;
     String fullname;
     boolean gender;
@@ -24,8 +20,19 @@ public class ProfileDTO {
     double money;
     int managed_by;
     String email;
-    
+    int teaching_course;
+
     public ProfileDTO() {
+    }
+
+    public ProfileDTO(int profile_id, String fullname, boolean gender, String avt, double money, int managed_by, int teaching_course) {
+        this.profile_id = profile_id;
+        this.fullname = fullname;
+        this.gender = gender;
+        this.avt = avt;
+        this.money = money;
+        this.managed_by = managed_by;
+        this.teaching_course = teaching_course;
     }
 
     public ProfileDTO(int profile_id, String fullname, boolean gender, String avt, double money, String email) {
@@ -37,7 +44,6 @@ public class ProfileDTO {
         this.email = email;
     }
 
-    
     public ProfileDTO(int profile_id, String fullname, boolean gender, String avt, double money, int managed_by) {
         this.profile_id = profile_id;
         this.fullname = fullname;
@@ -46,9 +52,9 @@ public class ProfileDTO {
         this.money = money;
         this.managed_by = managed_by;
     }
-    
+
     //insert by admin
-        public ProfileDTO( String fullname, boolean gender, double money, int managed_by) {
+    public ProfileDTO(String fullname, boolean gender, double money, int managed_by) {
         this.fullname = fullname;
         this.gender = gender;
         this.money = money;
@@ -56,26 +62,40 @@ public class ProfileDTO {
     }
 
 //        update by admin
-    public ProfileDTO(int profile_id, String fullname,boolean gender) {
+    public ProfileDTO(int profile_id, String fullname, boolean gender) {
         this.profile_id = profile_id;
         this.fullname = fullname;
         this.gender = gender;
     }
 
-        
-        
     public ProfileDTO(int profile_id, String fullname, String avt) {
         this.profile_id = profile_id;
         this.fullname = fullname;
         this.avt = avt;
     }
 
-
     public ProfileDTO(String fullname, int managed_by) {
         this.fullname = fullname;
         this.managed_by = managed_by;
     }
-    
+
+    public ProfileDTO(int profile_id, String fullname, boolean gender, String avt, double money, String email, int teaching_course) {
+        this.profile_id = profile_id;
+        this.fullname = fullname;
+        this.gender = gender;
+        this.avt = avt;
+        this.money = money;
+        this.email = email;
+        this.teaching_course = teaching_course;
+    }
+
+    public int getTeaching_course() {
+        return teaching_course;
+    }
+
+    public void setTeaching_course(int teaching_course) {
+        this.teaching_course = teaching_course;
+    }
 
     public int getProfile_id() {
         return profile_id;
@@ -89,7 +109,6 @@ public class ProfileDTO {
         this.email = email;
     }
 
-    
     public void setProfile_id(int profile_id) {
         this.profile_id = profile_id;
     }
@@ -133,8 +152,5 @@ public class ProfileDTO {
     public void setManaged_by(int managed_by) {
         this.managed_by = managed_by;
     }
-    
-    
-    
-    
+
 }

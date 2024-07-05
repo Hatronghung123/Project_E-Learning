@@ -34,6 +34,14 @@ public class Quiz {
         this.passScore = passScore;
     }
 
+    public Quiz(int moduleId, String quizName, Time quizTime, int passScore) {
+        this.moduleId = moduleId;
+        this.quizName = quizName;
+        this.quizTime = quizTime;
+        this.passScore = passScore;
+    }
+    
+
     public int getQuizId() {
         return quizId;
     }

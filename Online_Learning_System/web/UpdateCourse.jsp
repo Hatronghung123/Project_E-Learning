@@ -111,7 +111,16 @@
             .form-label{
                 margin-bottom: 0px;
             }
-
+            .mentor-item {
+                padding: 5px;
+                cursor: pointer;
+            }
+            .mentor-item:hover {
+                background-color: #f0f0f0;
+            }
+            .hidden {
+                display: none;
+            }
         </style>
     </head>
 
@@ -139,7 +148,7 @@
                                 <c:forEach items="${list_module}" var="module">
                                     <a class="list-group-item list-group-item-action" href="ModuleManage?moduleId=${module.moduleid}&cid=${my_managed_course.course_id}" data-module-id="${module.moduleid}">${module.modulename}</a>
                                 </c:forEach>
-                                <h5>Quizzes</h5>
+                                    <a class="btn btn-outline-primary" href="course-manage?action=add_module&cid=${my_managed_course.course_id}">Add New Module</a>
                             </div>
                         </div>
 
@@ -149,7 +158,7 @@
                                 <div class="tab-pane fade active show" id="Courses">
                                     <h3 style="color: red">${requestScope.error}</h3>
 
-                                    <form action="course-manage?action=update&cid=${my_managed_course.course_id}" method="post" enctype="multipart/form-data">
+                                    <form id="updateCourseForm" action="course-manage?cid=${my_managed_course.course_id}&action=update" method="post" enctype="multipart/form-data">
                                         <div>
                                             <div class="form-group">
                                                 <h3 style="color: red">${requestScope.error_images}</h3>
@@ -159,6 +168,7 @@
                                                     <input type="file" class="" name="image">
                                                     <div class="text-black-50 small mt-1">Allowed JPG or PNG. Max size of 800K</div>
                                                 </div>
+                                                <input type="hidden" name="current_image" value="${requestScope.my_managed_course.image}">
                                             </div>
                                             <div class="form-group">
                                                 <h3 style="color: red">${requestScope.error_name}</h3>
@@ -174,7 +184,7 @@
                                                 <label class="form-label">Price</label>
                                                 <input name="price" type="number" min="0" max="999999999" class="form-control" value="${requestScope.my_managed_course.price}">
                                             </div>
-                                            <div class="form-group" style="width: 5%">
+                                            <div class="form-group" style="width: 10%">
                                                 <label class="form-label">Discount</label>
                                                 <input name="discount" type="number" min="0" max="100" class="form-control" value="${requestScope.my_managed_course.discount}"%">
                                             </div>
@@ -190,8 +200,32 @@
                                                     </c:forEach>
                                                 </select>
                                             </div>
-                                            <br>
                                             <div class="form-group">
+                                                <label class="form-label">Assign Mentor</label><br>
+                                                <input id="mentorSearch" class="search-input" type="text" name="search" placeholder="Search Mentor"><br>
+                                                <div id="mentorListContainer">
+                                                    <table class="table table-bordered" id="mentorList">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Select</th>
+                                                                <th>Name</th>
+                                                                <th>Email</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <c:forEach items="${list_mentor_by_courseId}" var="mentor" varStatus="status">
+                                                                <tr class="mentor-item" data-name="${mentor.fullname}" data-email="${mentor.email}">
+                                                                    <td><input <c:if test="${mentor.teaching_course == my_managed_course.course_id}">checked=""</c:if> type="checkbox" name="mentors" value="${mentor.profile_id}"></td>
+                                                                    <td>${mentor.fullname}</td>
+                                                                    <td>${mentor.email}</td>
+                                                                </tr>
+                                                            </c:forEach>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="form-group" style="text-align: right;">
                                                 <button type="submit" class="btn btn-outline-primary">Save Change</button>
                                             </div>
                                         </div>
@@ -224,6 +258,36 @@
 
                         // Resize on page load
                         autoResize(textarea);
+                    });
+                });
+                document.addEventListener('DOMContentLoaded', function () {
+                    var form = document.getElementById('updateCourseForm');
+                    form.addEventListener('submit', function (event) {
+                        event.preventDefault(); // Prevent the form from submitting immediately
+
+                        if (confirm('Are you sure you want to save these changes?')) {
+                            this.submit(); // If user confirms, submit the form
+                        }
+                    });
+                });
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    const searchInput = document.getElementById('mentorSearch');
+                    const mentorList = document.getElementById('mentorList');
+                    const mentorItems = mentorList.getElementsByClassName('mentor-item');
+                    searchInput.addEventListener('input', function () {
+                        const searchTerm = this.value.toLowerCase();
+
+                        Array.from(mentorItems).forEach(function (item) {
+                            const mentorName = item.getAttribute('data-name').toLowerCase();
+                            const mentorEmail = item.getAttribute('data-email').toLowerCase();
+
+                            if (mentorName.includes(searchTerm) || mentorEmail.includes(searchTerm)) {
+                                item.classList.remove('hidden');
+                            } else {
+                                item.classList.add('hidden');
+                            }
+                        });
                     });
                 });
             </script>

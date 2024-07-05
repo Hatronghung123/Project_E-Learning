@@ -76,6 +76,13 @@ public class StatisticalSeverlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         StatisticalDAO admin_manage_DAO = new StatisticalDAO();
+        AccountDTO acc = (AccountDTO) session.getAttribute("account");
+        
+        if(acc == null || acc.getRole_id() != 1 ) {
+            response.sendRedirect("../home");
+             return;
+        }
+        
         try {
             Payment TotalPerMonth = admin_manage_DAO.getPaymentPerMonth();
              Payment TotalPerYear = admin_manage_DAO.getPaymentPerYear();

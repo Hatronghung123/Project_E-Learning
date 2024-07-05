@@ -69,6 +69,7 @@ public class ControllerQuestionServlet extends HttpServlet {
         session.setAttribute("listQuestions", listQuestions);
         session.setAttribute("listAnswers", listAnswers);
         request.getRequestDispatcher("create_quiz/cquestions.jsp").forward(request, response);
+
     }
 
     /**
