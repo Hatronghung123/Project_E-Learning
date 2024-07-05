@@ -318,6 +318,7 @@ public class HomeDAO {
                                                   [dbo].[Profile] pro ON pro.[ProfileId] = cr.CreatedBy
                                               LEFT JOIN 
                                                   Enrollment e ON cr.CourseId = e.CourseId
+                                                  Where cr.Status = 1
                                               GROUP BY 
                                                   cr.[CourseId], 
                                                   cr.[CourseName], 
@@ -396,7 +397,7 @@ public class HomeDAO {
                      LEFT JOIN 
                          Enrollment e ON cr.CourseId = e.CourseId
                      WHERE 
-                         cr.[CourseName] LIKE ?
+                         cr.[CourseName] LIKE ? and cr.Status = 1
                      GROUP BY 
                          cr.[CourseId], 
                          cr.[CourseName], 
@@ -439,7 +440,7 @@ public class HomeDAO {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         HomeDAO dao = new HomeDAO();
-        System.out.println(dao.getCategoryAndCountCourse());
+        System.out.println(dao.getPopulerCourse());
 
     }
 }
