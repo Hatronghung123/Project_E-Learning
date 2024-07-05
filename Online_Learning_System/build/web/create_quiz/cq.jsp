@@ -90,11 +90,10 @@
     </head>
     <body>
         <jsp:include page="../common/menu.jsp"></jsp:include>
-
         <div class="container">
             <h1 class="page-heading h2" style="margin-top: 10px;">Create A New Quiz</h1>
             <form id="addQuizForm" action="createquiz?moduleId=${this_module.moduleid}&cid=${requestScope.cid}" method="post" onsubmit="return validateForm3(event)">
-                <div class="card">
+            <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Module: ${this_module.modulename}</h4>
                     </div>

@@ -63,12 +63,12 @@ public class CreateQuizServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int mid = Integer.parseInt(request.getParameter("moduleid"));
-        int cid = Integer.parseInt(request.getParameter("cid"));
+        int midModule = Integer.parseInt(request.getParameter("moduleid"));
+        int cidCourse = Integer.parseInt(request.getParameter("cid"));
         ModuleDAO module_dao = new ModuleDAO();
-        ModuleDTO this_module = module_dao.FindModuleByModuleId(mid);
+        ModuleDTO this_module = module_dao.FindModuleByModuleId(midModule);
         request.setAttribute("this_module", this_module);
-        request.setAttribute("cid", cid);
+        request.setAttribute("cidCourse", cidCourse);
         request.getRequestDispatcher("create_quiz/cq.jsp").forward(request, response);
     }
 
@@ -83,7 +83,7 @@ public class CreateQuizServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int mid = Integer.parseInt(request.getParameter("moduleId"));
+        int mid = Integer.parseInt(request.getParameter("mid"));
         int cid = Integer.parseInt(request.getParameter("cid"));
         
         String quizTitle = request.getParameter("quizTitle");

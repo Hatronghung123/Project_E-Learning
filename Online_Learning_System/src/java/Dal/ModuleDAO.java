@@ -97,7 +97,7 @@ public class ModuleDAO extends DBContext {
     }
 
     // find module by moduleId
-    public ModuleDTO FindModuleByModuleId(int mid) {
+    public ModuleDTO FindModuleByModuleId(int midModule) {
         connection = getConnection();
         String sql = "SELECT [ModuleId]\n"
                 + "      ,[ModuleName]\n"
@@ -108,7 +108,7 @@ public class ModuleDAO extends DBContext {
         try {
             connection = new DBContext().getConnection();
             statement = connection.prepareStatement(sql);
-            statement.setInt(1, mid);
+            statement.setInt(1, midModule);
             resultSet = statement.executeQuery();
             // trả về kết quả
             while (resultSet.next()) {

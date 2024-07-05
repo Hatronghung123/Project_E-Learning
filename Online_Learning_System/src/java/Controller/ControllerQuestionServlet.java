@@ -64,12 +64,16 @@ public class ControllerQuestionServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Questions questions = (Questions) session.getAttribute("questions");
+        int midCancel = (Integer) session.getAttribute("mid");
+        int cidCancel = (Integer) session.getAttribute("cid");
         ArrayList<Questions> listQuestions = quizDAO.getListQuestions(questions);
         ArrayList<Answer> listAnswers = quizDAO.getListAnswers(questions);
         session.setAttribute("listQuestions", listQuestions);
         session.setAttribute("listAnswers", listAnswers);
+        request.setAttribute("midCancel", midCancel);
+        request.setAttribute("cidCancel", cidCancel);
         request.getRequestDispatcher("create_quiz/cquestions.jsp").forward(request, response);
-
+        
     }
 
     /**
