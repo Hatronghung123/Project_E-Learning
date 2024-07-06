@@ -10,8 +10,8 @@
             </div>
             <div class="modal-body">
                 <form id="createQuestionForm" action="question?action=create" method="POST" onsubmit="return validateForm(event)">
-                    <input type="hidden" name="midCreate" value="${midCancel}"/>
-                    <input type="hidden" name="cidCreate" value="${cidCancel}"/>
+                    <input type="hidden" name="midCreate" value="${midCreate}"/>
+                    <input type="hidden" name="cidCreate" value="${cidCreate}"/>
                     <div class="form-group row">
                         <label for="questionNoInput" class="col-form-label col-md-3">Question No:</label>
                         <div class="col-md-9">

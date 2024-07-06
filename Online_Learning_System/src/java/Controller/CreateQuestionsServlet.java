@@ -88,8 +88,8 @@ public class CreateQuestionsServlet extends HttpServlet {
     private void createQuestion(HttpServletRequest request) {
 
         HttpSession session = request.getSession();
-        int midCancel = Integer.parseInt(request.getParameter("midCreate"));
-        int cidCancel = Integer.parseInt(request.getParameter("cidCreate"));
+        int mid = Integer.parseInt(request.getParameter("midCreate"));
+        int cid = Integer.parseInt(request.getParameter("cidCreate"));
         int quizId = (int) session.getAttribute("quizId");
         String questionNumber_str = request.getParameter("questionNumber");
         String titleQuestion = request.getParameter("titleQuestion");
@@ -110,8 +110,8 @@ public class CreateQuestionsServlet extends HttpServlet {
         quizDAO.insertAnswers(answers);
         quizDAO.updateTypeQuestion(questions);
         session.setAttribute("questions", questions);
-        session.setAttribute("mid", midCancel);
-        session.setAttribute("cid", cidCancel);
+        session.setAttribute("mid", mid);
+        session.setAttribute("cid", cid);
     }
 
     private void deleteQuestion(HttpServletRequest request, HttpServletResponse response) throws IOException {

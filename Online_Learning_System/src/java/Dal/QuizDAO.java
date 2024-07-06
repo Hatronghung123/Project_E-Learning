@@ -576,10 +576,48 @@ public class QuizDAO extends DBContext {
         }
         return new_map;
     }
-    
+
     public static void main(String[] args) {
         QuizDAO dao = new QuizDAO();
         dao.updateTypeQuestion(new Questions(295, 1, 289, "Hello Elearning", true));
+    }
+
+    public ArrayList<Questions> getListQuestionsByModlueId(Questions questions, int midModule) {
+        ArrayList<Questions> listFound = new ArrayList<>();
+        // connect with DB
+        connection = getConnection();
+        // viết câu lệnh sql
+        String sql = "select *\n"
+                + "from Question qu\n"
+                + "join Quiz qz on qu.QuizId = qz.QuizId\n"
+                + "join Module m on qz.ModuleId = m.ModuleId\n"
+                + "where qu.QuizId = ? and  m.ModuleId = ?";
+        try {
+            // tạo đối tượng preparestatement
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, questions.getQuizId());
+            statement.setInt(2, midModule);
+            // thực thi câu lệnh
+            resultSet = statement.executeQuery();
+            // trả về kết quả
+            while (resultSet.next()) {
+                int questionId = resultSet.getInt("questionId");
+                int questionNum = resultSet.getInt("questionNum");
+                int quizId = resultSet.getInt("quizId");
+                String questionName = resultSet.getString("questionName");
+                Boolean type = resultSet.getBoolean("type");
+                Questions question = new Questions(questionId, questionNum, quizId, questionName, type);
+                listFound.add(question);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return listFound;
+    }
+
+    public ArrayList<Answer> getListAnswersByModuleId(Questions questions, int midModule) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

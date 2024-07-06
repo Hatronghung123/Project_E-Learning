@@ -83,7 +83,7 @@ public class CreateQuizServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int mid = Integer.parseInt(request.getParameter("mid"));
+        int mid = Integer.parseInt(request.getParameter("moduleId"));
         int cid = Integer.parseInt(request.getParameter("cid"));
         
         String quizTitle = request.getParameter("quizTitle");
@@ -125,8 +125,8 @@ public class CreateQuizServlet extends HttpServlet {
         HttpSession session = request.getSession();
         session.setAttribute("quizId", quiz.getQuizId());
         session.setAttribute("quiz", quiz);
-        request.setAttribute("mid", mid);
-        request.setAttribute("cid", cid);
+        request.setAttribute("midCreate", mid);
+        request.setAttribute("cidCreate", cid);
         request.getRequestDispatcher("create_quiz/cquestions.jsp").forward(request, response);
     }
 
