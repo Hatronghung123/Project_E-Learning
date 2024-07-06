@@ -68,8 +68,8 @@ public class ControllerQuestionServlet extends HttpServlet {
         int cidModule = (Integer) session.getAttribute("cid");
         ArrayList<Questions> listQuestions = quizDAO.getListQuestionsByModlueId(questions, midModule);
         ArrayList<Answer> listAnswers = quizDAO.getListAnswers(questions);
-        session.setAttribute("listQuestions", listQuestions);
-        session.setAttribute("listAnswers", listAnswers);
+        request.setAttribute("listQuestions", listQuestions);
+        request.setAttribute("listAnswers", listAnswers);
         request.setAttribute("midCreate", midModule);
         request.setAttribute("cidCreate", cidModule);
         request.getRequestDispatcher("create_quiz/cquestions.jsp").forward(request, response);

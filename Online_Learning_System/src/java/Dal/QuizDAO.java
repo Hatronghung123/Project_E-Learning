@@ -579,7 +579,7 @@ public class QuizDAO extends DBContext {
 
     public static void main(String[] args) {
         QuizDAO dao = new QuizDAO();
-        dao.updateTypeQuestion(new Questions(295, 1, 289, "Hello Elearning", true));
+        //System.out.println(dao.getListQuestionsByModlueId(questions, 0));
     }
 
     public ArrayList<Questions> getListQuestionsByModlueId(Questions questions, int midModule) {
@@ -587,11 +587,12 @@ public class QuizDAO extends DBContext {
         // connect with DB
         connection = getConnection();
         // viết câu lệnh sql
-        String sql = "select *\n"
-                + "from Question qu\n"
-                + "join Quiz qz on qu.QuizId = qz.QuizId\n"
-                + "join Module m on qz.ModuleId = m.ModuleId\n"
-                + "where qu.QuizId = ? and  m.ModuleId = ?";
+        String sql = """
+                     select *
+                     from Question qu
+                     join Quiz qz on qu.QuizId = qz.QuizId
+                     join Module m on qz.ModuleId = m.ModuleId
+                     where qu.QuizId = ? and  m.ModuleId = ?""";
         try {
             // tạo đối tượng preparestatement
             statement = connection.prepareStatement(sql);
