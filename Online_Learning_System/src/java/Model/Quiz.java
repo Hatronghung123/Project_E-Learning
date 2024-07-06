@@ -28,6 +28,16 @@ public class Quiz {
         this.passScore = passScore;
     }
 
+    public Quiz(int quizId, int moduleId, String quizName, Time quizTime, int passScore) {
+        this.quizId = quizId;
+        this.moduleId = moduleId;
+        this.quizName = quizName;
+        this.quizTime = quizTime;
+        this.passScore = passScore;
+    }
+
+    
+
     public Quiz(String quizName, Time quizTime, int passScore) {
         this.quizName = quizName;
         this.quizTime = quizTime;
@@ -40,6 +50,7 @@ public class Quiz {
         this.quizTime = quizTime;
         this.passScore = passScore;
     }
+    
     
 
     public int getQuizId() {
@@ -94,6 +105,4 @@ public class Quiz {
     public String toString() {
         return "Quiz{" + "quizId=" + quizId + ", moduleId=" + moduleId + ", quizNumber=" + quizNumber + ", quizName=" + quizName + ", quizTime=" + quizTime + ", passScore=" + passScore + '}';
     }
-
-    
 }

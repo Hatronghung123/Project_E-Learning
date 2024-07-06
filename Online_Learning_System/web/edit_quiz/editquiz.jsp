@@ -5,7 +5,8 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -124,12 +125,72 @@
         <jsp:include page="../common/menu.jsp"></jsp:include>
 
             <div class="container">
-                <h1 class="page-heading h2" style="margin-top: 10px;">Create Questions</h1>
-                <form id="addQuizForm">
-                    <div class="card">
+                <h1 class="page-heading h2" style="margin-top: 10px;">Edit Quiz</h1>
+                <form id="addQuizForm" action="editquiz" method="post" onsubmit="return validateForm3(event)">
+                    <div class="card mb-4">
                         <div class="card-header">
-                            <h4 class="card-title">Questions</h4>
+                            <h4 class="card-title">Module: ${moduleOfQuizEdit.getModulename()}</h4>
+                        <input type="hidden" name="moduleId" value="${moduleOfQuizEdit.getModuleid()}">
+                        <input type="hidden" name="quizId" value="${quizEdit.getQuizId()}">
+                        
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label for="quizTitle" class="col-sm-3 col-form-label">Quiz Title:</label>
+                            <div class="col-sm-9 col-md-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Title" aria-describedby="sizing-addon2" name="quizTitle" id="quizTitle" value="${quizEdit.getQuizName()}">
+                                    <div id="quizTitleError" class="error"></div>
+                                </div>
+                            </div>
                         </div>
+
+                        <div class="form-group row">
+                            <label for="time_toggle" class="col-sm-3 col-form-label">Timeframe:</label>
+                            <div class="col-sm-9">
+                                <div class="form-inline">
+                                    <div class="form-group" style="margin-right: 10px; margin-top: 10px">
+                                        <c:if test="${requestScope.minutes != 0}">
+                                            <input type="number" min="1" max="100" class="form-control text-center" name="timeNumber" id="timeNumber" style="width: 70px;" value="${requestScope.minutes}">
+                                        </c:if>
+                                        <c:if test="${requestScope.seconds != 0 && requestScope.minutes == 0}">
+                                            <input type="number" min="1" max="100" class="form-control text-center" name="timeNumber" id="timeNumber" style="width: 70px;" value="${requestScope.seconds}">
+                                        </c:if>
+
+                                        <div id="timeNumberError" class="error"></div>
+                                    </div>
+                                    <div class="form-group" style="margin-right: 10px; margin-top: 10px">
+                                        <select class="custom-select" name="timeUnit">
+                                            <c:if test="${requestScope.minutes != 0}">
+                                                <option value="minutes" selected>Minutes</option>
+                                            </c:if>
+                                            <c:if test="${requestScope.seconds != 0}">
+                                                <option value="seconds">Seconds</option>
+                                            </c:if>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="quizScore" class="col-sm-3 col-form-label">Pass Score:</label>
+                            <div class="col-sm-9">
+                                <div class="form-inline">
+                                    <div class="form-group" style="margin-right: 10px;">
+                                        <input type="number" min="1" max="10" class="form-control text-center" name="quizScore" id="quizScore" style="width: 70px;" value="${quizEdit.getPassScore()}">
+                                        <div id="quizScoreError" class="error"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h1 class="page-heading h2" style="margin-top: 10px;">Edit Questions</h1>
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Questions</h4>
+                    </div>
                     <c:forEach items="${listQuestions}" var="question">
                         <div class="nestable" id="nestable">
                             <ul class="list-group list-group-fit nestable-list-plain mb-0">
@@ -167,12 +228,19 @@
                     </c:forEach>
                     <div class="card-header bg-white buttons-container">
                         <a href="#" data-toggle="modal" data-target="#createQuestion" class="btn btn-success">Add Question</a>
-<!--                        <a href="ModuleManage?moduleId=${midCancel}&cid=${cidCancel}" class="btn btn-danger">Cancel</a>-->
-                    <a href="javascript:window.history.go(-2);"class="btn btn-danger">Cancel</a>
+                    </div>
+                    <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="">
+                            <input type="submit" name="AddQuiz" value="Save Changes" class="btn btn-success" style="width: 127.6px;">
+                        </div>
+                        <div style="">
+                            <a href="ModuleManage?moduleId=${this_module.moduleid}&cid=${requestScope.cidCourse}" class="btn btn-danger">Cancel</a>
+                        </div>
                     </div>
                 </div>
             </form>
         </div>
+
         <!-- jQuery -->
         <script src="${pageContext.request.contextPath}/assets/vendor/jquery.min.js"></script>
 
@@ -181,7 +249,6 @@
         <script src="${pageContext.request.contextPath}/assets/vendor/bootstrap.min.js"></script>
 
         <!-- Simplebar -->
-        <!-- Used for adding a custom scrollbar to the drawer -->
         <script src="${pageContext.request.contextPath}/assets/vendor/simplebar.js"></script>
 
         <!-- MDK -->
@@ -205,8 +272,10 @@
         <script src="${pageContext.request.contextPath}/lib/wow/wow.min.js"></script>
         <script src="${pageContext.request.contextPath}/lib/easing/easing.min.js"></script>
 
-        <jsp:include page="canswer.jsp"></jsp:include>
-        <jsp:include page="deletequestion.jsp"></jsp:include>
-        <jsp:include page="editquestion.jsp"></jsp:include>
+        <jsp:include page="editquiz_canswer.jsp"></jsp:include>
+        <jsp:include page="editquiz_deletequestion.jsp"></jsp:include>
+        <jsp:include page="editquiz_editquestion.jsp"></jsp:include>
+
+        
     </body>
 </html>
