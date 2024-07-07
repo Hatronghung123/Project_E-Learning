@@ -154,7 +154,7 @@
                                             <input type="number" min="1" max="100" class="form-control text-center" name="timeNumber" id="timeNumber" style="width: 70px;" value="${requestScope.minutes}">
                                         </c:if>
                                         <c:if test="${requestScope.seconds != 0 && requestScope.minutes == 0}">
-                                            <input type="number" min="1" max="100" class="form-control text-center" name="timeNumber" id="timeNumber" style="width: 70px;" value="${requestScope.seconds}">
+                                            <input type="number" min="1" max="59" class="form-control text-center" name="timeNumber" id="timeNumber" style="width: 70px;" value="${requestScope.seconds}">
                                         </c:if>
 
                                         <div id="timeNumberError" class="error"></div>
@@ -163,9 +163,11 @@
                                         <select class="custom-select" name="timeUnit">
                                             <c:if test="${requestScope.minutes != 0}">
                                                 <option value="minutes" selected>Minutes</option>
+                                                <option value="seconds" select>Seconds</option>
                                             </c:if>
                                             <c:if test="${requestScope.seconds != 0}">
-                                                <option value="seconds">Seconds</option>
+                                                <option value="seconds" selected>Seconds</option>
+                                                <option value="minutes">Minutes</option>
                                             </c:if>
                                         </select>
                                     </div>
