@@ -79,6 +79,22 @@
         .breadcrumb{
             margin-top: 10px;
         }
+
+
+        .active-quiz {
+            background-color: #f9c2ff; /* Màu nền cho quiz đã chọn */
+        }
+        
+.lesson-completed {
+    background-color: #d4edda; /* Màu nền cho bài học đã hoàn thành */
+    text-decoration: line-through; /* Gạch ngang bài học đã hoàn thành */
+}
+
+.quiz-completed {
+    background-color: #c3e6cb; /* Màu nền cho quiz đã hoàn thành */
+    text-decoration: line-through; /* Gạch ngang quiz đã hoàn thành */
+}
+
     </style>
 
 </head>
@@ -106,7 +122,7 @@
                     <div class="col-md-8">
                         <div class="card">
                             <div class="embed-responsive embed-responsive-16by9">
-                                <iframe class="embed-responsive-item" src="${lesson.getLessonvideo()}"title="0" frameborder="0" allow="0"  allowfullscreen></iframe>
+                                <iframe id="lessonVideo" class="embed-responsive-item" src="${lesson.getLessonvideo()}"title="0" frameborder="0" allow="0"  allowfullscreen></iframe>
                             </div>
                             <div class="card-body">
                                 ${lesson.getLessoncontent()}
@@ -299,23 +315,33 @@
                                             </div>
                                             <c:forEach items="${lessonList}" var="i" varStatus="status">
                                                 <div class="module-content">
-
+                                                 <c:set var="itemIndex" value="${itemIndex + 1}" /> <!-- Tăng biến đếm -->
                                                     <c:if test="${o.getModulename() == i.getModulname()}">
                                                         <a style="color: black" href="lesson?cid=${i.getCourseid()}&lessonid=${i.getLessonid()}&createBy=${i.getCreateby()}" class="btn btn-block btn--col module-lesson" data-lessonid="${i.getLessonid()}">
-                                                            ${status.index + 1}. ${i.getLessonname()}
+                                                          ${i.getLessonname()} 
                                                             <div>
-
                                                                 <small class="text-muted module-lesson" style="color: black">${ YoutubeDuration.convertToMinutesAndSeconds(i.getDuration())}</small>
                                                             </div>
                                                         </a> 
-
                                                     </c:if>
 
 
                                                 </div>
-
                                             </c:forEach>
-
+                                                
+                                            <!--List quiz here-->
+                                            <c:forEach items="${quizLits}" var="j" varStatus="status">
+                                                <div class="module-content">
+                                                    <c:if test="${o.getModuleid() == j.getModuleId()}">
+                                                        <a style="color: black"  class="btn btn-block btn--col module-lesson"  data-quizid="${j.getQuizId()}"  href="doquiz?mid=${j.getModuleId()}&cid=${o.getCourseid()}"> 
+                                                            ${j.getQuizName()}
+                                                            <div>
+                                                                <small class="text-muted module-lesson" style="color: black">Do quiz</small>
+                                                            </div>
+                                                        </a>
+                                                    </c:if>
+                                                </div>
+                                            </c:forEach>   
                                         </div>
 
                                     </c:forEach>

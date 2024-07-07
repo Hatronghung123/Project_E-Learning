@@ -576,9 +576,47 @@ public class QuizDAO extends DBContext {
         return new_map;
     }
     
+    
+    // Lấy list quiz theo cid để hiện thị lên người dùng
+     public ArrayList<Quiz> findListQuizByCourseId(int courseid) {
+         ArrayList<Quiz> list = new ArrayList<>();
+        connection = getConnection();
+
+        String sql = """
+                   SELECT [QuizId]
+                           ,m.[ModuleId]
+                           ,[QuizName]
+                           ,[QuizTime]
+                           ,[PassScore]
+                       FROM [dbo].[Quiz] q
+                       Join [dbo].[Module] m on m.ModuleId = q.ModuleId
+                       join Course c on c.CourseId = m.CourseId
+                       Where c.CourseId = ?""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, courseid);
+            // thực thi câu lệnh
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int quizId = resultSet.getInt(1);
+                int moduleId = resultSet.getInt(2);
+                String quizName = resultSet.getString(3);
+                Time quizTime = resultSet.getTime(4);
+                int passScore = resultSet.getInt(5);
+
+               list.add( new Quiz(quizId, moduleId, quizName, quizTime, passScore));
+
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return list;
+    }
+    
     public static void main(String[] args) {
         QuizDAO dao = new QuizDAO();
-        dao.updateTypeQuestion(new Questions(295, 1, 289, "Hello Elearning", true));
+        //dao.updateTypeQuestion(new Questions(295, 1, 289, "Hello Elearning", true));
+        System.out.println(dao.findListQuizByCourseId(2));
     }
 
 }
