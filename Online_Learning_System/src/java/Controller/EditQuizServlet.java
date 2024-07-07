@@ -4,10 +4,10 @@
  */
 package Controller;
 
-import Dal.ModuleDAO;
 import Dal.QuizDAO;
-import Model.ModuleDTO;
+import Model.Answer;
 import Model.Modules;
+import Model.Questions;
 import Model.Quiz;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,59 +17,37 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
  *
  * @author hatro
  */
-public class CreateQuizServlet extends HttpServlet {
+public class EditQuizServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CreateQuizServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CreateQuizServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int midModule = Integer.parseInt(request.getParameter("moduleid"));
-        int cidCourse = Integer.parseInt(request.getParameter("cid"));
-        ModuleDAO module_dao = new ModuleDAO();
-        ModuleDTO this_module = module_dao.FindModuleByModuleId(midModule);
-        request.setAttribute("this_module", this_module);
-        request.setAttribute("cidCourse", cidCourse);
-        request.getRequestDispatcher("create_quiz/cq.jsp").forward(request, response);
+        QuizDAO quizDAO = new QuizDAO();
+        int quizId = Integer.parseInt(request.getParameter("quizId"));
+        Quiz quizEdit = quizDAO.GetQuizByQuizId(quizId);
+        Modules moduleOfQuizEdit = quizDAO.GetModulebyQuizId(quizId);
+        // lấy ra thời gian cho vào edit quiz
+        String time_quiz = quizEdit.getQuizTime().toString();
+        String[] time_quiz_to_array = time_quiz.split(":");
+        request.setAttribute("minutes", Integer.valueOf(time_quiz_to_array[1]));
+        request.setAttribute("seconds", Integer.valueOf(time_quiz_to_array[2]));
+        
+        // cho câu hỏi và câu trả lời vào editquiz
+        
+        ArrayList<Questions> listQuestions = quizDAO.getListQuestionsByQuizId(quizId);
+        ArrayList<Answer> listAnswers = quizDAO.getListAnswers();
+        request.setAttribute("listQuestions", listQuestions);
+        request.setAttribute("listAnswers", listAnswers);
+        request.setAttribute("quizEdit", quizEdit);
+        request.setAttribute("moduleOfQuizEdit", moduleOfQuizEdit);
+        request.getRequestDispatcher("edit_quiz/editquiz.jsp").forward(request, response);
     }
 
     /**
@@ -84,8 +62,7 @@ public class CreateQuizServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int mid = Integer.parseInt(request.getParameter("moduleId"));
-        int cid = Integer.parseInt(request.getParameter("cid"));
-        
+        int quizId = Integer.parseInt(request.getParameter("quizId"));
         String quizTitle = request.getParameter("quizTitle");
         String timeNumber = request.getParameter("timeNumber");
         String timeUnit = request.getParameter("timeUnit");
@@ -117,27 +94,15 @@ public class CreateQuizServlet extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        Quiz quiz = null;
+       
         if (quizTime != null) {
             QuizDAO quizDAO = new QuizDAO();
-            quiz = quizDAO.insertQuiz( new Quiz( mid, quizTitle, quizTime, quizScore));
+            quizDAO.editQuizByQuizId( new Quiz( quizId,mid, quizTitle, quizTime, quizScore));
         }
-        HttpSession session = request.getSession();
-        session.setAttribute("quizId", quiz.getQuizId());
-        session.setAttribute("quiz", quiz);
-        request.setAttribute("midCreate", mid);
-        request.setAttribute("cidCreate", cid);
-        request.getRequestDispatcher("create_quiz/cquestions.jsp").forward(request, response);
-    }
+        
+        //=============================================THỰC HIỆN CHUYỂN HƯỚNG Ở ĐÂY======================================================
+        request.getRequestDispatcher("ModuleManage?moduleId="+mid+"cid="+2).forward(request, response);
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+    }
 
 }

@@ -90,13 +90,12 @@
     </head>
     <body>
         <jsp:include page="../common/menu.jsp"></jsp:include>
-
         <div class="container">
             <h1 class="page-heading h2" style="margin-top: 10px;">Create A New Quiz</h1>
-            <form id="addQuizForm" action="createquiz" method="post" onsubmit="return validateForm3(event)">
-                <div class="card">
+            <form id="addQuizForm" action="createquiz?moduleId=${this_module.moduleid}&cid=${requestScope.cidCourse}" method="post" onsubmit="return validateForm3(event)">
+            <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Quiz</h4>
+                        <h4 class="card-title">Module: ${this_module.modulename}</h4>
                     </div>
                     <div class="card-body">
                         <div class="form-group row">
@@ -137,9 +136,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer">
+                    <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
                         <div class="">
                             <input type="submit" name="AddQuiz" value="Add Quiz" class="btn btn-success" style="width: 127.6px;">
+                        </div>
+                        <div style="">
+                            <a href="ModuleManage?moduleId=${this_module.moduleid}&cid=${requestScope.cidCourse}" class="btn btn-danger">Cancel</a>
                         </div>
                     </div>
                 </div>

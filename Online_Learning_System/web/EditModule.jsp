@@ -150,7 +150,7 @@
                                     <div style="display: flex; justify-content: space-between; align-items: center;">
                                         <div>
                                             <a href="LessonManage?action=addlesson&cid=${cid}&moduleid=${module_id}" class="btn btn-outline-success">Add New Lesson</a>
-                                            <a href="QuizManage?action=addQuiz&cid=${cid}&moduleid=${module_id}" class="btn btn-outline-primary">Add New Quiz</a>
+                                            <a href="createquiz?action=addQuiz&cid=${cid}&moduleid=${module_id}" class="btn btn-outline-primary">Add New Quiz</a>
                                         </div>
                                         <div>
                                             <form action="ModuleManage?action=delete&cid=${cid}&moduleId=${module_id}" method="post">

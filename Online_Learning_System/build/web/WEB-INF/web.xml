@@ -64,6 +64,14 @@
         <servlet-name>ModuleManageServler</servlet-name>
         <servlet-class>Controller.User.Manager.ModuleManageServler</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EditQuizServlet</servlet-name>
+        <servlet-class>Controller.EditQuizServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditQuizCRUDQuestions</servlet-name>
+        <servlet-class>Controller.EditQuizCRUDQuestions</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginGoogleHandler</servlet-name>
         <url-pattern>/google</url-pattern>
@@ -114,7 +122,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ControllerQuestionServlet</servlet-name>
-        <url-pattern>/controller</url-pattern>
+        <url-pattern>/controllerquestion</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>DoQuizServlet</servlet-name>
@@ -124,9 +132,17 @@
         <servlet-name>DoQuizController</servlet-name>
         <url-pattern>/doquizsub</url-pattern>
     </servlet-mapping>
-     <servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ModuleManageServler</servlet-name>
         <url-pattern>/ModuleManage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditQuizServlet</servlet-name>
+        <url-pattern>/editquiz</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditQuizCRUDQuestions</servlet-name>
+        <url-pattern>/editquizcrudquestion</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>

@@ -4,6 +4,7 @@
  */
 package Dal;
 
+import Model.Answer;
 import Model.ModuleDTO;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -91,6 +92,35 @@ public class ModuleDAO extends DBContext {
 
     public static void main(String[] args) {
         ModuleDAO dao = new ModuleDAO();
-        dao.updateModuleName(new ModuleDTO(9, "pass_ok"));
+        ModuleDTO u = dao.FindModuleByModuleId(1);
+        System.out.println(u.getModulename());
+    }
+
+    // find module by moduleId
+    public ModuleDTO FindModuleByModuleId(int midModule) {
+        connection = getConnection();
+        String sql = "SELECT [ModuleId]\n"
+                + "      ,[ModuleName]\n"
+                + "      ,[CourseId]\n"
+                + "      ,[ModuleNumber]\n"
+                + "  FROM [dbo].[Module]\n"
+                + "  where ModuleId = ?";
+        try {
+            connection = new DBContext().getConnection();
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, midModule);
+            resultSet = statement.executeQuery();
+            // trả về kết quả
+            while (resultSet.next()) {
+                int moduleid = resultSet.getInt("ModuleId");
+                String modulename = resultSet.getString("ModuleName");
+                int module_number = resultSet.getInt("ModuleNumber");
+                ModuleDTO this_module = new ModuleDTO(moduleid, modulename, module_number);
+                return this_module;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 }

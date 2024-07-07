@@ -174,7 +174,7 @@
 
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    <a href="#" id="resetQuiz" class="nav-item nav-link">Reset</a>
+                    <a href="resetQuiz" id="resetQuiz" class="nav-item nav-link">Reset</a>
                     <span id="answeredCount" class="nav-item nav-link active">${countAnswer}</span>
                     <span class="nav-item nav-link active">/</span>
                     <span id="totalCount" class="nav-item nav-link active">${listQuestionsByMId.size()}</span> 

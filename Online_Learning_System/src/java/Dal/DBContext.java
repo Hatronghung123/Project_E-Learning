@@ -31,9 +31,6 @@ public class DBContext {
             String url = "jdbc:sqlserver://localhost:1433;databaseName=Project Online Learning";
             String user = "sa";
             String password = "Tuan2003";
-
-
-
             connection = DriverManager.getConnection(url, user, password);
             return connection;
         } catch (SQLException | ClassNotFoundException e) {

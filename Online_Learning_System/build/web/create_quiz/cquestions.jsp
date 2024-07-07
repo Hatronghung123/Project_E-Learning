@@ -14,7 +14,7 @@
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <meta content="" name="keywords">
         <meta content="" name="description">
-        
+
 
         <!-- Favicon -->
         <link href="${pageContext.request.contextPath}/img/favicon.ico" rel="icon">
@@ -113,6 +113,11 @@
                 color: #333333;
                 background-color: #f8f9fa;
             }
+            .buttons-container {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 10px;
+            }
         </style>
     </head>
     <body>
@@ -160,8 +165,10 @@
                             </ul>
                         </div>
                     </c:forEach>
-                    <div class="card-header bg-white">
+                    <div class="card-header bg-white buttons-container">
                         <a href="#" data-toggle="modal" data-target="#createQuestion" class="btn btn-success">Add Question</a>
+<!--                        <a href="ModuleManage?moduleId=${midCancel}&cid=${cidCancel}" class="btn btn-danger">Cancel</a>-->
+                    <a href="javascript:window.history.go(-2);"class="btn btn-danger">Cancel</a>
                     </div>
                 </div>
             </form>
