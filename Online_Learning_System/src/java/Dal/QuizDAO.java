@@ -474,6 +474,35 @@ public class QuizDAO extends DBContext {
         }
         return null;
     }
+    public ArrayList<Quiz> getListQuizByModuleId(int moduleId) {
+        ArrayList<Quiz> quiz_list = new ArrayList<>();
+        connection = getConnection();
+
+        String sql = """
+                     select *
+                     from Quiz q 
+                     join Module m on  q.ModuleId = m.ModuleId
+                     where m.ModuleId = ?""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, moduleId);
+            // thực thi câu lệnh
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int quizId = resultSet.getInt(1);
+                String quizName = resultSet.getString(3);
+                Time quizTime = resultSet.getTime(4);
+                int passScore = resultSet.getInt(5);
+
+                Quiz quiz = new Quiz(quizId, moduleId, quizName, quizTime, passScore);
+                quiz_list.add(quiz);
+            }
+            return quiz_list;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
 
     // lấy ra danh sách câu trả lời đúng của câu hỏi dựa trên moduleId
     public ArrayList<Answer> getlistAnswerCorrectByModuleId(int moduleId) {
@@ -607,7 +636,7 @@ public class QuizDAO extends DBContext {
 
     public static void main(String[] args) {
         QuizDAO dao = new QuizDAO();
-        System.out.println(dao.GetQuizByQuizId(82));
+        System.out.println(dao.getListQuizByModuleId(2).get(0));
     }
 
     public ArrayList<Questions> getListQuestionsByModlueId(Questions questions, int midModule) {
