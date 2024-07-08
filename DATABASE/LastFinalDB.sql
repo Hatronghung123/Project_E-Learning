@@ -190,21 +190,7 @@ Bạn muốn củng cố lại kiến thức đã học từ lâu.
  700000, 20, 'IT',2 ,'2024-06-12', '1.30 Hrs', 1
  )
  
-INSERT INTO [dbo].[Course]
-     VALUES
-           (
-		   'Kỹ năng giao tiếp trong kinh doanh: Viết và ngữ pháp trong kinh doanh',
-           'Biến giao tiếp thành lợi thế nghề nghiệp lâu dài, mở ra những cánh cửa thay vì nguồn gốc của sự thiếu tự tin và nghi ngờ bản thân.
-Khóa học này sẽ biến bạn thành một nhà văn và người giao tiếp giỏi hơn, đây là một kỹ năng giúp bạn phát triển sự nghiệp và khiến những ý tưởng của bạn được lắng nghe và xem xét!
-Trở thành một nhà văn kinh doanh giỏi hơn và cư xử chuyên nghiệp hơn trong văn bản và tương tác với sếp, khách hàng hoặc đồng nghiệp - hôm nay và trong phần còn lại của sự nghiệp của bạn.'
-           ,'https://img-c.udemycdn.com/course/240x135/2323470_7191_9.jpg'
-           ,799000
-           ,10
-           ,'BSN'
-           ,2
-           ,'2024/06/18'
-           ,'5.4 Hrs'
-           ,1);
+
 		   
 		   INSERT INTO [dbo].[Course] 
 VALUES (
@@ -302,12 +288,18 @@ create table Enrollment(
 	Progress int --per 100%
 );
  
-  insert into Enrollment
+ 
+ insert into Enrollment
   values
   (1,1,'2024-06-07',0),
   (1,2,'2024-06-09',50),
   (1,3,'2024-06-13',20),
-  (1,4,'2024-05-20',80);
+  (1,4,'2024-05-20',100),
+  (4,1,'2024-07-08',80),
+  (4,2,'2024-05-07',50),
+  (4,3,'2024-07-07',80),
+  (4,4,'2024-04-07',100);
+
 
 
 
@@ -379,7 +371,22 @@ INSERT INTO [dbo].[Payment]
            ,'2024/05/20'
            ,'VNPAY'
            ,1000000)
-
+insert into [Payment]
+VALUES(
+4,1,'2024-07-08','VNPAY',500000
+)
+insert into [Payment]
+VALUES(
+4,3,'2024-07-07','VNPAY',800000
+)
+insert into [Payment]
+VALUES(
+4,4,'2024-04-07','VNPAY',1000000
+)
+insert into [Payment]
+VALUES(
+4,2,'2024-05-07','VNPAY',500000
+)
 
 --Tuong insert ModuleNumber
 create table Module(

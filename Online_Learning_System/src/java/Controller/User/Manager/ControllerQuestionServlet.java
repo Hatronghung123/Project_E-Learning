@@ -2,31 +2,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller;
+package Controller.User.Manager;
 
-import Controller.Admin.StatisticalSeverlet;
-import Dal.CertificateDAO;
-import Model.AccountDTO;
-import Model.Certificate;
+import Dal.QuizDAO;
+import Model.Answer;
+import Model.Questions;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
- * @author Admin
+ * @author hatro
  */
-@WebServlet(name = "CertificateDetailSeverlet", urlPatterns = {"/CertificateDetail"})
-public class CertificateDetailSeverlet extends HttpServlet {
+public class ControllerQuestionServlet extends HttpServlet {
+
+    QuizDAO quizDAO = new QuizDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,10 +41,10 @@ public class CertificateDetailSeverlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CertificateDetailSeverlet</title>");            
+            out.println("<title>Servlet ControllerQuestionServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CertificateDetailSeverlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ControllerQuestionServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -66,18 +62,18 @@ public class CertificateDetailSeverlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         HttpSession session = request.getSession();
-        CertificateDAO certificateDAO = new CertificateDAO();
-        int cid = Integer.parseInt(request.getParameter("cid"));
-         AccountDTO acc = (AccountDTO) session.getAttribute("account");
-        try {
-            ArrayList<Certificate> getDetailCertificateByAccIdAndCourseId = certificateDAO.getDetailCertificateByAccIdAndCourseId(acc.getAccount_id(),cid);          
-            request.setAttribute("getDetailCertificateByAccIdAndCourseId", getDetailCertificateByAccIdAndCourseId);
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(CertificateDetailSeverlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        request.getRequestDispatcher("CertificateDetail.jsp").forward(request, response);
+        HttpSession session = request.getSession();
+        Questions questions = (Questions) session.getAttribute("questions");
+        int midModule = (Integer) session.getAttribute("mid");
+        int cidModule = (Integer) session.getAttribute("cid");
+        ArrayList<Questions> listQuestions = quizDAO.getListQuestionsByModlueId(questions, midModule);
+        ArrayList<Answer> listAnswers = quizDAO.getListAnswers(questions);
+        request.setAttribute("listQuestions", listQuestions);
+        request.setAttribute("listAnswers", listAnswers);
+        request.setAttribute("midCreate", midModule);
+        request.setAttribute("cidCreate", cidModule);
+        request.getRequestDispatcher("create_quiz/cquestions.jsp").forward(request, response);
+        
     }
 
     /**
@@ -91,7 +87,7 @@ public class CertificateDetailSeverlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
     }
 
     /**

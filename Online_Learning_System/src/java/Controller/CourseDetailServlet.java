@@ -38,7 +38,7 @@ import javax.mail.Session;
  *
  * @author Tuan Anh(Gia Truong)
  */
-public class CourseDetailServelet extends HttpServlet {
+public class CourseDetailServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -141,7 +141,7 @@ public class CourseDetailServelet extends HttpServlet {
 
             //         out.print(getCourseByID.getImage());
         } catch (SQLException ex) {
-            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CourseDetailServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         request.getRequestDispatcher("detail.jsp").forward(request, response);
@@ -209,7 +209,7 @@ public class CourseDetailServelet extends HttpServlet {
             ArrayList<Category> listCategory = dao.getAllCategory();
             request.setAttribute("listCategory", listCategory);
         } catch (SQLException ex) {
-            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CourseDetailServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

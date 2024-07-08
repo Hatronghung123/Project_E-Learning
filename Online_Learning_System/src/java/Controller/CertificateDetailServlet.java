@@ -4,13 +4,10 @@
  */
 package Controller;
 
-import Dal.CourseDetailDAO;
-import Dal.StarRatingDAO;
-
+import Controller.Admin.StatisticalSeverlet;
+import Dal.CertificateDAO;
 import Model.AccountDTO;
-
-import Model.Course;
-import Model.StarRatingDTO;
+import Model.Certificate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -20,17 +17,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
-import java.sql.Date;
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  *
- * @author Tuan Anh(Gia Truong)
+ * @author Admin
  */
-@WebServlet(name = "StarRatingServelet", urlPatterns = {"/StarRating"})
-public class StarRatingServelet extends HttpServlet {
+@WebServlet(name = "CertificateDetailSeverlet", urlPatterns = {"/CertificateDetail"})
+public class CertificateDetailServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -49,10 +45,10 @@ public class StarRatingServelet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet StarRatingServelet</title>");
+            out.println("<title>Servlet CertificateDetailSeverlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet StarRatingServelet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CertificateDetailSeverlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -70,21 +66,18 @@ public class StarRatingServelet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+         HttpSession session = request.getSession();
+        CertificateDAO certificateDAO = new CertificateDAO();
+        int cid = Integer.parseInt(request.getParameter("cid"));
+         AccountDTO acc = (AccountDTO) session.getAttribute("account");
         try {
-            String cid = request.getParameter("cid");
-            CourseDetailDAO dao = new CourseDetailDAO();
+            ArrayList<Certificate> getDetailCertificateByAccIdAndCourseId = certificateDAO.getDetailCertificateByAccIdAndCourseId(acc.getAccount_id(),cid);          
+            request.setAttribute("getDetailCertificateByAccIdAndCourseId", getDetailCertificateByAccIdAndCourseId);
             
-            Course course = dao.getCourseById(Integer.parseInt(cid));
-
-            request.setAttribute("course", course);
-            request.setAttribute("cid", cid);
-            request.getRequestDispatcher("StarRating.jsp").forward(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(StarRatingServelet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception e) {
-            e.printStackTrace();
+            Logger.getLogger(CertificateDetailServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        request.getRequestDispatcher("CertificateDetail.jsp").forward(request, response);
     }
 
     /**
@@ -98,27 +91,7 @@ public class StarRatingServelet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        HttpSession session = request.getSession();
-        String cid = request.getParameter("cid");
-        String star = request.getParameter("rating");
-        String comment = request.getParameter("comment");
-
-        AccountDTO account = (AccountDTO) session.getAttribute("account");
-
-        StarRatingDAO dao = new StarRatingDAO();
-
-        String msg = "";
-
-   
-            try {
-                StarRatingDTO rating = new StarRatingDTO(Integer.parseInt(star), comment, Date.valueOf(LocalDate.now()), Integer.parseInt(cid), account.getAccount_id());
-//             Chèn dữ liệu vào db
-                dao.insertRating(rating);
-                response.sendRedirect("CourseDetail?cid="+cid);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        processRequest(request, response);
     }
 
     /**
@@ -131,6 +104,4 @@ public class StarRatingServelet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    
-    
 }
