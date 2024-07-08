@@ -2,38 +2,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller.Admin;
+package Controller.User.Manager;
 
-
-import Dal.StatisticalDAO;
-
-import Model.AccountDTO;
-
-import Model.Category;
-import Model.Course;
-import Model.Payment;
-
+import Dal.QuizDAO;
+import Model.Answer;
+import Model.Questions;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.sql.SQLException;
-
 import java.util.ArrayList;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
- * @author Admin
+ * @author hatro
  */
-@WebServlet(name = "StatisticalSeverlet", urlPatterns = {"/dasboard_for_admin/StatisticalSeverlet"})
-public class StatisticalSeverlet extends HttpServlet {
+public class ControllerQuestionServlet extends HttpServlet {
+
+    QuizDAO quizDAO = new QuizDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -52,10 +41,10 @@ public class StatisticalSeverlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet StatisticalSeverlet</title>");
+            out.println("<title>Servlet ControllerQuestionServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet StatisticalSeverlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ControllerQuestionServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -74,32 +63,17 @@ public class StatisticalSeverlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-
-        StatisticalDAO admin_manage_DAO = new StatisticalDAO();
-        AccountDTO acc = (AccountDTO) session.getAttribute("account");
+        Questions questions = (Questions) session.getAttribute("questions");
+        int midModule = (Integer) session.getAttribute("mid");
+        int cidModule = (Integer) session.getAttribute("cid");
+        ArrayList<Questions> listQuestions = quizDAO.getListQuestionsByModlueId(questions, midModule);
+        ArrayList<Answer> listAnswers = quizDAO.getListAnswers(questions);
+        request.setAttribute("listQuestions", listQuestions);
+        request.setAttribute("listAnswers", listAnswers);
+        request.setAttribute("midCreate", midModule);
+        request.setAttribute("cidCreate", cidModule);
+        request.getRequestDispatcher("create_quiz/cquestions.jsp").forward(request, response);
         
-        if(acc == null || acc.getRole_id() != 1 ) {
-            response.sendRedirect("../home");
-             return;
-        }
-        
-        try {
-            Payment TotalPerMonth = admin_manage_DAO.getPaymentPerMonth();
-             Payment TotalPerYear = admin_manage_DAO.getPaymentPerYear();
-             AccountDTO CountAccStilActive = admin_manage_DAO.CountAccStillActive();
-             Course CountCourseStilActive = admin_manage_DAO.CountCourseStillActive();
-            ArrayList<Payment> TotalEarningPerMonthChart = admin_manage_DAO.getTotalEarningPerMonth();
-            ArrayList<Category> PercentCategory = admin_manage_DAO.getPercentCategory();
-             request.setAttribute("TotalPerMonth", TotalPerMonth);
-             request.setAttribute("TotalPerYear", TotalPerYear);
-             request.setAttribute("CountAccStilActive", CountAccStilActive);
-              request.setAttribute("CountCourseStilActive", CountCourseStilActive);
-            request.setAttribute("TotalEarningPerMonth", TotalEarningPerMonthChart);
-            request.setAttribute("PercentCategory", PercentCategory);
-        } catch (SQLException ex) {
-            Logger.getLogger(StatisticalSeverlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        request.getRequestDispatcher("dasboard_home.jsp").forward(request, response);
     }
 
     /**
@@ -113,7 +87,7 @@ public class StatisticalSeverlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
     }
 
     /**

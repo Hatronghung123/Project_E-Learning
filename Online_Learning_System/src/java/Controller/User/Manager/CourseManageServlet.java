@@ -333,8 +333,8 @@ public class CourseManageServlet extends HttpServlet {
             ArrayList<ModuleDTO> list_module = module_dao.getListModulByCid(cid);
             ArrayList<LessonDTO> list_lesson = lesson_manage_dao.getListlessonByCid(Integer.parseInt(cid));
             CourseManageDTO my_managed_course = course_manage_DAO.getMyManagedCourseById(my_account.getAccount_id(), cid);
-            ArrayList<ProfileDTO> list_mentor = profile_manage_dao.getMyListManagedMentor(my_account.getAccount_id(), cid);
-            ArrayList<ProfileDTO> list_mentor_by_courseId = profile_manage_dao.getMyListManagedMentor(my_account.getAccount_id(), cid);
+            ArrayList<ProfileDTO> list_mentor = profile_manage_dao.getMyListManagedMentorByCouresId(my_account.getAccount_id(), cid);
+            ArrayList<ProfileDTO> list_mentor_by_courseId = profile_manage_dao.getMyListManagedMentorByCouresId(my_account.getAccount_id(), cid);
             request.setAttribute("list_module", list_module);
             request.setAttribute("list_lesson", list_lesson);
             request.setAttribute("my_managed_course", my_managed_course);
@@ -417,8 +417,8 @@ public class CourseManageServlet extends HttpServlet {
                 ArrayList<ModuleDTO> list_module = module_dao.getListModulByCid(cid);
                 ArrayList<LessonDTO> list_lesson = lesson_manage_dao.getListlessonByCid(Integer.parseInt(cid));
                 CourseManageDTO my_managed_course = course_manage_DAO.getMyManagedCourseById(my_account.getAccount_id(), cid);
-                ArrayList<ProfileDTO> list_mentor = profile_manage_dao.getMyListManagedMentor(my_account.getAccount_id(), cid);
-                ArrayList<ProfileDTO> list_mentor_by_courseId = profile_manage_dao.getMyListManagedMentor(my_account.getAccount_id(), cid);
+                ArrayList<ProfileDTO> list_mentor = profile_manage_dao.getMyListManagedMentorByCouresId(my_account.getAccount_id(), cid);
+                ArrayList<ProfileDTO> list_mentor_by_courseId = profile_manage_dao.getMyListManagedMentorByCouresId(my_account.getAccount_id(), cid);
 
                 request.setAttribute("list_module", list_module);
                 request.setAttribute("list_lesson", list_lesson);

@@ -13,6 +13,7 @@ public class UserAnswer {
     private int questionId;
     private String answer;
     private boolean isCorrectUserAnswer;
+    private int AttemptNumber;
 
     public UserAnswer() {
     }
@@ -23,6 +24,16 @@ public class UserAnswer {
         this.answer = answer;
         this.isCorrectUserAnswer = isCorrectUserAnswer;
     }
+
+    public UserAnswer(int accountId, int questionId, String answer, boolean isCorrectUserAnswer, int AttemptNumber) {
+        this.accountId = accountId;
+        this.questionId = questionId;
+        this.answer = answer;
+        this.isCorrectUserAnswer = isCorrectUserAnswer;
+        this.AttemptNumber = AttemptNumber;
+    }
+    
+    
 
     public UserAnswer(int accountId, int questionId, boolean isCorrectUserAnswer) {
         this.accountId = accountId;
@@ -64,10 +75,16 @@ public class UserAnswer {
         this.isCorrectUserAnswer = isCorrectUserAnswer;
     }
 
+    public int getAttemptNumber() {
+        return AttemptNumber;
+    }
+
+    public void setAttemptNumber(int AttemptNumber) {
+        this.AttemptNumber = AttemptNumber;
+    }
+
     @Override
     public String toString() {
-        return "UserAnswer{" + "accountId=" + accountId + ", questionId=" + questionId + ", answer=" + answer + ", isCorrectUserAnswer=" + isCorrectUserAnswer + '}';
+        return "UserAnswer{" + "accountId=" + accountId + ", questionId=" + questionId + ", answer=" + answer + ", isCorrectUserAnswer=" + isCorrectUserAnswer + ", AttemptNumber=" + AttemptNumber + '}';
     }
-    
-    
 }

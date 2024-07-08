@@ -4,7 +4,7 @@
  */
 package Util;
 
-import Controller.CourseDetailServelet;
+import Controller.CourseDetailServlet;
 import Dal.HomeDAO;
 import Model.AccountDTO;
 import Model.Category;
@@ -37,7 +37,7 @@ public class MyCommon {
             ArrayList<Category> listCategory = dao.getAllCategory();
             session.setAttribute("listCategory", listCategory);
         } catch (SQLException ex) {
-            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
 
         session.setMaxInactiveInterval(60 * 30);
@@ -55,7 +55,7 @@ public class MyCommon {
             ArrayList<Category> listCategory = dao.getAllCategory();
             session.setAttribute("listCategory", listCategory);
         } catch (SQLException ex) {
-            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         session.setMaxInactiveInterval(60 * 30);
     }

@@ -9,6 +9,7 @@ import Dal.DisscussionDAO;
 import Dal.HomeDAO;
 import Dal.LessonDAO;
 import Dal.LessonManageDAO;
+import Dal.QuizDAO;
 
 import Model.AccountDTO;
 
@@ -17,6 +18,7 @@ import YoutubeAPI.YoutubeDuration;
 import Model.DiscussionLesson;
 import Model.Enrollment;
 import Model.LessonDTO;
+import Model.Quiz;
 import Model.StarRatingDTO;
 import Util.AVGOfRaing;
 import java.io.IOException;
@@ -83,6 +85,7 @@ public class lessonServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         LessonDAO dao = new LessonDAO();
         DisscussionDAO discussDao = new DisscussionDAO();
+        QuizDAO quizDao = new QuizDAO();
         HttpSession session = request.getSession();
 
         AccountDTO acc = (AccountDTO) session.getAttribute("account");
@@ -151,7 +154,7 @@ public class lessonServlet extends HttpServlet {
                 ArrayList<LessonDTO> lessonList = dao.getListModulByCidd(course_id);
                 ArrayList<Model.ModuleDTO> moduleList = dao.getListModulByCid(course_id);
                 LessonDTO lesson = dao.getlessonByCid(course_id, lesson_id);
-
+                  
 
                 
                 
@@ -185,6 +188,10 @@ public class lessonServlet extends HttpServlet {
                 long totalDuration = sumOfDurationInCourse(course_id);
                 displayTotalTimeLearnCourse(request, response, totalDuration);
 
+                //Lấy quiz theo module id
+                ArrayList<Quiz> quizLits = quizDao.findListQuizByCourseId(course_id);
+                
+
                 // Đặt các thuộc tính cho JSP
                 request.setAttribute("mainComments", mainComments);
                 request.setAttribute("repliesMap", repliesMap);
@@ -192,6 +199,7 @@ public class lessonServlet extends HttpServlet {
 //                out.print(parentCommentid);
                 request.setAttribute("lesson", lesson);
                 request.setAttribute("moduleList", moduleList);
+                request.setAttribute("quizLits", quizLits);
                 request.setAttribute("lessonList", lessonList);
                 request.setAttribute("listEnrollment", listEnrollment);
                 //response.getWriter().print(lessonList);
@@ -334,7 +342,7 @@ public class lessonServlet extends HttpServlet {
             ArrayList<Category> listCategory = dao.getAllCategory();
             request.setAttribute("listCategory", listCategory);
         } catch (SQLException ex) {
-            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CourseDetailServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+<<<<<<< HEAD
+=======
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/src/java/Model/ScoreQuiz.java</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/src/java/Controller/DoQuizServlet.java</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/web/do_quiz/doquizsubmit.jsp</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/src/java/Model/UserAnswer.java</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/web/do_quiz/do_quiz.jsp</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/src/java/Dal/QuizDAO.java</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/src/java/Model/Answer.java</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/src/java/Controller/DoQuizController.java</file>
+        </group>
+    </open-files>
+>>>>>>> d04aab8aef7fa06220f171fbc97f6541a09ace4b
 </project-private>

@@ -2,17 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller.Admin;
+package Controller;
 
-
-import Dal.StatisticalDAO;
+import Dal.CourseDetailDAO;
+import Dal.StarRatingDAO;
 
 import Model.AccountDTO;
 
-import Model.Category;
 import Model.Course;
-import Model.Payment;
-
+import Model.StarRatingDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -22,18 +20,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
-
-import java.util.ArrayList;
-
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  *
- * @author Admin
+ * @author Tuan Anh(Gia Truong)
  */
-@WebServlet(name = "StatisticalSeverlet", urlPatterns = {"/dasboard_for_admin/StatisticalSeverlet"})
-public class StatisticalSeverlet extends HttpServlet {
+@WebServlet(name = "StarRatingServelet", urlPatterns = {"/StarRating"})
+public class StarRatingServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -52,10 +49,10 @@ public class StatisticalSeverlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet StatisticalSeverlet</title>");
+            out.println("<title>Servlet StarRatingServelet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet StatisticalSeverlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet StarRatingServelet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -73,33 +70,21 @@ public class StatisticalSeverlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-
-        StatisticalDAO admin_manage_DAO = new StatisticalDAO();
-        AccountDTO acc = (AccountDTO) session.getAttribute("account");
-        
-        if(acc == null || acc.getRole_id() != 1 ) {
-            response.sendRedirect("../home");
-             return;
-        }
-        
         try {
-            Payment TotalPerMonth = admin_manage_DAO.getPaymentPerMonth();
-             Payment TotalPerYear = admin_manage_DAO.getPaymentPerYear();
-             AccountDTO CountAccStilActive = admin_manage_DAO.CountAccStillActive();
-             Course CountCourseStilActive = admin_manage_DAO.CountCourseStillActive();
-            ArrayList<Payment> TotalEarningPerMonthChart = admin_manage_DAO.getTotalEarningPerMonth();
-            ArrayList<Category> PercentCategory = admin_manage_DAO.getPercentCategory();
-             request.setAttribute("TotalPerMonth", TotalPerMonth);
-             request.setAttribute("TotalPerYear", TotalPerYear);
-             request.setAttribute("CountAccStilActive", CountAccStilActive);
-              request.setAttribute("CountCourseStilActive", CountCourseStilActive);
-            request.setAttribute("TotalEarningPerMonth", TotalEarningPerMonthChart);
-            request.setAttribute("PercentCategory", PercentCategory);
+            String cid = request.getParameter("cid");
+            CourseDetailDAO dao = new CourseDetailDAO();
+            
+            Course course = dao.getCourseById(Integer.parseInt(cid));
+
+            request.setAttribute("course", course);
+            request.setAttribute("cid", cid);
+            request.getRequestDispatcher("StarRating.jsp").forward(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(StatisticalSeverlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StarRatingServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        request.getRequestDispatcher("dasboard_home.jsp").forward(request, response);
+
     }
 
     /**
@@ -113,7 +98,27 @@ public class StatisticalSeverlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        HttpSession session = request.getSession();
+        String cid = request.getParameter("cid");
+        String star = request.getParameter("rating");
+        String comment = request.getParameter("comment");
+
+        AccountDTO account = (AccountDTO) session.getAttribute("account");
+
+        StarRatingDAO dao = new StarRatingDAO();
+
+        String msg = "";
+
+   
+            try {
+                StarRatingDTO rating = new StarRatingDTO(Integer.parseInt(star), comment, Date.valueOf(LocalDate.now()), Integer.parseInt(cid), account.getAccount_id());
+//             Chèn dữ liệu vào db
+                dao.insertRating(rating);
+                response.sendRedirect("CourseDetail?cid="+cid);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 
     /**
@@ -126,4 +131,6 @@ public class StatisticalSeverlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    
+    
 }
