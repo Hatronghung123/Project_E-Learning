@@ -532,3 +532,6 @@ create table Certificate(
 
 
 
+-- Thêm cột AttemptNumber vào bảng AnswerQuestion
+ALTER TABLE AnswerQuestion
+ADD AttemptNumber INT;

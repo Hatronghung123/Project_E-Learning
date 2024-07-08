@@ -175,7 +175,7 @@
 
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    <a href="../Project_E-Learning/doquiz?mid=${quizDoQuiz.getModuleId()}" id="resetQuiz" class="nav-item nav-link">Reset</a>
+                   <a href="../Project_E-Learning/doquiz?mid=${quizDoQuiz.getModuleId()}" id="resetQuiz" class="nav-item nav-link">Reset</a>
                     <span id="answeredCount" class="nav-item nav-link active">${countAnswer}</span>
                     <span class="nav-item nav-link active">/</span>
                     <span id="totalCount" class="nav-item nav-link active">${listQuestionsByMId.size()}</span> 
@@ -231,7 +231,16 @@
         </div>
 
         <script>
+            // Script to clear sessionStorage when the reset button is clicked
+            document.addEventListener('DOMContentLoaded', () => {
+                const resetButton = document.getElementById('resetQuiz');
 
+                resetButton.addEventListener('click', () => {
+                    sessionStorage.removeItem('quizTimeLeft');
+                    sessionStorage.removeItem('quizSubmitted');
+                    sessionStorage.clear();  // Clear all session storage if needed
+                });
+            });
         </script>
 
         <!-- JavaScript Libraries -->
