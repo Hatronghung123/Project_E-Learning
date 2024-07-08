@@ -159,7 +159,8 @@
     <body>
         <!-- Navbar Start -->
         <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
-            <a href="home" class="navbar-brand d-flex align-items-center px-4 px-lg-5" style="text-decoration: none; margin-right: 0px">
+            <a href="../Project_E-Learning/lesson?cid=${course.getCourse_id()}&
+                lessonid=${course.getLessonId()}&createBy=${course.getCreate_by()}" class="navbar-brand d-flex align-items-center px-4 px-lg-5" style="text-decoration: none; margin-right: 0px">
                 <h2 class="m-0 text-primary">Back</h2>
             </a>
             
@@ -193,7 +194,7 @@
                         <c:forEach items="${listAnswerByMId}" var="answer">
                             <c:if test="${question.getQuestionId() == answer.getQuestionId()}">
                                 <li>
-                                    <input type="${question.isType() ? 'radio' : 'checkbox'}" 
+                                    <input type="${question.isType() ? 'checkbox' : 'radio'}" 
                                            id="${answer.getQuestionId()}${answer.getChoices()}" 
                                            name="${question.getQuestionId()}" 
                                            value="${answer.getChoices()}"

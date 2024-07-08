@@ -913,7 +913,36 @@ public class QuizDAO extends DBContext {
     public static void main(String[] args) {
         QuizDAO dao = new QuizDAO();
         //dao.updateTypeQuestion(new Questions(295, 1, 289, "Hello Elearning", true));
-        System.out.println(dao.findScoreDoQuizByAccountIdAndQuizId(2, 89));
+        System.out.println(dao.findCourseIdAndCreateByByModuleId(1).getLessonId());
 
+    }
+
+    public Course findCourseIdAndCreateByByModuleId(int moduleId) {
+        connection = getConnection();
+        String sql = """
+                     select *
+                     from Course c
+                     join Module m on c.CourseId = m.CourseId 
+                     join Lesson l on m.ModuleId = l.ModuleId
+                     where m.ModuleId = ? and LessonId =
+                     (select max(l.LessonId)
+                     from Lesson l)""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, moduleId);
+            // thực thi câu lệnh
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int courseId = resultSet.getInt(1);
+                int createBy = resultSet.getInt("CreatedBy");
+                int lessonId = resultSet.getInt("LessonId");
+                
+                Course course = new Course(courseId, createBy, lessonId);
+                return course;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 }
