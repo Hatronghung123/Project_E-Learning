@@ -75,25 +75,25 @@ public class LessonDAO {
 
     public ArrayList<LessonDTO> getListModulByCidd(int courseId) throws SQLException {
         ArrayList<LessonDTO> list = new ArrayList<>();
-        String sql = "SELECT\n"
-                + "    l.LessonId,\n"
-                + "    m.ModuleName,\n"
-                + "    l.LessonName,\n"
-                + "    l.LessonContent,\n"
-                + "    l.LessonVideo,\n"
-                + "    c.CourseName,\n"
-                + "    p.FullName,\n"
-                + "    p.Avatar,\n"
-                + "	c.CourseId,\n"
-                + "    p.ProfileId,\n"
-                + "    c.[CreatedBy],\n"
-                + "	[Duration]\n"
-                + "FROM [dbo].[Lesson] l\n"
-                + "JOIN [dbo].[Module] m ON l.ModuleId = m.ModuleId\n"
-                + "JOIN [dbo].[Course] c ON c.CourseId = m.CourseId\n"
-                + "JOIN [dbo].[Teaching] teach ON teach.CourseId = c.CourseId\n"
-                + "JOIN [dbo].[Profile] p ON p.ProfileId = teach.MentorId\n"
-                + "WHERE c.CourseId = ?";
+        String sql = """
+                       SELECT
+                         l.LessonId,
+                         m.ModuleName,
+                         l.LessonName,
+                         l.LessonContent,
+                         l.LessonVideo,
+                         c.CourseName,
+                         p.FullName,
+                         p.Avatar,
+                         c.CourseId,
+                         p.ProfileId,
+                         c.CreatedBy,
+                         Duration
+                     FROM dbo.Lesson l
+                     JOIN dbo.Module m ON l.ModuleId = m.ModuleId
+                     JOIN dbo.Course c ON c.CourseId = m.CourseId
+                     JOIN dbo.Profile p ON p.ProfileId = c.CreatedBy
+                     WHERE c.CourseId = ?""";
         try {
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
@@ -305,6 +305,6 @@ public class LessonDAO {
     
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         LessonDAO dao = new LessonDAO();
-        System.out.println(dao.getlessonByCid(2, 1));
+        System.out.println(dao.getListModulByCidd(2));
     }
 }

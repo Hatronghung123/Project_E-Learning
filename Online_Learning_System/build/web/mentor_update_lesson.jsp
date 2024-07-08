@@ -191,6 +191,7 @@
                                 </div>
                             </div>
                         </div>
+                        <h3 class="text-danger">${msg}</h3>
                         <div class="text-right mt-3">
                             <c:if test="${action == 'updatelesson'}">
                                 <input type="hidden" value="updatelesson" name="action">
