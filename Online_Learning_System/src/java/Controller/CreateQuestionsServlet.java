@@ -140,7 +140,6 @@ public class CreateQuestionsServlet extends HttpServlet {
             boolean correctAnswer = request.getParameter("correctAnswer" + i) == null ? false : true;
             answers.add(new Answer(idQuestionEdit, choices[i - 1], correctAnswer));
         }
-        //o.println(choices[1]);
         quizDAO.editAnswers(answers);
         quizDAO.updateTypeQuestion(questions);
     }

@@ -7,6 +7,7 @@ package Controller;
 import Dal.QuizDAO;
 import Model.AccountDTO;
 import Model.Answer;
+import Model.Course;
 import Model.Questions;
 import Model.Quiz;
 import Model.ScoreQuiz;
@@ -77,17 +78,18 @@ public class DoQuizController extends HttpServlet {
             response.sendRedirect("join?action=login");
             return;
         }
-
-        ArrayList<UserAnswer> listUserAnswer = (ArrayList<UserAnswer>) session.getAttribute("listUserAnswer");
-        ArrayList<ScoreQuiz> listScoreQuiz = (ArrayList<ScoreQuiz>) session.getAttribute("listScoreQuiz");
         QuizDAO quizDAO = new QuizDAO();
         int moduleId = Integer.parseInt(request.getParameter("mid"));
+        
         Quiz quiz = quizDAO.findQuizByModuleId(moduleId);
+        // lấy ra câu trả lời của người dùng thực hiện quiz
+        ArrayList<UserAnswer> listUserAnswer = quizDAO.getListUserAnswerByQuizIdAndAccId(acc.getAccount_id(), quiz.getQuizId());
+        // lấy ra điểm mới nhất của người dùng
+        ScoreQuiz scoreQuiz = quizDAO.findScoreDoQuizByAccountIdAndQuizId(acc.getAccount_id(), quiz.getQuizId());
+        
         ArrayList<Questions> listQuestionByModuleId = quizDAO.getListQuestionsByModuleId(moduleId);
         ArrayList<Answer> listAnswerByModuleId = quizDAO.getlistAnswerByModuleId(moduleId);
         ArrayList<Answer> listAnswersCorrect = quizDAO.getlistAnswerCorrectByModuleId(moduleId);
-        UserAnswer userAnswer = listUserAnswer.get(listUserAnswer.size() - 1);
-        ScoreQuiz scoreQuiz = listScoreQuiz.get(listScoreQuiz.size() - 1);
 
         // count UserAnswer
         Set<Integer> answerCount = new HashSet<>();
@@ -140,7 +142,7 @@ public class DoQuizController extends HttpServlet {
         request.setAttribute("quizDoQuiz", quiz);
         request.setAttribute("listQuestionsByMId", listQuestionByModuleId);
         request.setAttribute("listAnswerByMId", listAnswerByModuleId);
-        request.getRequestDispatcher("do_quiz/doquizsubmit.jsp").forward(request, response);
+         request.getRequestDispatcher("do_quiz/doquizsubmit.jsp").forward(request, response);
     }
 
     /**

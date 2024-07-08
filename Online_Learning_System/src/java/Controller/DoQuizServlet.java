@@ -71,24 +71,29 @@ public class DoQuizServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        QuizDAO quizDAO = new QuizDAO();
         HttpSession session = request.getSession();
         AccountDTO acc = (AccountDTO) session.getAttribute("account");
+        int moduleId = Integer.parseInt(request.getParameter("mid"));
+        Quiz quiz = quizDAO.findQuizByModuleId(moduleId);
         if (acc == null) {
             response.sendRedirect("join?action=login");
             return;
+        } else {
+//            ScoreQuiz scoreQuiz = quizDAO.findScoreDoQuizByAccountIdAndQuizId(acc.getAccount_id(), quiz.getQuizId());
+//            if (scoreQuiz != null) {
+//                response.sendRedirect("doquizsub?mid=" + moduleId);
+//                return;
+//            } else {
+                ArrayList<Questions> listQuestionByModuleId = quizDAO.getListQuestionsByModuleId(moduleId);
+                ArrayList<Answer> listAnswerByModuleId = quizDAO.getlistAnswerByModuleId(moduleId);
+                request.setAttribute("quizDoQuiz", quiz);
+                request.setAttribute("listQuestionsByMId", listQuestionByModuleId);
+                request.setAttribute("listAnswerByMId", listAnswerByModuleId);
+                request.getRequestDispatcher("do_quiz/do_quiz.jsp").forward(request, response);
+//            }
         }
-        else{
-        QuizDAO quizDAO = new QuizDAO();
-        int moduleId = Integer.parseInt(request.getParameter("mid"));
-        Quiz quiz = quizDAO.findQuizByModuleId(moduleId);
-        ArrayList<Questions> listQuestionByModuleId = quizDAO.getListQuestionsByModuleId(moduleId);
-        ArrayList<Answer> listAnswerByModuleId = quizDAO.getlistAnswerByModuleId(moduleId);
-        request.setAttribute("quizDoQuiz", quiz);
-        request.setAttribute("listQuestionsByMId", listQuestionByModuleId);
-        request.setAttribute("listAnswerByMId", listAnswerByModuleId);
-        request.getRequestDispatcher("do_quiz/do_quiz.jsp").forward(request, response);
     }
-   }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -105,7 +110,9 @@ public class DoQuizServlet extends HttpServlet {
         AccountDTO acc = (AccountDTO) session.getAttribute("account");
 
         int moduleId = Integer.parseInt(request.getParameter("mid"));
+        
         QuizDAO quizDAO = new QuizDAO();
+        Quiz quiz = quizDAO.findQuizByModuleId(moduleId);
         ArrayList<Questions> listQuestionByModuleId = quizDAO.getListQuestionsByModuleId(moduleId);
         //LIST CAU DUNG
         ArrayList<Answer> listAnswerCorrectByModuleId = quizDAO.getlistAnswerCorrectByModuleId(moduleId);
@@ -127,7 +134,8 @@ public class DoQuizServlet extends HttpServlet {
 
         ArrayList<UserAnswer> listUserAnswer = new ArrayList<>();
         int score = 0;
-// Process the user's answers and compare them with the correct answers
+        int attemptNumber = quizDAO.updateAttemptNumber(acc.getAccount_id(), quiz.getQuizId());
+        // Process the user's answers and compare them with the correct answers
         for (Map.Entry<String, String[]> entry : questionAnswersMap.entrySet()) {
             int questionId = Integer.parseInt(entry.getKey());
             String[] userAnswers = entry.getValue();
@@ -141,25 +149,22 @@ public class DoQuizServlet extends HttpServlet {
             // Add the user's answers to the list
             for (String userAnswer : userAnswers) {
                 boolean isCorrectUserAnswer = isAnswerCorrect(userAnswer, correctAnswers);
-                listUserAnswer.add(new UserAnswer(acc.getAccount_id(), questionId, userAnswer, isCorrectUserAnswer));
+                listUserAnswer.add(new UserAnswer(acc.getAccount_id(), questionId, userAnswer, isCorrectUserAnswer, attemptNumber));
             }
         }
-        
-//         Insert danh sách đáp án của người dùng vào database
-// nhớ xóa primary key của bảng answer question đi!
-        quizDAO.insertUserAnser(listUserAnswer);
 
+//      Insert danh sách đáp án của người dùng vào database
+        quizDAO.insertUserAnser(listUserAnswer);
         float totalScore = (float) score / listQuestionByModuleId.size() * 10;
-        Quiz quiz = quizDAO.findQuizByModuleId(moduleId);
-        ArrayList<ScoreQuiz> listScoreQuiz = new ArrayList<>();
-        ScoreQuiz scorequiz = new ScoreQuiz(acc.getAccount_id(), quiz.getQuizId(), totalScore);
-        listScoreQuiz.add(scorequiz);
-        quizDAO.insertlistScoreQuiz(listScoreQuiz);
         
-        session.setAttribute("listUserAnswer", listUserAnswer);
-        session.setAttribute("listScoreQuiz", listScoreQuiz);
+        
+        ScoreQuiz scorequiz = new ScoreQuiz(acc.getAccount_id(), quiz.getQuizId(), totalScore);
+
+        quizDAO.insertcoreQuiz(scorequiz);
+
+        
 //         Chuyển hướng sau khi xử lý
-        response.sendRedirect("doquizsub"+"?mid=1");
+        response.sendRedirect("doquizsub?mid=" + moduleId );
     }
 
     /**

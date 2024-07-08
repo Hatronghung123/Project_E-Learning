@@ -7,10 +7,12 @@ package Controller.User.Manager;
 import Dal.CourseManageDAO;
 import Dal.LessonManageDAO;
 import Dal.ModuleDAO;
+import Dal.QuizDAO;
 import Model.AccountDTO;
 import Model.CourseManageDTO;
 import Model.LessonDTO;
 import Model.ModuleDTO;
+import Model.Quiz;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -74,6 +76,8 @@ public class ModuleManageServler extends HttpServlet {
         LessonManageDAO lesson_manage_dao = new LessonManageDAO();
         ModuleDAO module_dao = new ModuleDAO();
         CourseManageDAO course_manage_DAO = new CourseManageDAO();
+        QuizDAO quiz_dao = new QuizDAO();
+        
         AccountDTO my_account = (AccountDTO) session.getAttribute("account");
         switch (action) {
             case "update":
@@ -86,12 +90,14 @@ public class ModuleManageServler extends HttpServlet {
                 ArrayList<LessonDTO> list_lesson_by_moduleId = lesson_manage_dao.getListlessonByModuleId(module_id);
                 CourseManageDTO my_managed_course = course_manage_DAO.getMyManagedCourseById(my_account.getAccount_id(), cid);
                 ArrayList<ModuleDTO> list_module = module_dao.getListModulByCid(cid);
-
+                ArrayList<Quiz> list_quiz_by_moduleId = quiz_dao.getListQuizByModuleId(Integer.parseInt(module_id));
+                
                 request.setAttribute("list_lesson_in_module", list_lesson_by_moduleId);
                 request.setAttribute("list_module", list_module);
                 request.setAttribute("cid", cid);
                 request.setAttribute("module_id", module_id);
                 request.setAttribute("my_managed_course", my_managed_course);
+                request.setAttribute("list_quiz_by_moduleId", list_quiz_by_moduleId);
                 request.getRequestDispatcher("EditModule.jsp").forward(request, response);
         }
     }

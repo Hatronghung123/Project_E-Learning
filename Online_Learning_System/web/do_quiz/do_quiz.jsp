@@ -228,7 +228,6 @@
 
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    <a href="#" id="resetQuiz" class="nav-item nav-link" style="display: none;">Reset</a>
                     <span id="answeredCount" class="nav-item nav-link active">0</span>
                     <span class="nav-item nav-link active">/</span>
                     <span id="totalCount" class="nav-item nav-link active">${listQuestionsByMId.size()}</span> 
@@ -248,7 +247,7 @@
                             <c:forEach items="${listAnswerByMId}" var="answer">
                                 <c:if test="${question.getQuestionId() == answer.getQuestionId()}">
                                     <li>
-                                        <input type="${question.isType() ? 'radio' : 'checkbox'}" 
+                                        <input type="${question.isType() ? 'checkbox' : 'radio'}" 
                                                id="${answer.getQuestionId()}${answer.getChoices()}" 
                                                name="${question.getQuestionId()}" 
                                                value="${answer.getChoices()}"

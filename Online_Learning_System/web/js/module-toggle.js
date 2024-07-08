@@ -60,11 +60,14 @@
 
 
 
-
 $(document).ready(function () {
     // Hàm để lấy giá trị đã lưu trữ trong localStorage
     function getActiveLesson() {
         return localStorage.getItem("activeLesson");
+    }
+
+    function getActiveQuiz() {
+        return localStorage.getItem("activeQuiz");
     }
 
     // Hàm để set giá trị vào localStorage
@@ -72,12 +75,26 @@ $(document).ready(function () {
         localStorage.setItem("activeLesson", lessonId);
     }
 
-    // Kiểm tra nếu có bài học được lưu trong localStorage thì áp dụng lớp active-lesson
+    function setActiveQuiz(quizId) {
+        localStorage.setItem("activeQuiz", quizId);
+    }
+
+    // Kiểm tra nếu có bài học hoặc quiz được lưu trong localStorage thì áp dụng lớp active
     var activeLessonId = getActiveLesson();
+    var activeQuizId = getActiveQuiz();
+
     if (activeLessonId) {
-        $(".module-content a").each(function () {
+        $(".module-content a.module-lesson").each(function () {
             if ($(this).attr("data-lessonid") === activeLessonId) {
                 $(this).addClass("active-lesson");
+            }
+        });
+    }
+
+    if (activeQuizId) {
+        $(".module-content a.module-quiz").each(function () {
+            if ($(this).attr("data-quizid") === activeQuizId) {
+                $(this).addClass("active-quiz");
             }
         });
     }
@@ -100,5 +117,40 @@ $(document).ready(function () {
         // Chuyển hướng đến URL của bài học được chọn
         window.location.href = $(this).attr("href");
     });
+
+    // Xử lý sự kiện click trên các liên kết quiz
+    $(".module-quiz").click(function (e) {
+        e.preventDefault(); // Ngăn chặn hành động mặc định của liên kết (chuyển hướng)
+
+        var quizId = $(this).attr("data-quizid"); // Lấy id của quiz
+
+        // Xóa lớp active-quiz khỏi tất cả các liên kết quiz
+        $(".module-quiz").removeClass("active-quiz");
+
+        // Thêm lớp active-quiz vào liên kết quiz được chọn
+        $(this).addClass("active-quiz");
+
+        // Lưu trạng thái của quiz được chọn vào localStorage
+        setActiveQuiz(quizId);
+
+        // Chuyển hướng đến URL của quiz được chọn
+        window.location.href = $(this).attr("href");
+    });
 });
 
+// lưu trạng thái hoàn thành từng lesoson
+
+document.getElementById('lessonVideo').addEventListener('ended', function() {
+    var lessonId = $(this).closest('.module-lesson').data('lessonid'); // Lấy id của bài học
+    markAsCompleted("completedLessons", lessonId); // Lưu vào localStorage
+    alert("Bạn đã hoàn thành bài học!");
+});
+$(document).ready(function () {
+    // Xử lý sự kiện click để đánh dấu bài học là hoàn thành
+    $(".complete-lesson-btn").click(function () {
+        var lessonId = $(this).data("lessonid"); // Lấy id của bài học
+        markAsCompleted("completedLessons", lessonId); // Lưu vào localStorage
+        alert("Bạn đã hoàn thành bài học!");
+        $("a[data-lessonid='" + lessonId + "']").addClass("lesson-completed"); // Cập nhật giao diện
+    });
+});

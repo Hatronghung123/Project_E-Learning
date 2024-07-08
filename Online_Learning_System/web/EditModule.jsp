@@ -154,7 +154,6 @@
                                         </div>
                                         <div>
                                             <form action="ModuleManage?action=delete&cid=${cid}&moduleId=${module_id}" method="post">
-                                                <a href="ModuleManage?action=update&cid=${cid}&moduleid=${module_id}" class="btn btn-outline-warning">Update Module</a>
                                                 <input type="submit" class="btn btn-outline-danger" value="Delete Module">
                                             </form>
                                         </div>
@@ -176,6 +175,7 @@
                                             </c:forEach>
                                         </div>
                                         <div class="card-body pb-2">
+                                            <h5>Lesson</h5>
                                             <c:forEach items="${list_lesson_in_module}" var="lesson">
                                                 <div id="course-${lesson.lessonname}" class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
                                                     <div class="col-lg-2">
@@ -186,7 +186,7 @@
                                                     <div class="col-lg-8">
                                                         <label class="form-label" style="color: black; font-size: 20px">Lesson Name: ${lesson.lessonname}</label><br>                                                        
                                                         <label class="form-label" style="color: #000; font-size: 15px ">Content: ${lesson.lessoncontent}</label><br>
-                                                        <label class="form-label" style="color: #000; font-size: 15px ">Create By ${lesson.createbyName}</label><br>
+                                                        <label class="form-label" style="color: #000; font-size: 15px ">Create By: ${lesson.createbyName}</label><br>
                                                         <label class="form-label" style="color: #000; font-size: 15px ">Duration: ${lesson.duration}</label><br>
                                                         <label class="form-label" style="color: #000; font-size: 15px ">Video: ${lesson.lessonvideo}</label><br>                                                
                                                     </div>
@@ -200,10 +200,31 @@
                                                 </div>                                        
                                             </c:forEach>
                                             <br>
+                                            <hr class="border-light m-0">
+                                        </div>
+                                        <div class="card-body pb-2">
+                                            <h5>Quiz</h5>
+                                            <c:forEach items="${requestScope.list_quiz_by_moduleId}" var="quiz">
+                                                <div class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
+                                                    <div class="col-lg-2">
+                                                        <div class="embed-responsive embed-responsive-16by9">
+                                                            <iframe  id="videoFrame" class="embed-responsive-item" src="${lesson.lessonvideo}"  width="100%" height="auto" allowfullscreen=""></iframe>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-8">
+                                                        <label class="form-label" style="color: black; font-size: 20px">Quiz Name: ${quiz.quizName}</label><br>                                                        
+                                                        <label class="form-label" style="color: #000; font-size: 15px ">Quiz Time: ${quiz.quizTime}</label><br>
+                                                        <label class="form-label" style="color: #000; font-size: 15px ">Pass Score: ${quiz.passScore}</label><br>                                               
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <a href="#" class="btn btn-outline-success" style="padding-right: 6px">Update Quiz</a>
 
-                                            <!--==============CRUD QUIZ IN HERE=============-->
+                                                        <a class="btn btn-outline-danger" style="margin-top: 2px;" data-toggle="modal" data-target="#delete-lessson-modal" >Delete Quiz</a>
 
-
+                                                    </div>
+                                                </div>                                        
+                                            </c:forEach>
+                                            <br>
                                             <hr class="border-light m-0">
                                         </div>
                                     </div>

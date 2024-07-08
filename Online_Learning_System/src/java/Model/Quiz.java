@@ -27,14 +27,15 @@ public class Quiz {
         this.quizTime = quizTime;
         this.passScore = passScore;
     }
-
-    public Quiz(int quizId, int moduleId, String quizName, Time quizTime, int passScore) {
+    
+      public Quiz(int quizId, int moduleId, String quizName, Time quizTime, int passScore) {
         this.quizId = quizId;
         this.moduleId = moduleId;
         this.quizName = quizName;
         this.quizTime = quizTime;
         this.passScore = passScore;
     }
+
 
     
 

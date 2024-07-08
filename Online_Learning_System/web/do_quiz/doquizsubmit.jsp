@@ -162,6 +162,7 @@
             <a href="home" class="navbar-brand d-flex align-items-center px-4 px-lg-5" style="text-decoration: none; margin-right: 0px">
                 <h2 class="m-0 text-primary">Back</h2>
             </a>
+            
 
             <div class="col-2">
                 <h7 style="margin-bottom: 0px">${quizDoQuiz.getQuizName()}</h7>
@@ -174,7 +175,7 @@
 
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    <a href="resetQuiz" id="resetQuiz" class="nav-item nav-link">Reset</a>
+                    <a href="../Project_E-Learning/doquiz?mid=${quizDoQuiz.getModuleId()}" id="resetQuiz" class="nav-item nav-link">Reset</a>
                     <span id="answeredCount" class="nav-item nav-link active">${countAnswer}</span>
                     <span class="nav-item nav-link active">/</span>
                     <span id="totalCount" class="nav-item nav-link active">${listQuestionsByMId.size()}</span> 
