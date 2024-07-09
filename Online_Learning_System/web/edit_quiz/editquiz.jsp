@@ -132,6 +132,7 @@
                             <h4 class="card-title">Module: ${moduleOfQuizEdit.getModulename()}</h4>
                         <input type="hidden" name="moduleId" value="${moduleOfQuizEdit.getModuleid()}">
                         <input type="hidden" name="quizId" value="${quizEdit.getQuizId()}">
+                        <input type="hidden" name="cid1" value="${moduleOfQuizEdit.getCourseid()}">
                         
                     </div>
                     <div class="card-body">
@@ -236,7 +237,7 @@
                             <input type="submit" name="AddQuiz" value="Save Changes" class="btn btn-success" style="width: 127.6px;">
                         </div>
                         <div style="">
-                            <a href="ModuleManage?moduleId=${this_module.moduleid}&cid=${requestScope.cidCourse}" class="btn btn-danger">Cancel</a>
+                            <a href="ModuleManage?moduleId=${moduleOfQuizEdit.getModuleid()}&cid=${moduleOfQuizEdit.getCourseid()}" class="btn btn-danger">Cancel</a>
                         </div>
                     </div>
                 </div>
