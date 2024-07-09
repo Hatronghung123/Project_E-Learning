@@ -3,10 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package Controller;
+
 import Model.AccountDTO;
 import Dal.AccountDAO;
-
-
 
 import Model.ProfileDTO;
 import Util.SendEmail;
@@ -91,7 +90,7 @@ public class joinServlet extends HttpServlet {
             String cid = request.getParameter("cid");
             if (action.equals("login") && cid != null) {
                 session.setAttribute("cid", cid);
-                
+
             }
 
             switch (action) {
@@ -296,9 +295,11 @@ public class joinServlet extends HttpServlet {
             ProfileDTO profile = accountDAO.getProfile(account_login);
             session.setAttribute("profile", profile);
             session.setMaxInactiveInterval(60 * 30);
-            
+
             //CHuyển hướng đến màn hình mong muốn
-            String redireactAfter_Login = (String) session.getAttribute("cid");
+            Object cidObject = session.getAttribute("cid");
+            String redireactAfter_Login = cidObject != null ? cidObject.toString() : null;
+
             //response.getWriter().print(redireactAfter_Login);
             if (redireactAfter_Login != null) {
                 session.removeAttribute("cid");
@@ -316,7 +317,6 @@ public class joinServlet extends HttpServlet {
             request.getRequestDispatcher("Login.jsp").forward(request, response);
         }
     }
-
 
     private void signUpDoPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         AccountDAO accountDAO = new AccountDAO();
