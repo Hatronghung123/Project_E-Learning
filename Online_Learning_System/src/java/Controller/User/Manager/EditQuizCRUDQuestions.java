@@ -3,10 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package Controller;
+package Controller.User.Manager;
 
 import Dal.QuizDAO;
 import Model.Answer;
+import Model.Modules;
 import Model.Questions;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -72,7 +73,10 @@ public class EditQuizCRUDQuestions extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         // lấy ra quiz id để trả về đúng trang edit quiz cần đến
+//        courseId 
+//        moduleId
         int quizId = Integer.parseInt(request.getParameter("quizId"));
+        Modules module = quizDAO.getCourseIdAndModuleIdByQuizId(quizId);
         //get action
         String action = request.getParameter("action") == null
                 ? ""
@@ -89,7 +93,8 @@ public class EditQuizCRUDQuestions extends HttpServlet {
                 editQuestion(request, response);
             default:
         }
-        response.sendRedirect("editquiz?quizId="+quizId);
+        response.sendRedirect("editquiz?action=edit&cid=" + module.getCourseid() + 
+                "&moduleId=" + module.getModuleid() + "&quizId=" + quizId);
     }
 
     /** 
@@ -128,7 +133,7 @@ public class EditQuizCRUDQuestions extends HttpServlet {
     private void deleteQuestion(HttpServletRequest request, HttpServletResponse response) {
         int quizId = Integer.parseInt(request.getParameter("quizId"));
         int questionId = Integer.parseInt(request.getParameter("id"));
-        quizDAO.deleteQuestionById(questionId, quizId);
+        quizDAO.deleteQuestionDoQuizById(questionId);
     }
 
     private void editQuestion(HttpServletRequest request, HttpServletResponse response) {

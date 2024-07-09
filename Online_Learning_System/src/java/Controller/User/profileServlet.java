@@ -4,7 +4,7 @@
  */
 package Controller.User;
 
-import Controller.CourseDetailServelet;
+import Controller.CourseDetailServlet;
 import Dal.AccountDAO;
 import Dal.HomeDAO;
 

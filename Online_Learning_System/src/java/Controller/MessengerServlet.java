@@ -32,7 +32,7 @@ import java.util.logging.Logger;
  * @author Admin
  */
 @WebServlet(name = "MessengerSeverlet", urlPatterns = {"/messenger"})
-public class MessengerSeverlet extends HttpServlet {
+public class MessengerServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

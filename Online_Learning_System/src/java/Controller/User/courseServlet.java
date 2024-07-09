@@ -4,7 +4,7 @@
  */
 package Controller.User;
 
-import Controller.CourseDetailServelet;
+import Controller.CourseDetailServlet;
 import Dal.EnrollmentDAO;
 import Dal.HomeDAO;
 import Dal.WishlistDAO;
@@ -142,7 +142,7 @@ public class courseServlet extends HttpServlet {
             ArrayList<Category> listCategory = dao.getAllCategory();
             request.setAttribute("listCategory", listCategory);
         } catch (SQLException ex) {
-            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CourseDetailServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

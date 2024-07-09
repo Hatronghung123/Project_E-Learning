@@ -14,6 +14,7 @@
         <group>
             <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/QuizDAO.java</file>
             <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/nbproject/build-impl.xml~</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/DisscussionDAO.java</file>
             <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/web/mentee_my_lesson.jsp</file>
             <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/DBContext.java</file>
             <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/LessonDAO.java</file>
@@ -22,7 +23,6 @@
             <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/lessonServlet.java</file>
             <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Model/Quiz.java</file>
             <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Model/ModuleDTO.java</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/web/js/main.js</file>
         </group>
     </open-files>
 </project-private>

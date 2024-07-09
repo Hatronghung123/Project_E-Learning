@@ -342,7 +342,7 @@ public class lessonServlet extends HttpServlet {
             ArrayList<Category> listCategory = dao.getAllCategory();
             request.setAttribute("listCategory", listCategory);
         } catch (SQLException ex) {
-            Logger.getLogger(CourseDetailServelet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CourseDetailServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

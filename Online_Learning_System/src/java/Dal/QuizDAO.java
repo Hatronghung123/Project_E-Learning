@@ -7,6 +7,7 @@ package Dal;
 import Model.AccountDTO;
 import Model.Answer;
 import Model.Category;
+import Model.Course;
 import Model.Modules;
 import Model.Questions;
 import Model.Quiz;
@@ -224,7 +225,7 @@ public class QuizDAO extends DBContext {
                 + "      ,[Type] = ?\n"
                 + " WHERE [QuestionId] = ?";
         try {
-            statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            statement = connection.prepareStatement(sql);
             statement.setInt(1, questions.getQuestionNum());
             statement.setInt(2, questions.getQuizId());
             statement.setString(3, questions.getQuestionName());
@@ -234,11 +235,7 @@ public class QuizDAO extends DBContext {
             int affectedRows = statement.executeUpdate();
 
             if (affectedRows > 0) {
-                ResultSet rs = statement.getGeneratedKeys();
-                if (rs.next()) {
-                    questions.setQuestionId(rs.getInt(1));
-                }
-                rs.close();
+                questions.setQuestionId(idQuestionEdit); // Đặt lại questionId sau khi cập nhật
             }
 
             statement.close();
@@ -445,7 +442,7 @@ public class QuizDAO extends DBContext {
         return listFound;
     }
 
-    // find quiz by module id
+    // find quiz by module id dùng để hiển thị cho người dùng là quiz
     public Quiz findQuizByModuleId(int moduleIdSelect) {
         connection = getConnection();
 
@@ -461,12 +458,11 @@ public class QuizDAO extends DBContext {
             while (resultSet.next()) {
                 int quizId = resultSet.getInt(1);
                 int moduleId = resultSet.getInt(2);
-                int quizNum = resultSet.getInt(3);
-                String quizName = resultSet.getString(4);
-                Time quizTime = resultSet.getTime(5);
-                int passScore = resultSet.getInt(6);
+                String quizName = resultSet.getString(3);
+                Time quizTime = resultSet.getTime(4);
+                int passScore = resultSet.getInt(5);
 
-                Quiz quiz = new Quiz(quizId, moduleId, quizNum, quizName, quizTime, passScore);
+                Quiz quiz = new Quiz(quizId, moduleId, quizName, quizTime, passScore);
                 return quiz;
             }
         } catch (SQLException ex) {
@@ -474,6 +470,7 @@ public class QuizDAO extends DBContext {
         }
         return null;
     }
+
     public ArrayList<Quiz> getListQuizByModuleId(int moduleId) {
         ArrayList<Quiz> quiz_list = new ArrayList<>();
         connection = getConnection();
@@ -536,67 +533,6 @@ public class QuizDAO extends DBContext {
         return listFound;
     }
 
-    // lưu trữ danh sách câu trả lời của sinh viên 
-    public void insertUserAnser(ArrayList<UserAnswer> userAnswer) {
-        connection = getConnection();
-        String sql = "INSERT INTO [dbo].[AnswerQuestion]\n"
-                + "           ([AccountId]\n"
-                + "           ,[QuestionId]\n"
-                + "           ,[Answer]\n"
-                + "           ,[IsCorrect])\n"
-                + "     VALUES\n"
-                + "           (?\n"
-                + "           ,?\n"
-                + "           ,?\n"
-                + "           ,?)";
-        try {
-            statement = connection.prepareStatement(sql);
-
-            for (UserAnswer useranswer : userAnswer) {
-                statement.setInt(1, useranswer.getAccountId());
-                statement.setInt(2, useranswer.getQuestionId());
-                statement.setString(3, useranswer.getAnswer());
-                statement.setBoolean(4, useranswer.isIsCorrectUserAnswer());
-                statement.addBatch();
-            }
-
-            statement.executeBatch();
-            statement.close();
-            connection.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    // inser list Score list này để lư trữ điểm số của sinh viên khi làm quiz nhiều lần
-    // dùng list để có thể lấy ra điểm lần cuối cùng của sv khi làm quiz
-    public void insertlistScoreQuiz(ArrayList<ScoreQuiz> listScoreQuiz) {
-        connection = getConnection();
-        String sql = "INSERT INTO [dbo].[ScoreQuiz]\n"
-                + "           ([AccountId]\n"
-                + "           ,[QuizId]\n"
-                + "           ,[Score])\n"
-                + "     VALUES\n"
-                + "           (?,?,?)";
-        try {
-            statement = connection.prepareStatement(sql);
-
-            for (ScoreQuiz score : listScoreQuiz) {
-                statement.setInt(1, score.getAccountId());
-                statement.setInt(2, score.getQuizId());
-                statement.setFloat(3, score.getScore());
-
-                statement.addBatch();
-            }
-
-            statement.executeBatch();
-            statement.close();
-            connection.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
     // Map chứa id câu hỏi và câu trả lời đúng dùng để insert
     public Map<String, String[]> getListQuestionAnswer(int moduleId) {
         Map<String, String[]> new_map = new HashMap<String, String[]>();
@@ -634,11 +570,9 @@ public class QuizDAO extends DBContext {
         return new_map;
     }
 
-    
-    
     // Lấy list quiz theo cid để hiện thị lên người dùng
-     public ArrayList<Quiz> findListQuizByCourseId(int courseid) {
-         ArrayList<Quiz> list = new ArrayList<>();
+    public ArrayList<Quiz> findListQuizByCourseId(int courseid) {
+        ArrayList<Quiz> list = new ArrayList<>();
         connection = getConnection();
 
         String sql = """
@@ -663,20 +597,13 @@ public class QuizDAO extends DBContext {
                 Time quizTime = resultSet.getTime(4);
                 int passScore = resultSet.getInt(5);
 
-               list.add( new Quiz(quizId, moduleId, quizName, quizTime, passScore));
+                list.add(new Quiz(quizId, moduleId, quizName, quizTime, passScore));
 
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return list;
-    }
-    
-    public static void main(String[] args) {
-        QuizDAO dao = new QuizDAO();
-        //dao.updateTypeQuestion(new Questions(295, 1, 289, "Hello Elearning", true));
-        System.out.println(dao.findListQuizByCourseId(2));
-
     }
 
     public ArrayList<Questions> getListQuestionsByModlueId(Questions questions, int midModule) {
@@ -712,10 +639,6 @@ public class QuizDAO extends DBContext {
             System.out.println(e.getMessage());
         }
         return listFound;
-    }
-
-    public ArrayList<Answer> getListAnswersByModuleId(Questions questions, int midModule) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     // =================================== Edit Quiz++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -835,6 +758,276 @@ public class QuizDAO extends DBContext {
         }
         return listFound;
 
+    }
+
+    //===================================================== DO QUIZ======================================================================
+    // lấy ra điểm mới nhất của người dùng
+    public ScoreQuiz findScoreDoQuizByAccountIdAndQuizId(int account_id, int quizIdSelect) {
+        connection = getConnection();
+        String sql = """
+                     SELECT TOP 1 * 
+                     FROM ScoreQuiz 
+                     WHERE AccountId = ? AND QuizId = ? 
+                     ORDER BY ScoreQuizId DESC""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, account_id);
+            statement.setInt(2, quizIdSelect);
+            // thực thi câu lệnh
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int accountId = resultSet.getInt("accountId");
+                int quizId = resultSet.getInt("quizId");
+                float Score = resultSet.getFloat("Score");
+                ScoreQuiz score = new ScoreQuiz(accountId, quizId, Score);
+                return score;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    // update số lần thực hiện bài quiz
+    public int updateAttemptNumber(int account_id, int quizId) {
+        int AttemptNumber = 1;
+        connection = getConnection();
+        String sql = """
+                     select max(aq.AttemptNumber)
+                     from AnswerQuestion aq
+                     join Question qu on aq.QuestionId = qu.QuestionId
+                     join Quiz qz on qz.QuizId = qu.QuizId
+                     where aq.AccountId = ? and qz.QuizId = ?""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, account_id);
+            statement.setInt(2, quizId);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next() && rs.getInt(1) != 0) {
+                AttemptNumber = rs.getInt(1) + 1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return AttemptNumber;
+    }
+
+    // lưu trữ danh sách câu trả lời của sinh viên 
+    public void insertUserAnser(ArrayList<UserAnswer> userAnswer) {
+        connection = getConnection();
+        String sql = "INSERT INTO [dbo].[AnswerQuestion]\n"
+                + "           ([AccountId]\n"
+                + "           ,[QuestionId]\n"
+                + "           ,[Answer]\n"
+                + "           ,[IsCorrect]\n"
+                + "           ,[AttemptNumber])\n"
+                + "     VALUES\n"
+                + "           (?\n"
+                + "           ,?\n"
+                + "           ,?\n"
+                + "           ,?, ?)";
+        try {
+            statement = connection.prepareStatement(sql);
+
+            for (UserAnswer useranswer : userAnswer) {
+                statement.setInt(1, useranswer.getAccountId());
+                statement.setInt(2, useranswer.getQuestionId());
+                statement.setString(3, useranswer.getAnswer());
+                statement.setBoolean(4, useranswer.isIsCorrectUserAnswer());
+                statement.setInt(5, useranswer.getAttemptNumber());
+                statement.addBatch();
+            }
+
+            statement.executeBatch();
+            statement.close();
+            connection.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    // inser  Score  này để lư trữ điểm số của sinh viên khi làm 
+    public void insertcoreQuiz(ScoreQuiz scorequiz) {
+        connection = getConnection();
+        String sql = "INSERT INTO [dbo].[ScoreQuiz]\n"
+                + "           ([AccountId]\n"
+                + "           ,[QuizId]\n"
+                + "           ,[Score])\n"
+                + "     VALUES\n"
+                + "           (?,?,?)";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, scorequiz.getAccountId());
+            statement.setInt(2, scorequiz.getQuizId());
+            statement.setFloat(3, scorequiz.getScore());
+            // thực thi câu lệnh
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    // Lấy ra danh sách câu trả lời mới nhất của người dùng làm  bài quiz
+    public ArrayList<UserAnswer> getListUserAnswerByQuizIdAndAccId(int account_id, int quizId) {
+        ArrayList<UserAnswer> listFound = new ArrayList<>();
+        // connect with DB
+        connection = getConnection();
+        // viết câu lệnh sql
+        String sql = """
+                     select aq.*
+                     from AnswerQuestion aq
+                     join Question qu on aq.QuestionId = qu.QuestionId
+                     join Quiz qz on qz.QuizId = qu.QuizId
+                     where aq.AccountId = ? and qz.QuizId = ? AND aq.AttemptNumber = (
+                     select max(aq.AttemptNumber)
+                     from AnswerQuestion aq
+                     join Question qu on aq.QuestionId = qu.QuestionId
+                     join Quiz qz on qz.QuizId = qu.QuizId
+                     where aq.AccountId = ? and qz.QuizId = ?)""";
+        try {
+            // tạo đối tượng preparestatement
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, account_id);
+            statement.setInt(2, quizId);
+            statement.setInt(3, account_id);
+            statement.setInt(4, quizId);
+            // thực thi câu lệnh
+            resultSet = statement.executeQuery();
+            // trả về kết quả
+            while (resultSet.next()) {
+                int accountId = resultSet.getInt("accountId");
+                int questionId = resultSet.getInt("questionId");
+                String answer = resultSet.getString("answer");
+                boolean isCorrect = resultSet.getBoolean("isCorrect");
+                int AttemptNumber = resultSet.getInt("AttemptNumber");
+                UserAnswer us = new UserAnswer(accountId, questionId, answer, isCorrect, AttemptNumber);
+                listFound.add(us);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return listFound;
+    }
+
+    public static void main(String[] args) {
+        QuizDAO dao = new QuizDAO();
+        //dao.updateTypeQuestion(new Questions(295, 1, 289, "Hello Elearning", true));
+        dao.deleteQuizByQuizId(107);
+
+    }
+
+    public Course findCourseIdAndCreateByByModuleId(int moduleId) {
+        connection = getConnection();
+        String sql = """
+                     select *
+                     from Course c
+                     join Module m on c.CourseId = m.CourseId 
+                     join Lesson l on m.ModuleId = l.ModuleId
+                     where m.ModuleId = ? and LessonId =
+                     (select max(l.LessonId)
+                     from Lesson l)""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, moduleId);
+            // thực thi câu lệnh
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int courseId = resultSet.getInt(1);
+                int createBy = resultSet.getInt("CreatedBy");
+                int lessonId = resultSet.getInt("LessonId");
+
+                Course course = new Course(courseId, createBy, lessonId);
+                return course;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public Modules getCourseIdAndModuleIdByQuizId(int quizId) {
+        connection = getConnection();
+        String sql = "select *\n"
+                + "from Module m\n"
+                + "join Quiz qz on m.ModuleId = qz.ModuleId\n"
+                + "where qz.QuizId = ?";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, quizId);
+            // thực thi câu lệnh
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int moduleId = resultSet.getInt(1);
+                String moduleName = resultSet.getString("ModuleName");
+                int courseId = resultSet.getInt("CourseId");
+
+                Modules module = new Modules(moduleId, moduleName, courseId);
+                return module;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public void deleteQuestionDoQuizById(int questionId) {
+        connection = getConnection();
+        String sql = "delete AnswerQuestion\n"
+                + "where QuestionId = ?\n"
+                + "delete QuestionChoices\n"
+                + "where QuestionId = ?\n"
+                + "delete Question\n"
+                + "where QuestionId = ?\n";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, questionId);
+            statement.setInt(2, questionId);
+            statement.setInt(3, questionId);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteQuizByQuizId(int quizId) {
+        connection = getConnection();
+        String sql = """
+                     delete ScoreQuiz 
+                     where QuizId = ?
+                     
+                     delete QuestionChoices
+                     where QuestionId IN (
+                     select qu.QuestionId
+                     from Question qu
+                     join Quiz qz on qu.QuizId = qz.QuizId
+                     where qu.QuizId = ?
+                     )
+                     
+                     delete AnswerQuestion
+                     where QuestionId IN (
+                     select qu.QuestionId
+                     from Question qu
+                     join Quiz qz on qu.QuizId = qz.QuizId
+                     where qu.QuizId = ?
+                     )
+                     
+                     delete Question
+                     where QuizId = ?
+                     
+                     delete Quiz
+                     where QuizId = ?""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, quizId);
+            statement.setInt(2, quizId);
+            statement.setInt(3, quizId);
+            statement.setInt(4, quizId);
+            statement.setInt(5, quizId);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

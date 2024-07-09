@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller;
+package Controller.User.Manager;
 
 import Dal.QuizDAO;
 import Model.Answer;
@@ -140,7 +140,6 @@ public class CreateQuestionsServlet extends HttpServlet {
             boolean correctAnswer = request.getParameter("correctAnswer" + i) == null ? false : true;
             answers.add(new Answer(idQuestionEdit, choices[i - 1], correctAnswer));
         }
-        //o.println(choices[1]);
         quizDAO.editAnswers(answers);
         quizDAO.updateTypeQuestion(questions);
     }

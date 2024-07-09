@@ -4,25 +4,33 @@
  */
 package Controller;
 
-import Dal.QuizDAO;
-import Model.Answer;
-import Model.Questions;
+import Dal.CourseDetailDAO;
+import Dal.StarRatingDAO;
+
+import Model.AccountDTO;
+
+import Model.Course;
+import Model.StarRatingDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
+import java.sql.SQLException;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
- * @author hatro
+ * @author Tuan Anh(Gia Truong)
  */
-public class ControllerQuestionServlet extends HttpServlet {
-
-    QuizDAO quizDAO = new QuizDAO();
+@WebServlet(name = "StarRatingServelet", urlPatterns = {"/StarRating"})
+public class StarRatingServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +49,10 @@ public class ControllerQuestionServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ControllerQuestionServlet</title>");
+            out.println("<title>Servlet StarRatingServelet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ControllerQuestionServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet StarRatingServelet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,18 +70,21 @@ public class ControllerQuestionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Questions questions = (Questions) session.getAttribute("questions");
-        int midModule = (Integer) session.getAttribute("mid");
-        int cidModule = (Integer) session.getAttribute("cid");
-        ArrayList<Questions> listQuestions = quizDAO.getListQuestionsByModlueId(questions, midModule);
-        ArrayList<Answer> listAnswers = quizDAO.getListAnswers(questions);
-        request.setAttribute("listQuestions", listQuestions);
-        request.setAttribute("listAnswers", listAnswers);
-        request.setAttribute("midCreate", midModule);
-        request.setAttribute("cidCreate", cidModule);
-        request.getRequestDispatcher("create_quiz/cquestions.jsp").forward(request, response);
-        
+        try {
+            String cid = request.getParameter("cid");
+            CourseDetailDAO dao = new CourseDetailDAO();
+            
+            Course course = dao.getCourseById(Integer.parseInt(cid));
+
+            request.setAttribute("course", course);
+            request.setAttribute("cid", cid);
+            request.getRequestDispatcher("StarRating.jsp").forward(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(StarRatingServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -88,6 +99,26 @@ public class ControllerQuestionServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        HttpSession session = request.getSession();
+        String cid = request.getParameter("cid");
+        String star = request.getParameter("rating");
+        String comment = request.getParameter("comment");
+
+        AccountDTO account = (AccountDTO) session.getAttribute("account");
+
+        StarRatingDAO dao = new StarRatingDAO();
+
+        String msg = "";
+
+   
+            try {
+                StarRatingDTO rating = new StarRatingDTO(Integer.parseInt(star), comment, Date.valueOf(LocalDate.now()), Integer.parseInt(cid), account.getAccount_id());
+//             Chèn dữ liệu vào db
+                dao.insertRating(rating);
+                response.sendRedirect("CourseDetail?cid="+cid);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 
     /**
@@ -100,4 +131,6 @@ public class ControllerQuestionServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    
+    
 }

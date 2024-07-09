@@ -333,7 +333,7 @@
                                             <c:forEach items="${quizLits}" var="j" varStatus="status">
                                                 <div class="module-content">
                                                     <c:if test="${o.getModuleid() == j.getModuleId()}">
-                                                        <a style="color: black"  class="btn btn-block btn--col module-lesson"  data-quizid="${j.getQuizId()}"  href="doquiz?mid=${j.getModuleId()}&cid=${o.getCourseid()}"> 
+                                                        <a style="color: black"  class="btn btn-block btn--col module-lesson"  data-quizid="${j.getQuizId()}"  href="doquiz?mid=${j.getModuleId()}"> 
                                                             ${j.getQuizName()}
                                                             <div>
                                                                 <small class="text-muted module-lesson" style="color: black">Do quiz</small>

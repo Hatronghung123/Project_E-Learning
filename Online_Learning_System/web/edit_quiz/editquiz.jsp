@@ -132,6 +132,7 @@
                             <h4 class="card-title">Module: ${moduleOfQuizEdit.getModulename()}</h4>
                         <input type="hidden" name="moduleId" value="${moduleOfQuizEdit.getModuleid()}">
                         <input type="hidden" name="quizId" value="${quizEdit.getQuizId()}">
+                        <input type="hidden" name="cid1" value="${moduleOfQuizEdit.getCourseid()}">
                         
                     </div>
                     <div class="card-body">
@@ -154,7 +155,7 @@
                                             <input type="number" min="1" max="100" class="form-control text-center" name="timeNumber" id="timeNumber" style="width: 70px;" value="${requestScope.minutes}">
                                         </c:if>
                                         <c:if test="${requestScope.seconds != 0 && requestScope.minutes == 0}">
-                                            <input type="number" min="1" max="100" class="form-control text-center" name="timeNumber" id="timeNumber" style="width: 70px;" value="${requestScope.seconds}">
+                                            <input type="number" min="1" max="59" class="form-control text-center" name="timeNumber" id="timeNumber" style="width: 70px;" value="${requestScope.seconds}">
                                         </c:if>
 
                                         <div id="timeNumberError" class="error"></div>
@@ -163,9 +164,11 @@
                                         <select class="custom-select" name="timeUnit">
                                             <c:if test="${requestScope.minutes != 0}">
                                                 <option value="minutes" selected>Minutes</option>
+                                                <option value="seconds" select>Seconds</option>
                                             </c:if>
                                             <c:if test="${requestScope.seconds != 0}">
-                                                <option value="seconds">Seconds</option>
+                                                <option value="seconds" selected>Seconds</option>
+                                                <option value="minutes">Minutes</option>
                                             </c:if>
                                         </select>
                                     </div>
@@ -234,7 +237,7 @@
                             <input type="submit" name="AddQuiz" value="Save Changes" class="btn btn-success" style="width: 127.6px;">
                         </div>
                         <div style="">
-                            <a href="ModuleManage?moduleId=${this_module.moduleid}&cid=${requestScope.cidCourse}" class="btn btn-danger">Cancel</a>
+                            <a href="ModuleManage?moduleId=${moduleOfQuizEdit.getModuleid()}&cid=${moduleOfQuizEdit.getCourseid()}" class="btn btn-danger">Cancel</a>
                         </div>
                     </div>
                 </div>

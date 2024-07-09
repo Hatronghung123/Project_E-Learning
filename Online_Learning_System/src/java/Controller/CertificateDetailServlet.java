@@ -2,16 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller.Admin;
+package Controller;
 
-import Dal.StatisticalDAO;
-
+import Controller.Admin.StatisticalSeverlet;
+import Dal.CertificateDAO;
 import Model.AccountDTO;
-
-import Model.Category;
-import Model.Course;
-import Model.Payment;
-
+import Model.Certificate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -21,11 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
-import java.text.NumberFormat;
-
 import java.util.ArrayList;
-import java.util.Locale;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,8 +25,8 @@ import java.util.logging.Logger;
  *
  * @author Admin
  */
-@WebServlet(name = "StatisticalSeverlet", urlPatterns = {"/dasboard_for_admin/StatisticalSeverlet"})
-public class StatisticalSeverlet extends HttpServlet {
+@WebServlet(name = "CertificateDetailSeverlet", urlPatterns = {"/CertificateDetail"})
+public class CertificateDetailServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -53,10 +45,10 @@ public class StatisticalSeverlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet StatisticalSeverlet</title>");
+            out.println("<title>Servlet CertificateDetailSeverlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet StatisticalSeverlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CertificateDetailSeverlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -74,36 +66,18 @@ public class StatisticalSeverlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-
-        StatisticalDAO admin_manage_DAO = new StatisticalDAO();
-        AccountDTO acc = (AccountDTO) session.getAttribute("account");
-
-        if (acc == null || acc.getRole_id() != 1) {
-            response.sendRedirect("../home");
-            return;
-        }
-
+         HttpSession session = request.getSession();
+        CertificateDAO certificateDAO = new CertificateDAO();
+        int cid = Integer.parseInt(request.getParameter("cid"));
+         AccountDTO acc = (AccountDTO) session.getAttribute("account");
         try {
-            Payment TotalPerMonth = admin_manage_DAO.getPaymentPerMonth();
-            Payment TotalPerYear = admin_manage_DAO.getPaymentPerYear();
-            TotalPerMonth.setFormattedPrice(formartPrice(TotalPerMonth.getAmount()));
-            TotalPerYear.setFormattedPrice(formartPrice(TotalPerYear.getAmount()));
-            AccountDTO CountAccStilActive = admin_manage_DAO.CountAccStillActive();
-            Course CountCourseStilActive = admin_manage_DAO.CountCourseStillActive();
-            ArrayList<Payment> TotalEarningPerMonthChart = admin_manage_DAO.getTotalEarningPerMonth();
-            ArrayList<Category> PercentCategory = admin_manage_DAO.getPercentCategory();
-
-            request.setAttribute("TotalPerMonth", TotalPerMonth);
-            request.setAttribute("TotalPerYear", TotalPerYear);
-            request.setAttribute("CountAccStilActive", CountAccStilActive);
-            request.setAttribute("CountCourseStilActive", CountCourseStilActive);
-            request.setAttribute("TotalEarningPerMonth", TotalEarningPerMonthChart);
-            request.setAttribute("PercentCategory", PercentCategory);
+            ArrayList<Certificate> getDetailCertificateByAccIdAndCourseId = certificateDAO.getDetailCertificateByAccIdAndCourseId(acc.getAccount_id(),cid);          
+            request.setAttribute("getDetailCertificateByAccIdAndCourseId", getDetailCertificateByAccIdAndCourseId);
+            
         } catch (SQLException ex) {
-            Logger.getLogger(StatisticalSeverlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CertificateDetailServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        request.getRequestDispatcher("dasboard_home.jsp").forward(request, response);
+        request.getRequestDispatcher("CertificateDetail.jsp").forward(request, response);
     }
 
     /**
@@ -130,8 +104,4 @@ public class StatisticalSeverlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    public String formartPrice(int price) {
-        NumberFormat formatTer = NumberFormat.getInstance(new Locale("vi", "VN"));
-        return formatTer.format(price);
-    }
 }

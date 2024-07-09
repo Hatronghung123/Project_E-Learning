@@ -26,7 +26,7 @@
     </servlet>
     <servlet>
         <servlet-name>CourseDetailServelet</servlet-name>
-        <servlet-class>Controller.CourseDetailServelet</servlet-class>
+        <servlet-class>Controller.CourseDetailServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>lessonServlet</servlet-name>
@@ -34,15 +34,15 @@
     </servlet>
     <servlet>
         <servlet-name>CreateQuizServlet</servlet-name>
-        <servlet-class>Controller.CreateQuizServlet</servlet-class>
+        <servlet-class>Controller.User.Manager.CreateQuizServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>CreateQuestionsServlet</servlet-name>
-        <servlet-class>Controller.CreateQuestionsServlet</servlet-class>
+        <servlet-class>Controller.User.Manager.CreateQuestionsServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ControllerQuestionServlet</servlet-name>
-        <servlet-class>Controller.ControllerQuestionServlet</servlet-class>
+        <servlet-class>Controller.User.Manager.ControllerQuestionServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>CourseManageServlet</servlet-name>
@@ -66,11 +66,15 @@
     </servlet>
     <servlet>
         <servlet-name>EditQuizServlet</servlet-name>
-        <servlet-class>Controller.EditQuizServlet</servlet-class>
+        <servlet-class>Controller.User.Manager.EditQuizServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>EditQuizCRUDQuestions</servlet-name>
-        <servlet-class>Controller.EditQuizCRUDQuestions</servlet-class>
+        <servlet-class>Controller.User.Manager.EditQuizCRUDQuestions</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteQuizServlet</servlet-name>
+        <servlet-class>Controller.User.Manager.DeleteQuizServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginGoogleHandler</servlet-name>
@@ -143,6 +147,10 @@
     <servlet-mapping>
         <servlet-name>EditQuizCRUDQuestions</servlet-name>
         <url-pattern>/editquizcrudquestion</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteQuizServlet</servlet-name>
+        <url-pattern>/deletequiz</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>
