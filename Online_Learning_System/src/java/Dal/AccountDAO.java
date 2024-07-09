@@ -59,7 +59,7 @@ public class AccountDAO extends DBContext {
                 String avatar = resultSet.getString("Avatar");
                 double money = resultSet.getDouble("Money");
                 int managed_by = resultSet.getInt("ManagedBy");
-                return new AccountDTO(account_id, full_name, email_in_db, password_in_db,gender,avatar,money,managed_by, status, role_id);
+                return new AccountDTO(account_id, full_name, email_in_db, password_in_db, gender, avatar, money, managed_by, status, role_id);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -538,4 +538,7 @@ public class AccountDAO extends DBContext {
         }
     }
 
+    
+
+    
 }

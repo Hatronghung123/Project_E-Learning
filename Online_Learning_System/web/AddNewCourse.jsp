@@ -147,7 +147,7 @@
                                             </div>
                                             <div class="form-group" style="width: 15%">
                                                 <label class="form-label">Price</label>
-                                                <input name="price" type="number" min="0" max="999999999" class="form-control" value="${requestScope.price}">
+                                                <input name="price" type="number" min="0" max="9999999" class="form-control" value="${requestScope.price}">
                                             </div>
                                             <div hidden="" class="form-group" style="width: 5%">
                                                 <label class="form-label">Discount</label>

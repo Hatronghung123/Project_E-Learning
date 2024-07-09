@@ -121,8 +121,13 @@
 
             <div class="container-fluid">
                 <div class="container py-5">
+                        <div class="col-2">
+                            <a href="course-manage" class="fas fa-angle-left" >
+                                Course Manage
+                            </a>
+                        </div>
                     <div class="row">
-                        <div class="col-lg-10">
+                        <div class="col-10">
                             <h5 class="display-6 text-dark">${my_managed_course.course_name}</h5>
                     </div>
                 </div>
