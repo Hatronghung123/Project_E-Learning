@@ -184,9 +184,10 @@
                                                 <label class="form-label">Price</label>
                                                 <input name="price" type="number" min="0" max="999999999" class="form-control" value="${requestScope.my_managed_course.price}">
                                             </div>
-                                            <div class="form-group" style="width: 10%">
+                                            <div hidden="" class="form-group" style="width: 10%">
                                                 <label class="form-label">Discount</label>
-                                                <input name="discount" type="number" min="0" max="100" class="form-control" value="${requestScope.my_managed_course.discount}"%">
+                                                <!--<input name="discount" type="number" min="0" max="100" class="form-control" value="${requestScope.my_managed_course.discount}"%">-->
+                                                <input name="discount" type="number" min="0" max="100" class="form-control" value="0"%">
                                             </div>
                                             <div class="form-group">
                                                 ${requestScope.my_managed_course.course_category_id}

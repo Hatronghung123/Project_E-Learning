@@ -210,7 +210,6 @@ public class lessonServlet extends HttpServlet {
                 // Đặt đường dẫn của cookie để nó có hiệu lực trên toàn bộ trang web
                 lastLessonCookie.setPath("/");
                 response.addCookie(lastLessonCookie);
-                session.setAttribute("lastLessonId_"+course_id, lesson_id);
 
 
             } catch (SQLException ex) {

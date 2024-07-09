@@ -171,6 +171,7 @@
                                                         <label class="form-label" style="color: #06BBCC; font-size: 25px ">${c.course_name}</label><br>
                                                         <label class="form-label" style="color: #000; font-size: 15px ">Category: ${c.course_category_id}</label><br>
                                                         <label class="form-label" style="color: #000; font-size: 15px ">Create On: ${c.create_date}</label><br>
+                                                        <label class="form-label" style="color: #000; font-size: 15px ">Price: ${c.price}</label><br>
 
                                                         <label class="form-label" style="color: #000; font-size: 15px ">Status: </label>
                                                         <c:if test="${c.status}">

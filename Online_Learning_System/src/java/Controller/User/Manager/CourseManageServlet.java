@@ -315,7 +315,8 @@ public class CourseManageServlet extends HttpServlet {
             ModuleDAO module_DAO = new ModuleDAO();
             ModuleDTO new_module = new ModuleDTO(module_name, Integer.parseInt(module_number));
             module_DAO.insertModule(cid, new_module);
-            response.sendRedirect("course-manage?cid=" + cid + "&action=update");
+            new_module = module_DAO.getModuleInserted(cid, module_number);
+            response.sendRedirect("ModuleManage?moduleId="+ new_module.getModuleid() +"&cid="+cid);
         } else {
             request.getRequestDispatcher("AddNewModule.jsp").forward(request, response);
         }
