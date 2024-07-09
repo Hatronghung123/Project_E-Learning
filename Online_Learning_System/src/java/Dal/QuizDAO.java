@@ -577,14 +577,15 @@ public class QuizDAO extends DBContext {
 
         String sql = """
                    SELECT [QuizId]
-                           ,m.[ModuleId]
-                           ,[QuizName]
-                           ,[QuizTime]
-                           ,[PassScore]
-                       FROM [dbo].[Quiz] q
-                       Join [dbo].[Module] m on m.ModuleId = q.ModuleId
-                       join Course c on c.CourseId = m.CourseId
-                       Where c.CourseId = ?""";
+                                              ,m.[ModuleId]
+                                              ,[QuizName]
+                                              ,[QuizTime]
+                                              ,[PassScore]
+                   						   ,c.CourseId
+                                          FROM [dbo].[Quiz] q
+                                          Join [dbo].[Module] m on m.ModuleId = q.ModuleId
+                                          join Course c on c.CourseId = m.CourseId
+                                          Where c.CourseId = ?""";
         try {
             statement = connection.prepareStatement(sql);
             statement.setInt(1, courseid);
@@ -596,8 +597,8 @@ public class QuizDAO extends DBContext {
                 String quizName = resultSet.getString(3);
                 Time quizTime = resultSet.getTime(4);
                 int passScore = resultSet.getInt(5);
-
-                list.add(new Quiz(quizId, moduleId, quizName, quizTime, passScore));
+                int course_id = resultSet.getInt("CourseId");
+                list.add(new Quiz(quizId, moduleId, quizName, quizTime, passScore, course_id));
 
             }
         } catch (SQLException ex) {
@@ -913,7 +914,7 @@ public class QuizDAO extends DBContext {
     public static void main(String[] args) {
         QuizDAO dao = new QuizDAO();
         //dao.updateTypeQuestion(new Questions(295, 1, 289, "Hello Elearning", true));
-        dao.deleteQuizByQuizId(107);
+        System.out.println(dao.findScoreDoQuizByAccountIdAndQuizId(1, 100000));
 
     }
 
@@ -921,12 +922,10 @@ public class QuizDAO extends DBContext {
         connection = getConnection();
         String sql = """
                      select *
-                     from Course c
-                     join Module m on c.CourseId = m.CourseId 
-                     join Lesson l on m.ModuleId = l.ModuleId
-                     where m.ModuleId = ? and LessonId =
-                     (select max(l.LessonId)
-                     from Lesson l)""";
+                                          from Course c
+                                          left join Module m on c.CourseId = m.CourseId 
+                                          left join Lesson l on m.ModuleId = l.ModuleId
+                                          where m.ModuleId = ?""";
         try {
             statement = connection.prepareStatement(sql);
             statement.setInt(1, moduleId);
@@ -1029,5 +1028,27 @@ public class QuizDAO extends DBContext {
             ex.printStackTrace();
         }
     }
-    
+
+    public void deleteAnswerByAccountIdAndQuizId(int account_id, int quizId) {
+        connection = getConnection();
+        String sql = """
+                      delete AnswerQuestion
+                                          where QuestionId IN (
+                                          select qu.QuestionId
+                                          from Question qu
+                                          join Quiz qz on qu.QuizId = qz.QuizId
+                                          where qu.QuizId = ?
+                                          ) and AccountId = ?
+                     """;
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, quizId);
+            statement.setInt(2, account_id);
+            
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }

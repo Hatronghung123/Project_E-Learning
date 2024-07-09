@@ -83,6 +83,7 @@ public class DoQuizController extends HttpServlet {
         
         Quiz quiz = quizDAO.findQuizByModuleId(moduleId);
         // lấy ra câu trả lời của người dùng thực hiện quiz
+        
         ArrayList<UserAnswer> listUserAnswer = quizDAO.getListUserAnswerByQuizIdAndAccId(acc.getAccount_id(), quiz.getQuizId());
         // lấy ra điểm mới nhất của người dùng
         ScoreQuiz scoreQuiz = quizDAO.findScoreDoQuizByAccountIdAndQuizId(acc.getAccount_id(), quiz.getQuizId());

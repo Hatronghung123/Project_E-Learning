@@ -43,187 +43,122 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/createQuiz/style.css"/>
 
         <style>
-        .max-width-800 {
-            font-family: Arial, sans-serif;
-            margin: 20px auto;
-            max-width: 800px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .timer {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 0px;
-            text-align: center;
-            line-height: 1.5;
-        }
-
-        .timer span {
-            background-color: #00cc66;
-            color: white;
-            padding: 5px;
-            border-radius: 3px;
-            margin: 0 2px;
-        }
-
-        .question {
-            margin-bottom: 30px;
-            border: 1px solid #ccc;
-            padding: 15px;
-            border-radius: 5px;
-            background-color: #fff;
-        }
-
-        .question h3 {
-            margin: 0 0 10px;
-        }
-
-        .options {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .options li {
-            margin-bottom: 10px;
-        }
-
-        input[type="radio"],
-        input[type="checkbox"] {
-            display: none;
-        }
-
-        input[type="radio"]+label,
-        input[type="checkbox"]+label {
-            position: relative;
-            padding-left: 30px;
-            cursor: pointer;
-            display: inline-block;
-            line-height: 20px;
-        }
-
-        input[type="radio"]+label:before,
-        input[type="checkbox"]+label:before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #000;
-            border-radius: 50%;
-            background: #fff;
-        }
-
-        input[type="checkbox"]+label:before {
-            border-radius: 3px;
-        }
-
-        input[type="radio"]:checked+label:before,
-        input[type="checkbox"]:checked+label:before {
-            background: #00cc66;
-            border-color: #00cc66;
-        }
-
-        input[type="checkbox"]:checked+label:before {
-            content: '✔';
-            color: white;
-            font-size: 16px;
-            text-align: center;
-            line-height: 20px;
-        }
-
-        input[type="radio"]:checked+label:before {
-            background: #00cc66;
-            border-color: #00cc66;
-        }
-
-        input[type="radio"]+label:hover:before,
-        input[type="checkbox"]+label:hover:before {
-            border-color: #555;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            padding-top: 10px;
-            border-top: 1px solid #ccc;
-        }
-    </style>
-        <script>
-            // Lưu trữ thời gian còn lại của bộ đếm thời gian vào sessionStorage
-            function saveTimerState(timeLeft) {
-                sessionStorage.setItem('quizTimeLeft', timeLeft);
+            .max-width-800 {
+                font-family: Arial, sans-serif;
+                margin: 20px auto;
+                max-width: 800px;
+                padding: 20px;
+                background-color: #f9f9f9;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
 
-            //Tải thời gian còn lại của bộ đếm thời gian từ sessionStorage
-            //Hàm này lấy giá trị quizTimeLeft từ sessionStorage            
-            function loadTimerState() {
-                return parseInt(sessionStorage.getItem('quizTimeLeft')) || null;
+            .timer {
+                font-size: 24px;
+                font-weight: bold;
+                margin-bottom: 0px;
+                text-align: center;
+                line-height: 1.5;
             }
 
-            // Function to save quiz state (submitted or not)
-            function saveQuizState(isSubmitted) {
-                sessionStorage.setItem('quizSubmitted', isSubmitted);
+            .timer span {
+                background-color: #00cc66;
+                color: white;
+                padding: 5px;
+                border-radius: 3px;
+                margin: 0 2px;
             }
 
-            // Hàm này lưu trữ một giá trị cho biết liệu bài kiểm tra đã được nộp hay chưa
-            function loadQuizState() {
-                return sessionStorage.getItem('quizSubmitted') === 'true';
+            .question {
+                margin-bottom: 30px;
+                border: 1px solid #ccc;
+                padding: 15px;
+                border-radius: 5px;
+                background-color: #fff;
             }
 
-            // Function to save selected answers into session storage
-            function saveSelections() {
-                document.querySelectorAll('input[type=radio], input[type=checkbox]').forEach((input) => {
-                    if (input.type === 'radio') {
-                        if (input.checked) {
-                            // lư giá trị của đáp án người dùng chọn vào sessionStorage
-                            sessionStorage.setItem(input.name, input.value);
-                        }
-                    } else if (input.type === 'checkbox') {
-                        // Lấy danh sách các giá trị đã lưu trữ trước đó từ sessionStorage
-                        let selectedValues = JSON.parse(sessionStorage.getItem(input.name)) || [];
-                        //Nếu input được chọn, thêm giá trị của input vào mảng selectedValues
-                        if (input.checked) {
-                            selectedValues.push(input.value);
-                            //loại bỏ giá trị của input khỏi mảng selectedValues bằng cách sử dụng .filter()
-                            // và trả về mảng mới chỉ chứa các giá trị khác 
-                        } else {
-                            // chỉ lấy các ô check box mà người dùng chọn cho vào mảng
-                            selectedValues = selectedValues.filter(value => value !== input.value);
-                        }
-                        sessionStorage.setItem(input.name, JSON.stringify(selectedValues));
-                    }
-                });
+            .question h3 {
+                margin: 0 0 10px;
             }
 
-            // Function to load saved selections from session storage
-            function loadSelections() {
-                document.querySelectorAll('input[type=radio], input[type=checkbox]').forEach((input) => {
-                    if (input.type === 'radio') {
-                        const savedValue = sessionStorage.getItem(input.name);
-                        if (savedValue !== null && savedValue === input.value) {
-                            input.checked = true;
-                        }
-                    } else if (input.type === 'checkbox') {
-                        const savedValues = JSON.parse(sessionStorage.getItem(input.name)) || [];
-                        if (savedValues.includes(input.value)) {
-                            input.checked = true;
-                        }
-                    }
-                });
+            .options {
+                list-style-type: none;
+                padding: 0;
             }
-        </script>
+
+            .options li {
+                margin-bottom: 10px;
+            }
+
+            input[type="radio"],
+            input[type="checkbox"] {
+                display: none;
+            }
+
+            input[type="radio"]+label,
+            input[type="checkbox"]+label {
+                position: relative;
+                padding-left: 30px;
+                cursor: pointer;
+                display: inline-block;
+                line-height: 20px;
+            }
+
+            input[type="radio"]+label:before,
+            input[type="checkbox"]+label:before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 20px;
+                height: 20px;
+                border: 2px solid #000;
+                border-radius: 50%;
+                background: #fff;
+            }
+
+            input[type="checkbox"]+label:before {
+                border-radius: 3px;
+            }
+
+            input[type="radio"]:checked+label:before,
+            input[type="checkbox"]:checked+label:before {
+                background: #00cc66;
+                border-color: #00cc66;
+            }
+
+            input[type="checkbox"]:checked+label:before {
+                content: '✔';
+                color: white;
+                font-size: 16px;
+                text-align: center;
+                line-height: 20px;
+            }
+
+            input[type="radio"]:checked+label:before {
+                background: #00cc66;
+                border-color: #00cc66;
+            }
+
+            input[type="radio"]+label:hover:before,
+            input[type="checkbox"]+label:hover:before {
+                border-color: #555;
+            }
+
+            footer {
+                text-align: center;
+                margin-top: 20px;
+                padding-top: 10px;
+                border-top: 1px solid #ccc;
+            }
+        </style>
     </head>
 
     <body>
         <!-- Navbar Start -->
         <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
-             <a href="../Project_E-Learning/lesson?cid=${course.getCourse_id()}&
-                lessonid=${course.getLessonId()}&createBy=${course.getCreate_by()}" class="navbar-brand d-flex align-items-center px-4 px-lg-5" style="text-decoration: none; margin-right: 0px">
+            <a href="doquiz?mid=${quizDoQuiz.moduleId}&cid=${course.getCourse_id()}" class="navbar-brand d-flex align-items-center px-4 px-lg-5" id="backed" style="text-decoration: none; margin-right: 0px">
                 <h2 class="m-0 text-primary">Back</h2>
             </a>
 
@@ -272,102 +207,183 @@
         </div>
 
         <script>
-            let timer = document.getElementById('timer');
-            let hoursSpan = document.getElementById('hours');
-            let minutesSpan = document.getElementById('minutes');
-            let secondsSpan = document.getElementById('seconds');
-            let submitButton = document.getElementById('submitQuiz');
-            let quizForm = document.getElementById('quizForm');
+    function saveTimerState(timeLeft) {
+        sessionStorage.setItem('quizTimeLeft', timeLeft);
+    }
 
-            const quizTime = '${quizDoQuiz.getQuizTime()}';
-            const timeParts = quizTime.split(':');
-            // timeLeft lưu trữ tổng số giây mà mentor cho làm quiz
-            // nếu người dùng ấn reset trình duyệt  thì lúc lày sẽ lấy thời gian ở loadTimerState
-            let timeLeft = loadTimerState() || (+timeParts[0]) * 3600 + (+timeParts[1]) * 60 + (+timeParts[2]);
+    function loadTimerState() {
+        return parseInt(sessionStorage.getItem('quizTimeLeft')) || null;
+    }
 
-            function updateTimer() {
-                let hours = Math.floor(timeLeft / 3600);
-                let minutes = Math.floor((timeLeft % 3600) / 60);
-                let seconds = timeLeft % 60;
-                
-                // lấy ra giá trị text để hiển thị trên màn hình
-                hoursSpan.textContent = hours < 10 ? '0' + hours : hours;
-                minutesSpan.textContent = minutes < 10 ? '0' + minutes : minutes;
-                secondsSpan.textContent = seconds < 10 ? '0' + seconds : seconds;
+    function saveQuizState(isSubmitted) {
+        sessionStorage.setItem('quizSubmitted', isSubmitted);
+    }
 
-                if (timeLeft > 0) {
-                    timeLeft--;
-                    saveTimerState(timeLeft);
-                    // hàm này để gọi lại hàm updateTimer sau 1 giây
-                    setTimeout(updateTimer, 1000);
+    function loadQuizState() {
+        return sessionStorage.getItem('quizSubmitted') === 'true';
+    }
+
+    function saveSelections() {
+        document.querySelectorAll('input[type=radio], input[type=checkbox]').forEach((input) => {
+            if (input.type === 'radio') {
+                if (input.checked) {
+                    sessionStorage.setItem(input.name, input.value);
+                }
+            } else if (input.type === 'checkbox') {
+                let selectedValues = JSON.parse(sessionStorage.getItem(input.name)) || [];
+                if (input.checked) {
+                    selectedValues.push(input.value);
                 } else {
-                    clearSessionStorage();
-                    submitQuiz();
+                    selectedValues = selectedValues.filter(value => value !== input.value);
+                }
+                sessionStorage.setItem(input.name, JSON.stringify(selectedValues));
+            }
+        });
+    }
+
+    function loadSelections() {
+        document.querySelectorAll('input[type=radio], input[type=checkbox]').forEach((input) => {
+            if (input.type === 'radio') {
+                const savedValue = sessionStorage.getItem(input.name);
+                if (savedValue !== null && savedValue === input.value) {
+                    input.checked = true;
+                }
+            } else if (input.type === 'checkbox') {
+                const savedValues = JSON.parse(sessionStorage.getItem(input.name)) || [];
+                if (savedValues.includes(input.value)) {
+                    input.checked = true;
                 }
             }
+        });
+    }
 
-            function submitQuiz() {
-                // chuyển trạng thái của saveQuizState là đã nộp bài
-                saveQuizState(true);
-                clearSessionStorage();
+    function clearSessionStorage(callback) {
+        sessionStorage.removeItem('quizTimeLeft');
+        sessionStorage.removeItem('quizSubmitted');
+        sessionStorage.clear();
+
+        setTimeout(() => {
+            if (typeof callback === 'function') {
+                callback();
+            }
+        }, 1);
+    }
+
+    function updateTimer() {
+        let hours = Math.floor(timeLeft / 3600);
+        let minutes = Math.floor((timeLeft % 3600) / 60);
+        let seconds = timeLeft % 60;
+
+        hoursSpan.textContent = hours < 10 ? '0' + hours : hours;
+        minutesSpan.textContent = minutes < 10 ? '0' + minutes : minutes;
+        secondsSpan.textContent = seconds < 10 ? '0' + seconds : seconds;
+
+        if (timeLeft > 0) {
+            timeLeft--;
+            saveTimerState(timeLeft);
+            setTimeout(updateTimer, 1000);
+        } else {
+            clearSessionStorage(() => submitQuiz());
+        }
+    }
+
+    function submitQuiz() {
+        if (confirm('Are you sure you want to submit the quiz?')) { // Custom alert message
+            saveQuizState(true);
+            clearSessionStorage(() => {
                 quizForm.submit();
+            });
+        }
+    }
+
+    let timer = document.getElementById('timer');
+    let hoursSpan = document.getElementById('hours');
+    let minutesSpan = document.getElementById('minutes');
+    let secondsSpan = document.getElementById('seconds');
+    let submitButton = document.getElementById('submitQuiz');
+    let quizForm = document.getElementById('quizForm');
+
+    const quizTime = '${quizDoQuiz.getQuizTime()}';
+    const timeParts = quizTime.split(':');
+    let timeLeft = loadTimerState() || (+timeParts[0]) * 3600 + (+timeParts[1]) * 60 + (+timeParts[2]);
+
+    let answeredCount = 0;
+    const totalCount = ${listQuestionsByMId.size()};
+
+    function updateAnsweredCount() {
+        const questions = document.querySelectorAll('.question');
+        answeredCount = 0;
+
+        questions.forEach(question => {
+            const radios = question.querySelectorAll('input[type="radio"]');
+            const checkboxes = question.querySelectorAll('input[type="checkbox"]');
+            const isRadioAnswered = Array.from(radios).some(radio => radio.checked);
+            const isCheckboxAnswered = Array.from(checkboxes).some(checkbox => checkbox.checked);
+
+            if (isRadioAnswered || isCheckboxAnswered) {
+                answeredCount++;
             }
-            function clearSessionStorage() {
-                sessionStorage.removeItem('quizTimeLeft');
-                sessionStorage.removeItem('quizSubmitted');
-                sessionStorage.clear();
-            }
+        });
 
-            let answeredCount = 0;
-            const totalCount = ${listQuestionsByMId.size()};
+        document.getElementById('answeredCount').textContent = answeredCount;
+    }
 
-            function updateAnsweredCount() {
-                // chọn tất cả các phần tử có class question
-                const questions = document.querySelectorAll('.question');
-                answeredCount = 0;
+    function checkAndClearSessionStorage() {
+        if (sessionStorage.getItem('quizTimeLeft')) {
+            clearSessionStorage();
+        }
+    }
 
-                questions.forEach(question => {
-                    // Chọn tất cả các phần tử input có type là 'radio' hoặc checkbox trong câu hỏi hiện tại
-                    const radios = question.querySelectorAll('input[type="radio"]');
-                    const checkboxes = question.querySelectorAll('input[type="checkbox"]');
-                    // Kiểm tra xem có radio of checkbox nào được chọn trong câu hỏi hiện tại không
-                    // chuyển NodeList của các radio thành một mảng
-                    // kiểm tra xem có bất kỳ phần tử nào trong mảng có thuộc tính checked là true.
-                    const isRadioAnswered = Array.from(radios).some(radio => radio.checked);
-                    const isCheckboxAnswered = Array.from(checkboxes).some(checkbox => checkbox.checked);
+    document.addEventListener('DOMContentLoaded', () => {
+        checkAndClearSessionStorage();
+        updateTimer();
+        loadSelections();
 
-                    if (isRadioAnswered || isCheckboxAnswered) {
-                        answeredCount++;
-                    }
-                });
-
-                document.getElementById('answeredCount').textContent = answeredCount;
-            }
-
-            document.addEventListener('DOMContentLoaded', () => {
-                    updateTimer();
-                    // gọi hàm loadSelections để lư lấy ra các câu trả lời người dùng đã làm trước đó khi bị tải lại trang
-                    loadSelections();
-                
-                // Tìm tất cả các phần tử input có type là 'radio' hoặc 'checkbox' và thêm một sự kiện change cho mỗi phần tử này.
-                document.querySelectorAll('input[type=radio], input[type=checkbox]').forEach((input) => {
-                    input.addEventListener('change', () => {
-                        // khi người dùng thay đổi lựa chọn đáp án hoặc bỏ chọn thì sẽ gọi 2 hàm save câu trả lời và update updateAnsweredCount
-                        saveSelections();
-                        updateAnsweredCount();
-                    });
-                });
-                // lắng nghe sự kiện của submitButton ấn vào thì submitQuiz được gọi gửi form đi
-                submitButton.addEventListener('click', submitQuiz);
-                
-                // lấy ra phần tử của nút back và lắng nghe sự kiện nếu người dùng trở ra thì xóa đi
-                const backButton = document.querySelector('.navbar-brand.d-flex.align-items-center.px-4.px-lg-5');
-                backButton.addEventListener('click', clearSessionStorage);
-
-                // Initial count update
+        document.querySelectorAll('input[type=radio], input[type=checkbox]').forEach((input) => {
+            input.addEventListener('change', () => {
+                saveSelections();
                 updateAnsweredCount();
             });
-        </script>
+        });
+
+        submitButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            submitQuiz();
+        });
+
+        const backButton = document.querySelector('#backed');
+        let isAlertShown = false;
+
+        const showAlert = function(e) {
+            e.preventDefault();
+            if (!isAlertShown) {
+                isAlertShown = true;
+                if (confirm('Bạn đang thực hiện bài quiz, nếu thoát toàn bộ câu trả lời sẽ bị hủy. Bạn có chắc chắn muốn thoát?')) {
+                    clearSessionStorage(function() {
+                        window.location.href = backButton.getAttribute('href');
+                    });
+                } else {
+                    isAlertShown = false;
+                }
+            }
+        };
+
+        backButton.addEventListener('click', showAlert);
+
+        window.addEventListener('beforeunload', function(event) {
+            if (!isAlertShown) {
+                isAlertShown = true;
+                const confirmationMessage = 'Bạn đang thực hiện bài quiz, nếu thoát toàn bộ câu trả lời sẽ bị hủy. Bạn có chắc chắn muốn thoát?';
+                event.returnValue = confirmationMessage;
+                return confirmationMessage;
+            }
+        });
+
+        updateAnsweredCount();
+    });
+</script>
+
+
 
         <!-- JavaScript Libraries -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
