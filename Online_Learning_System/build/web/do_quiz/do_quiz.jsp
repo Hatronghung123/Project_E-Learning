@@ -154,12 +154,13 @@
         }
     </style>
         <script>
-            // Function to save timer state
+            // Lưu trữ thời gian còn lại của bộ đếm thời gian vào sessionStorage
             function saveTimerState(timeLeft) {
                 sessionStorage.setItem('quizTimeLeft', timeLeft);
             }
 
-            // Function to load timer state
+            //Tải thời gian còn lại của bộ đếm thời gian từ sessionStorage
+            //Hàm này lấy giá trị quizTimeLeft từ sessionStorage            
             function loadTimerState() {
                 return parseInt(sessionStorage.getItem('quizTimeLeft')) || null;
             }
@@ -169,7 +170,7 @@
                 sessionStorage.setItem('quizSubmitted', isSubmitted);
             }
 
-            // Function to load quiz state
+            // Hàm này lưu trữ một giá trị cho biết liệu bài kiểm tra đã được nộp hay chưa
             function loadQuizState() {
                 return sessionStorage.getItem('quizSubmitted') === 'true';
             }
@@ -179,13 +180,19 @@
                 document.querySelectorAll('input[type=radio], input[type=checkbox]').forEach((input) => {
                     if (input.type === 'radio') {
                         if (input.checked) {
+                            // lư giá trị của đáp án người dùng chọn vào sessionStorage
                             sessionStorage.setItem(input.name, input.value);
                         }
                     } else if (input.type === 'checkbox') {
+                        // Lấy danh sách các giá trị đã lưu trữ trước đó từ sessionStorage
                         let selectedValues = JSON.parse(sessionStorage.getItem(input.name)) || [];
+                        //Nếu input được chọn, thêm giá trị của input vào mảng selectedValues
                         if (input.checked) {
                             selectedValues.push(input.value);
+                            //loại bỏ giá trị của input khỏi mảng selectedValues bằng cách sử dụng .filter()
+                            // và trả về mảng mới chỉ chứa các giá trị khác 
                         } else {
+                            // chỉ lấy các ô check box mà người dùng chọn cho vào mảng
                             selectedValues = selectedValues.filter(value => value !== input.value);
                         }
                         sessionStorage.setItem(input.name, JSON.stringify(selectedValues));
@@ -215,7 +222,8 @@
     <body>
         <!-- Navbar Start -->
         <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
-            <a href="home" class="navbar-brand d-flex align-items-center px-4 px-lg-5" style="text-decoration: none; margin-right: 0px">
+             <a href="../Project_E-Learning/lesson?cid=${course.getCourse_id()}&
+                lessonid=${course.getLessonId()}&createBy=${course.getCreate_by()}" class="navbar-brand d-flex align-items-center px-4 px-lg-5" style="text-decoration: none; margin-right: 0px">
                 <h2 class="m-0 text-primary">Back</h2>
             </a>
 
@@ -240,7 +248,7 @@
         <div class="max-width-800">
             <form id="quizForm" action="doquiz" method="POST">
                 <c:forEach items="${listQuestionsByMId}" var="question">
-                    <input type="hidden" name="mid" value="1">
+                    <input type="hidden" name="mid" value="${quizDoQuiz.getModuleId()}">
                     <div class="question" data-question-id="${question.getQuestionId()}">
                         <h3>${question.getQuestionNum()}. ${question.getQuestionName()}</h3>
                         <ul class="options">
@@ -269,18 +277,20 @@
             let minutesSpan = document.getElementById('minutes');
             let secondsSpan = document.getElementById('seconds');
             let submitButton = document.getElementById('submitQuiz');
-            let resetButton = document.getElementById('resetQuiz');
             let quizForm = document.getElementById('quizForm');
 
             const quizTime = '${quizDoQuiz.getQuizTime()}';
             const timeParts = quizTime.split(':');
+            // timeLeft lưu trữ tổng số giây mà mentor cho làm quiz
+            // nếu người dùng ấn reset trình duyệt  thì lúc lày sẽ lấy thời gian ở loadTimerState
             let timeLeft = loadTimerState() || (+timeParts[0]) * 3600 + (+timeParts[1]) * 60 + (+timeParts[2]);
 
             function updateTimer() {
                 let hours = Math.floor(timeLeft / 3600);
                 let minutes = Math.floor((timeLeft % 3600) / 60);
                 let seconds = timeLeft % 60;
-
+                
+                // lấy ra giá trị text để hiển thị trên màn hình
                 hoursSpan.textContent = hours < 10 ? '0' + hours : hours;
                 minutesSpan.textContent = minutes < 10 ? '0' + minutes : minutes;
                 secondsSpan.textContent = seconds < 10 ? '0' + seconds : seconds;
@@ -288,39 +298,41 @@
                 if (timeLeft > 0) {
                     timeLeft--;
                     saveTimerState(timeLeft);
+                    // hàm này để gọi lại hàm updateTimer sau 1 giây
                     setTimeout(updateTimer, 1000);
                 } else {
+                    clearSessionStorage();
                     submitQuiz();
                 }
             }
 
             function submitQuiz() {
+                // chuyển trạng thái của saveQuizState là đã nộp bài
                 saveQuizState(true);
+                clearSessionStorage();
                 quizForm.submit();
-                showResetButton();
             }
-
-            function showResetButton() {
-                submitButton.style.display = 'none';
-                resetButton.style.display = 'block';
-            }
-
-            function resetQuiz() {
+            function clearSessionStorage() {
+                sessionStorage.removeItem('quizTimeLeft');
+                sessionStorage.removeItem('quizSubmitted');
                 sessionStorage.clear();
-                location.reload();
             }
 
             let answeredCount = 0;
             const totalCount = ${listQuestionsByMId.size()};
 
             function updateAnsweredCount() {
+                // chọn tất cả các phần tử có class question
                 const questions = document.querySelectorAll('.question');
                 answeredCount = 0;
 
                 questions.forEach(question => {
+                    // Chọn tất cả các phần tử input có type là 'radio' hoặc checkbox trong câu hỏi hiện tại
                     const radios = question.querySelectorAll('input[type="radio"]');
                     const checkboxes = question.querySelectorAll('input[type="checkbox"]');
-
+                    // Kiểm tra xem có radio of checkbox nào được chọn trong câu hỏi hiện tại không
+                    // chuyển NodeList của các radio thành một mảng
+                    // kiểm tra xem có bất kỳ phần tử nào trong mảng có thuộc tính checked là true.
                     const isRadioAnswered = Array.from(radios).some(radio => radio.checked);
                     const isCheckboxAnswered = Array.from(checkboxes).some(checkbox => checkbox.checked);
 
@@ -333,22 +345,24 @@
             }
 
             document.addEventListener('DOMContentLoaded', () => {
-                if (loadQuizState()) {
-                    showResetButton();
-                } else {
                     updateTimer();
+                    // gọi hàm loadSelections để lư lấy ra các câu trả lời người dùng đã làm trước đó khi bị tải lại trang
                     loadSelections();
-                }
-
+                
+                // Tìm tất cả các phần tử input có type là 'radio' hoặc 'checkbox' và thêm một sự kiện change cho mỗi phần tử này.
                 document.querySelectorAll('input[type=radio], input[type=checkbox]').forEach((input) => {
                     input.addEventListener('change', () => {
+                        // khi người dùng thay đổi lựa chọn đáp án hoặc bỏ chọn thì sẽ gọi 2 hàm save câu trả lời và update updateAnsweredCount
                         saveSelections();
                         updateAnsweredCount();
                     });
                 });
-
+                // lắng nghe sự kiện của submitButton ấn vào thì submitQuiz được gọi gửi form đi
                 submitButton.addEventListener('click', submitQuiz);
-                resetButton.addEventListener('click', resetQuiz);
+                
+                // lấy ra phần tử của nút back và lắng nghe sự kiện nếu người dùng trở ra thì xóa đi
+                const backButton = document.querySelector('.navbar-brand.d-flex.align-items-center.px-4.px-lg-5');
+                backButton.addEventListener('click', clearSessionStorage);
 
                 // Initial count update
                 updateAnsweredCount();

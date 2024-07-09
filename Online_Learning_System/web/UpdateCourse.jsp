@@ -130,8 +130,13 @@
 
             <div class="container-fluid">
                 <div class="container py-5">
+                    <div class="col-2 h6">
+                        <a href="course-manage" class="fas fa-angle-left">
+                            Course Manage
+                        </a>
+                    </div>
                     <div class="row">
-                        <div class="col-lg-10">
+                        <div class="col-10">
                             <h6 href="" class="display-6 text-dark animated slideInDown">${my_managed_course.course_name}</h6>
                     </div>
 
@@ -148,7 +153,7 @@
                                 <c:forEach items="${list_module}" var="module">
                                     <a class="list-group-item list-group-item-action" href="ModuleManage?moduleId=${module.moduleid}&cid=${my_managed_course.course_id}" data-module-id="${module.moduleid}">${module.modulename}</a>
                                 </c:forEach>
-                                    <a class="btn btn-outline-primary" href="course-manage?action=add_module&cid=${my_managed_course.course_id}">Add New Module</a>
+                                <a class="btn btn-outline-primary" href="course-manage?action=add_module&cid=${my_managed_course.course_id}">Add New Module</a>
                             </div>
                         </div>
 
@@ -182,11 +187,12 @@
                                             </div>
                                             <div class="form-group" style="width: 15%">
                                                 <label class="form-label">Price</label>
-                                                <input name="price" type="number" min="0" max="999999999" class="form-control" value="${requestScope.my_managed_course.price}">
+                                                <input name="price" type="number" min="0" max="9999999" class="form-control" value="${requestScope.my_managed_course.price}">
                                             </div>
-                                            <div class="form-group" style="width: 10%">
+                                            <div hidden="" class="form-group" style="width: 10%">
                                                 <label class="form-label">Discount</label>
-                                                <input name="discount" type="number" min="0" max="100" class="form-control" value="${requestScope.my_managed_course.discount}"%">
+                                                <!--<input name="discount" type="number" min="0" max="100" class="form-control" value="${requestScope.my_managed_course.discount}"%">-->
+                                                <input name="discount" type="number" min="0" max="100" class="form-control" value="0"%">
                                             </div>
                                             <div class="form-group">
                                                 ${requestScope.my_managed_course.course_category_id}

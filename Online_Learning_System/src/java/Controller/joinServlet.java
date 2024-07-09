@@ -284,24 +284,13 @@ public class joinServlet extends HttpServlet {
             if (remember_me.equals("on")) {
                 email_remember.setMaxAge(60 * 60 * 24); //1 day
                 password_remember.setMaxAge(60 * 60 * 24);
-//                session.setAttribute("account", account_login);
-//                session.setMaxInactiveInterval(60 * 30);
                 response.addCookie(email_remember);
                 response.addCookie(password_remember);
-//                response.sendRedirect("home");
-//                return;
             } else {
                 email_remember.setMaxAge(0);
                 password_remember.setMaxAge(0);
                 response.addCookie(email_remember);
                 response.addCookie(password_remember);
-
-                //session chi ton tai duoc trong 1800s
-                  //set time account exist in session 10 hours
-                //request.getRequestDispatcher("home").forward(request, response);
-
-//                response.sendRedirect("home");
-//                return;
             }
             session.setAttribute("account", account_login);
             ProfileDTO profile = accountDAO.getProfile(account_login);

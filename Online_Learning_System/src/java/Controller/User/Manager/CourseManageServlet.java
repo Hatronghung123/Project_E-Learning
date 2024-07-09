@@ -224,11 +224,11 @@ public class CourseManageServlet extends HttpServlet {
         course_name = Validation.validName(course_name);
         if (!Validation.checkString(course_name)) {
             request.setAttribute("course_name", course_name);
-            request.setAttribute("error_name", "You must input course name!");
+            request.setAttribute("error_name", "You must input a valid course name!!");
         }
-        if (!Validation.checkString(description)) {
+        if (!Validation.checkDesciptionCourse(description)) {
             request.setAttribute("description", description);
-            request.setAttribute("error_desciption", "You must input desciption!");
+            request.setAttribute("error_desciption", "You must input a valid desciption (<2000 characters)!!");
         }
         if (!Validation.checkString(category)) {
             request.setAttribute("category", category);
@@ -240,7 +240,8 @@ public class CourseManageServlet extends HttpServlet {
             CourseManageDAO course_manage_DAO = new CourseManageDAO();
             CourseManageDTO new_course = new CourseManageDTO(course_name, description, image_file_name, Float.parseFloat(price), Float.parseFloat(discount), category);
             course_manage_DAO.insertCourse(my_account.getAccount_id(), new_course);
-            response.sendRedirect("course-manage");
+            int cid = course_manage_DAO.getMyLastInsertedCourse(my_account.getAccount_id()).getCourse_id();
+            response.sendRedirect("course-manage?cid="+cid+"&action=update");
         } else {
             request.getRequestDispatcher("AddNewCourse.jsp").forward(request, response);
         }
@@ -315,7 +316,8 @@ public class CourseManageServlet extends HttpServlet {
             ModuleDAO module_DAO = new ModuleDAO();
             ModuleDTO new_module = new ModuleDTO(module_name, Integer.parseInt(module_number));
             module_DAO.insertModule(cid, new_module);
-            response.sendRedirect("course-manage?cid=" + cid + "&action=update");
+            new_module = module_DAO.getModuleInserted(cid, module_number);
+            response.sendRedirect("ModuleManage?moduleId="+ new_module.getModuleid() +"&cid="+cid);
         } else {
             request.getRequestDispatcher("AddNewModule.jsp").forward(request, response);
         }
@@ -385,9 +387,9 @@ public class CourseManageServlet extends HttpServlet {
             request.setAttribute("course_name", course_name);
             request.setAttribute("error_name", "You must input a valid course name!");
         }
-        if (!Validation.checkString(description)) {
+        if (!Validation.checkDesciptionCourse(description)) {
             request.setAttribute("description", description);
-            request.setAttribute("error_desciption", "You must input a valid desciption!");
+            request.setAttribute("error_desciption", "You must input a valid desciption (<2000 characters)!");
         }
         if (!Validation.checkString(category)) {
             request.setAttribute("category", category);

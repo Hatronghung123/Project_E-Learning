@@ -9,6 +9,7 @@ import Model.AccountDTO;
 import Model.AccountDTO;
 import Model.UserAnswer;
 import Model.Answer;
+import Model.Course;
 import Model.Questions;
 import Model.Quiz;
 import Model.ScoreQuiz;
@@ -85,8 +86,10 @@ public class DoQuizServlet extends HttpServlet {
 //                response.sendRedirect("doquizsub?mid=" + moduleId);
 //                return;
 //            } else {
+                Course course = quizDAO.findCourseIdAndCreateByByModuleId(moduleId);
                 ArrayList<Questions> listQuestionByModuleId = quizDAO.getListQuestionsByModuleId(moduleId);
                 ArrayList<Answer> listAnswerByModuleId = quizDAO.getlistAnswerByModuleId(moduleId);
+                request.setAttribute("course", course);
                 request.setAttribute("quizDoQuiz", quiz);
                 request.setAttribute("listQuestionsByMId", listQuestionByModuleId);
                 request.setAttribute("listAnswerByMId", listAnswerByModuleId);

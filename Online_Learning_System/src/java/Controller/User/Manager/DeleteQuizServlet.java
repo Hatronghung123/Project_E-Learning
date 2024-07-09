@@ -4,29 +4,19 @@
  */
 package Controller.User.Manager;
 
-import Dal.AccountDAO;
-import Dal.CourseManageDAO;
-import Dal.ProfileManageDAO;
-
-import Model.AccountDTO;
-import Model.CourseManageDTO;
-import Model.ProfileDTO;
+import Dal.QuizDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
 
 /**
  *
- * @author tuong
+ * @author hatro
  */
-@WebServlet(name = "MentorManageServlet", urlPatterns = {"/mentor-manage"})
-public class MentorManageServlet extends HttpServlet {
+public class DeleteQuizServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,10 +35,10 @@ public class MentorManageServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet MentorManageServlet</title>");
+            out.println("<title>Servlet DeleteQuizServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet MentorManageServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet DeleteQuizServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -66,14 +56,9 @@ public class MentorManageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        showData(request, response);
+        processRequest(request, response);
     }
 
-//    public static void main(String[] args) {
-//        ProfileManageDAO mentor_manage_DAO = new ProfileManageDAO();
-//        ArrayList<ProfileDTO> list_managed_mentor = mentor_manage_DAO.getMyListManagedMentorByCouresId(2);
-//        System.out.println(list_managed_mentor.get(0).getFullname());
-//    }
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -85,17 +70,13 @@ public class MentorManageServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action") == null ? "" : request.getParameter("action");
-        String mentor_id = request.getParameter("mentor_id") == null ? "" : request.getParameter("mentor_id");
-        switch (action) {
-            case "delete":
-                AccountDAO account_dao = new AccountDAO();
-                account_dao.activeOrInactiveAccount(Integer.parseInt(mentor_id), 0);
-                break;
-            default:
+        QuizDAO quizDAO = new QuizDAO();
+        int quizId = Integer.parseInt(request.getParameter("quizIdSelect"));
+        String courseId = request.getParameter("courseId");
+        String moduleId = request.getParameter("moduleId");
+        quizDAO.deleteQuizByQuizId(quizId);
 
-        }
-        showData(request, response);
+     response.sendRedirect("ModuleManage?moduleId=" + moduleId + "&cid=" + courseId);
     }
 
     /**
@@ -107,21 +88,5 @@ public class MentorManageServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-    private void showData(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        PrintWriter o = response.getWriter();
-
-        AccountDTO my_account = (AccountDTO) session.getAttribute("account");
-
-        ProfileManageDAO mentor_manage_DAO = new ProfileManageDAO();
-        ArrayList<ProfileDTO> list_managed_mentor = mentor_manage_DAO.getMyListManagedMentor(my_account.getAccount_id());
-        if (list_managed_mentor == null || list_managed_mentor.isEmpty()) {
-            request.setAttribute("list_managed_mentor", new ArrayList<>());
-        } else {
-            request.setAttribute("list_managed_mentor", list_managed_mentor);
-        }
-        request.getRequestDispatcher("MentorManage.jsp").forward(request, response);
-    }
 
 }

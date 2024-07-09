@@ -132,6 +132,7 @@ public class DoQuizController extends HttpServlet {
                 questionResultMap.put(questionId, "Incorrect");
             }
         }
+        Course course = quizDAO.findCourseIdAndCreateByByModuleId(moduleId);
 
         // Đặt các thuộc tính và chuyển tiếp yêu cầu
         request.setAttribute("listAnswersCorrect", listAnswersCorrect);
@@ -140,6 +141,7 @@ public class DoQuizController extends HttpServlet {
         request.setAttribute("countAnswer", countAnswer);
         request.setAttribute("scoreQuiz", scoreQuiz);
         request.setAttribute("quizDoQuiz", quiz);
+        request.setAttribute("course", course);
         request.setAttribute("listQuestionsByMId", listQuestionByModuleId);
         request.setAttribute("listAnswerByMId", listAnswerByModuleId);
          request.getRequestDispatcher("do_quiz/doquizsubmit.jsp").forward(request, response);

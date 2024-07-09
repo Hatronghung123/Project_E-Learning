@@ -913,7 +913,121 @@ public class QuizDAO extends DBContext {
     public static void main(String[] args) {
         QuizDAO dao = new QuizDAO();
         //dao.updateTypeQuestion(new Questions(295, 1, 289, "Hello Elearning", true));
-        System.out.println(dao.findScoreDoQuizByAccountIdAndQuizId(2, 89));
+        dao.deleteQuizByQuizId(107);
 
     }
+
+    public Course findCourseIdAndCreateByByModuleId(int moduleId) {
+        connection = getConnection();
+        String sql = """
+                     select *
+                     from Course c
+                     join Module m on c.CourseId = m.CourseId 
+                     join Lesson l on m.ModuleId = l.ModuleId
+                     where m.ModuleId = ? and LessonId =
+                     (select max(l.LessonId)
+                     from Lesson l)""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, moduleId);
+            // thực thi câu lệnh
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int courseId = resultSet.getInt(1);
+                int createBy = resultSet.getInt("CreatedBy");
+                int lessonId = resultSet.getInt("LessonId");
+
+                Course course = new Course(courseId, createBy, lessonId);
+                return course;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public Modules getCourseIdAndModuleIdByQuizId(int quizId) {
+        connection = getConnection();
+        String sql = "select *\n"
+                + "from Module m\n"
+                + "join Quiz qz on m.ModuleId = qz.ModuleId\n"
+                + "where qz.QuizId = ?";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, quizId);
+            // thực thi câu lệnh
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int moduleId = resultSet.getInt(1);
+                String moduleName = resultSet.getString("ModuleName");
+                int courseId = resultSet.getInt("CourseId");
+
+                Modules module = new Modules(moduleId, moduleName, courseId);
+                return module;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public void deleteQuestionDoQuizById(int questionId) {
+        connection = getConnection();
+        String sql = "delete AnswerQuestion\n"
+                + "where QuestionId = ?\n"
+                + "delete QuestionChoices\n"
+                + "where QuestionId = ?\n"
+                + "delete Question\n"
+                + "where QuestionId = ?\n";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, questionId);
+            statement.setInt(2, questionId);
+            statement.setInt(3, questionId);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void deleteQuizByQuizId(int quizId) {
+        connection = getConnection();
+        String sql = """
+                     delete ScoreQuiz 
+                     where QuizId = ?
+                     
+                     delete QuestionChoices
+                     where QuestionId IN (
+                     select qu.QuestionId
+                     from Question qu
+                     join Quiz qz on qu.QuizId = qz.QuizId
+                     where qu.QuizId = ?
+                     )
+                     
+                     delete AnswerQuestion
+                     where QuestionId IN (
+                     select qu.QuestionId
+                     from Question qu
+                     join Quiz qz on qu.QuizId = qz.QuizId
+                     where qu.QuizId = ?
+                     )
+                     
+                     delete Question
+                     where QuizId = ?
+                     
+                     delete Quiz
+                     where QuizId = ?""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, quizId);
+            statement.setInt(2, quizId);
+            statement.setInt(3, quizId);
+            statement.setInt(4, quizId);
+            statement.setInt(5, quizId);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
 }

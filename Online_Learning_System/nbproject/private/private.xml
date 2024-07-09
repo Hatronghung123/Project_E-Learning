@@ -2,6 +2,20 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
         <group/>
+=======
+        <group>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/web/WEB-INF/web.xml</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/EditQuizServlet.java</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/DeleteQuizServlet.java</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/web/EditModule.jsp</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/web/create_quiz/deletequestion.jsp</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/web/create_quiz/cquestions.jsp</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/web/edit_quiz/editquiz.jsp</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/src/java/Dal/QuizDAO.java</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/ModuleManageServler.java</file>
+        </group>
+>>>>>>> dc57d04996ec72e5f908b94231a2d06a20badb5a
     </open-files>
 </project-private>
