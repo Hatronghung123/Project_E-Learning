@@ -3,10 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package Controller;
+
 import Model.AccountDTO;
 import Dal.AccountDAO;
-
-
 
 import Model.ProfileDTO;
 import Util.SendEmail;
@@ -91,7 +90,7 @@ public class joinServlet extends HttpServlet {
             String cid = request.getParameter("cid");
             if (action.equals("login") && cid != null) {
                 session.setAttribute("cid", cid);
-                
+
             }
 
             switch (action) {
@@ -284,32 +283,23 @@ public class joinServlet extends HttpServlet {
             if (remember_me.equals("on")) {
                 email_remember.setMaxAge(60 * 60 * 24); //1 day
                 password_remember.setMaxAge(60 * 60 * 24);
-//                session.setAttribute("account", account_login);
-//                session.setMaxInactiveInterval(60 * 30);
                 response.addCookie(email_remember);
                 response.addCookie(password_remember);
-//                response.sendRedirect("home");
-//                return;
             } else {
                 email_remember.setMaxAge(0);
                 password_remember.setMaxAge(0);
                 response.addCookie(email_remember);
                 response.addCookie(password_remember);
-
-                //session chi ton tai duoc trong 1800s
-                  //set time account exist in session 10 hours
-                //request.getRequestDispatcher("home").forward(request, response);
-
-//                response.sendRedirect("home");
-//                return;
             }
             session.setAttribute("account", account_login);
             ProfileDTO profile = accountDAO.getProfile(account_login);
             session.setAttribute("profile", profile);
             session.setMaxInactiveInterval(60 * 30);
-            
+
             //CHuyển hướng đến màn hình mong muốn
-            String redireactAfter_Login = (String) session.getAttribute("cid");
+            Object cidObject = session.getAttribute("cid");
+            String redireactAfter_Login = cidObject != null ? cidObject.toString() : null;
+
             //response.getWriter().print(redireactAfter_Login);
             if (redireactAfter_Login != null) {
                 session.removeAttribute("cid");
@@ -327,7 +317,6 @@ public class joinServlet extends HttpServlet {
             request.getRequestDispatcher("Login.jsp").forward(request, response);
         }
     }
-
 
     private void signUpDoPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         AccountDAO accountDAO = new AccountDAO();

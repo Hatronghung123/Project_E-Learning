@@ -2,6 +2,7 @@
 go
 drop database [Project Online Learning]
 go
+
 create database [Project Online Learning]
 go
 use [Project Online Learning]
@@ -188,12 +189,7 @@ Bạn muốn củng cố lại kiến thức đã học từ lâu.
 ',
  'https://lh3.googleusercontent.com/d/1xxouEo75gTaX_nkVHpqdJrvZC50aKMTv',
  700000, 20, 'IT',2 ,'2024-06-12', '1.30 Hrs', 1
- )
- 
-
-		   
-		   INSERT INTO [dbo].[Course] 
-VALUES (
+ ),(
     'Crash Course Business - Soft Skills',
 	'Welcome to a new Crash Course series! Join Evelyn from the Internets as she hosts this 17 episode series on Soft Skills, which is going to be all about learning to be in a working environment, applying for jobs, interviewing, and so much more. In this episode, we start by talking about why "Trust" is so important in Business. ',
     'https://i.ytimg.com/vi/8UnfCkFVQ9E/maxresdefault.jpg',
@@ -204,11 +200,7 @@ VALUES (
     '2024/06/19',
     '6.1 Hrs',
     1
-)
-
-
-  INSERT INTO [dbo].[Course] 
-VALUES (
+),(
     'Visual Communication Design for Digital Media',
 	'The course will impart knowledge on the different aspects of visual communication design, emphasizing on virtual media platform. In contemporary visual design pedagogy, virtual media technology is an emerging paradigm. The course will emphasize on understanding of visual cognition, which is the key factor to achieve user-friendly design. Usage of contemporary technology like, eye tracking will also be introduced as user testing tool. The course will enable the students to learn visual design in virtual media through a methodological approach.',
     'https://i.ytimg.com/vi/oa67x6faDJg/maxresdefault.jpg',
@@ -219,12 +211,7 @@ VALUES (
     '2024/06/19',
     '5.1 Hrs',
     1
-)
-
-
-
-  INSERT INTO [dbo].[Course] 
-VALUES (
+), (
     'Crash Course Computer Science',' Welcome to Crash Course Computer Science! So today, we’re going to take a look at computing’s origins, because even though our digital computers are relatively new, the need for computation is not. Since the start of civilization itself, humans have had an increasing need for special devices to help manage laborious tasks, and as the scale of society continued to grow, these computational devices began to play a crucial role in amplifying our mental abilities. From the abacus and astrolabe to the difference engine and tabulating machine, we’ve come a long way to satisfying this increasing need, and in the process completely transformed commerce, government, and daily life. ',
     'https://www.chrisharrison.net/projects/crashcourse/CrashCourseCSLogoSplash.jpg',
     650000,
@@ -234,8 +221,15 @@ VALUES (
     '2024/06/19',
     '8.3 Hrs',
     1
-);
+)
 
+ 
+
+		   
+		 
+
+
+ 
 
 
 create table CourseRating(
@@ -263,8 +257,8 @@ create table Teaching(
 
 
 insert into Teaching 
-values (5, 1),  (5,5) ,
-(3, 3), (3, 4),(3,2)
+values (5, 1),  (5,5) , (5,8),
+(3, 3), (3, 4),(3,2),(3, 6), (3, 7)
 
 
 create table WishList(

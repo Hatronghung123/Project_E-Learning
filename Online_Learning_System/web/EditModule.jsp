@@ -5,6 +5,7 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -120,8 +121,13 @@
 
             <div class="container-fluid">
                 <div class="container py-5">
+                        <div class="col-2">
+                            <a href="course-manage" class="fas fa-angle-left" >
+                                Course Manage
+                            </a>
+                        </div>
                     <div class="row">
-                        <div class="col-lg-10">
+                        <div class="col-10">
                             <h5 class="display-6 text-dark">${my_managed_course.course_name}</h5>
                     </div>
                 </div>
@@ -151,11 +157,13 @@
                                     <div style="display: flex; justify-content: space-between; align-items: center;">
                                         <div>
                                             <a href="LessonManage?action=addlesson&cid=${cid}&moduleid=${module_id}" class="btn btn-outline-success">Add New Lesson</a>
-                                            <a href="createquiz?action=addQuiz&cid=${cid}&moduleid=${module_id}" class="btn btn-outline-primary">Add New Quiz</a>
+                                            <c:if test="${quiz_exist  != 1}">
+                                                <a href="createquiz?action=addQuiz&cid=${cid}&moduleid=${module_id}" class="btn btn-outline-primary">Add New Quiz</a>
+                                            </c:if>
                                         </div>
                                         <div>
-                                            <form action="ModuleManage?action=delete&cid=${cid}&moduleId=${module_id}" method="post">
-                                                <input type="submit" class="btn btn-outline-danger" value="Delete Module">
+                                            <form id="deleteForm" action="ModuleManage?action=delete&cid=${cid}&moduleId=${module_id}" method="post">
+                                                <input type="submit" class="btn btn-outline-danger" value="Delete Module" onclick="confirmDelete(event, ${fn:length(list_lesson_in_module)}, ${quiz_exist == 1? quiz_exist : 0 })">
                                             </form>
                                         </div>
                                     </div>
@@ -176,7 +184,7 @@
                                             </c:forEach>
                                         </div>
                                         <div class="card-body pb-2">
-                                            <h5>Lesson</h5>
+                                            <h5>Lesson(Number: ${fn:length(list_lesson_in_module)})</h5>
                                             <c:forEach items="${list_lesson_in_module}" var="lesson">
                                                 <div id="course-${lesson.lessonname}" class="row card-body media align-items-center" style="border: 1px solid #ced4da;">
                                                     <div class="col-lg-2">
@@ -285,7 +293,7 @@
                             <div class="form-group" style="display: none">
                                 <input type="hidden" class="form-control" id="idQuizInput" name="quizIdSelect">
                                 <input type="hidden" class="form-control"  name="courseId" value="${cid}">
-                               <input type="hidden" class="form-control" name="moduleId" value="${module_id}">
+                                <input type="hidden" class="form-control" name="moduleId" value="${module_id}">
                             </div>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
                             <button type="submit" class="btn btn-danger">Yes</button>
@@ -322,10 +330,13 @@
                 document.querySelector('input[name="moduleId"]').value = moduleId;
             }
 
-
-
-
-
+            function confirmDelete(event, lesson_number, quiz_number) {
+                if (!confirm("Are you sure you want to delete this module?\n\
+Lesson number: " + lesson_number + "\n\
+Quiz number: " + quiz_number)) {
+                    event.preventDefault(); // Ngăn không cho form gửi đi
+                }
+            }
         </script>
 
 

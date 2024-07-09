@@ -105,8 +105,12 @@ public class CourseManageDAO extends DBContext {
         connection = getConnection();
         ArrayList<ProfileDTO> list = new ArrayList<>();
         String sql = """
-                     select t.CourseId, p.* from Teaching t right join Profile p
-                        on t.MentorId = p.ProfileId where p.ManagedBy = ?""";
+                      select t.CourseId, p.* from Teaching t 
+                      right join Profile p
+                     on t.MentorId = p.ProfileId 
+                      join Account a
+                     on p.ProfileId = a.AccountId
+                     where p.ManagedBy = ? and a.Status = 1""";
         try {
             statement = connection.prepareStatement(sql);
             statement.setInt(1, manager_id);
@@ -115,10 +119,10 @@ public class CourseManageDAO extends DBContext {
                 int teaching_courseId = resultSet.getInt(1);
                 int mentor_id = resultSet.getInt(2);
                 String mentor_name = resultSet.getString(3);
-                boolean gender = resultSet.getBoolean(3);
-                String avatar = resultSet.getString(4);
-                double money = resultSet.getDouble(5);
-                int managed_by = resultSet.getInt(6);
+                boolean gender = resultSet.getBoolean(4);
+                String avatar = resultSet.getString(5);
+                double money = resultSet.getDouble(6);
+                int managed_by = resultSet.getInt(7);
                 list.add(new ProfileDTO(mentor_id, mentor_name, gender, avatar, money, managed_by, teaching_courseId));
             }
             return list;
@@ -289,6 +293,47 @@ public class CourseManageDAO extends DBContext {
 
     public static void main(String[] args) {
         CourseManageDAO dao = new CourseManageDAO();
+        System.out.println(dao.getMyMentors(2));
+    }
+
+    public CourseManageDTO getMyLastInsertedCourse(int account_id) {
+        connection = getConnection();
+        String sql = """
+                     SELECT TOP (1) [CourseId]
+                                                ,[CourseName]
+                                                ,[Description]
+                                                ,[Image]
+                                                ,[Price]
+                                                ,[Discount]
+                                                ,[CourseCategoryId]
+                                                ,[CreatedBy]
+                                                ,[DateCreated]
+                                                ,[StudyTime]
+                                                ,[Status]
+                                            FROM [Project Online Learning].[dbo].[Course]
+                                            where CreatedBy = ?
+                                            order by CourseId desc""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, account_id);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int course_id = resultSet.getInt(1);
+                String course_name = resultSet.getString(2);
+                String description = resultSet.getString(3);
+                String image = resultSet.getString(4);
+                float price = resultSet.getFloat(5);
+                float discount = resultSet.getFloat(6);
+                String course_category = resultSet.getString(7);
+                String create_date = resultSet.getString(9);
+                String study_time = resultSet.getString(10);
+                boolean status = resultSet.getBoolean(11);
+                return new CourseManageDTO(course_id, course_name, description, image, price, discount, course_category, create_date, study_time, status, 0);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
 }

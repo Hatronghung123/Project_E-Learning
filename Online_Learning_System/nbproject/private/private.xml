@@ -1,17 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>src/java/Controller/Admin/ManageAccountByAdminServlet.java</url>
+            <bookmark id="1">
+                <name/>
+                <line>104</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/F:/Project_E-Learning/Online_Learning_System/web/WEB-INF/web.xml</file>
-            <file>file:/F:/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/EditQuizServlet.java</file>
-            <file>file:/F:/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/DeleteQuizServlet.java</file>
-            <file>file:/F:/Project_E-Learning/Online_Learning_System/web/EditModule.jsp</file>
-            <file>file:/F:/Project_E-Learning/Online_Learning_System/web/create_quiz/deletequestion.jsp</file>
-            <file>file:/F:/Project_E-Learning/Online_Learning_System/web/create_quiz/cquestions.jsp</file>
-            <file>file:/F:/Project_E-Learning/Online_Learning_System/web/edit_quiz/editquiz.jsp</file>
-            <file>file:/F:/Project_E-Learning/Online_Learning_System/src/java/Dal/QuizDAO.java</file>
-            <file>file:/F:/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/ModuleManageServler.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/QuizDAO.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/nbproject/build-impl.xml~</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/DisscussionDAO.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/web/mentee_my_lesson.jsp</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/DBContext.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/LessonDAO.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/web/js/module-toggle.js</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/web/js/index.js</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/lessonServlet.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Model/Quiz.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Model/ModuleDTO.java</file>
         </group>
     </open-files>
 </project-private>
