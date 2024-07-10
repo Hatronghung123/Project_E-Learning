@@ -94,6 +94,10 @@
     background-color: #c3e6cb; /* Màu nền cho quiz đã hoàn thành */
     text-decoration: line-through; /* Gạch ngang quiz đã hoàn thành */
 }
+.scrollable-mentor-list {
+    max-height: 80px; /* Đặt chiều cao tối đa cho phần tử */
+    overflow-y: auto; /* Cho phép cuộn theo chiều dọc */
+}
 
     </style>
 
@@ -349,9 +353,12 @@
 
                             </div>
                         </div>
-                        <div class="card">
+                        
+                         <div class="card">
+                           <div class="card-header bg-white scrollable-mentor-list"> 
+                               <c:forEach items="${mentorList}" var="o">
                             <div class="card-header bg-white">
-                                <c:forEach items="${mentorList}" var="o">
+                               
                                 <div class="media">
                                     <div class="media-left media-middle">
                                         <img src="${o.getAvatar()}"  class="rounded-circle">
@@ -362,14 +369,10 @@
                                     </div>
                                     <a class="buttons" href="messenger?sender_id=${sessionScope.account.getAccount_id()}&receiver_id=${o.getProfileid()}">Chat Now</a>
                                 </div>
-                                </c:forEach>
+                              
                             </div>
-                            <!--                            <div class="card-body">
-                                                            <p>Having over 12 years exp. Adrian is one of the lead UI designers in the industry Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, aut.</p>
-                                                            <a href="#" class="btn btn-default"><i class="fa fa-facebook"></i></a>
-                                                            <a href="#" class="btn btn-default"><i class="fa fa-twitter"></i></a>
-                                                            <a href="#" class="btn btn-default"><i class="fa fa-github"></i></a>
-                                                        </div>-->
+                              </c:forEach>
+                            </div>
                         </div>
 
                         <div class="card">
