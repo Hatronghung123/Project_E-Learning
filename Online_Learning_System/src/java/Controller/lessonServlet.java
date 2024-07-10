@@ -139,15 +139,16 @@ public class lessonServlet extends HttpServlet {
 
                 ArrayList<Enrollment> listEnrollment = dao.getEnrollmentByAccountId(acc.getAccount_id());
 
+                
                 //Kiểm tra có phải người tạo ra khóa học hay không(Phân Quyền)
-                if (acc.getAccount_id() != createBy_id) {
+                if(!checkMentorInLesson(acc.getAccount_id(), course_id, dao)){
                     //Kiểm tra người dùng nếu chưa mua khóa học mà truy cập đường link thì chuyển về home       
                     if (!isPaid(course_id, listEnrollment)) {
                         response.sendRedirect("home");
                         return;
                     }
-
-                }
+            }
+                
                 ArrayList<LessonDTO> lessonList = dao.getListModulByCidd(course_id);
                 ArrayList<Model.ModuleDTO> moduleList = dao.getListModulByCid(course_id);
                 LessonDTO lesson = dao.getlessonByCid(course_id, lesson_id);
@@ -373,5 +374,16 @@ public class lessonServlet extends HttpServlet {
 
         }
     }
+    
+   private boolean checkMentorInLesson(int accountid, int courseId, LessonDAO dao) throws SQLException {
+       ArrayList<TeachingDTO> listmentor = dao.getListMentorByCid(courseId);
+       for (TeachingDTO teachingDTO : listmentor) {
+           if(teachingDTO.getMentorid() == accountid) {
+               return true;
+           }
+       }
+       
+       return false;
+   }
 
 }
