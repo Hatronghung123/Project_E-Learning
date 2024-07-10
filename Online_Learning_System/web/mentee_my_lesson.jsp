@@ -351,16 +351,18 @@
                         </div>
                         <div class="card">
                             <div class="card-header bg-white">
+                                <c:forEach items="${mentorList}" var="o">
                                 <div class="media">
                                     <div class="media-left media-middle">
-                                        <img src="${lesson.getAvatar()}" alt="About Adrian" class="rounded-circle">
+                                        <img src="${o.getAvatar()}"  class="rounded-circle">
                                     </div>
                                     <div class="media-body media-middle">
-                                        <h4 class="card-title"><a href="#">${lesson.getMentorname()}</a></h4>
+                                        <h4 class="card-title"><a href="#">${o.getFullname()}</a></h4>
                                         <p class="card-subtitle">Instructor</p>
                                     </div>
-                                    <a class="buttons" href="messenger?sender_id=${sessionScope.account.getAccount_id()}&receiver_id=${lesson.getProfile_id()}">Chat Now</a>
+                                    <a class="buttons" href="messenger?sender_id=${sessionScope.account.getAccount_id()}&receiver_id=${o.getProfileid()}">Chat Now</a>
                                 </div>
+                                </c:forEach>
                             </div>
                             <!--                            <div class="card-body">
                                                             <p>Having over 12 years exp. Adrian is one of the lead UI designers in the industry Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, aut.</p>
