@@ -2,6 +2,7 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
         <group>
             <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Model/AccountDTO.java</file>
             <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/MentorManageServlet.java</file>
@@ -14,5 +15,8 @@
             <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Dal/ProfileManageDAO.java</file>
             <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Controller/joinServlet.java</file>
         </group>
+=======
+        <group/>
+>>>>>>> 7a23e836ef0d29e11a9a4bfcbf46740eb8479729
     </open-files>
 </project-private>
