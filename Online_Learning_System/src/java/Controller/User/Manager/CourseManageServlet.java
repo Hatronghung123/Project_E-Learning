@@ -150,7 +150,9 @@ public class CourseManageServlet extends HttpServlet {
         PrintWriter o = response.getWriter();
         switch (action) {
             case "update":
+
                 updateCourseDoPost(request, response, cid);
+ 
                 break;
             case "add_new_module":
                 addNewModuleDoPost(request, response, cid);
@@ -356,8 +358,10 @@ public class CourseManageServlet extends HttpServlet {
             request.setAttribute("list_lesson", list_lesson);
             request.setAttribute("my_managed_course", my_managed_course);
 //            request.setAttribute("list_mentor", list_mentor);
+            
             request.setAttribute("my_role", my_account.getRole_id());
             request.setAttribute("list_mentor_by_courseId", list_mentor_by_courseId);
+            
         } catch (SQLException ex) {
             Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -427,6 +431,7 @@ public class CourseManageServlet extends HttpServlet {
         if (Validation.checkStringArray(fullFields) && file_image_course.getSize() < 820000) {
             CourseManageDTO new_course = new CourseManageDTO(Integer.parseInt(cid), course_name, description, null, image_file_name, Float.parseFloat(price), Float.parseFloat(discount), category);
             course_manage_DAO.updateCourse(my_account.getAccount_id(), new_course);
+            session.setAttribute("successMessage", "Changes saved successfully!");
             response.sendRedirect("course-manage?cid=" + cid + "&action=update");
         } else {
             ModuleDAO module_dao = new ModuleDAO();
@@ -442,6 +447,7 @@ public class CourseManageServlet extends HttpServlet {
                 request.setAttribute("list_lesson", list_lesson);
                 request.setAttribute("my_managed_course", my_managed_course);
                 request.setAttribute("list_mentor", list_mentor);
+                
                 request.setAttribute("list_mentor_by_courseId", list_mentor_by_courseId);
             } catch (SQLException ex) {
                 Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
