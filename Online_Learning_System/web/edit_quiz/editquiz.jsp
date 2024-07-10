@@ -179,7 +179,7 @@
                     </div>
                     <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
                         <div class="">
-                            <button type="button" class="btn btn-success" style="width: 127.6px;" onclick="showSaveModal()">Save Change</button>
+                            <button type="button" class="btn btn-success" style="width: 127.6px;" onclick="validateAndShowModal()">Save Change</button>
                         </div>
                         <div style="">
                             <a href="ModuleManage?moduleId=${moduleOfQuizEdit.getModuleid()}&cid=${moduleOfQuizEdit.getCourseid()}" class="btn btn-danger">Cancel</a>
@@ -255,8 +255,36 @@
                 // Replace 'edit-questions.jsp' with the actual URL of your new JSP page
                 window.location.href = 'editquizcrudquestion?quizId=${quizEdit.getQuizId()}';
             }
+
+            function validateAndShowModal() {
+                // Lấy các giá trị từ các trường input
+                let quizTitle = $('#quizTitle').val();
+                let timeNumber = $('#timeNumber').val();
+                let quizScore = $('#quizScore').val();
+
+                // Clear current error messages
+                $('.error').html('');
+
+                // Check if fields are empty and show error messages
+                let isValid = true;
+                if (quizTitle === '') {
+                    $('#quizTitleError').html('Title Can Not Be Empty');
+                    isValid = false;
+                }
+                if (timeNumber === '') {
+                    $('#timeNumberError').html('Time Frame Of Quiz Can Not Be Empty');
+                    isValid = false;
+                }
+                if (quizScore === '') {
+                    $('#quizScoreError').html('Score Of Quiz Can Not Be Empty');
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    showSaveModal();
+                }
+            }
         </script>
 
     </body>
 </html>
-
