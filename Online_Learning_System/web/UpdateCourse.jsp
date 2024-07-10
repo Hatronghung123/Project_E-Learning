@@ -206,30 +206,32 @@
                                                     </c:forEach>
                                                 </select>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="form-label">Assign Mentor</label><br>
-                                                <input id="mentorSearch" class="search-input" type="text" name="search" placeholder="Search Mentor"><br>
-                                                <div id="mentorListContainer">
-                                                    <table class="table table-bordered" id="mentorList">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Select</th>
-                                                                <th>Name</th>
-                                                                <th>Email</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <c:forEach items="${list_mentor_by_courseId}" var="mentor" varStatus="status">
-                                                                <tr class="mentor-item" data-name="${mentor.fullname}" data-email="${mentor.email}">
-                                                                    <td><input <c:if test="${mentor.teaching_course == my_managed_course.course_id}">checked=""</c:if> type="checkbox" name="mentors" value="${mentor.profile_id}"></td>
-                                                                    <td>${mentor.fullname}</td>
-                                                                    <td>${mentor.email}</td>
+                                                <c:if test="${my_role == 2}">
+                                                <div class="form-group">
+                                                    <label class="form-label">Assign Mentor</label><br>
+                                                    <input id="mentorSearch" class="search-input" type="text" name="search" placeholder="Search Mentor"><br>
+                                                    <div id="mentorListContainer">
+                                                        <table class="table table-bordered" id="mentorList">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Select</th>
+                                                                    <th>Name</th>
+                                                                    <th>Email</th>
                                                                 </tr>
-                                                            </c:forEach>
-                                                        </tbody>
-                                                    </table>
+                                                            </thead>
+                                                            <tbody>
+                                                                <c:forEach items="${list_mentor_by_courseId}" var="mentor" varStatus="status">
+                                                                    <tr class="mentor-item" data-name="${mentor.fullname}" data-email="${mentor.email}">
+                                                                        <td><input <c:if test="${mentor.teaching_course == my_managed_course.course_id}">checked=""</c:if> type="checkbox" name="mentors" value="${mentor.profile_id}"></td>
+                                                                        <td>${mentor.fullname}</td>
+                                                                        <td>${mentor.email}</td>
+                                                                    </tr>
+                                                                </c:forEach>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </c:if>
                                             <br>
                                             <div class="form-group" style="text-align: right;">
                                                 <button type="submit" class="btn btn-outline-primary">Save Change</button>

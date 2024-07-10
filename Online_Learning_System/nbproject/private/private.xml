@@ -14,7 +14,15 @@
         <group>
             <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/web/detail.jsp</file>
             <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/HomeDAO.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/CourseManageDAO.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/DoQuizServlet.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/web/mentee_my_quiz.jsp</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/DBContext.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/joinServlet.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/CourseDetailServlet.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/DoQuizController.java</file>
             <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/CourseDetailDAO.java</file>
+            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/CourseManageServlet.java</file>
         </group>
     </open-files>
 </project-private>

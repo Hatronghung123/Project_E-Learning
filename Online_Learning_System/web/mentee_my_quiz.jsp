@@ -1,8 +1,9 @@
 <%-- 
-    Document   : lesson
-    Created on : Jun 10, 2024, 12:53:18 AM
-    Author     : Tuan Anh(Gia Truong)
+    Document   : mentee_my_quiz
+    Created on : Jul 9, 2024, 10:53:54 PM
+    Author     : hatro
 --%>
+
 <%@page import="Model.Enrollment"%>
 <%@page import="java.util.ArrayList"%>
 
@@ -68,6 +69,9 @@
 
 
     <style>
+        .active-quiz {
+            background-color: #33ff33; /* Màu xanh nhạt */
+        }
         .rounded-circle{
             height: 50px;
             width: 50px;
@@ -84,16 +88,16 @@
         .active-quiz {
             background-color: #f9c2ff; /* Màu nền cho quiz đã chọn */
         }
-        
-.lesson-completed {
-    background-color: #d4edda; /* Màu nền cho bài học đã hoàn thành */
-    text-decoration: line-through; /* Gạch ngang bài học đã hoàn thành */
-}
 
-.quiz-completed {
-    background-color: #c3e6cb; /* Màu nền cho quiz đã hoàn thành */
-    text-decoration: line-through; /* Gạch ngang quiz đã hoàn thành */
-}
+        .lesson-completed {
+            background-color: #d4edda; /* Màu nền cho bài học đã hoàn thành */
+            text-decoration: line-through; /* Gạch ngang bài học đã hoàn thành */
+        }
+
+        .quiz-completed {
+            background-color: #c3e6cb; /* Màu nền cho quiz đã hoàn thành */
+            text-decoration: line-through; /* Gạch ngang quiz đã hoàn thành */
+        }
 
     </style>
 
@@ -115,123 +119,33 @@
                         <li class="breadcrumb-item"><a href="student-browse-courses.html">Courses</a></li>
                         <li class="breadcrumb-item active">${lesson.getCoursename()}</li>
                 </ol>
-                <h1 class="page-heading h2">${lesson.getCoursename()}</h1>
-
-
                 <div class="row">
                     <div class="col-md-8">
-                        <div class="card">
-                            <div class="embed-responsive embed-responsive-16by9">
-                                <iframe id="lessonVideo" class="embed-responsive-item" src="${lesson.getLessonvideo()}"title="0" frameborder="0" allow="0"  allowfullscreen></iframe>
+                        <h2>${quizDoQuiz.quizName}</h2>
+                        <div class="timer" id="timer">
+                            <strong>Quiz Time: ${quizDoQuiz.getQuizTime()}</strong>
+                        </div><br><br><br>
+                        <div style="margin-left: 70%;">
+                            <c:if test="${score == null}">
+                                <a style="width: 200px; height: 60px; font-size: 30px" href="doquiz?mid=${quizDoQuiz.getModuleId()}&action=do_quiz" class="btn btn-outline-primary">Do quiz</a>
+                            </c:if>
+                            <c:if test="${score != null}">
+                                <a style="width: 200px; height: 60px; font-size: 30px" href="doquiz?mid=${quizDoQuiz.getModuleId()}&action=do_quiz" class="btn btn-outline-primary">Again</a>
+
+                            </c:if>
+                        </div><br><br>
+                        <hr class="border-light m-0">
+                        <br><br>
+                        <div class="row no-gutters row-bordered row-border-light" style="font-size: 20px;">
+                            <div class="col-3"></div>
+                            <div class="col-5 pt-0">
+                                <h3>Receive grade:</h3>
+                                <p>To Pass <span>${quizDoQuiz.passScore} or higher</span></p>
                             </div>
-                            <div class="card-body">
-                                ${lesson.getLessoncontent()}
+                            <div class="col-4 card_mine">
+                                <h3>Your grade:</h3>
+                                <span>${score.getScore()}</span>
                             </div>
-                        </div>
-
-                        <!--comment-->
-
-                        <div class="comments">
-                            <h2>Comments</h2>
-                            <!-- Thêm comment mới -->
-                            <form action="lesson?status=insert" method="post">
-                                <div class="comment-input">
-                                    <img src="${sessionScope.profile.getAvt()}" alt="User Avatar" class="avatar">
-                                    <textarea required="" name="content" rows="1" placeholder="Add a comment..."></textarea>
-                                    <input type="hidden" name="cid" value="${lesson.getCourseid()}">
-                                    <input type="hidden" name="lessonid" value="${lesson.getLessonid()}">
-                                    <input type="hidden" name="parentCommentID" value="">
-                                    <input type="hidden" name="createBy" value="${lesson.getCreateby()}">
-
-                                    <button type="submit">Submit</button>
-                                </div>
-                            </form>
-
-
-
-
-
-                            <!-- Hiển thị comment và reply -->
-                            <div class="comment-list">
-                                <c:forEach var="o" items="${mainComments}"> 
-                                    <c:if test="${o.getLessonId() == lesson.getLessonid()}">
-                                        <div class="comment">
-
-                                            <img src="${o.getAvatar()}" alt="User1 Avatar" class="avatar">    
-
-                                            <div class="comment-content">
-                                                <p><strong>${o.getName()}</strong>  <span class="timestamp">${o.getTimeAgo()}</span></p>
-                                                <p>${o.getComment()}</p> 
-
-
-
-
-                                            </div> 
-                                            <!-- Nút xóa comment -->
-                                            <c:if test="${sessionScope.account.getAccount_id() == o.getAcccountId()}">
-                                                <form action="lesson?status=delete" method="post" class="delete-form" onsubmit="return confirmDelete(this);">
-                                                    <input type="hidden" name="cid" value="${lesson.getCourseid()}">
-                                                    <input type="hidden" name="lessonid" value="${lesson.getLessonid()}">
-                                                    <input type="hidden" name="disscussID" value="${o.getDisscussionID()}">
-                                                    <input type="hidden" name="createBy" value="${lesson.getCreateby()}">
-
-                                                    <input type="hidden" name="parent" value="null">
-                                                    <button type="submit" class="del">Delete</button>
-                                                </form>
-                                            </c:if>
-
-                                        </div>
-
-                                        <div class="comment-list replies">
-                                            <!-- Hiển thị các reply -->
-                                            <c:forEach var="reply" items="${repliesMap[o.getDisscussionID()]}">
-                                                <div class="comment replies">                    
-                                                    <img src="${reply.getAvatar()}" alt="User Avatar" class="avatar">
-
-                                                    <div class="comment-content">
-                                                        <p><strong>${reply.getName()}</strong><span class="timestamp">${reply.getTimeAgo()}</span></p>
-                                                        <p>${reply.getComment()}</p>
-
-
-                                                    </div>          
-                                                    <!--    Nút xóa reply 
-                                                    -->  
-                                                    <c:if test="${sessionScope.account.getAccount_id() == reply.getAcccountId()}">
-                                                        <form action="lesson?status=delete" method="post" class="delete-form" onsubmit="return confirmDelete(this);">
-                                                            <input type="hidden" name="cid" value="${lesson.getCourseid()}">
-                                                            <input type="hidden" name="lessonid" value="${lesson.getLessonid()}">
-                                                            <input type="hidden" name="disscussID" value="${reply.getDisscussionID()}">
-                                                            <input type="hidden" name="parent" value="${reply.getParentId()}">
-                                                            <input type="hidden" name="createBy" value="${lesson.getCreateby()}">
-                                                            <button type="submit" class="del">Delete</button>
-                                                        </form>
-                                                    </c:if>
-                                                </div>
-                                            </c:forEach>
-                                        </div> 
-
-
-                                        <!-- Form để thêm reply -->
-                                        <form action="lesson?status=insert" method="post" class="reply-form">
-                                            <input type="hidden" name="lessonid" value="${lesson.getLessonid()}">
-                                            <input type="hidden" name="parent" value="${o.getDisscussionID()}">
-                                            <!--Chuyển lai trang có cid hiện tại-->
-                                            <input type="hidden" name="cid" value="${lesson.getCourseid()}">
-                                            <input type="hidden" name="createBy" value="${lesson.getCreateby()}">
-
-                                            <!-- Thêm class `reply-textarea` vào textarea để dễ dàng chọn từ JavaScript -->
-                                            <textarea required="" name="content" rows="1" placeholder="Reply to this comment..." class="reply-textarea" style="display: none;"></textarea>
-                                            <button type="button" class="reply-btn">Reply</button>
-                                            <button type="submit"  class="submit-reply-btn">Submit Reply</button>
-                                            <button type="button" class="cancel-reply-btn">Cancel</button>
-                                        </form>
-
-
-
-                                    </c:if>
-                                </c:forEach>
-                            </div>
-
                         </div>
 
                         <script>
@@ -315,10 +229,10 @@
                                             </div>
                                             <c:forEach items="${lessonList}" var="i" varStatus="status">
                                                 <div class="module-content">
-                                                 <c:set var="itemIndex" value="${itemIndex + 1}" /> <!-- Tăng biến đếm -->
+                                                    <c:set var="itemIndex" value="${itemIndex + 1}" /> <!-- Tăng biến đếm -->
                                                     <c:if test="${o.getModulename() == i.getModulname()}">
                                                         <a style="color: black" href="lesson?cid=${i.getCourseid()}&lessonid=${i.getLessonid()}&createBy=${i.getCreateby()}" class="btn btn-block btn--col module-lesson" data-lessonid="${i.getLessonid()}">
-                                                          ${i.getLessonname()} 
+                                                            ${i.getLessonname()} 
                                                             <div>
                                                                 <small class="text-muted module-lesson" style="color: black">${ YoutubeDuration.convertToMinutesAndSeconds(i.getDuration())}</small>
                                                             </div>
@@ -328,12 +242,12 @@
 
                                                 </div>
                                             </c:forEach>
-                                                
+
                                             <!--List quiz here-->
                                             <c:forEach items="${quizLits}" var="j" varStatus="status">
                                                 <div class="module-content">
                                                     <c:if test="${o.getModuleid() == j.getModuleId()}">
-                                                        <a style="color: black"  class="btn btn-block btn--col module-lesson"  data-quizid="${j.getQuizId()}"  href="doquiz?mid=${j.getModuleId()}&cid=${j.course_id}"> 
+                                                        <a style="color: black" class="btn btn-block btn--col quiz-item" data-quizid="${j.getQuizId()}" href="doquiz?mid=${j.getModuleId()}&cid=${j.course_id}"> 
                                                             ${j.getQuizName()}
                                                             <div>
                                                                 <small class="text-muted module-lesson" style="color: black">Do quiz</small>
@@ -341,7 +255,7 @@
                                                         </a>
                                                     </c:if>
                                                 </div>
-                                            </c:forEach>   
+                                            </c:forEach> 
                                         </div>
 
                                     </c:forEach>
@@ -428,7 +342,33 @@
 
 
     </div>
+    <script>
 
+        document.addEventListener('DOMContentLoaded', function () {
+            const quizItems = document.querySelectorAll('.quiz-item');
+
+            quizItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    // Xóa lớp active-quiz từ tất cả các quiz
+                    quizItems.forEach(quiz => quiz.classList.remove('active-quiz'));
+
+                    // Thêm lớp active-quiz vào quiz được chọn
+                    this.classList.add('active-quiz');
+                });
+            });
+        });
+        function clearSessionStorage() {
+            sessionStorage.removeItem('quizTimeLeft');
+            sessionStorage.removeItem('quizSubmitted');
+            sessionStorage.clear();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            clearSessionStorage(); // Xóa session storage ngay khi trang được tải
+        });
+
+
+    </script>
 
     <!-- jQuery -->
     <script src="assets/vendor/jquery.min.js"></script>

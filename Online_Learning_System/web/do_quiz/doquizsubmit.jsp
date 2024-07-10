@@ -159,8 +159,7 @@
     <body>
         <!-- Navbar Start -->
         <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
-            <a href="../Project_E-Learning/lesson?cid=${course.getCourse_id()}&
-                lessonid=${course.getLessonId()}&createBy=${course.getCreate_by()}" class="navbar-brand d-flex align-items-center px-4 px-lg-5" style="text-decoration: none; margin-right: 0px">
+            <a href="doquiz?mid=${quizDoQuiz.moduleId}&cid=${course.getCourse_id()}" class="navbar-brand d-flex align-items-center px-4 px-lg-5" id="backed" style="text-decoration: none; margin-right: 0px">
                 <h2 class="m-0 text-primary">Back</h2>
             </a>
             
@@ -176,7 +175,7 @@
 
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
-                   <a href="../Project_E-Learning/doquiz?mid=${quizDoQuiz.getModuleId()}" id="resetQuiz" class="nav-item nav-link">Reset</a>
+                   <a href="doquiz?mid=${quizDoQuiz.getModuleId()}&action=do_quiz&cid=${course.getCourse_id()}" id="resetQuiz" class="nav-item nav-link">Reset</a>
                     <span id="answeredCount" class="nav-item nav-link active">${countAnswer}</span>
                     <span class="nav-item nav-link active">/</span>
                     <span id="totalCount" class="nav-item nav-link active">${listQuestionsByMId.size()}</span> 

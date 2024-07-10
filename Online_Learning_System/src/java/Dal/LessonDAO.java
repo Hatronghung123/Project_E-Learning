@@ -183,11 +183,14 @@ public class LessonDAO {
 
     public ArrayList<ModuleDTO> getListModulByCid(int courseId) throws SQLException {
         ArrayList<ModuleDTO> list = new ArrayList<>();
-        String sql = "SELECT  [ModuleId]\n"
-                + "      ,[ModuleName]\n"
-                + "      ,[CourseId]\n"
-                + "  FROM [dbo].[Module] \n"
-                + "WHERE CourseId = ?";
+        String sql = """
+                       SELECT  [ModuleId]
+                                ,[ModuleName]
+                                ,[CourseId]
+                     		   ,[ModuleNumber]
+                        FROM [dbo].[Module] 
+                        WHERE CourseId = ?
+                        Order by ModuleNumber ASC """;
         try {
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
