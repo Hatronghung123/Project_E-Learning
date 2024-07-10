@@ -89,7 +89,7 @@ public class joinServlet extends HttpServlet {
             //Lưu thông tin khóa học lên session để chuyển hướng tới đó
             String cid = request.getParameter("cid");
             if (action.equals("login") && cid != null) {
-                session.setAttribute("cid", cid);
+                session.setAttribute("courseid", cid);
 
             }
 
@@ -297,12 +297,13 @@ public class joinServlet extends HttpServlet {
             session.setMaxInactiveInterval(60 * 30);
 
             //CHuyển hướng đến màn hình mong muốn
-            Object cidObject = session.getAttribute("cid");
-            String redireactAfter_Login = cidObject != null ? cidObject.toString() : null;
-
+//            Object cidObject = session.getAttribute("cid");
+//            String redireactAfter_Login = cidObject != null ? cidObject.toString() : null;
+              String redireactAfter_Login = (String) session.getAttribute("courseid");
+            //String redireactAfter_Login =   request.getParameter("cid");
             //response.getWriter().print(redireactAfter_Login);
             if (redireactAfter_Login != null) {
-                session.removeAttribute("cid");
+                session.removeAttribute("courseid");
                 response.sendRedirect("CourseDetail?cid=" + redireactAfter_Login);
                 return;
             } else {
