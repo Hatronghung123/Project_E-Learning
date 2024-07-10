@@ -303,11 +303,11 @@
                                                                         </div>-->
                                 </div>
 
-                                <div class="child-hai">
+                                <div class="child-hai">  
+                                    <c:set var="index" value="1" /> <!-- Tăng biến đếm -->
                                     <c:forEach items="${moduleList}" var="o" varStatus="status">
-
+                                     
                                         <div class="dev" >
-
                                             <div style="background-color: #edeff1" class="block-header block-header-default">
                                                 <h3 class="block-title font-w800 text-black ">${status.index + 1}. ${o.getModulename()}</h3>
 
@@ -317,19 +317,19 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <c:forEach items="${lessonList}" var="i" varStatus="status">
-                                                <div class="module-content">
-                                                 <c:set var="itemIndex" value="${itemIndex + 1}" /> <!-- Tăng biến đếm -->
+                                            <c:forEach items="${lessonList}" var="i">
+                                                <div class="module-content">     
                                                     <c:if test="${o.getModulename() == i.getModulname()}">
                                                         <a style="color: black" href="lesson?cid=${i.getCourseid()}&lessonid=${i.getLessonid()}&createBy=${i.getCreateby()}" class="btn btn-block btn--col module-lesson" data-lessonid="${i.getLessonid()}">
-                                                          ${i.getLessonname()} 
+                                                         ${index}. ${i.getLessonname()} 
                                                             <div>
                                                                 <small class="text-muted module-lesson" style="color: black">${ YoutubeDuration.convertToMinutesAndSeconds(i.getDuration())}</small>
                                                             </div>
                                                         </a> 
+                                                         <c:set var="index" value="${index + 1}" />
                                                     </c:if>
 
-
+                                               
                                                 </div>
                                             </c:forEach>
                                                 
@@ -338,11 +338,12 @@
                                                 <div class="module-content">
                                                     <c:if test="${o.getModuleid() == j.getModuleId()}">
                                                         <a style="color: black"  class="btn btn-block btn--col module-lesson"  data-quizid="${j.getQuizId()}"  href="doquiz?mid=${j.getModuleId()}&cid=${j.course_id}"> 
-                                                            ${j.getQuizName()}
+                                                            ${index}. ${j.getQuizName()}
                                                             <div>
                                                                 <small class="text-muted module-lesson" style="color: black">Do quiz</small>
                                                             </div>
                                                         </a>
+                                                        <c:set var="index" value="${index + 1}" />
                                                     </c:if>
                                                 </div>
                                             </c:forEach>   
