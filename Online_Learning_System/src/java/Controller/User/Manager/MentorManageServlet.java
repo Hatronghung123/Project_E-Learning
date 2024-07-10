@@ -121,6 +121,7 @@ public class MentorManageServlet extends HttpServlet {
         } else {
             request.setAttribute("list_managed_mentor", list_managed_mentor);
         }
+        request.setAttribute("my_role", my_account.getRole_id());
         request.getRequestDispatcher("MentorManage.jsp").forward(request, response);
     }
 
