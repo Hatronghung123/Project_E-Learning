@@ -95,7 +95,10 @@ public class dataTransferLessonServlet extends HttpServlet {
                 lastLessonId = lessonid;
             }
 
-            
+            //=============CHECK ROLE ĐỂ THAM GIA KHÓA HỌC=============
+            if(acc.getAccount_id() == Integer.parseInt(createby)) {
+                 response.sendRedirect("lesson?cid=" + courseid + "&lessonid=" + lastLessonId + "&createBy=" + createby);
+            } else
 //            nếu tài khaonr này là mentor của khóa học 
             if (checkMentorInLesson(acc.getAccount_id(), Integer.parseInt(courseid), dao)) {
                 response.sendRedirect("lesson?cid=" + courseid + "&lessonid=" + lastLessonId + "&createBy=" + createby);
@@ -110,6 +113,9 @@ public class dataTransferLessonServlet extends HttpServlet {
             //response.sendRedirect("lesson?cid="+ courseid +"&lessonid="+ lastLessonId +"&createBy="+createby);
         } catch (SQLException ex) {
             Logger.getLogger(dataTransferLessonServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            e.printStackTrace();
+              response.getWriter().print("Dang thieu gi do");
         }
 
     }
