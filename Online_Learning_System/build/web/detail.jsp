@@ -342,6 +342,7 @@
                                     </c:when>
                                         
                                     <c:otherwise>
+
                                         <c:set var="currentCourseId" value="${getCourseByID.getCourse_id()}"/>
                                         <c:choose>
 
@@ -349,7 +350,7 @@
                                                 <c:forEach items="${listEnrollment}" var="o">
                                                     <c:if test="${currentCourseId == o.getCourseid()}">
                                                         <div class="py-3 px-4">
-                                                            <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="lesson?cid=${currentCourseId}&lessonid=<%=lastLessonId%>&createBy=${getCourseByID.getCreate_by()}">Resume</a>
+                                                            <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="dataTransferLesson?cid=${getCourseByID.getCourse_id()}&lessonid=<%=lastLessonId%>&createBy=${getCourseByID.getCreate_by()}&price=${getCourseByID.getPrice()}&ndck=${sessionScope.profile.fullname}">Resume</a>
                                                         </div>
                                                         <c:set var="isPaid" value="true"/>
                                                     </c:if>
@@ -367,7 +368,7 @@
 
                                         <c:if test="${isPaid != true}">
                                             <div class="py-3 px-4">
-                                                <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="vnpay_pay.jsp?price=${getCourseByID.getPrice()}&cid=${getCourseByID.getCourse_id()}&acc=${sessionScope.account.getAccount_id()}&ndck=${sessionScope.profile.fullname} chuyen khoan" >Enroll Now</a>
+                                                <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="dataTransferLesson?cid=${getCourseByID.getCourse_id()}&lessonid=<%=lastLessonId%>&createBy=${getCourseByID.getCreate_by()}&price=${getCourseByID.getPrice()}&ndck=${sessionScope.profile.fullname}" >Enroll Now</a>
                                             </div>
                                         </c:if>
                                     </c:otherwise>
