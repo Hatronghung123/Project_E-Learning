@@ -1,28 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
-        <file>
-            <url>src/java/Controller/Admin/ManageAccountByAdminServlet.java</url>
-            <bookmark id="1">
-                <name/>
-                <line>104</line>
-                <key/>
-            </bookmark>
-        </file>
-    </editor-bookmarks>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/web/detail.jsp</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/HomeDAO.java</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/CourseManageDAO.java</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/DoQuizServlet.java</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/web/mentee_my_quiz.jsp</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/DBContext.java</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/joinServlet.java</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/CourseDetailServlet.java</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/DoQuizController.java</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/CourseDetailDAO.java</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/CourseManageServlet.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
