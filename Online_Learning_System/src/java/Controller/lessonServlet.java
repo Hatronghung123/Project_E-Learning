@@ -141,7 +141,7 @@ public class lessonServlet extends HttpServlet {
 
                 
                 //Kiểm tra có phải người tạo ra khóa học hay không(Phân Quyền)
-                if(!checkMentorInLesson(acc.getAccount_id(), course_id, dao)){
+                if(!checkMentorInLesson(acc.getAccount_id(), course_id, dao) && createBy_id != acc.getAccount_id()){
                     //Kiểm tra người dùng nếu chưa mua khóa học mà truy cập đường link thì chuyển về home       
                     if (!isPaid(course_id, listEnrollment)) {
                         response.sendRedirect("home");
@@ -356,6 +356,7 @@ public class lessonServlet extends HttpServlet {
         return sumDuration;
     }
 
+    
     private void displayTotalTimeLearnCourse(HttpServletRequest request, HttpServletResponse response, long sumDuration)
             throws ServletException, IOException {
         String time = null;
