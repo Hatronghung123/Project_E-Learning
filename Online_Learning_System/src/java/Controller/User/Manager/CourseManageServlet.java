@@ -427,6 +427,7 @@ public class CourseManageServlet extends HttpServlet {
         if (Validation.checkStringArray(fullFields) && file_image_course.getSize() < 820000) {
             CourseManageDTO new_course = new CourseManageDTO(Integer.parseInt(cid), course_name, description, null, image_file_name, Float.parseFloat(price), Float.parseFloat(discount), category);
             course_manage_DAO.updateCourse(my_account.getAccount_id(), new_course);
+            session.setAttribute("successMessage", "Changes saved successfully!");
             response.sendRedirect("course-manage?cid=" + cid + "&action=update");
         } else {
             ModuleDAO module_dao = new ModuleDAO();

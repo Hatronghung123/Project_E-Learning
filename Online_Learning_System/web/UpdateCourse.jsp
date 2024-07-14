@@ -135,9 +135,15 @@
                             Course Manage
                         </a>
                     </div>
-                    <div class="row">
-                        <div class="col-10">
-                            <h6 href="" class="display-6 text-dark animated slideInDown">${my_managed_course.course_name}</h6>
+                <c:if test="${not empty successMessage}">
+                    <div class="alert alert-success">
+                        ${successMessage}
+                    </div>
+                    <% session.removeAttribute("successMessage"); %>
+                </c:if>
+                <div class="row">
+                    <div class="col-10">
+                        <h6 href="" class="display-6 text-dark animated slideInDown">${my_managed_course.course_name}</h6>
                     </div>
 
                 </div>
@@ -206,7 +212,7 @@
                                                     </c:forEach>
                                                 </select>
                                             </div>
-                                                <c:if test="${my_role == 2}">
+                                            <c:if test="${my_role == 2}">
                                                 <div class="form-group">
                                                     <label class="form-label">Assign Mentor</label><br>
                                                     <input id="mentorSearch" class="search-input" type="text" name="search" placeholder="Search Mentor"><br>
@@ -233,9 +239,14 @@
                                                 </div>
                                             </c:if>
                                             <br>
+
+
+                                            <!-- Form fields here -->
                                             <div class="form-group" style="text-align: right;">
                                                 <button type="submit" class="btn btn-outline-primary">Save Change</button>
                                             </div>
+
+
                                         </div>
                                     </form>
                                 </div>
@@ -251,6 +262,15 @@
             <script type="text/javascript">
             </script>
             <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    var form = document.getElementById('updateCourseForm');
+                    form.addEventListener('submit', function (event) {
+                        event.preventDefault(); // Prevent the form from submitting immediately
+                        if (confirm('Are you sure you want to save these changes?')) {
+                            this.submit(); // If user confirms, submit the form
+                        }
+                    });
+                });
                 document.addEventListener('DOMContentLoaded', function () {
                     function autoResize(textarea) {
                         textarea.style.height = 'auto';
