@@ -263,15 +263,6 @@
             </script>
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
-                    var form = document.getElementById('updateCourseForm');
-                    form.addEventListener('submit', function (event) {
-                        event.preventDefault(); // Prevent the form from submitting immediately
-                        if (confirm('Are you sure you want to save these changes?')) {
-                            this.submit(); // If user confirms, submit the form
-                        }
-                    });
-                });
-                document.addEventListener('DOMContentLoaded', function () {
                     function autoResize(textarea) {
                         textarea.style.height = 'auto';
                         textarea.style.height = textarea.scrollHeight + 'px';

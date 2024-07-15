@@ -170,11 +170,14 @@ public class joinServlet extends HttpServlet {
 
         //Cookie email_remember = new Cookie("email", (String)session.getAttribute("email"));
         Cookie password_remember = new Cookie("password", (String) session.getAttribute("password"));
-
+        AccountDTO my_account = (AccountDTO) session.getAttribute("account");
+        Cookie account_id = new Cookie("account_id", String.valueOf(my_account.getAccount_id()));
         //email_remember.setMaxAge(0);
         password_remember.setMaxAge(0);
+        account_id.setMaxAge(0);
         //response.addCookie(email_remember);
         response.addCookie(password_remember);
+        response.addCookie(account_id);
 
         session.removeAttribute("account");
         response.sendRedirect("home");
@@ -202,6 +205,14 @@ public class joinServlet extends HttpServlet {
                 check_remember_password = true;
 //                password = c.getValue();
                 request.setAttribute("password", c.getValue());
+            }
+            //delete old account_id in cookie
+            if (c.getName().equals("account_id")) {
+                HttpSession session = request.getSession();
+                AccountDTO my_account = (AccountDTO) session.getAttribute("account");
+                Cookie account_id = new Cookie("account_id", String.valueOf(my_account.getAccount_id()));
+                account_id.setMaxAge(0);
+                response.addCookie(account_id);
             }
         }
 
@@ -278,18 +289,23 @@ public class joinServlet extends HttpServlet {
         if (account_login != null) {
             Cookie email_remember = new Cookie("email", email);
             Cookie password_remember = new Cookie("password", password);
+            Cookie account_id = new Cookie("account_id", String.valueOf(account_login.getAccount_id()));
             //check xem co tich vao remember me ko de luu vao cookie
 
             if (remember_me.equals("on")) {
                 email_remember.setMaxAge(60 * 60 * 24); //1 day
                 password_remember.setMaxAge(60 * 60 * 24);
+                account_id.setMaxAge(60 * 60 * 24);
                 response.addCookie(email_remember);
                 response.addCookie(password_remember);
+                response.addCookie(account_id);
             } else {
                 email_remember.setMaxAge(0);
                 password_remember.setMaxAge(0);
+                account_id.setMaxAge(0);
                 response.addCookie(email_remember);
                 response.addCookie(password_remember);
+                response.addCookie(account_id);
             }
             session.setAttribute("account", account_login);
             ProfileDTO profile = accountDAO.getProfile(account_login);
@@ -299,7 +315,7 @@ public class joinServlet extends HttpServlet {
             //CHuyển hướng đến màn hình mong muốn
 //            Object cidObject = session.getAttribute("cid");
 //            String redireactAfter_Login = cidObject != null ? cidObject.toString() : null;
-              String redireactAfter_Login = (String) session.getAttribute("courseid");
+            String redireactAfter_Login = (String) session.getAttribute("courseid");
             //String redireactAfter_Login =   request.getParameter("cid");
             //response.getWriter().print(redireactAfter_Login);
             if (redireactAfter_Login != null) {
