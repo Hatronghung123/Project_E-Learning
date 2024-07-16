@@ -77,6 +77,7 @@ public class dataTransferLessonServlet extends HttpServlet {
             AccountDTO acc = (AccountDTO) session.getAttribute("account");
             String price = request.getParameter("price");
             String ndck = request.getParameter("ndck");
+            String address = request.getParameter("address");
             ArrayList<Enrollment> listEnrollment = dao.getEnrollmentByAccountId(acc.getAccount_id());
             String lastLessonId = null;
             Cookie[] cookies = request.getCookies();
@@ -89,12 +90,13 @@ public class dataTransferLessonServlet extends HttpServlet {
                 }
             }
 
-            if (lastLessonId == null) {
+            if (lastLessonId == null ||  Integer.parseInt(lastLessonId) == 0) {
                 // Nếu không có cookie, bạn có thể đặt giá trị mặc định, ví dụ: bài học đầu tiên
                 //String lessonid = lessonidObj.toString();
                 lastLessonId = lessonid;
             }
 
+            
             //=============CHECK ROLE ĐỂ THAM GIA KHÓA HỌC=============
             if(acc.getAccount_id() == Integer.parseInt(createby)) {
                  response.sendRedirect("lesson?cid=" + courseid + "&lessonid=" + lastLessonId + "&createBy=" + createby);
@@ -107,7 +109,7 @@ public class dataTransferLessonServlet extends HttpServlet {
             } else if (isPaid(Integer.parseInt(courseid), listEnrollment)) {
                 response.sendRedirect("lesson?cid=" + courseid + "&lessonid=" + lastLessonId + "&createBy=" + createby);
             }else {
-                response.sendRedirect("vnpay_pay.jsp?price="+ price + "&cid="+Integer.parseInt(courseid) +"&acc=" + acc.getAccount_id() +"&ndck="+ndck+"chuyen khoan");
+                response.sendRedirect("vnpay_pay.jsp?price="+ price + "&cid="+ courseid +"&acc=" + acc.getAccount_id() +"&ndck="+ndck+"chuyen khoan"+"&address="+address);
             }
 
             //response.sendRedirect("lesson?cid="+ courseid +"&lessonid="+ lastLessonId +"&createBy="+createby);

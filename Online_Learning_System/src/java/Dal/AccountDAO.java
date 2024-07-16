@@ -23,7 +23,7 @@ public class AccountDAO extends DBContext {
 
 //        dao.insertUser(new AccountDTO("tuongdeptrai@gmail.com", "67676767", 4), new Profile("Pham Cat Tuong", 0));
         AccountDTO a = dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010");
-        System.out.println(dao.getAllAccount());
+        System.out.println(dao.getMentorAccount());
 
         System.out.println("Succesfully");
         dao.activeOrInactiveAccount(12, 0);
@@ -341,8 +341,8 @@ public class AccountDAO extends DBContext {
     }
 
     //===========Admin=================
-    //Lấy ra tất cả tài khoản
-    public ArrayList<AccountDTO> getAllAccount() {
+    //Lấy ra tất cả tài khoản của  mentor
+    public ArrayList<AccountDTO> getMentorAccount() {
         ArrayList<AccountDTO> list = new ArrayList<>();
 
         connection = getConnection();
@@ -354,7 +354,8 @@ public class AccountDAO extends DBContext {
                              ,[Status]
                              ,[RoleId]
                          FROM [Project Online Learning].[dbo].[Account] acc
-                         Join [dbo].[Profile] p on p.[ProfileId] = acc.AccountId """;
+                         Join [dbo].[Profile] p on p.[ProfileId] = acc.AccountId
+                         Where [RoleId] = 3 """;
         try {
             statement = connection.prepareStatement(sql);
             resultSet = statement.executeQuery();
@@ -375,6 +376,42 @@ public class AccountDAO extends DBContext {
         return list;
     }
 
+        //Lấy ra tất cả tài khoản của  manager
+    public ArrayList<AccountDTO> getManagerAccount() {
+        ArrayList<AccountDTO> list = new ArrayList<>();
+
+        connection = getConnection();
+        String sql = """
+                     SELECT [AccountId]
+                       	  ,p.FullName
+                             ,[Email]
+                             ,[Password]
+                             ,[Status]
+                             ,[RoleId]
+                         FROM [Project Online Learning].[dbo].[Account] acc
+                         Join [dbo].[Profile] p on p.[ProfileId] = acc.AccountId
+                         Where [RoleId] = 2 """;
+        try {
+            statement = connection.prepareStatement(sql);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int account_id = resultSet.getInt(1);
+                String fullName = resultSet.getString(2);
+                String email_in_db = resultSet.getString(3);
+                String password_in_db = resultSet.getString(4);
+                boolean status = resultSet.getBoolean(5);
+                int role_id = resultSet.getInt(6);
+
+                list.add(new AccountDTO(account_id, fullName, email_in_db, password_in_db, status, role_id));
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
+
+    
     public void insertUserByAdmin(AccountDTO account, ProfileDTO profile) {
         insertAccount(account);
         AccountDTO new_insert_account = getAccountByEmailPass(account.getEmail(), account.getPassword());
