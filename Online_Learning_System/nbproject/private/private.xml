@@ -2,20 +2,10 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-<<<<<<< HEAD
-        <group/>
-=======
         <group>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/web/index.jsp</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/Home/dataTransferLessonServlet.java</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/DBContext.java</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/YoutubeAPI/YoutubeDuration.java</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Dal/LessonManageDAO.java</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/Home/listCourseSeverlet.java</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/lessonServlet.java</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/web/Courses.jsp</file>
-            <file>file:/D:/New%20folder/V12/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/LessonMangeServelet.java</file>
+            <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/CourseManageServlet.java</file>
+            <file>file:/E:/Project_E-Learning/Online_Learning_System/web/UpdateCourse.jsp</file>
+            <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Dal/DBContext.java</file>
         </group>
->>>>>>> 8972b8bcd437ac93bb1c8f9cf5a76e775160e011
     </open-files>
 </project-private>
