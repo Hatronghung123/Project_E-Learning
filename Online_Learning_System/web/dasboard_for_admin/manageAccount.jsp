@@ -145,7 +145,7 @@
 
                             <!-- Page Heading -->
                             <h1 class="h3 mb-2 text-gray-800">Tables</h1>
-                            <div class="container">
+<!--                            <div class="container">
                                 <h2>Import Mentor Accounts</h2>
                                 <form action="manageAccount?action=import" method="POST" enctype="multipart/form-data" class="upload-form">
                                     <label for="file-upload" class="custom-file-upload">
@@ -153,7 +153,7 @@
                                     </label>
                                     <input type="submit" value="Import" class="submit-btn">
                                 </form>
-                            </div>
+                            </div>-->
 
                             <!-- DataTales Example -->
                             <div class="card shadow mb-4">
