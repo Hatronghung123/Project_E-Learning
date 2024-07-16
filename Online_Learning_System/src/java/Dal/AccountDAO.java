@@ -40,7 +40,7 @@ public class AccountDAO extends DBContext {
                                                   ,[RoleId],
                        						   p.*
                                               FROM [dbo].[Account] a
-                       					   join Profile p
+                       					   left join Profile p
                        					   on a.AccountId = p.ProfileId
                        					   where Email like ? and Password like ?""";
         try {
