@@ -3,9 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/CourseManageServlet.java</file>
             <file>file:/E:/Project_E-Learning/Online_Learning_System/web/UpdateCourse.jsp</file>
             <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Dal/DBContext.java</file>
+=======
+            <file>file:/D:/PEOJECT_DEMO/Project_E-Learning/Online_Learning_System/src/java/Controller/Home/homeServlet.java</file>
+            <file>file:/D:/PEOJECT_DEMO/Project_E-Learning/Online_Learning_System/src/java/Controller/User/Manager/CourseManageServlet.java</file>
+            <file>file:/D:/PEOJECT_DEMO/Project_E-Learning/Online_Learning_System/src/java/Util/MyCommon.java</file>
+            <file>file:/D:/PEOJECT_DEMO/Project_E-Learning/Online_Learning_System/web/UpdateCourse.jsp</file>
+            <file>file:/D:/PEOJECT_DEMO/Project_E-Learning/Online_Learning_System/src/java/Controller/User/profileServlet.java</file>
+            <file>file:/D:/PEOJECT_DEMO/Project_E-Learning/Online_Learning_System/src/java/Dal/AccountDAO.java</file>
+            <file>file:/D:/PEOJECT_DEMO/Project_E-Learning/Online_Learning_System/src/java/Controller/joinServlet.java</file>
+>>>>>>> b0e2957080d1d183f457f38c4d89d663116a0f74
         </group>
     </open-files>
 </project-private>
