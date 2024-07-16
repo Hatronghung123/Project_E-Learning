@@ -77,7 +77,7 @@
                             <a class="dropdown-item" href="course-manage">Manager</a>
                         </c:if>
                         <c:if test="${sessionScope.account.role_id == 3}">
-                            <a class="dropdown-item" href="course-manage">Course Teaching</a>
+                            <a class="dropdown-item" href="course-manage">My Teaching</a>
                         </c:if>
                         <c:if test="${sessionScope.account.role_id == 3}">
                             <a class="dropdown-item" href="messenger?sender_id=${sessionScope.account.getAccount_id()}&receiver_id=0">Messenger</a>

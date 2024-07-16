@@ -388,12 +388,8 @@ public class CourseManageServlet extends HttpServlet {
 //check invalid
         String image_file_name = "";
         if (file_image_course != null && file_image_course.getSize() > 0) {
-            if (file_image_course.getSize() > 820000) {
-                request.setAttribute("error_images", "Your photo exceeds the allowed size (800K)!");
-            } else {
                 image_file_name = Validation.inputFile(request, file_image_course, "image_course");
                 request.setAttribute("image", image_file_name);
-            }
         } else {
             image_file_name = currentImage;
         }
@@ -423,7 +419,7 @@ public class CourseManageServlet extends HttpServlet {
             }
         }
 //valid
-        if (Validation.checkStringArray(fullFields) && file_image_course.getSize() < 820000) {
+        if (Validation.checkStringArray(fullFields)) {
             CourseManageDTO new_course = new CourseManageDTO(Integer.parseInt(cid), course_name, description, null, image_file_name, Float.parseFloat(price), Float.parseFloat(discount), category);
             course_manage_DAO.updateCourse(my_account.getAccount_id(), new_course);
             session.setAttribute("successMessage", "Changes saved successfully!");

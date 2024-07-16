@@ -20,6 +20,11 @@ public class Quiz {
     public Quiz() {
     }
 
+    public Quiz(int quizId) {
+        this.quizId = quizId;
+    }
+    
+
     public Quiz(int quizId, int moduleId, int quizNumber, String quizName, Time quizTime, int passScore) {
         this.quizId = quizId;
         this.moduleId = moduleId;

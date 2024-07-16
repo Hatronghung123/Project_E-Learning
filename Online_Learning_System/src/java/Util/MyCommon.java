@@ -69,7 +69,7 @@ public class MyCommon {
         AccountDTO my_account = (AccountDTO) session.getAttribute("account");
         Cookie account_id_cookies = new Cookie("account_id", String.valueOf(my_account.getAccount_id()));
         account_id_cookies.setMaxAge(60 * 60 * 24);
-        if (my_account != null) {
+        if (my_account == null) {
             AccountDAO account_dao = new AccountDAO();
             Cookie cookie[] = request.getCookies();
             String account_id = "";
@@ -83,9 +83,9 @@ public class MyCommon {
             if (account_id.isEmpty()) {
                 return null;
             }
-            return my_account;
+            return account_dao.getAccountById(Integer.parseInt(account_id));
         }
-        else return new AccountDTO();
+        else return my_account;
     }
 
 }
