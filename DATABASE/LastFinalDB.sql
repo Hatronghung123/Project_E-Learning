@@ -22,7 +22,7 @@ create table Account(
 	Email varchar(255) not null, 
 	Password varchar(255) not null,
 	Status bit not null,
-	RoleId int foreign key references Role(RoleId) not null,
+	RoleId int foreign key references Role(RoleId) not null
 );
 
 insert into Account
@@ -465,7 +465,7 @@ create table Quiz(
 	ModuleId int foreign key references Module(ModuleId),
 	QuizName varchar(255),
 	QuizTime time,
-	PassScore int,
+	PassScore int
 );
 
 create table Question(
@@ -473,13 +473,13 @@ create table Question(
 	QuestionNum int,
 	QuizId int foreign key references Quiz(QuizId),
 	QuestionName nvarchar(255),
-	Type bit, -- 0: checkBox, 1: Radio
+	Type bit -- 0: checkBox, 1: Radio
 );
 
 create table QuestionChoices(
 	QuestionId int foreign key references Question(QuestionId),
 	Choices text,
-	IsCorrect bit,
+	IsCorrect bit
 );
 
 create table AnswerQuestion(
@@ -487,7 +487,7 @@ create table AnswerQuestion(
 	AccountId int references Account(AccountId),
 	QuestionId int references Question(QuestionId),
 	Answer text,
-	IsCorrect bit,
+	IsCorrect bit
 );
 
 --Hatro edit
@@ -496,6 +496,7 @@ create table ScoreQuiz(
 	AccountId int references Account(AccountId),
 	QuizId int references Quiz(QuizId),
 	Score float,
+	IsPass bit
 );
 
 create table DiscussionLesson(
@@ -513,7 +514,7 @@ create table Message(
 	SenderId int foreign key references Account(AccountId),
 	ReceiverId int foreign key references Account(AccountId),
 	MessageText text,
-	MessageTime datetime,
+	MessageTime datetime
 );
 
 
@@ -528,7 +529,7 @@ create table Certificate(
 	CourseId int foreign key references Course(CourseId),
 	AccountId int foreign key references Account(AccountId),
 	Issuer int foreign key references Account(AccountId),
-	IssueDate date,
+	IssueDate date
 );
 
 

@@ -4,6 +4,7 @@
  */
 package Controller.User.Manager;
 
+import Dal.AccountDAO;
 import Dal.CourseDetailDAO;
 import Dal.CourseManageDAO;
 import Dal.HomeDAO;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -75,6 +77,10 @@ public class CourseManageServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    AccountDAO account_dao = new AccountDAO();
+    CourseManageDAO course_manage_DAO = new CourseManageDAO();
+    ProfileManageDAO profile_manage_dao = new ProfileManageDAO();
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -85,14 +91,25 @@ public class CourseManageServlet extends HttpServlet {
         String action = (String) request.getParameter("action") == null ? "" : (String) request.getParameter("action");
 
         HttpSession session = request.getSession();
-        AccountDTO my_account = (AccountDTO) session.getAttribute("account");
-        CourseManageDAO course_manage_DAO = new CourseManageDAO();
-        ProfileManageDAO profile_manage_dao = new ProfileManageDAO();
+//        AccountDTO my_account = (AccountDTO) session.getAttribute("account");
+        AccountDTO my_account = MyCommon.getMyAccount(request,response);
 
-        ArrayList<CourseManageDTO> list_managed_course = course_manage_DAO.getMyManagedCourses(my_account.getAccount_id());
-        request.setAttribute("list_managed_couse", list_managed_course);
-        ArrayList<ProfileDTO> list_my_mentors = course_manage_DAO.getMyMentors(my_account.getAccount_id());
-        request.setAttribute("list_my_mentors", list_my_mentors);
+        if (my_account.getRole_id() == 2) {
+            ArrayList<CourseManageDTO> list_managed_course = course_manage_DAO.getMyManagedCourses(my_account.getAccount_id());
+            request.setAttribute("list_managed_couse", list_managed_course);
+        } else if (my_account.getRole_id() == 3) {
+            ArrayList<CourseManageDTO> list_managed_course = course_manage_DAO.getMyTeachingCourses(my_account.getAccount_id());
+            request.setAttribute("list_managed_couse", list_managed_course);
+        }
+        if (my_account.getRole_id() == 2) {
+            ArrayList<ProfileDTO> list_my_mentors = course_manage_DAO.getMyMentors(my_account.getAccount_id());
+            request.setAttribute("list_my_mentors", list_my_mentors);
+            request.setAttribute("my_role", my_account.getRole_id());
+        } else if (my_account.getRole_id() == 3) {
+            ArrayList<ProfileDTO> list_my_mentors = course_manage_DAO.getMyMentors(my_account.getManaged_by());
+            request.setAttribute("list_my_mentors", list_my_mentors);
+            request.setAttribute("my_role", my_account.getRole_id());
+        }
         switch (action) {
             case "update":
                 updateCourseDoGet(request, response, cid);
@@ -101,14 +118,17 @@ public class CourseManageServlet extends HttpServlet {
             case "add_module":
                 addModule(request, response, cid);
                 return;
+            case "course_teaching":
+                courseTeaching(request, response);
+                return;
 
             case "add_new_course":
                 try {
-                    addCourse(request, response);
-                } catch (SQLException ex) {
-                    Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                return;
+                addCourse(request, response);
+            } catch (SQLException ex) {
+                Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return;
             default:
                 request.getRequestDispatcher("CourseManage.jsp").forward(request, response);
         }
@@ -186,7 +206,6 @@ public class CourseManageServlet extends HttpServlet {
 
     private void activateCourse(String cid, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        CourseManageDAO course_manage_DAO = new CourseManageDAO();
         boolean success = course_manage_DAO.activateCourse(cid);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -237,11 +256,10 @@ public class CourseManageServlet extends HttpServlet {
         if (Validation.checkStringArray(fullFields)) {
             HttpSession session = request.getSession();
             AccountDTO my_account = (AccountDTO) session.getAttribute("account");
-            CourseManageDAO course_manage_DAO = new CourseManageDAO();
             CourseManageDTO new_course = new CourseManageDTO(course_name, description, image_file_name, Float.parseFloat(price), Float.parseFloat(discount), category);
             course_manage_DAO.insertCourse(my_account.getAccount_id(), new_course);
             int cid = course_manage_DAO.getMyLastInsertedCourse(my_account.getAccount_id()).getCourse_id();
-            response.sendRedirect("course-manage?cid="+cid+"&action=update");
+            response.sendRedirect("course-manage?cid=" + cid + "&action=update");
         } else {
             request.getRequestDispatcher("AddNewCourse.jsp").forward(request, response);
         }
@@ -269,7 +287,7 @@ public class CourseManageServlet extends HttpServlet {
                 expectedNumber = currentNumber + 1;
             }
             //truyền vào module number cuối cùng tiếp theo
-            list_number_module.add((list_module.get(list_module.size()-1).getModule_number()) + 1);
+            list_number_module.add((list_module.get(list_module.size() - 1).getModule_number()) + 1);
         }
         request.setAttribute("list_module_number_valid", list_number_module);
         request.getRequestDispatcher("AddNewModule.jsp").forward(request, response);
@@ -299,7 +317,7 @@ public class CourseManageServlet extends HttpServlet {
                 expectedNumber = currentNumber + 1;
             }
             //truyền vào module number cuối cùng tiếp theo
-            list_number_module.add((list_module.get(list_module.size()-1).getModule_number()) + 1);
+            list_number_module.add((list_module.get(list_module.size() - 1).getModule_number()) + 1);
         }
         request.setAttribute("list_module_number_valid", list_number_module);
 
@@ -317,7 +335,7 @@ public class CourseManageServlet extends HttpServlet {
             ModuleDTO new_module = new ModuleDTO(module_name, Integer.parseInt(module_number));
             module_DAO.insertModule(cid, new_module);
             new_module = module_DAO.getModuleInserted(cid, module_number);
-            response.sendRedirect("ModuleManage?moduleId="+ new_module.getModuleid() +"&cid="+cid);
+            response.sendRedirect("ModuleManage?moduleId=" + new_module.getModuleid() + "&cid=" + cid);
         } else {
             request.getRequestDispatcher("AddNewModule.jsp").forward(request, response);
         }
@@ -326,8 +344,6 @@ public class CourseManageServlet extends HttpServlet {
     private void updateCourseDoGet(HttpServletRequest request, HttpServletResponse response, String cid) throws ServletException, IOException {
         HttpSession session = request.getSession();
         AccountDTO my_account = (AccountDTO) session.getAttribute("account");
-        CourseManageDAO course_manage_DAO = new CourseManageDAO();
-        ProfileManageDAO profile_manage_dao = new ProfileManageDAO();
         request.setAttribute("cid", cid);
         ModuleDAO module_dao = new ModuleDAO();
         LessonManageDAO lesson_manage_dao = new LessonManageDAO();
@@ -335,12 +351,13 @@ public class CourseManageServlet extends HttpServlet {
             ArrayList<ModuleDTO> list_module = module_dao.getListModulByCid(cid);
             ArrayList<LessonDTO> list_lesson = lesson_manage_dao.getListlessonByCid(Integer.parseInt(cid));
             CourseManageDTO my_managed_course = course_manage_DAO.getMyManagedCourseById(my_account.getAccount_id(), cid);
-            ArrayList<ProfileDTO> list_mentor = profile_manage_dao.getMyListManagedMentorByCouresId(my_account.getAccount_id(), cid);
+//            ArrayList<ProfileDTO> list_mentor = profile_manage_dao.getMyListManagedMentorByCouresId(my_account.getAccount_id(), cid);
             ArrayList<ProfileDTO> list_mentor_by_courseId = profile_manage_dao.getMyListManagedMentorByCouresId(my_account.getAccount_id(), cid);
             request.setAttribute("list_module", list_module);
             request.setAttribute("list_lesson", list_lesson);
             request.setAttribute("my_managed_course", my_managed_course);
-            request.setAttribute("list_mentor", list_mentor);
+//            request.setAttribute("list_mentor", list_mentor);
+            request.setAttribute("my_role", my_account.getRole_id());
             request.setAttribute("list_mentor_by_courseId", list_mentor_by_courseId);
         } catch (SQLException ex) {
             Logger.getLogger(CourseManageServlet.class.getName()).log(Level.SEVERE, null, ex);
@@ -367,18 +384,12 @@ public class CourseManageServlet extends HttpServlet {
 //my account
         HttpSession session = request.getSession();
         AccountDTO my_account = (AccountDTO) session.getAttribute("account");
-        CourseManageDAO course_manage_DAO = new CourseManageDAO();
-        ProfileManageDAO profile_manage_dao = new ProfileManageDAO();
 //update course
 //check invalid
         String image_file_name = "";
         if (file_image_course != null && file_image_course.getSize() > 0) {
-            if (file_image_course.getSize() > 820000) {
-                request.setAttribute("error_images", "Your photo exceeds the allowed size (800K)!");
-            } else {
                 image_file_name = Validation.inputFile(request, file_image_course, "image_course");
                 request.setAttribute("image", image_file_name);
-            }
         } else {
             image_file_name = currentImage;
         }
@@ -408,9 +419,10 @@ public class CourseManageServlet extends HttpServlet {
             }
         }
 //valid
-        if (Validation.checkStringArray(fullFields) && file_image_course.getSize() < 820000) {
+        if (Validation.checkStringArray(fullFields)) {
             CourseManageDTO new_course = new CourseManageDTO(Integer.parseInt(cid), course_name, description, null, image_file_name, Float.parseFloat(price), Float.parseFloat(discount), category);
             course_manage_DAO.updateCourse(my_account.getAccount_id(), new_course);
+            session.setAttribute("successMessage", "Changes saved successfully!");
             response.sendRedirect("course-manage?cid=" + cid + "&action=update");
         } else {
             ModuleDAO module_dao = new ModuleDAO();
@@ -432,6 +444,10 @@ public class CourseManageServlet extends HttpServlet {
             }
             request.getRequestDispatcher("UpdateCourse.jsp").forward(request, response);
         }
+    }
+
+    private void courseTeaching(HttpServletRequest request, HttpServletResponse response) {
+
     }
 
 }

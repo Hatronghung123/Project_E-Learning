@@ -46,7 +46,7 @@
                     <div class="signup-content">
                         <div class="signup-form">
                             <h2 class="form-title">Sign up</h2>
-                            <h4 style="color: red">
+                            <h4 style="color: red" class="alert-primary">
                                 ${error}
                             </h4>
                             <form method="post" action="join?action=signup" class="register-form" id="register-form">
@@ -58,6 +58,12 @@
                                     <label for="email"><i class="zmdi zmdi-email"></i></label>
                                     <input type="email"name="email" value="${email}" id="email" placeholder="Your Email"/>
                                 </div>
+                                <h4 style="color: red" class="alert-primary">
+                                    ${error_pass}
+                                </h4>
+                                <h4 style="color: red" class="alert-primary">
+                                    ${error_pass_length}
+                                </h4>
                                 <div class="form-group">
                                     <label for="pass"><i class="zmdi zmdi-lock"></i></label>
                                     <input type="password" name="password" value="${password}" id="pass" placeholder="Password"/>
@@ -66,6 +72,9 @@
                                     <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
                                     <input type="password" name="re_pass" value="${re_pass}" id="re_pass" placeholder="Repeat your password"/>
                                 </div>
+                                <h4 style="color: red" class="alert-primary">
+                                    ${error_terms}
+                                </h4>
                                 <div class="form-group">
                                     <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
                                     <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  

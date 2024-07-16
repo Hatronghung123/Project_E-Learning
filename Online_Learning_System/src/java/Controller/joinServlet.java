@@ -8,7 +8,9 @@ import Model.AccountDTO;
 import Dal.AccountDAO;
 
 import Model.ProfileDTO;
+import Util.MyCommon;
 import Util.SendEmail;
+import Util.Validation;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -89,7 +91,7 @@ public class joinServlet extends HttpServlet {
             //Lưu thông tin khóa học lên session để chuyển hướng tới đó
             String cid = request.getParameter("cid");
             if (action.equals("login") && cid != null) {
-                session.setAttribute("cid", cid);
+                session.setAttribute("courseid", cid);
 
             }
 
@@ -170,11 +172,14 @@ public class joinServlet extends HttpServlet {
 
         //Cookie email_remember = new Cookie("email", (String)session.getAttribute("email"));
         Cookie password_remember = new Cookie("password", (String) session.getAttribute("password"));
-
+        AccountDTO my_account = (AccountDTO) session.getAttribute("account");
+        Cookie account_id = new Cookie("account_id", String.valueOf(my_account.getAccount_id()));
         //email_remember.setMaxAge(0);
         password_remember.setMaxAge(0);
+        account_id.setMaxAge(0);
         //response.addCookie(email_remember);
         response.addCookie(password_remember);
+        response.addCookie(account_id);
 
         session.removeAttribute("account");
         response.sendRedirect("home");
@@ -202,6 +207,14 @@ public class joinServlet extends HttpServlet {
                 check_remember_password = true;
 //                password = c.getValue();
                 request.setAttribute("password", c.getValue());
+            }
+            //delete old account_id in cookie
+            if (c.getName().equals("account_id")) {
+                HttpSession session = request.getSession();
+                AccountDTO my_account = (AccountDTO) session.getAttribute("account");
+                Cookie account_id = new Cookie("account_id", String.valueOf(my_account.getAccount_id()));
+                account_id.setMaxAge(0);
+                response.addCookie(account_id);
             }
         }
 
@@ -278,18 +291,23 @@ public class joinServlet extends HttpServlet {
         if (account_login != null) {
             Cookie email_remember = new Cookie("email", email);
             Cookie password_remember = new Cookie("password", password);
+            Cookie account_id = new Cookie("account_id", String.valueOf(account_login.getAccount_id()));
             //check xem co tich vao remember me ko de luu vao cookie
 
             if (remember_me.equals("on")) {
                 email_remember.setMaxAge(60 * 60 * 24); //1 day
                 password_remember.setMaxAge(60 * 60 * 24);
+                account_id.setMaxAge(60 * 60 * 24);
                 response.addCookie(email_remember);
                 response.addCookie(password_remember);
+                response.addCookie(account_id);
             } else {
                 email_remember.setMaxAge(0);
                 password_remember.setMaxAge(0);
+                account_id.setMaxAge(0);
                 response.addCookie(email_remember);
                 response.addCookie(password_remember);
+                response.addCookie(account_id);
             }
             session.setAttribute("account", account_login);
             ProfileDTO profile = accountDAO.getProfile(account_login);
@@ -297,12 +315,13 @@ public class joinServlet extends HttpServlet {
             session.setMaxInactiveInterval(60 * 30);
 
             //CHuyển hướng đến màn hình mong muốn
-            Object cidObject = session.getAttribute("cid");
-            String redireactAfter_Login = cidObject != null ? cidObject.toString() : null;
-
+//            Object cidObject = session.getAttribute("cid");
+//            String redireactAfter_Login = cidObject != null ? cidObject.toString() : null;
+            String redireactAfter_Login = (String) session.getAttribute("courseid");
+            //String redireactAfter_Login =   request.getParameter("cid");
             //response.getWriter().print(redireactAfter_Login);
             if (redireactAfter_Login != null) {
-                session.removeAttribute("cid");
+                session.removeAttribute("courseid");
                 response.sendRedirect("CourseDetail?cid=" + redireactAfter_Login);
                 return;
             } else {
@@ -329,25 +348,24 @@ public class joinServlet extends HttpServlet {
         String re_pass = request.getParameter("re_pass");
         String email = request.getParameter("email");
         String check_agree_terms = request.getParameter("agree-term") == null ? "" : "on";
+        boolean check = true;
 
-        //check da nhap du du lieu chua
-        if (fullname.isBlank() || password.isBlank() || re_pass.isBlank() || email.isBlank()) {
+        if(!Validation.checkName(fullname)){
             request.setAttribute("fullname", fullname);
             //request.setAttribute("password", password);
             request.setAttribute("email", email);
-            request.setAttribute("error", "Please input all the fields!");
-            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
-            return;
+            request.setAttribute("error", "Your name is invalid!");
+            check = false;
         }
+        fullname = Validation.validName(fullname);
 
         // kiểm tra xem người dùng đã nhập đúng format chưa
-        if (!email.matches("[a-zA-Z0-9]+@([a-zA-Z]+.){1,2}[a-zA-Z]+")) {
+        if (!Validation.checkEmail(email)) {
             request.setAttribute("error", "Please Enter Email matches with fomat email@domain.com");
             request.setAttribute("email", email);
             request.setAttribute("fullname", fullname);
             //request.setAttribute("password", password);
-            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
-            return;
+            check = false;
         }
 
         //check pass va re_pass co duplicate ko?
@@ -355,33 +373,27 @@ public class joinServlet extends HttpServlet {
             request.setAttribute("fullname", fullname);
             //request.setAttribute("password", password);
             request.setAttribute("email", email);
-            request.setAttribute("error", "Passwords do not match!");
-            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
-            return;
+            request.setAttribute("error_pass", "Passwords do not match!");
+            check = false;
         }
-
         //check pass phai du 8 ki tu, etc.
         if (password.length() < 8) {
             request.setAttribute("fullname", fullname);
             //request.setAttribute("password", password);
             request.setAttribute("email", email);
             //including uppercase letters, lowercase letters, numbers and special characters!
-            request.setAttribute("error", "Password must be at least 8 characters");
-            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
-            return;
+            request.setAttribute("error_pass_length", "Password must be at least 8 characters");
+            check = false;
         }
-
         //check da tich vao checkbox agree terms chua
         if (!check_agree_terms.equals("on")) {
             request.setAttribute("fullname", fullname);
             request.setAttribute("password", password);
             request.setAttribute("re_pass", re_pass);
             request.setAttribute("email", email);
-            request.setAttribute("error", "You must agree all statements in Our Terms!");
-            request.getRequestDispatcher("SignUp.jsp").forward(request, response);
-            return;
+            request.setAttribute("error_terms", "You must agree all statements in Our Terms!");
+            check = false;
         }
-
         //kiểm tra xem email đã tồn tại trong db chưa
         // nếu rồi thì hiển thị lỗi quay trở lại trang sign up
 //        AccountDTO accountByEmailPass = accountDAO.getAccountByEmailPass(account);
@@ -389,12 +401,25 @@ public class joinServlet extends HttpServlet {
             request.setAttribute("fullname", fullname);
             //request.setAttribute("password", password);
             request.setAttribute("email", email);
-            request.setAttribute("error", "Account existed!");
+            request.setAttribute("error", "Email existed!");
+            check = false;
+        } 
+        
+        //check da nhap du du lieu chua
+        if (fullname.isBlank() || password.isBlank() || re_pass.isBlank() || email.isBlank()) {
+            request.setAttribute("fullname", fullname);
+            //request.setAttribute("password", password);
+            request.setAttribute("email", email);
+            request.setAttribute("error", "Please input all the fields!");
+            check = false;
+        }
+        if(!check){
             request.getRequestDispatcher("SignUp.jsp").forward(request, response);
             return;
-        } else {
+        }
+        else {
 
-            AccountDTO account = new AccountDTO(email, password);
+            AccountDTO account = new AccountDTO(email, password, 4);
 
             ProfileDTO profile_register = new ProfileDTO(fullname, 0);
             // nếu chưa thì inser vào trong db, chuyển dến trang home
@@ -406,7 +431,15 @@ public class joinServlet extends HttpServlet {
                 ProfileDTO profile = accountDAO.getProfile(account_login);
                 session.setAttribute("profile", profile);
             }
-
+            Cookie email_remember = new Cookie("email", email);
+            Cookie password_remember = new Cookie("password", password);
+            Cookie account_id = new Cookie("account_id", String.valueOf(account_login.getAccount_id()));
+            email_remember.setMaxAge(60 * 60 * 24); //1 day
+            password_remember.setMaxAge(60 * 60 * 24);
+            account_id.setMaxAge(60 * 60 * 24);
+            response.addCookie(email_remember);
+            response.addCookie(password_remember);
+            response.addCookie(account_id);
             session.setMaxInactiveInterval(60 * 30);
             response.sendRedirect("home");
         }

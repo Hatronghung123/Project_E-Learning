@@ -6,6 +6,7 @@ package Controller;
 
 import Dal.CourseDetailDAO;
 import Dal.DisscussionDAO;
+import Dal.EnrollmentDAO;
 import Dal.HomeDAO;
 import Dal.LessonDAO;
 import Dal.LessonManageDAO;
@@ -53,6 +54,7 @@ public class DoQuizServlet extends HttpServlet {
 
     LessonDAO dao = new LessonDAO();
     DisscussionDAO discussDao = new DisscussionDAO();
+    EnrollmentDAO enrollment_dao = new EnrollmentDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -113,7 +115,9 @@ public class DoQuizServlet extends HttpServlet {
             ArrayList<Questions> listQuestionByModuleId = quizDAO.getListQuestionsByModuleId(moduleId);
             ArrayList<Answer> listAnswerByModuleId = quizDAO.getlistAnswerByModuleId(moduleId);
             ScoreQuiz score = quizDAO.findScoreDoQuizByAccountIdAndQuizId(acc.getAccount_id(), quiz.getQuizId());
+            ScoreQuiz my_max_score = quizDAO.getMaxMyScoreInQuiz(acc.getAccount_id(), quiz.getQuizId());
             request.setAttribute("score", score);
+            request.setAttribute("my_max_score", my_max_score);
             request.setAttribute("course", course);
             request.setAttribute("quizDoQuiz", quiz);
             o.print(quiz.getModuleId());
@@ -187,15 +191,22 @@ public class DoQuizServlet extends HttpServlet {
                 listUserAnswer.add(new UserAnswer(acc.getAccount_id(), questionId, userAnswer, isCorrectUserAnswer, attemptNumber));
             }
         }
-        
+
         quizDAO.deleteAnswerByAccountIdAndQuizId(acc.getAccount_id(), quiz.getQuizId());
 //      Insert danh sách đáp án của người dùng vào database
         quizDAO.insertUserAnser(listUserAnswer);
         float totalScore = (float) score / listQuestionByModuleId.size() * 10;
-
-        ScoreQuiz scorequiz = new ScoreQuiz(acc.getAccount_id(), quiz.getQuizId(), totalScore);
+        boolean pass_quiz = false;
+        if (totalScore > quiz.getPassScore()) {
+            pass_quiz = true;
+        }
+        ScoreQuiz scorequiz = new ScoreQuiz(acc.getAccount_id(), quiz.getQuizId(), totalScore, pass_quiz);
 
         quizDAO.insertcoreQuiz(scorequiz);
+        ArrayList<Quiz> total_quiz_in_course = quizDAO.getListQuizByCourseId(quiz.getCourse_id());
+        ArrayList<Quiz> my_quiz_pass = quizDAO.getListQuizPassed(acc.getAccount_id(), quiz.getCourse_id());
+        int progress = (int) ((float) my_quiz_pass.size() / (float) total_quiz_in_course.size() * 100);
+        enrollment_dao.updateProgressCourse(acc.getAccount_id(), quiz.getCourse_id(), progress);
 
 //         Chuyển hướng sau khi xử lý
         response.sendRedirect("doquizsub?mid=" + moduleId);

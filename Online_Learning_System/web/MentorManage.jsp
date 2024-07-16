@@ -126,17 +126,28 @@
                                                                     <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-connections">Connections</a>-->
                                     <!--                                <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-notifications">Notifications</a>-->
                                     <a class="list-group-item list-group-item-action" href="course-manage">Courses </a>
+                                <c:if test="${my_role == 2}">
                                     <a class="list-group-item list-group-item-action active" href="mentor-manage">Mentors</a>
-                                </div>
+                                </c:if>
                             </div>
+                        </div>
 
 
-                            <div class="col-md-9 card_mine">
-                                <div class="tab-content">
-                                    <div class="tab-pane fade active show" id="mentor-manage">
-                                        <h3 style="color: red">${requestScope.error}</h3>
-
-
+                        <div class="col-md-9 card_mine">
+                            <div class="tab-content">
+                                <div class="tab-pane fade active show" id="mentor-manage">
+                                    <h3 style="color: red">${requestScope.error}</h3>
+                                    <c:if test="${my_role == 2}">
+                                        <div>
+                                            <form action="mentor-manage?action=add_mentor" method="post">
+                                                <input type="file">
+                                                <div>
+                                                    Upload file to add account for your mentors!
+                                                </div>
+                                                <button type="submit" class="btn btn-outline-primary">Submit</button>
+                                            </form>
+                                        </div>
+                                    </c:if>
                                     <div class="tab-pane fade show" id="mentor-manage">
                                         <div class="card-body pb-2">
                                             <c:forEach items="${list_managed_mentor}" var="mentor">
@@ -150,9 +161,11 @@
                                                             <label class="form-label" style="color: black; font-size: 17px">Mentor Email: ${mentor.email}</label><br>
                                                             <label class="form-label" style="color: black; font-size: 15px">Mentor Gender: ${mentor.gender ? 'Male' : 'Female'}</label>&nbsp;&nbsp;
                                                         </div>
-                                                        <div class="col-lg-3">
-                                                            <button type="submit" class="btn btn-outline-danger">Delete Mentor</button>
-                                                        </div>
+                                                        <c:if test="${my_role == 2}">
+                                                            <div class="col-lg-3">
+                                                                <button type="submit" class="btn btn-outline-danger">Delete Mentor</button>
+                                                            </div>
+                                                        </c:if>
                                                     </div>
                                                 </form>
                                             </c:forEach>

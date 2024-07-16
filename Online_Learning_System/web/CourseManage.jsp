@@ -122,33 +122,42 @@
                 <div class="container py-5">
                     <div class="row">
                         <div class="col-lg-10">
+                        <c:if test="${my_role == 2}">
                             <h1 class="display-3 text-dark animated slideInDown">Manage</h1>
-                        </div>
+                        </c:if>
+                        <c:if test="${my_role == 3}">
+                            <h1 class="display-3 text-dark animated slideInDown">My Course Teaching</h1>
+                        </c:if>
                     </div>
                 </div>
-                <div class="container light-style flex-grow-1 container-p-y">
+            </div>
+            <div class="container light-style flex-grow-1 container-p-y">
 
-                    <div class=" overflow-hidden">
-                        <div class="row no-gutters row-bordered row-border-light">
-                            <div class="col-md-3 pt-0">
-                                <div class="list-group list-group-flush account-settings-links">
-                                    <!-- <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-info">Information</a>-->
-                                    <!--                                <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-social-links">Social links</a>
-                                                                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-connections">Connections</a>-->
-                                    <!--                                <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-notifications">Notifications</a>-->
-                                    <a class="list-group-item list-group-item-action active" data-toggle="list" href="#Courses">Courses </a>
+                <div class=" overflow-hidden">
+                    <div class="row no-gutters row-bordered row-border-light">
+                        <div class="col-md-3 pt-0">
+                            <div class="list-group list-group-flush account-settings-links">
+                                <!-- <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-info">Information</a>-->
+                                <!--                                <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-social-links">Social links</a>
+                                                                <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-connections">Connections</a>-->
+                                <!--                                <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-notifications">Notifications</a>-->
+                                <a class="list-group-item list-group-item-action active" data-toggle="list" href="#Courses">Courses</a>
+                                <c:if test="${my_role == 2}">
                                     <a class="list-group-item list-group-item-action" href="mentor-manage">Mentors</a>
-                                </div>
+                                </c:if>
                             </div>
+                        </div>
 
 
-                            <div class="col-md-9 card_mine">
-                                <div class="tab-content">
-                                    <div class="tab-pane fade active show" id="Courses">
-                                        <h3 style="color: red">${requestScope.error}</h3>
+                        <div class="col-md-9 card_mine">
+                            <div class="tab-content">
+                                <div class="tab-pane fade active show" id="Courses">
+                                    <h3 style="color: red">${requestScope.error}</h3>
 
                                     <div>
-                                        <a href="course-manage?action=add_new_course" class="btn btn-outline-success">Add New Course</a>
+                                        <c:if test="${my_role == 2}">
+                                            <a href="course-manage?action=add_new_course" class="btn btn-outline-success">Add New Course</a>
+                                        </c:if>
                                     </div>
                                     <div class="tab-pane fade show" id="Courses">
                                         <div class="card-body pb-2">
@@ -161,7 +170,7 @@
 
                                                     </div>
                                                     <div class="col-lg-8">
-                                                            <label class="form-label" style="color: black; font-size: 15px">Mentors:</label>
+                                                        <label class="form-label" style="color: black; font-size: 15px">Mentors:</label>
                                                         <c:forEach items="${list_my_mentors}" var="mentor">
                                                             <c:if test="${mentor.teaching_course == c.course_id}">
                                                                 ${mentor.fullname}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

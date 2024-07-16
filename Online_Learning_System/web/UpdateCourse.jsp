@@ -135,9 +135,15 @@
                             Course Manage
                         </a>
                     </div>
-                    <div class="row">
-                        <div class="col-10">
-                            <h6 href="" class="display-6 text-dark animated slideInDown">${my_managed_course.course_name}</h6>
+                <c:if test="${not empty successMessage}">
+                    <div class="alert alert-success">
+                        ${successMessage}
+                    </div>
+                    <% session.removeAttribute("successMessage"); %>
+                </c:if>
+                <div class="row">
+                    <div class="col-10">
+                        <h6 href="" class="display-6 text-dark animated slideInDown">${my_managed_course.course_name}</h6>
                     </div>
 
                 </div>
@@ -170,8 +176,8 @@
                                                 <img style="width: 200px; height: auto; border-radius: 17px" src="${requestScope.my_managed_course.image}" id="image" alt="course image" class=" iamge d-block">
                                                 <label class="form-label">Change Image</label>
                                                 <div class="media-body ml-4">
-                                                    <input type="file" class="" name="image">
-                                                    <div class="text-black-50 small mt-1">Allowed JPG or PNG. Max size of 800K</div>
+                                                    <input type="file" id="imageFile" accept=".jpg, .jpeg, .png" class="" name="image">
+                                                    <div class="text-black-50 small mt-1">Allowed JPG, JPEG or PNG</div>
                                                 </div>
                                                 <input type="hidden" name="current_image" value="${requestScope.my_managed_course.image}">
                                             </div>
@@ -206,34 +212,41 @@
                                                     </c:forEach>
                                                 </select>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="form-label">Assign Mentor</label><br>
-                                                <input id="mentorSearch" class="search-input" type="text" name="search" placeholder="Search Mentor"><br>
-                                                <div id="mentorListContainer">
-                                                    <table class="table table-bordered" id="mentorList">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Select</th>
-                                                                <th>Name</th>
-                                                                <th>Email</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <c:forEach items="${list_mentor_by_courseId}" var="mentor" varStatus="status">
-                                                                <tr class="mentor-item" data-name="${mentor.fullname}" data-email="${mentor.email}">
-                                                                    <td><input <c:if test="${mentor.teaching_course == my_managed_course.course_id}">checked=""</c:if> type="checkbox" name="mentors" value="${mentor.profile_id}"></td>
-                                                                    <td>${mentor.fullname}</td>
-                                                                    <td>${mentor.email}</td>
+                                            <c:if test="${my_role == 2}">
+                                                <div class="form-group">
+                                                    <label class="form-label">Assign Mentor</label><br>
+                                                    <input id="mentorSearch" class="search-input" type="text" name="search" placeholder="Search Mentor"><br>
+                                                    <div id="mentorListContainer">
+                                                        <table class="table table-bordered" id="mentorList">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Select</th>
+                                                                    <th>Name</th>
+                                                                    <th>Email</th>
                                                                 </tr>
-                                                            </c:forEach>
-                                                        </tbody>
-                                                    </table>
+                                                            </thead>
+                                                            <tbody>
+                                                                <c:forEach items="${list_mentor_by_courseId}" var="mentor" varStatus="status">
+                                                                    <tr class="mentor-item" data-name="${mentor.fullname}" data-email="${mentor.email}">
+                                                                        <td><input <c:if test="${mentor.teaching_course == my_managed_course.course_id}">checked=""</c:if> type="checkbox" name="mentors" value="${mentor.profile_id}"></td>
+                                                                        <td>${mentor.fullname}</td>
+                                                                        <td>${mentor.email}</td>
+                                                                    </tr>
+                                                                </c:forEach>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </c:if>
                                             <br>
+
+
+                                            <!-- Form fields here -->
                                             <div class="form-group" style="text-align: right;">
                                                 <button type="submit" class="btn btn-outline-primary">Save Change</button>
                                             </div>
+
+
                                         </div>
                                     </form>
                                 </div>
@@ -296,6 +309,28 @@
                         });
                     });
                 });
+
+                //validate image input
+                document.getElementById('imageFile').addEventListener('change', function () {
+                    var file = this.files[0];
+                    var fileType = file.type;
+                    var match = ['image/jpeg', 'image/png', 'image/jpeg'];
+                    if (!match.includes(fileType)) {
+                        alert('Chỉ chấp nhận file JPG, JPEG hoặc PNG.');
+                        this.value = '';
+                        return false;
+                    }
+                });
+                function chooseFile(fileInput) {
+                    if (fileInput.files && fileInput.files[0]) {
+                        var reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            $('#image').attr('src', e.target.result);
+                        };
+                        reader.readAsDataURL(fileInput.files[0]);
+                    }
+                }
             </script>
 
         </div>
