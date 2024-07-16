@@ -127,10 +127,10 @@
                         </div><br><br><br>
                         <div style="margin-left: 70%;">
                             <c:if test="${score == null}">
-                                <a style="width: 200px; height: 60px; font-size: 30px" href="doquiz?mid=${quizDoQuiz.getModuleId()}&action=do_quiz" class="btn btn-outline-primary">Do quiz</a>
+                                <a style="width: 200px; height: 60px; font-size: 30px" href="doquiz?mid=${quizDoQuiz.getModuleId()}&action=do_quiz" class="btn btn-outline-primary quiz-btn">Do quiz</a>
                             </c:if>
                             <c:if test="${score != null}">
-                                <a style="width: 200px; height: 60px; font-size: 30px" href="doquiz?mid=${quizDoQuiz.getModuleId()}&action=do_quiz" class="btn btn-outline-primary">Again</a>
+                                <a style="width: 200px; height: 60px; font-size: 30px" href="doquiz?mid=${quizDoQuiz.getModuleId()}&action=do_quiz" class="btn btn-outline-primary quiz-btn">Again</a>
 
                             </c:if>
                         </div><br><br>
@@ -362,6 +362,15 @@
             sessionStorage.removeItem('quizSubmitted');
             sessionStorage.clear();
         }
+        
+        document.addEventListener("DOMContentLoaded", function () {
+            const quizButtons = document.querySelectorAll('.quiz-btn');
+            quizButtons.forEach(button => {
+                button.addEventListener('click', function (e) {
+                    clearSessionStorage();
+                });
+            });
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
             clearSessionStorage(); // Xóa session storage ngay khi trang được tải
