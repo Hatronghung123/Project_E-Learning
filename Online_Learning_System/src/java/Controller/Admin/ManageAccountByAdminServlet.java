@@ -108,7 +108,7 @@ public class ManageAccountByAdminServlet extends HttpServlet {
                     break;
                 default:
 //                    read
-                    ArrayList<AccountDTO> listAllAccount = accDao.getManagerAccount();
+                    ArrayList<AccountDTO> listAllAccount = accDao.getMentorAccount();
                     //response.getWriter().print(listAllAccount);
                     request.setAttribute("listAllAccount", listAllAccount);
                     request.getRequestDispatcher("manageAccount.jsp").forward(request, response);
