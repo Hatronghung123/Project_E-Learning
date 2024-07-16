@@ -495,7 +495,8 @@ create table ScoreQuiz(
 	ScoreQuizId int identity(1,1) primary key,
 	AccountId int references Account(AccountId),
 	QuizId int references Quiz(QuizId),
-	Score float
+	Score float,
+	IsPass bit
 );
 
 create table DiscussionLesson(
