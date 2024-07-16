@@ -23,7 +23,7 @@ public class AccountDAO extends DBContext {
 
 //        dao.insertUser(new AccountDTO("tuongdeptrai@gmail.com", "67676767", 4), new Profile("Pham Cat Tuong", 0));
         AccountDTO a = dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010");
-        System.out.println(dao.getAllAccount());
+        System.out.println(dao.getManagerAccount());
 
         System.out.println("Succesfully");
         dao.activeOrInactiveAccount(12, 0);
@@ -342,7 +342,7 @@ public class AccountDAO extends DBContext {
 
     //===========Admin=================
     //Lấy ra tất cả tài khoản
-    public ArrayList<AccountDTO> getAllAccount() {
+    public ArrayList<AccountDTO> getManagerAccount() {
         ArrayList<AccountDTO> list = new ArrayList<>();
 
         connection = getConnection();
@@ -354,7 +354,8 @@ public class AccountDAO extends DBContext {
                              ,[Status]
                              ,[RoleId]
                          FROM [Project Online Learning].[dbo].[Account] acc
-                         Join [dbo].[Profile] p on p.[ProfileId] = acc.AccountId """;
+                         Join [dbo].[Profile] p on p.[ProfileId] = acc.AccountId
+                         Where [RoleId] = 2 """;
         try {
             statement = connection.prepareStatement(sql);
             resultSet = statement.executeQuery();

@@ -229,7 +229,7 @@
 
                                                     <c:otherwise><!--Nguoi dung da dang nhap-->
 
-                                                        <a href="dataTransferLesson?cid=${o.getCourse_id()}&lessonid=${o.getFirstlessonid()}&createBy=${o.getCreate_by()}&price=${o.getPrice()}&ndck=${sessionScope.profile.fullname}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
+                                                        <a href="dataTransferLesson?cid=${o.getCourse_id()}&lessonid=${o.getFirstlessonid()}&createBy=${o.getCreate_by()}&price=${o.getPrice()}&ndck=${sessionScope.profile.fullname}&address=${getCourseByID.getCourse_id()}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Join Now</a>
 
                                                     </c:otherwise>
 
@@ -350,7 +350,7 @@
                                                 <c:forEach items="${listEnrollment}" var="o">
                                                     <c:if test="${currentCourseId == o.getCourseid()}">
                                                         <div class="py-3 px-4">
-                                                            <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="dataTransferLesson?cid=${getCourseByID.getCourse_id()}&lessonid=<%=lastLessonId%>&createBy=${getCourseByID.getCreate_by()}&price=${getCourseByID.getPrice()}&ndck=${sessionScope.profile.fullname}">Resume</a>
+                                                            <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="dataTransferLesson?cid=${getCourseByID.getCourse_id()}&lessonid=<%=lastLessonId%>&createBy=${getCourseByID.getCreate_by()}&price=${getCourseByID.getPrice()}&ndck=${sessionScope.profile.fullname}&address=${getCourseByID.getCourse_id()}">Resume</a>
                                                         </div>
                                                         <c:set var="isPaid" value="true"/>
                                                     </c:if>
@@ -368,7 +368,7 @@
 
                                         <c:if test="${isPaid != true}">
                                             <div class="py-3 px-4">
-                                                <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="dataTransferLesson?cid=${getCourseByID.getCourse_id()}&lessonid=<%=lastLessonId%>&createBy=${getCourseByID.getCreate_by()}&price=${getCourseByID.getPrice()}&ndck=${sessionScope.profile.fullname}" >Enroll Now</a>
+                                                <a style="background-color: #ee2a3d" class="btn btn-block btn-secondary py-3 px-5"href="dataTransferLesson?cid=${getCourseByID.getCourse_id()}&lessonid=<%=lastLessonId%>&createBy=${getCourseByID.getCreate_by()}&price=${getCourseByID.getPrice()}&ndck=${sessionScope.profile.fullname}&address=${getCourseByID.getCourse_id()}" >Enroll Now</a>
                                             </div>
                                         </c:if>
                                     </c:otherwise>
