@@ -175,10 +175,10 @@
                                             <div class="form-group">
                                                 <label class="form-label">E-mail</label>
                                                 <input readonly="" name="email" type="text" class="form-control mb-1" value="${sessionScope.account.email}">
-                                                <div class="alert alert-warning mt-3">
+<!--                                                <div class="alert alert-warning mt-3">
                                                     Your email is not confirmed. Please check your inbox.<br>
                                                     <a href="javascript:void(0)">Resend confirmation</a>
-                                                </div>
+                                                </div>-->
                                             </div>
                                             <!--                                        <div class="form-group">
                                                                                         <label class="form-label">Company</label>
