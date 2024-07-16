@@ -50,7 +50,9 @@ public class MyCommon {
         ProfileDTO profile = (ProfileDTO) session.getAttribute("profile");
         AccountDTO account = getMyAccount(request, response);
         session.setAttribute("profile", profile);
-        session.setAttribute("account", account);
+        if (account != null) {
+            session.setAttribute("account", account);
+        }
 //get list category
         try {
             HomeDAO dao = new HomeDAO();
@@ -63,18 +65,27 @@ public class MyCommon {
     }
 
     public static AccountDTO getMyAccount(HttpServletRequest request, HttpServletResponse response) {
-        AccountDAO account_dao = new AccountDAO();
-        Cookie cookie[] = request.getCookies();
-        AccountDTO my_account = new AccountDTO();
-        String account_id = "";
-        for (Cookie c : cookie) {
-            //delete old account_id in cookie
-            if (c.getName().equals("account_id")) {
-                account_id = c.getValue();
-                break;
+        HttpSession session = request.getSession();
+        AccountDTO my_account = (AccountDTO) session.getAttribute("account");
+        Cookie account_id_cookies = new Cookie("account_id", String.valueOf(my_account.getAccount_id()));
+        account_id_cookies.setMaxAge(60 * 60 * 24);
+        if (my_account != null) {
+            AccountDAO account_dao = new AccountDAO();
+            Cookie cookie[] = request.getCookies();
+            String account_id = "";
+            for (Cookie c : cookie) {
+                //delete old account_id in cookie
+                if (c.getName().equals("account_id")) {
+                    account_id = c.getValue();
+                    break;
+                }
             }
+            if (account_id.isEmpty()) {
+                return null;
+            }
+            return my_account;
         }
-        return my_account = account_dao.getAccountById(Integer.parseInt(account_id));
+        else return new AccountDTO();
     }
-    
+
 }
