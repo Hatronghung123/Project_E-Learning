@@ -28,7 +28,7 @@ create table Account(
 insert into Account
 values
 ('tuong0505ht@gmail.com','10101010',1,1),
-('manager@gmail.com','123123123',1,2),
+('tuongpcfx21626@funix.edu.vn','123123123',1,2),
 ('mentor001@gmail.com','123123123',1,3),
 ('mentee001@gmail.com','123123123',1,4),
 ('howkteam@gmail.com','12345678',1,3),
