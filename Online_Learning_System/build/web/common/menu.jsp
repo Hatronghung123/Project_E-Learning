@@ -53,7 +53,7 @@
                             </div>
                         </div>-->
             <c:choose>
-                <c:when test="${sessionScope.account.role_id == 1}" >
+                <c:when test="${sessionScope.account.role_id == 1 || sessionScope.account.role_id == 2}" >
                 <a href="dasboard_for_admin/StatisticalSeverlet" class="nav-item nav-link">Dasboard</a>
             </c:when>
                 <c:otherwise>
