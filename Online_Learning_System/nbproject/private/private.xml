@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Model/EnrollmentDTO.java</file>
             <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Dal/EnrollmentDAO.java</file>
             <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Dal/CourseDetailDAO.java</file>
@@ -11,6 +12,12 @@
             <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Dal/DBContext.java</file>
             <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Controller/User/courseServlet.java</file>
             <file>file:/E:/Project_E-Learning/Online_Learning_System/src/java/Controller/DoQuizController.java</file>
+=======
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/web/do_quiz/doquizsubmit.jsp</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/web/do_quiz/do_quiz.jsp</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/src/java/Dal/DBContext.java</file>
+            <file>file:/F:/Project_E-Learning/Online_Learning_System/web/mentee_my_quiz.jsp</file>
+>>>>>>> f53304cd1e17ad5362824daecff2dbf8c029ee8b
         </group>
     </open-files>
 </project-private>

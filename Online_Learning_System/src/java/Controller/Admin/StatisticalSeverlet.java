@@ -87,19 +87,21 @@ public class StatisticalSeverlet extends HttpServlet {
         try {
             Payment TotalPerMonth = admin_manage_DAO.getPaymentPerMonth();
             Payment TotalPerYear = admin_manage_DAO.getPaymentPerYear();
-            TotalPerMonth.setFormattedPrice(formartPrice(TotalPerMonth.getAmount()));
-            TotalPerYear.setFormattedPrice(formartPrice(TotalPerYear.getAmount()));
-            AccountDTO CountAccStilActive = admin_manage_DAO.CountAccStillActive();
-            Course CountCourseStilActive = admin_manage_DAO.CountCourseStillActive();
-            ArrayList<Payment> TotalEarningPerMonthChart = admin_manage_DAO.getTotalEarningPerMonth();
-            ArrayList<Category> PercentCategory = admin_manage_DAO.getPercentCategory();
+            if (TotalPerMonth != null && TotalPerYear != null) {
+                TotalPerMonth.setFormattedPrice(formartPrice(TotalPerMonth.getAmount()));
+                TotalPerYear.setFormattedPrice(formartPrice(TotalPerYear.getAmount()));
+                AccountDTO CountAccStilActive = admin_manage_DAO.CountAccStillActive();
+                Course CountCourseStilActive = admin_manage_DAO.CountCourseStillActive();
+                ArrayList<Payment> TotalEarningPerMonthChart = admin_manage_DAO.getTotalEarningPerMonth();
+                ArrayList<Category> PercentCategory = admin_manage_DAO.getPercentCategory();
 
-            request.setAttribute("TotalPerMonth", TotalPerMonth);
-            request.setAttribute("TotalPerYear", TotalPerYear);
-            request.setAttribute("CountAccStilActive", CountAccStilActive);
-            request.setAttribute("CountCourseStilActive", CountCourseStilActive);
-            request.setAttribute("TotalEarningPerMonth", TotalEarningPerMonthChart);
-            request.setAttribute("PercentCategory", PercentCategory);
+                request.setAttribute("TotalPerMonth", TotalPerMonth);
+                request.setAttribute("TotalPerYear", TotalPerYear);
+                request.setAttribute("CountAccStilActive", CountAccStilActive);
+                request.setAttribute("CountCourseStilActive", CountCourseStilActive);
+                request.setAttribute("TotalEarningPerMonth", TotalEarningPerMonthChart);
+                request.setAttribute("PercentCategory", PercentCategory);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(StatisticalSeverlet.class.getName()).log(Level.SEVERE, null, ex);
         }
