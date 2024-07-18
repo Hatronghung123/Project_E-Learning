@@ -171,7 +171,7 @@ public class LessonMangeServelet extends HttpServlet {
         String msg = "";
         try {
             ArrayList<ModuleDTO> listModule = dao.getListModuleByCid(Integer.parseInt(cid));
-            if (dao.checkLessonExist(lessonName) != null) {
+            if (dao.checkLessonExist(lessonName) != null && Integer.parseInt(cid) == dao.checkLessonExist(lessonName).getCourseid()) {
                 msg = "Lesson was exist";
             } else {
                 LessonDTO lesson = new LessonDTO(Integer.parseInt(moduleid), lessonName, lessonContent, videoLinkEmbed, duration);
@@ -250,7 +250,8 @@ public class LessonMangeServelet extends HttpServlet {
 
         try {
             ArrayList<ModuleDTO> listModule = dao.getListModuleByCid(Integer.parseInt(cid));
-            if (dao.checkLessonExist(lessonName) != null && Integer.parseInt(lessonid) != dao.checkLessonExist(lessonName).getLessonid()) {
+            if (dao.checkLessonExist(lessonName) != null && Integer.parseInt(lessonid) != dao.checkLessonExist(lessonName).getLessonid() 
+                    && Integer.parseInt(cid) == dao.checkLessonExist(lessonName).getCourseid()) {
                 msg = "Lesson was exist";
             } else {
                 LessonDTO lesson = new LessonDTO(Integer.parseInt(lessonid), Integer.parseInt(moduleid), lessonName, lessonContent, videoLinkEmbed, duration);
