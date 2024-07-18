@@ -43,7 +43,7 @@ public class EnrollmentDAO extends DBContext {
                 String enrollment_date = resultSet.getString(5);
                 int progress = resultSet.getInt(6);
 
-                list.add(new EnrollmentDTO(account_id,course_id, course_name, image, create_by, enrollment_date, progress));
+                list.add(new EnrollmentDTO(account_id, course_id, course_name, image, create_by, enrollment_date, progress));
             }
             return list;
         } catch (SQLException e) {
@@ -51,5 +51,25 @@ public class EnrollmentDAO extends DBContext {
         }
         return null;
     }
+
+    public void updateProgressCourse(int account_id, int course_id, int progress) {
+        connection = getConnection();
+        String sql = """
+                     UPDATE [dbo].[Enrollment]
+                        SET [Progress] = ?
+                      WHERE AccountId = ? and CourseId = ?""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, progress);
+            statement.setInt(2, account_id);
+            statement.setInt(3, course_id);
+            // thực thi câu lệnh
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+    }
+    
 
 }

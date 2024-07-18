@@ -163,7 +163,8 @@ public class LessonMangeServelet extends HttpServlet {
         String moduleid = request.getParameter("module");
         String lessonContent = request.getParameter("lessonContent");
         String videoLink = request.getParameter("videoLink");
-        long duration = getDuraton(videoLink);
+        String videoLinkEmbed = YoutubeDuration.convertToEmbedLink(videoLink);
+        long duration = getDuraton(videoLinkEmbed);
         LessonManageDAO dao = new LessonManageDAO();
 
         //Lấy ra được list module theo course id khi add hoặc update
@@ -173,7 +174,7 @@ public class LessonMangeServelet extends HttpServlet {
             if (dao.checkLessonExist(lessonName) != null) {
                 msg = "Lesson was exist";
             } else {
-                LessonDTO lesson = new LessonDTO(Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
+                LessonDTO lesson = new LessonDTO(Integer.parseInt(moduleid), lessonName, lessonContent, videoLinkEmbed, duration);
                 dao.InsertLesson(lesson);
                 response.sendRedirect("ModuleManage?moduleId=" + moduleid + "&cid=" + cid);
                 return;
@@ -240,9 +241,10 @@ public class LessonMangeServelet extends HttpServlet {
         String moduleid = request.getParameter("module");
         String lessonContent = request.getParameter("lessonContent");
         String videoLink = request.getParameter("videoLink");
+        String videoLinkEmbed = YoutubeDuration.convertToEmbedLink(videoLink);
         String action = (request.getParameter("action") == null) ? "" : request.getParameter("action");
 
-        long duration = getDuraton(videoLink);
+        long duration = getDuraton(videoLinkEmbed);
         LessonManageDAO dao = new LessonManageDAO();
         String msg = "";
 
@@ -251,14 +253,14 @@ public class LessonMangeServelet extends HttpServlet {
             if (dao.checkLessonExist(lessonName) != null && Integer.parseInt(lessonid) != dao.checkLessonExist(lessonName).getLessonid()) {
                 msg = "Lesson was exist";
             } else {
-                LessonDTO lesson = new LessonDTO(Integer.parseInt(lessonid), Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
+                LessonDTO lesson = new LessonDTO(Integer.parseInt(lessonid), Integer.parseInt(moduleid), lessonName, lessonContent, videoLinkEmbed, duration);
 
                 dao.updateLesson(lesson);
                 response.sendRedirect("ModuleManage?moduleId=" + moduleid + "&cid=" + cid);
                 return;
             }
 
-            LessonDTO lesson = new LessonDTO(Integer.parseInt(lessonid), Integer.parseInt(moduleid), lessonName, lessonContent, videoLink, duration);
+            LessonDTO lesson = new LessonDTO(Integer.parseInt(lessonid), Integer.parseInt(moduleid), lessonName, lessonContent, videoLinkEmbed, duration);
 
             request.setAttribute("msg", msg);
             request.setAttribute("lesson", lesson);

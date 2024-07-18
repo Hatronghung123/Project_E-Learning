@@ -85,14 +85,13 @@ public class ManageAccountByAdminServlet extends HttpServlet {
         String accountId = request.getParameter("accountid");
         String action = (request.getParameter("action") == null ? "" : request.getParameter("action"));
         AccountDAO accDao = new AccountDAO();
-        
+
         AccountDTO acc = (AccountDTO) session.getAttribute("account");
-        if(acc == null || acc.getRole_id()!= 1 ) {
+        if (acc == null || (acc.getRole_id() != 1 && acc.getRole_id() != 2)) {
             response.sendRedirect("../home");
             return;
         }
-        
-        
+
         try {
 
             switch (action) {
@@ -107,11 +106,18 @@ public class ManageAccountByAdminServlet extends HttpServlet {
                     request.getRequestDispatcher("update_account.jsp").forward(request, response);
                     break;
                 default:
-//                    read
-                    ArrayList<AccountDTO> listAllAccount = accDao.getMentorAccount();
-                    //response.getWriter().print(listAllAccount);
-                    request.setAttribute("listAllAccount", listAllAccount);
-                    request.getRequestDispatcher("MentorAccount.jsp").forward(request, response);
+                    if (acc.getRole_id() == 1) {
+                        ArrayList<AccountDTO> listAllAccount = accDao.getManagerAccount();
+                        //response.getWriter().print(listAllAccount);
+                        request.setAttribute("listAllAccount", listAllAccount);
+                        request.getRequestDispatcher("manageAccount.jsp").forward(request, response);
+                    } else {
+                        ArrayList<AccountDTO> listAllAccount = accDao.getMyMentorAccounts(acc.getAccount_id());
+                        request.setAttribute("listAllAccount", listAllAccount);
+                        request.getRequestDispatcher("MentorAccount.jsp").forward(request, response);
+                        PrintWriter o = response.getWriter();
+                        o.print(acc.getAccount_id());
+                    }
             }
 
         } catch (Exception e) {
@@ -162,63 +168,61 @@ public class ManageAccountByAdminServlet extends HttpServlet {
             return;
         }
 
-            // Xử lý file và đọc dữ liệu từ file Excel
-            try (InputStream fileContent = filePart.getInputStream(); Workbook workbook = new XSSFWorkbook(fileContent)) {
+        // Xử lý file và đọc dữ liệu từ file Excel
+        try (InputStream fileContent = filePart.getInputStream(); Workbook workbook = new XSSFWorkbook(fileContent)) {
 
-                Sheet sheet = workbook.getSheetAt(0);
-                AccountDAO accDao = new AccountDAO();
-                Iterator<Row> rowIterator = sheet.iterator();
+            Sheet sheet = workbook.getSheetAt(0);
+            AccountDAO accDao = new AccountDAO();
+            Iterator<Row> rowIterator = sheet.iterator();
 
-                // Bỏ qua hàng tiêu đề
-                if (rowIterator.hasNext()) {
-                    rowIterator.next();
-                }
-
-                // Đọc dữ liệu từ các hàng
-                while (rowIterator.hasNext()) {
-                    Row row = rowIterator.next();
-                    String email = getCellValue(row.getCell(0));
-                    String fullname = getCellValue(row.getCell(1));
-                    int manageBy = getCellValueInt(row.getCell(2));
-//                Nếu trong excel không có name thì lấy name theo email
-                    if (fullname == null || fullname.isEmpty()) {
-                        fullname = getNameFromEmail(email);
-                    }
-
-                    // Kiểm tra nếu email đã tồn tại
-                    if (accDao.checkAccountExist(email)) {
-                        response.getWriter().println("Email already exists: " + email);
-                        continue; // bỏ qua tài khoản này và tiếp tục với tài khoản khác
-                    }
-
-                    // Tạo mật khẩu ngẫu nhiên
-                    String password = generateRandomPassword(8);
-
-                    // Tạo đối tượng tài khoản và hồ sơ
-                    AccountDTO account = new AccountDTO(email, password, 3);
-                    ProfileDTO profile = new ProfileDTO(fullname, manageBy);
-
-                    // Thêm vào database
-                    accDao.insertUser(account, profile);
-                   
-                    // Gửi email mật khẩu tới mentor 
-                    SendEmail sendMk = new SendEmail();
-                    sendMk.send("hatronghung7777@gmail.com", "chnzvsbysoeesgwe", email, "Account Activation",
-                            "Dear mentor,\nYour account has been activated. Your password is: " + password, response);
-
-                }
-
-                response.getWriter().println("Mentor accounts imported and activated successfully.");
-
-            } catch (Exception e) {
-                response.getWriter().println("An error occurred while processing the file: " + e.getMessage());
-                e.printStackTrace(response.getWriter());
+            // Bỏ qua hàng tiêu đề
+            if (rowIterator.hasNext()) {
+                rowIterator.next();
             }
 
-            response.sendRedirect("manageAccount");
+            // Đọc dữ liệu từ các hàng
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                String email = getCellValue(row.getCell(0));
+                String fullname = getCellValue(row.getCell(1));
+                int manageBy = getCellValueInt(row.getCell(2));
+//                Nếu trong excel không có name thì lấy name theo email
+                if (fullname == null || fullname.isEmpty()) {
+                    fullname = getNameFromEmail(email);
+                }
+
+                // Kiểm tra nếu email đã tồn tại
+                if (accDao.checkAccountExist(email)) {
+                    response.getWriter().println("Email already exists: " + email);
+                    continue; // bỏ qua tài khoản này và tiếp tục với tài khoản khác
+                }
+
+                // Tạo mật khẩu ngẫu nhiên
+                String password = generateRandomPassword(8);
+
+                // Tạo đối tượng tài khoản và hồ sơ
+                AccountDTO account = new AccountDTO(email, password, 3);
+                ProfileDTO profile = new ProfileDTO(fullname, manageBy);
+
+                // Thêm vào database
+                accDao.insertUser(account, profile);
+
+                // Gửi email mật khẩu tới mentor 
+                SendEmail sendMk = new SendEmail();
+                sendMk.send("hatronghung7777@gmail.com", "chnzvsbysoeesgwe", email, "Account Activation",
+                        "Dear mentor,\nYour account has been activated. Your password is: " + password, response);
+
+            }
+
+            response.getWriter().println("Mentor accounts imported and activated successfully.");
+
+        } catch (Exception e) {
+            response.getWriter().println("An error occurred while processing the file: " + e.getMessage());
+            e.printStackTrace(response.getWriter());
         }
 
-    
+        response.sendRedirect("manageAccount");
+    }
 
     //thêm tài khoản mới
     private void addNewAccountByAdmin(HttpServletRequest request, HttpServletResponse response)

@@ -289,6 +289,13 @@ public class joinServlet extends HttpServlet {
 
         //acc co trong db
         if (account_login != null) {
+
+            //tai khoan da bi khoa
+            if (!account_login.isStatus()) {
+                request.setAttribute("message", "Your account was locked!");
+                request.getRequestDispatcher("Login.jsp").forward(request, response);
+                return;
+            }
             Cookie email_remember = new Cookie("email", email);
             Cookie password_remember = new Cookie("password", password);
             Cookie account_id = new Cookie("account_id", String.valueOf(account_login.getAccount_id()));
@@ -350,7 +357,7 @@ public class joinServlet extends HttpServlet {
         String check_agree_terms = request.getParameter("agree-term") == null ? "" : "on";
         boolean check = true;
 
-        if(!Validation.checkName(fullname)){
+        if (!Validation.checkName(fullname)) {
             request.setAttribute("fullname", fullname);
             //request.setAttribute("password", password);
             request.setAttribute("email", email);
@@ -403,8 +410,8 @@ public class joinServlet extends HttpServlet {
             request.setAttribute("email", email);
             request.setAttribute("error", "Email existed!");
             check = false;
-        } 
-        
+        }
+
         //check da nhap du du lieu chua
         if (fullname.isBlank() || password.isBlank() || re_pass.isBlank() || email.isBlank()) {
             request.setAttribute("fullname", fullname);
@@ -413,11 +420,10 @@ public class joinServlet extends HttpServlet {
             request.setAttribute("error", "Please input all the fields!");
             check = false;
         }
-        if(!check){
+        if (!check) {
             request.getRequestDispatcher("SignUp.jsp").forward(request, response);
             return;
-        }
-        else {
+        } else {
 
             AccountDTO account = new AccountDTO(email, password, 4);
 
