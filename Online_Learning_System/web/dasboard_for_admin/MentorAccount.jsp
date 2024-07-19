@@ -73,129 +73,182 @@
         <div id="wrapper">
 
             <!-- Sidebar -->
-            <jsp:include page="menuDasboard.jsp"></jsp:include>
-                <!-- End of Sidebar -->
+            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-                <!-- Content Wrapper -->
-                <div id="content-wrapper" class="d-flex flex-column">
+                <!-- Sidebar - Brand -->
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../home">
+                    <div class="sidebar-brand-icon rotate-n-15">
+                        <i class="fas fa-laugh-wink"></i>
+                    </div>
 
-                    <!-- Main Content -->
-                    <div id="content">
+                    <div class="sidebar-brand-text mx-3">OLS Admin <sup>2</sup></div>
 
-                        <!-- Topbar -->
-                        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                </a>
 
-                            <!-- Sidebar Toggle (Topbar) -->
-                            <form class="form-inline">
-                                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                                    <i class="fa fa-bars"></i>
-                                </button>
-                            </form>
+                <!-- Divider -->
+                <hr class="sidebar-divider my-0">
 
-                            <!-- Topbar Search -->
-                            <form
-                                class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                                <div class="input-group">
-                                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                           aria-label="Search" aria-describedby="basic-addon2">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary" type="button">
-                                            <i class="fas fa-search fa-sm"></i>
-                                        </button>
-                                    </div>
+                <!-- Nav Item - Dashboard -->
+                <li class="nav-item active">
+
+                    <a class="nav-link" href="StatisticalSeverlet">
+
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Dashboard</span></a>
+                </li>
+
+                <!-- Divider -->
+                <hr class="sidebar-divider">
+
+                <!-- Heading -->
+                <div class="sidebar-heading">
+                    Interface
+                </div>
+
+                <!-- Nav Item - Pages Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                       aria-expanded="true" aria-controls="collapseTwo">
+                        <i class="fas fa-user fa-fw"></i>
+                        <span>Account</span>
+                    </a>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Manage Account</h6>
+                            <a class="collapse-item" href="manageAccount">Mentor account</a>
+                        </div>
+                    </div>
+                </li>
+                <hr class="sidebar-divider d-none d-md-block">
+
+                <!-- Sidebar Toggler (Sidebar) -->
+                <div class="text-center d-none d-md-inline">
+                    <button class="rounded-circle border-0" id="sidebarToggle"></button>
+                </div>
+
+            </ul>
+            <!-- End of Sidebar -->
+
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column">
+
+                <!-- Main Content -->
+                <div id="content">
+
+                    <!-- Topbar -->
+                    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                        <!-- Sidebar Toggle (Topbar) -->
+                        <form class="form-inline">
+                            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                        </form>
+
+                        <!-- Topbar Search -->
+                        <form
+                            class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                            <div class="input-group">
+                                <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                       aria-label="Search" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="fas fa-search fa-sm"></i>
+                                    </button>
                                 </div>
-                            </form>
+                            </div>
+                        </form>
 
-                            <!-- Topbar Navbar -->
-                            <ul class="navbar-nav ml-auto">
+                        <!-- Topbar Navbar -->
+                        <ul class="navbar-nav ml-auto">
 
-                                <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                                <li class="nav-item dropdown no-arrow d-sm-none">
-                                    <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-search fa-fw"></i>
-                                    </a>
-                                    <!-- Dropdown - Messages -->
-                                    <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                         aria-labelledby="searchDropdown">
-                                        <form class="form-inline mr-auto w-100 navbar-search">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control bg-light border-0 small"
-                                                       placeholder="Search for..." aria-label="Search"
-                                                       aria-describedby="basic-addon2">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-primary" type="button">
-                                                        <i class="fas fa-search fa-sm"></i>
-                                                    </button>
-                                                </div>
+                            <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                            <li class="nav-item dropdown no-arrow d-sm-none">
+                                <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-search fa-fw"></i>
+                                </a>
+                                <!-- Dropdown - Messages -->
+                                <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                     aria-labelledby="searchDropdown">
+                                    <form class="form-inline mr-auto w-100 navbar-search">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control bg-light border-0 small"
+                                                   placeholder="Search for..." aria-label="Search"
+                                                   aria-describedby="basic-addon2">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="button">
+                                                    <i class="fas fa-search fa-sm"></i>
+                                                </button>
                                             </div>
-                                        </form>
-                                    </div>
-                                </li>
+                                        </div>
+                                    </form>
+                                </div>
+                            </li>
 
-                                
 
-                            </ul>
 
-                        </nav>
-                        <!-- End of Topbar -->
+                        </ul>
 
-                        <!-- Begin Page Content -->
-                        <div class="container-fluid">
+                    </nav>
+                    <!-- End of Topbar -->
 
-                            <!-- Page Heading -->
-                            <h1 class="h3 mb-2 text-gray-800">Tables</h1>
-                            <div class="container">
-                                <h2>Import Mentor Accounts</h2>
-                                <form action="manageAccount?action=import" method="POST" enctype="multipart/form-data" class="upload-form">
-                                    <label for="file-upload" class="custom-file-upload">
-                                        <input type="file" id="file-upload" name="file" accept=".xlsx">
-                                    </label>
-                                    <input type="submit" value="Import" class="submit-btn">
-                                </form>
+                    <!-- Begin Page Content -->
+                    <div class="container-fluid">
+
+                        <!-- Page Heading -->
+                        <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+                        <div class="container">
+                            <h2>Import Mentor Accounts</h2>
+                            <form action="manageAccount?action=import" method="POST" enctype="multipart/form-data" class="upload-form">
+                                <label for="file-upload" class="custom-file-upload">
+                                    <input type="file" id="file-upload" name="file" accept=".xlsx">
+                                </label>
+                                <input type="submit" value="Import" class="submit-btn">
+                            </form>
+                        </div>
+
+                        <!-- DataTales Example -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h5 class="card-title">All Students List  </h5>
+                                <div>
+
+<!--                                    <a href="manageAccount?action=addAccount" class="btn btn-primary">+ Add new</a>
+                                    <a href="manageAccount?action=import" style="background-color: orangered" class="btn btn-primary">- Delete</a>-->
+
+                                </div>
                             </div>
 
-                            <!-- DataTales Example -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h5 class="card-title">All Students List  </h5>
-                                    <div>
-
-                                        <a href="manageAccount?action=addAccount" class="btn btn-primary">+ Add new</a>
-                                        <a href="manageAccount?action=import" style="background-color: orangered" class="btn btn-primary">- Delete</a>
-
-                                    </div>
-                                </div>
 
 
 
-
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width:0px;">Id</th>
-                                                    <th style="width: 200px;">Full Name</th>
-                                                    <th style="width: 250px;">Email</th>
-                                                    <th style="width: 200px;">Password</th>
-                                                    <th style="width: 100px;">Role</th>
-                                                    <th style="width: 0px;">Status</th>
-                                                    <th style="width:0px;">Active</th>
-                                                </tr>
-                                            </thead>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>Id</th>
-                                                    <th>Full Name</th>
-                                                    <th>Email</th>
-                                                    <th>Password</th>
-                                                    <th>Role</th>
-                                                    <th>Status</th>
-                                                    <th>Active</th>
-                                                </tr>
-                                            </tfoot>
-                                            <tbody>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:0px;">Id</th>
+                                                <th style="width: 200px;">Full Name</th>
+                                                <th style="width: 250px;">Email</th>
+                                                <th style="width: 200px;">Password</th>
+                                                <th style="width: 100px;">Role</th>
+                                                <th style="width: 0px;">Status</th>
+                                                <th style="width:0px;">Active</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Full Name</th>
+                                                <th>Email</th>
+                                                <th>Password</th>
+                                                <th>Role</th>
+                                                <th>Status</th>
+                                                <th>Active</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody>
                                             <c:forEach items="${listAllAccount}" var="o">
                                                 <tr>
                                                     <td>${o.getAccount_id()}</td>
@@ -213,7 +266,7 @@
                                                         </span>
                                                     </td>
                                                     <td>
-                                                        <a href="manageAccount?action=updateAccount&accountid=${o.getAccount_id()}" class="btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i></a>
+<!--                                                        <a href="manageAccount?action=updateAccount&accountid=${o.getAccount_id()}" class="btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i></a>-->
                                                         <!--<a href="manageAccount?action=statusAccount" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></a>-->
                                                         <c:choose>
                                                             <c:when test="${o.isStatus()}">

@@ -70,17 +70,18 @@ public class StatisticalDAO {
     }
 
     public Payment getPaymentPerMonth() {
-        String sql = "		SELECT\n"
-                + "    DATENAME(month, DATEADD(month, MONTH(PaymentDate) - 1, CAST('2000-01-01' AS datetime))) AS PaymentMonth,\n"
-                + "    SUM(Money) AS TotalEarnings\n"
-                + "FROM [Project Online Learning].[dbo].[Payment]\n"
-                + "WHERE MONTH(PaymentDate) = MONTH(GETDATE())\n"
-                + "GROUP BY\n"
-                + "   \n"
-                + "    MONTH(PaymentDate)\n"
-                + "ORDER BY\n"
-                + "    \n"
-                + "    MONTH(PaymentDate);";
+        String sql = """
+                     SELECT
+                         DATENAME(month, DATEADD(month, MONTH(PaymentDate) - 1, CAST('2000-01-01' AS datetime))) AS PaymentMonth,
+                         SUM(Money) AS TotalEarnings
+                     FROM [Project Online Learning].[dbo].[Payment]
+                     WHERE MONTH(PaymentDate) = MONTH(GETDATE())
+                     GROUP BY
+                        
+                         MONTH(PaymentDate)
+                     ORDER BY
+                         
+                         MONTH(PaymentDate);""";
 
         try {
             con = new DBContext().getConnection();
@@ -101,14 +102,15 @@ public class StatisticalDAO {
     }
 
     public Payment getPaymentPerYear() {
-        String sql = "	SELECT\n"
-                + "    CONVERT(VARCHAR, YEAR(PaymentDate)) AS PaymentYearString,\n"
-                + "    SUM(Money) AS TotalEarnings\n"
-                + "FROM [Project Online Learning].[dbo].[Payment]\n"
-                + "GROUP BY\n"
-                + "    CONVERT(VARCHAR, YEAR(PaymentDate))\n"
-                + "ORDER BY\n"
-                + "    CONVERT(VARCHAR, YEAR(PaymentDate));";
+        String sql = """
+                     SELECT
+                         CONVERT(VARCHAR, YEAR(PaymentDate)) AS PaymentYearString,
+                         SUM(Money) AS TotalEarnings
+                     FROM [Project Online Learning].[dbo].[Payment]
+                     GROUP BY
+                         CONVERT(VARCHAR, YEAR(PaymentDate))
+                     ORDER BY
+                         CONVERT(VARCHAR, YEAR(PaymentDate));""";
 
         try {
             con = new DBContext().getConnection();

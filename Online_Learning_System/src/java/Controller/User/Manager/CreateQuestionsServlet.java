@@ -4,26 +4,44 @@
  */
 package Controller.User.Manager;
 
+import Dal.AccountDAO;
 import Dal.QuizDAO;
+import Model.AccountDTO;
 import Model.Answer;
+import Model.ProfileDTO;
 import Model.Questions;
 import Model.Quiz;
+import Util.SendEmail;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
  * @author hatro
  */
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
+        maxFileSize = 1024 * 1024 * 10, // 10 MB
+        maxRequestSize = 1024 * 1024 * 50 // 50 MB
+)
 public class CreateQuestionsServlet extends HttpServlet {
 
     QuizDAO quizDAO = new QuizDAO();
@@ -54,7 +72,7 @@ public class CreateQuestionsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       
+
         //get action
         String action = request.getParameter("action") == null
                 ? ""
@@ -69,6 +87,8 @@ public class CreateQuestionsServlet extends HttpServlet {
                 break;
             case "edit":
                 editQuestion(request, response);
+            case "import":
+                importQuestionFileExe(request, response);
             default:
         }
         response.sendRedirect("controllerquestion");
@@ -142,6 +162,62 @@ public class CreateQuestionsServlet extends HttpServlet {
         }
         quizDAO.editAnswers(answers);
         quizDAO.updateTypeQuestion(questions);
+    }
+
+    private void importQuestionFileExe(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        HttpSession session = request.getSession();
+        int mid = Integer.parseInt(request.getParameter("midCreate"));
+        int cid = Integer.parseInt(request.getParameter("cidCreate"));
+        int quizId = (int) session.getAttribute("quizId");
+        Part filePart = request.getPart("file");
+
+        if (filePart == null || filePart.getSize() == 0) {
+            response.getWriter().println("No file uploaded or file is empty.");
+            return;
+        }
+
+        try (InputStream fileContent = filePart.getInputStream(); Workbook workbook = new XSSFWorkbook(fileContent)) {
+
+            Sheet sheet = workbook.getSheetAt(0);
+            Iterator<Row> rowIterator = sheet.iterator();
+
+            // Bỏ qua hàng tiêu đề
+            if (rowIterator.hasNext()) {
+                rowIterator.next();
+            }
+            ArrayList<Answer> answers = new ArrayList<>();
+            // Đọc dữ liệu từ các hàng
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                int questionNum = (int) row.getCell(0).getNumericCellValue();
+                String questionTitle = row.getCell(1).getStringCellValue();
+                boolean typeQuestion = false;
+                Questions questions = quizDAO.insertQuestions(new Questions(questionNum, quizId, questionTitle, typeQuestion));
+
+                for (int i = 2; i <= 8; i++) { // Giả sử bạn có tối đa 7 câu trả lời
+                    Cell cell = row.getCell(i);
+                    if (cell != null) {
+                        String answerText = cell.getStringCellValue();
+                        boolean correctAnswer = answerText.endsWith("*") ? true : false;
+
+                        // Loại bỏ dấu * ở cuối câu trả lời nếu có
+                        if (correctAnswer == true) {
+                            answerText = answerText.substring(0, answerText.length() - 1).trim();
+                        } 
+                        answers.add(new Answer(questions.getQuestionId(), answerText, correctAnswer));
+                    }
+                }
+                quizDAO.insertAnswers(answers);
+                quizDAO.updateTypeQuestion(questions);
+            }
+//        session.setAttribute("questions", questions);
+//        session.setAttribute("mid", mid);
+//        session.setAttribute("cid", cid);
+
+        } catch (Exception e) {
+            response.getWriter().println("An error occurred while processing the file: " + e.getMessage());
+            e.printStackTrace(response.getWriter());
+        }
     }
 
 }

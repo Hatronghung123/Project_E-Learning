@@ -167,10 +167,16 @@
                     </c:forEach>
                     <div class="card-header bg-white buttons-container">
                         <a href="#" data-toggle="modal" data-target="#createQuestion" class="btn btn-success">Add Question</a>
+                         <a href="#" id="importQuestionBtn" class="btn btn-success">Import Question</a>
                         <a href="../Project_E-Learning/ModuleManage?moduleId=${midCreate}&cid=${cidCreate}" class="btn btn-danger">Cancel</a>
                    
                     </div>
                 </div>
+            </form>
+            <form action="question?action=import" method="POST" enctype="multipart/form-data" class="upload-form" style="display: none;">
+                <input type="file" id="file-upload" name="file" accept=".xlsx">
+                 <input type="hidden" name="midCreate" value="${midCreate}"/>
+                    <input type="hidden" name="cidCreate" value="${cidCreate}"/>
             </form>
         </div>
         <!-- jQuery -->
@@ -204,6 +210,15 @@
 
         <script src="${pageContext.request.contextPath}/lib/wow/wow.min.js"></script>
         <script src="${pageContext.request.contextPath}/lib/easing/easing.min.js"></script>
+         <script>
+        document.getElementById('importQuestionBtn').addEventListener('click', function() {
+            document.getElementById('file-upload').click();
+        });
+
+        document.getElementById('file-upload').addEventListener('change', function() {
+            document.querySelector('.upload-form').submit();
+        });
+    </script>
 
         <jsp:include page="canswer.jsp"></jsp:include>
         <jsp:include page="deletequestion.jsp"></jsp:include>
