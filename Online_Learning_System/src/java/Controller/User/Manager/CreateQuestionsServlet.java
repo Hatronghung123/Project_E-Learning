@@ -87,8 +87,10 @@ public class CreateQuestionsServlet extends HttpServlet {
                 break;
             case "edit":
                 editQuestion(request, response);
+                break;
             case "import":
                 importQuestionFileExe(request, response);
+                break;
             default:
         }
         response.sendRedirect("controllerquestion");

@@ -167,12 +167,13 @@
                     </c:forEach>
                     <div class="card-header bg-white buttons-container">
                         <a href="#" data-toggle="modal" data-target="#createQuestion" class="btn btn-success">Add Question</a>
-                         <a href="#" id="importQuestionBtn" class="btn btn-success">Import Question</a>
                         <a href="../Project_E-Learning/ModuleManage?moduleId=${midCreate}&cid=${cidCreate}" class="btn btn-danger">Cancel</a>
-                   
                     </div>
                 </div>
             </form>
+            <div class="card-header bg-white buttons-container">
+                         <a href="#" id="importQuestionBtn" class="btn btn-success">Import Question</a>
+                    </div>
             <form action="question?action=import" method="POST" enctype="multipart/form-data" class="upload-form" style="display: none;">
                 <input type="file" id="file-upload" name="file" accept=".xlsx">
                  <input type="hidden" name="midCreate" value="${midCreate}"/>
