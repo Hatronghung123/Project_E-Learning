@@ -177,42 +177,47 @@ public class CreateQuestionsServlet extends HttpServlet {
         }
 
         try (InputStream fileContent = filePart.getInputStream(); Workbook workbook = new XSSFWorkbook(fileContent)) {
-
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rowIterator = sheet.iterator();
 
-            // Bỏ qua hàng tiêu đề
+            // Skip header row
             if (rowIterator.hasNext()) {
                 rowIterator.next();
             }
-            ArrayList<Answer> answers = new ArrayList<>();
-            // Đọc dữ liệu từ các hàng
+            Questions question = new Questions();
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
                 int questionNum = (int) row.getCell(0).getNumericCellValue();
                 String questionTitle = row.getCell(1).getStringCellValue();
                 boolean typeQuestion = false;
-                Questions questions = quizDAO.insertQuestions(new Questions(questionNum, quizId, questionTitle, typeQuestion));
 
-                for (int i = 2; i <= 8; i++) { // Giả sử bạn có tối đa 7 câu trả lời
+                question = quizDAO.insertQuestions(new Questions(questionNum, quizId, questionTitle, typeQuestion));
+
+                ArrayList<Answer> answersList = new ArrayList<>(); // Clear the answers list for each question
+
+                for (int i = 2; i <= row.getLastCellNum() - 1; i++) {
                     Cell cell = row.getCell(i);
                     if (cell != null) {
-                        String answerText = cell.getStringCellValue();
-                        boolean correctAnswer = answerText.endsWith("*") ? true : false;
+                        String answerText = cell.getStringCellValue().trim();
+                        boolean correctAnswer = false;
 
-                        // Loại bỏ dấu * ở cuối câu trả lời nếu có
-                        if (correctAnswer == true) {
+                        // Check if the answer ends with '*' and remove it if present
+                        if (answerText.endsWith("*")) {
+                            correctAnswer = true;
                             answerText = answerText.substring(0, answerText.length() - 1).trim();
-                        } 
-                        answers.add(new Answer(questions.getQuestionId(), answerText, correctAnswer));
+                        }
+
+                        Answer answer = new Answer(question.getQuestionId(), answerText, correctAnswer);
+                        answersList.add(answer);
                     }
                 }
-                quizDAO.insertAnswers(answers);
-                quizDAO.updateTypeQuestion(questions);
+
+                quizDAO.insertAnswers(answersList);
+                quizDAO.updateTypeQuestion(question);
             }
-//        session.setAttribute("questions", questions);
-//        session.setAttribute("mid", mid);
-//        session.setAttribute("cid", cid);
+            session.setAttribute("questions", question);
+            session.setAttribute("mid", mid);
+            session.setAttribute("cid", cid);
 
         } catch (Exception e) {
             response.getWriter().println("An error occurred while processing the file: " + e.getMessage());
