@@ -21,7 +21,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -58,7 +62,18 @@ public class CreateQuestionsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        //get action
+        String action = request.getParameter("action") == null
+                ? ""
+                : request.getParameter("action");
+        switch (action) {
+            case "download":
+                downloadTemplateQuizExcelDoGet(request, response);
+                //response.sendRedirect("controller");
+                break;
+            default:
+        }
+        response.sendRedirect("controllerquestion");
     }
 
     /**
@@ -225,6 +240,28 @@ public class CreateQuestionsServlet extends HttpServlet {
             response.getWriter().println("An error occurred while processing the file: " + e.getMessage());
             e.printStackTrace(response.getWriter());
         }
+    }
+
+    private void downloadTemplateQuizExcelDoGet(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException, IOException {
+        String filePath = "/Excel_mentor_template/Create_Question_Template.xlsx";
+        File downloadFile = new File(getServletContext().getRealPath(filePath));
+        FileInputStream inStream = new FileInputStream(downloadFile);
+
+        // Cấu hình response
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setContentLength((int) downloadFile.length());
+        response.setHeader("Content-Disposition", "attachment; filename=Create_Question_Template.xlsx");
+
+        // Ghi file vào OutputStream
+        OutputStream outStream = response.getOutputStream();
+        byte[] buffer = new byte[4096];
+        int bytesRead = -1;
+        while ((bytesRead = inStream.read(buffer)) != -1) {
+            outStream.write(buffer, 0, bytesRead);
+        }
+
+        inStream.close();
+        outStream.close();
     }
 
 }

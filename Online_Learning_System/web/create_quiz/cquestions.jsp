@@ -172,12 +172,13 @@
                 </div>
             </form>
             <div class="card-header bg-white buttons-container">
+                         <a href="question?action=download" id="downloadTemplateQuiz" class="btn btn-success">Download Template</a>
                          <a href="#" id="importQuestionBtn" class="btn btn-success">Import Question</a>
                     </div>
             <form action="question?action=import" method="POST" enctype="multipart/form-data" class="upload-form" style="display: none;">
                 <input type="file" id="file-upload" name="file" accept=".xlsx">
                  <input type="hidden" name="midCreate" value="${midCreate}"/>
-                    <input type="hidden" name="cidCreate" value="${cidCreate}"/>
+                 <input type="hidden" name="cidCreate" value="${cidCreate}"/>
             </form>
         </div>
         <!-- jQuery -->
