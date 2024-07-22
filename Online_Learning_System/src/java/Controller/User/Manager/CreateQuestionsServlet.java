@@ -210,8 +210,8 @@ public class CreateQuestionsServlet extends HttpServlet {
 
                 question = quizDAO.insertQuestions(new Questions(questionNum, quizId, questionTitle, typeQuestion));
 
-                ArrayList<Answer> answersList = new ArrayList<>(); // Clear the answers list for each question
-
+                ArrayList<Answer> answersList = new ArrayList<>(); 
+                // Clear the answers list for each question
                 for (int i = 2; i <= row.getLastCellNum() - 1; i++) {
                     Cell cell = row.getCell(i);
                     if (cell != null) {
