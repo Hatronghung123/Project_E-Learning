@@ -453,6 +453,7 @@ public class joinServlet extends HttpServlet {
     }
 
     private void forgotPasswordDoGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
         request.getRequestDispatcher("ForgotPassword.jsp").forward(request, response);
 
     }
@@ -462,7 +463,7 @@ public class joinServlet extends HttpServlet {
         String email = request.getParameter("email");
         AccountDAO accountDAO = new AccountDAO();
 //        AccountDTO account = new AccountDTO(email);
-        if (!accountDAO.checkAccountExist(email)) {
+        if (accountDAO.checkAccountExist(email) == false) {
             request.setAttribute("Error", "Account does not exist");
             request.getRequestDispatcher("ForgotPassword.jsp").forward(request, response);
         } else {

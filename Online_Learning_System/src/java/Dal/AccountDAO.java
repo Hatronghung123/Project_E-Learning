@@ -18,13 +18,13 @@ public class AccountDAO extends DBContext {
 
     public static void main(String[] args) {
         AccountDAO dao = new AccountDAO();
-        System.out.println((dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010")).getEmail());
+//        System.out.println((dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010")).getEmail());
         System.out.println(dao.checkAccountExist("tuong0505ht@gmail.com"));
+//
+////        dao.insertUser(new AccountDTO("tuongdeptrai@gmail.com", "67676767", 4), new Profile("Pham Cat Tuong", 0));
+//        AccountDTO a = dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010");
 
-//        dao.insertUser(new AccountDTO("tuongdeptrai@gmail.com", "67676767", 4), new Profile("Pham Cat Tuong", 0));
-        AccountDTO a = dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010");
-
-        System.out.println(a);
+//        System.out.println(a);
         dao.activeOrInactiveAccount(12, 0);
     }
 
