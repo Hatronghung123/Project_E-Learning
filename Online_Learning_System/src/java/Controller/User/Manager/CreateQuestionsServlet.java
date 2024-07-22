@@ -215,8 +215,20 @@ public class CreateQuestionsServlet extends HttpServlet {
                 for (int i = 2; i <= row.getLastCellNum() - 1; i++) {
                     Cell cell = row.getCell(i);
                     if (cell != null) {
-                        String answerText = cell.getStringCellValue().trim();
+                        String answerText = null;
                         boolean correctAnswer = false;
+
+                        // Check the cell type and handle accordingly
+                        switch (cell.getCellType()) {
+                            case STRING:
+                                answerText = cell.getStringCellValue().trim();
+                                break;
+                            case NUMERIC:
+                                answerText = String.valueOf((int) cell.getNumericCellValue()).trim();
+                                break;
+                            default:
+                                continue; // Skip other types
+                        }
 
                         // Check if the answer ends with '*' and remove it if present
                         if (answerText.endsWith("*")) {
