@@ -81,9 +81,10 @@
                                                         <label class="form-label" style="color: black; font-size: 15px">Course | ${o.getFullname_mentor()}</label><br>                                                        
                                                         <label class="form-label" style="color: #06BBCC; font-size: 27px ">${o.getCourse_name()}</label><br>
                                                         <div>
-                                                            <progress style="
+                                                            <progress  style="
                                                                       width: 80%;
                                                                       height: 15px;
+                                                                      background-color:#e9ecef;
                                                                       " max="100" value="100"></progress>&nbsp;&nbsp;
                                                             <label style="color: black; font-size: 15px;">100%</label>
                                                         </div>

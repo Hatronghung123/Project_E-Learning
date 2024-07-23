@@ -1,9 +1,9 @@
 <%-- 
-    Document   : ForgotPassword
-    Created on : May 28, 2024, 2:37:24 PM
+    Document   : Captra
+    Created on : May 28, 2024, 2:58:51 PM
     Author     : hatro
 --%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -11,7 +11,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Forgot Pass Form</title>
+        <title>Captcha</title>
 
         <!-- Font Icon -->
         <link rel="stylesheet" href="fonts_login/material-icon/css/material-design-iconic-font.min.css">
@@ -20,13 +20,12 @@
         <link rel="stylesheet" href="css_login/style.css">
     </head>
     <body>
-<!--        <form action="join?action=forgot" method="post">
-            Email:
-            <br/>
-            <input type="text" name="email">
-            <br/>
-            <input type="submit" value="submit">
-            ${Error}
+        
+<!--        <form action="join?action=capcha" method="post">
+            Kiem tra captra trong emial va dien dung vao day
+            <input type="text" name="capcha">
+            <input type="submit" value="Submint">
+            ${Error};
         </form>-->
 
 
@@ -42,22 +41,22 @@
                         </div>
 
                         <div class="signin-form">
-                            <h2 class="form-title">Reset Password</h2>
-                           
+                            <h2 class="form-title">Check captcha in your email!</h2>
+                            <h4 style="color: red">${Error}</h4>
 
-                            <form  action="join?action=forgot" method="post" id="login-form">
-                                
+                            <form  action="join?action=capcha" method="post" id="login-form">
+
                                 <div class="form-group">
-                                    <label for="your_email"><i class="zmdi zmdi-email"></i></label>
-                                    <input value="${email}" type="text" name="email" id="your_email" placeholder="Email"/>
+                                    <label for="captcha"><i class="zmdi zmdi-code"></i></label>
+                                    <input value="" type="text" name="capcha" id="your_email" placeholder="Captcha"/>
                                 </div>
-                                
+
                                 <div class="form-group form-button">
-                                    <input type="submit" name="signin" id="signin" class="form-submit" value="Send email"/>
+                                    <input type="submit" name="signin" id="signin" class="form-submit" value="Submit"/>
                                 </div>
-                                
+
                             </form>
-                             <h4 style="color: red">${Error}</h4>
+
                         </div>
                     </div>
                 </div>
@@ -68,5 +67,6 @@
         <!-- JS -->
         <script src="vendor_login/jquery/jquery.min.js"></script>
         <script src="js_login/main.js"></script>
+
     </body>
 </html>
