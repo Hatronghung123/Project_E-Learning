@@ -113,7 +113,7 @@
 
                                             <c:otherwise><!--Nguoi dung da dang nhap-->
 
-                                                        <a href="dataTransferLesson?cid=${o.getCourse_id()}&lessonid=${o.getFirstlessonid()}&createBy=${o.getCreate_by()}&price=${o.getPrice()}&ndck=${sessionScope.profile.fullname}" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a>
+                                                        <a href="dataTransferLesson?cid=${o.getCourse_id()}&lessonid=${o.getFirstlessonid()}&createBy=${o.getCreate_by()}&price=${o.getPrice()}&ndck=${sessionScope.profile.fullname}&address=home" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a>
                                                  
                                             </c:otherwise>
                                         </c:choose>
