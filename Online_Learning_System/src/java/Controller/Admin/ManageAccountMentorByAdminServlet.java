@@ -40,7 +40,7 @@ import java.util.List;
         maxFileSize = 1024 * 1024 * 10, // 10 MB
         maxRequestSize = 1024 * 1024 * 50 // 50 MB
 )
-public class ManageAccountByAdminServlet extends HttpServlet {
+public class ManageAccountMentorByAdminServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -107,10 +107,10 @@ public class ManageAccountByAdminServlet extends HttpServlet {
                     break;
                 default:
                     if (acc.getRole_id() == 1) {
-                        ArrayList<AccountDTO> listAllAccount = accDao.getManagerAccount();
+                        ArrayList<AccountDTO> listAllAccount = accDao.getAllMentorAccounts();
                         //response.getWriter().print(listAllAccount);
                         request.setAttribute("listAllAccount", listAllAccount);
-                        request.getRequestDispatcher("manageAccount.jsp").forward(request, response);
+                        request.getRequestDispatcher("MentorAccount.jsp").forward(request, response);
                     } else {
                         ArrayList<AccountDTO> listAllAccount = accDao.getMyMentorAccounts(acc.getAccount_id());
                         request.setAttribute("listAllAccount", listAllAccount);
