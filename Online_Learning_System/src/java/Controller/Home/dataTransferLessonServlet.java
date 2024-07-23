@@ -4,8 +4,10 @@
  */
 package Controller.Home;
 
+import Dal.CourseDetailDAO;
 import Dal.LessonDAO;
 import Model.AccountDTO;
+import Model.Course;
 import Model.Enrollment;
 import Model.TeachingDTO;
 import java.io.IOException;
@@ -71,6 +73,7 @@ public class dataTransferLessonServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             LessonDAO dao = new LessonDAO();
+            CourseDetailDAO cdtDao = new CourseDetailDAO();
             String lessonid = request.getParameter("lessonid");
             String courseid = request.getParameter("cid");
             String createby = request.getParameter("createBy");
@@ -90,34 +93,39 @@ public class dataTransferLessonServlet extends HttpServlet {
                 }
             }
 
-            if (lastLessonId == null ||  Integer.parseInt(lastLessonId) == 0) {
+            if (lastLessonId == null || Integer.parseInt(lastLessonId) == 0) {
                 // Nếu không có cookie, bạn có thể đặt giá trị mặc định, ví dụ: bài học đầu tiên
                 //String lessonid = lessonidObj.toString();
                 lastLessonId = lessonid;
             }
 
             
-            //=============CHECK ROLE ĐỂ THAM GIA KHÓA HỌC=============
-            if(acc.getAccount_id() == Integer.parseInt(createby)) {
-                 response.sendRedirect("lesson?cid=" + courseid + "&lessonid=" + lastLessonId + "&createBy=" + createby);
-            } else
-//            nếu tài khaonr này là mentor của khóa học 
-            if (checkMentorInLesson(acc.getAccount_id(), Integer.parseInt(courseid), dao)) {
+            //=========Check nếu giá tiền khóa học bằng 0đ thì tham gia được luôn========
+            Course course = cdtDao.getCourseById(Integer.parseInt(courseid));
+            if (course.getPrice() == 0) {
                 response.sendRedirect("lesson?cid=" + courseid + "&lessonid=" + lastLessonId + "&createBy=" + createby);
-                response.getWriter().print("m là mentor");
+                return;
+            } else {
+                //=============CHECK ROLE ĐỂ THAM GIA KHÓA HỌC=============
+                if (acc.getAccount_id() == Integer.parseInt(createby)) {
+                    response.sendRedirect("lesson?cid=" + courseid + "&lessonid=" + lastLessonId + "&createBy=" + createby);
+                } else //            nếu tài khoản này là mentor của khóa học 
+                if (checkMentorInLesson(acc.getAccount_id(), Integer.parseInt(courseid), dao)) {
+                    response.sendRedirect("lesson?cid=" + courseid + "&lessonid=" + lastLessonId + "&createBy=" + createby);
+                    response.getWriter().print("bạn là mentor");
 
-            } else if (isPaid(Integer.parseInt(courseid), listEnrollment)) {
-                response.sendRedirect("lesson?cid=" + courseid + "&lessonid=" + lastLessonId + "&createBy=" + createby);
-            }else {
-                response.sendRedirect("vnpay_pay.jsp?price="+ price + "&cid="+ courseid +"&acc=" + acc.getAccount_id() +"&ndck="+ndck+"chuyen khoan"+"&address="+address);
+                } else if (isPaid(Integer.parseInt(courseid), listEnrollment)) {
+                    response.sendRedirect("lesson?cid=" + courseid + "&lessonid=" + lastLessonId + "&createBy=" + createby);
+                } else {
+                    response.sendRedirect("vnpay_pay.jsp?price=" + price + "&cid=" + courseid + "&acc=" + acc.getAccount_id() + "&ndck=" + ndck + "chuyen khoan" + "&address=" + address);
+                }
             }
-
             //response.sendRedirect("lesson?cid="+ courseid +"&lessonid="+ lastLessonId +"&createBy="+createby);
         } catch (SQLException ex) {
             Logger.getLogger(dataTransferLessonServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception e) {
             e.printStackTrace();
-              response.getWriter().print("Dang thieu gi do");
+            response.getWriter().print("Dang thieu gi do");
         }
 
     }
