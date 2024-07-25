@@ -5,11 +5,9 @@
 package Controller.User.Manager;
 
 import Dal.AccountDAO;
-import Dal.CourseManageDAO;
 import Dal.ProfileManageDAO;
 
 import Model.AccountDTO;
-import Model.CourseManageDTO;
 import Model.ProfileDTO;
 import Util.MyCommon;
 import static Util.SendEmail.sendEmailWithAttachment;

@@ -111,7 +111,6 @@
 
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="home">Home</a></li>
-                        <li class="breadcrumb-item"><a href="student-browse-courses.html">Courses</a></li>
                         <li class="breadcrumb-item active">${lesson.getCoursename()}</li>
                 </ol>
                 <div class="row">
