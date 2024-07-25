@@ -183,8 +183,8 @@ public class ManageAccountMentorByAdminServlet extends HttpServlet {
             // Đọc dữ liệu từ các hàng
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
-                String email = getCellValue(row.getCell(0));
-                String fullname = getCellValue(row.getCell(1));
+                String fullname = getCellValue(row.getCell(0));
+                String email = getCellValue(row.getCell(1));
                 int manageBy = getCellValueInt(row.getCell(2));
 //                Nếu trong excel không có name thì lấy name theo email
                 if (fullname == null || fullname.isEmpty()) {

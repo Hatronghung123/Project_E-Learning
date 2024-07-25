@@ -158,7 +158,7 @@
                             <!-- DataTales Example -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h5 class="card-title">All Students List  </h5>
+                                    <h5 class="card-title">Mentor Account List  </h5>
                                     <div>
 
                                         <a href="manageAccount?action=addAccount" class="btn btn-primary">+ Add new</a>
