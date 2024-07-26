@@ -207,7 +207,11 @@ public class DoQuizServlet extends HttpServlet {
         ArrayList<Quiz> my_quiz_pass = quizDAO.getListQuizPassed(acc.getAccount_id(), quiz.getCourse_id());
         int progress = (int) ((float) my_quiz_pass.size() / (float) total_quiz_in_course.size() * 100);
         enrollment_dao.updateProgressCourse(acc.getAccount_id(), quiz.getCourse_id(), progress);
-
+        //progress = 100 thi chuyen huong sang trang rate course
+        if(enrollment_dao.getMyProgress(acc.getAccount_id(), quiz.getCourse_id())  == 100){
+            response.sendRedirect("StarRating?cid="+quiz.getCourse_id());
+            return;
+        }
 //         Chuyển hướng sau khi xử lý
         response.sendRedirect("doquizsub?mid=" + moduleId);
     }

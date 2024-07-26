@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -188,11 +189,6 @@ public class CreateQuestionsServlet extends HttpServlet {
         int quizId = (int) session.getAttribute("quizId");
         Part filePart = request.getPart("file");
 
-        if (filePart == null || filePart.getSize() == 0) {
-            response.getWriter().println("No file uploaded or file is empty.");
-            return;
-        }
-
         try (InputStream fileContent = filePart.getInputStream(); Workbook workbook = new XSSFWorkbook(fileContent)) {
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> rowIterator = sheet.iterator();
@@ -204,15 +200,32 @@ public class CreateQuestionsServlet extends HttpServlet {
             Questions question = new Questions();
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
-                int questionNum = (int) row.getCell(0).getNumericCellValue();
-                String questionTitle = row.getCell(1).getStringCellValue();
-                boolean typeQuestion = false;
 
+                // Check if questionNum and questionTitle are not null
+                Cell questionNumCell = row.getCell(0);
+                Cell questionTitleCell = row.getCell(1);
+
+                if (questionNumCell == null || questionTitleCell == null) {
+                    continue; // Skip this row if either cell is null
+                }
+
+                // Check if questionNum is numeric and questionTitle is a string
+                if (questionNumCell.getCellType() != CellType.NUMERIC || questionTitleCell.getCellType() != CellType.STRING) {
+                    continue; // Skip this row if cell types do not match expected types
+                }
+
+                int questionNum = (int) questionNumCell.getNumericCellValue();
+                String questionTitle = questionTitleCell.getStringCellValue().trim();
+
+                if (questionTitle.isEmpty()) {
+                    continue; // Skip this row if questionTitle is empty
+                }
+
+                boolean typeQuestion = false;
                 question = quizDAO.insertQuestions(new Questions(questionNum, quizId, questionTitle, typeQuestion));
 
-                ArrayList<Answer> answersList = new ArrayList<>(); 
-                // Clear the answers list for each question
-                for (int i = 2; i <= row.getLastCellNum() - 1; i++) {
+                ArrayList<Answer> answersList = new ArrayList<>();
+                for (int i = 2; i < row.getLastCellNum(); i++) {
                     Cell cell = row.getCell(i);
                     if (cell != null) {
                         String answerText = null;

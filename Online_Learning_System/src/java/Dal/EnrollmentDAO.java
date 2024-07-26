@@ -71,5 +71,26 @@ public class EnrollmentDAO extends DBContext {
 
     }
     
+    public int getMyProgress(int account_id, int course_id) {
+        connection = getConnection();
+        int progress = 0;
+        String sql = """
+                     select Progress from Enrollment
+                       where AccountId = ? and CourseId = ?""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1, account_id);
+            statement.setInt(2, course_id);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                progress = resultSet.getInt(1);
+            }
+            return progress;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return -1;
+    }
+    
 
 }
