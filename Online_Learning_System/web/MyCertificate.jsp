@@ -84,7 +84,6 @@
                                                             <progress  style="
                                                                       width: 80%;
                                                                       height: 15px;
-                                                                      background-color:#e9ecef;
                                                                       " max="100" value="100"></progress>&nbsp;&nbsp;
                                                             <label style="color: black; font-size: 15px;">100%</label>
                                                         </div>

@@ -43,7 +43,7 @@
                 <div class="container py-5">
                     <div class="row">
                         <div class="col-lg-10">
-                            <h1 class="display-3 text-dark animated slideInDown">My Courses</h1>
+                            <h1 class="display-3 text-dark animated slideInDown">My Learning</h1>
                         </div>
                     </div>
                 </div>

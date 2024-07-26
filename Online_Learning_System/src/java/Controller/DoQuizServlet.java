@@ -209,9 +209,9 @@ public class DoQuizServlet extends HttpServlet {
         int progress = (int) ((float) my_quiz_pass.size() / (float) total_quiz_in_course.size() * 100);
         enrollment_dao.updateProgressCourse(acc.getAccount_id(), quiz.getCourse_id(), progress);
         //progress = 100 thi chuyen huong sang trang rate course
-        boolean hasRated = checkIfUserHasRated(acc.getAccount_id(), quiz.getCourse_id());
+        boolean noRatedBefore = checkIfUserHasRated(acc.getAccount_id(), quiz.getCourse_id());
         if (enrollment_dao.getMyProgress(acc.getAccount_id(), quiz.getCourse_id()) == 100) {
-            if (!hasRated) {
+            if (noRatedBefore) {
                 response.sendRedirect("StarRating?cid=" + quiz.getCourse_id());
                 return;
             }
@@ -396,7 +396,7 @@ public class DoQuizServlet extends HttpServlet {
 
     private boolean checkIfUserHasRated(int accountId, int courseId) {
         StarRatingDAO dao = new StarRatingDAO();
-        return dao.getUserRatings(accountId, courseId) != null;
+        return dao.getUserRatings(accountId, courseId) == null;
     }
 
 }
