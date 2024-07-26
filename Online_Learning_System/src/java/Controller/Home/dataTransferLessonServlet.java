@@ -4,11 +4,13 @@
  */
 package Controller.Home;
 
+import Controller.getBillServlet;
 import Dal.CourseDetailDAO;
 import Dal.LessonDAO;
 import Model.AccountDTO;
 import Model.Course;
 import Model.Enrollment;
+import Model.Payment;
 import Model.TeachingDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,7 +21,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -93,33 +97,36 @@ public class dataTransferLessonServlet extends HttpServlet {
                 }
             }
 
+            long Firstlessonid = dao.getLessonIdByCourseId(Integer.parseInt(courseid));
+
             if (lastLessonId == null || Integer.parseInt(lastLessonId) == 0) {
                 // Nếu không có cookie, bạn có thể đặt giá trị mặc định, ví dụ: bài học đầu tiên
                 //String lessonid = lessonidObj.toString();
-                lastLessonId = lessonid;
+                lastLessonId = String.valueOf(Firstlessonid);
             }
 
-            
             //=========Check nếu giá tiền khóa học bằng 0đ thì tham gia được luôn========
             Course course = cdtDao.getCourseById(Integer.parseInt(courseid));
-            if (course.getPrice() == 0) {
-                response.sendRedirect("lesson?cid=" + courseid + "&lessonid=" + lastLessonId + "&createBy=" + createby);
-                return;
-            } else {
-                //=============CHECK ROLE ĐỂ THAM GIA KHÓA HỌC=============
-                if (acc.getAccount_id() == Integer.parseInt(createby)) {
-                    response.sendRedirect("lesson?cid=" + courseid + "&lessonid=" + lastLessonId + "&createBy=" + createby);
-                } else //            nếu tài khoản này là mentor của khóa học 
-                if (checkMentorInLesson(acc.getAccount_id(), Integer.parseInt(courseid), dao)) {
-                    response.sendRedirect("lesson?cid=" + courseid + "&lessonid=" + lastLessonId + "&createBy=" + createby);
-                    response.getWriter().print("bạn là mentor");
 
-                } else if (isPaid(Integer.parseInt(courseid), listEnrollment)) {
-                    response.sendRedirect("lesson?cid=" + courseid + "&lessonid=" + lastLessonId + "&createBy=" + createby);
-                } else {
-                    response.sendRedirect("vnpay_pay.jsp?price=" + price + "&cid=" + courseid + "&acc=" + acc.getAccount_id() + "&ndck=" + ndck + "chuyen khoan" + "&address=" + address);
+            //=============CHECK ROLE ĐỂ THAM GIA KHÓA HỌC=============
+            if (acc.getAccount_id() == Integer.parseInt(createby)) {
+                response.sendRedirect("lesson?cid=" + courseid + "&lessonid=" + lastLessonId + "&createBy=" + createby);
+            } else // nếu tài khoản này là mentor của khóa học 
+            if (checkMentorInLesson(acc.getAccount_id(), Integer.parseInt(courseid), dao)) {
+                response.sendRedirect("lesson?cid=" + courseid + "&lessonid=" + lastLessonId + "&createBy=" + createby);
+                response.getWriter().print("bạn là mentor");
+
+            } else if (isPaid(Integer.parseInt(courseid), listEnrollment)) {
+                response.sendRedirect("lesson?cid=" + courseid + "&lessonid=" + lastLessonId + "&createBy=" + createby);
+            } else if (course.getPrice() == 0) {
+                if (!isPaid(Integer.parseInt(courseid), listEnrollment)) {
+                    EnrollmentInCourseFree(acc.getAccount_id(), Integer.parseInt(courseid));
                 }
+                response.sendRedirect("lesson?cid=" + courseid + "&lessonid=" + lastLessonId + "&createBy=" + createby);
+            } else {
+                response.sendRedirect("vnpay_pay.jsp?price=" + price + "&cid=" + courseid + "&acc=" + acc.getAccount_id() + "&ndck=" + ndck + "chuyen khoan" + "&address=" + address);
             }
+
             //response.sendRedirect("lesson?cid="+ courseid +"&lessonid="+ lastLessonId +"&createBy="+createby);
         } catch (SQLException ex) {
             Logger.getLogger(dataTransferLessonServlet.class.getName()).log(Level.SEVERE, null, ex);
@@ -128,6 +135,12 @@ public class dataTransferLessonServlet extends HttpServlet {
             response.getWriter().print("Dang thieu gi do");
         }
 
+    }
+
+    private void EnrollmentInCourseFree(int accId, int courseId) throws ServletException, IOException {
+        Enrollment enrollment = new Enrollment(accId, courseId, Date.valueOf(LocalDate.now()), 0);
+        LessonDAO dao = new LessonDAO();
+        dao.insertEnrollment(enrollment);
     }
 
     /**

@@ -223,7 +223,7 @@
                     document.getElementById('addQuizForm').submit();
                     setTimeout(function () {
                         window.location.href = 'editquizcrudquestion?quizId=${quizEdit.getQuizId()}';
-                    }, 500); // Điều chỉnh thời gian trì hoãn nếu cần thiết
+                    }, 100); // Điều chỉnh thời gian trì hoãn nếu cần thiết
                 }
             }
 
