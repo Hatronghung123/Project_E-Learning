@@ -57,7 +57,7 @@ public class CourseDetailDAO {
                                                 LEFT JOIN [dbo].[Enrollment] e ON cr.CourseId = e.CourseId
                                             WHERE
                                                 cr.[CourseCategoryId] = (SELECT [CourseCategoryId] FROM [dbo].[Course] WHERE [CourseId] = ?) 
-                                                AND cr.[CourseId] != ?
+                                                AND cr.[CourseId] != ? AND cr.Status = 1
                                             GROUP BY
                                                 cr.[CourseId],
                                                 cr.[CourseName],
