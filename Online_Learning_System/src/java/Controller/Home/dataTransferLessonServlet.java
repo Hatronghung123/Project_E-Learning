@@ -93,10 +93,12 @@ public class dataTransferLessonServlet extends HttpServlet {
                 }
             }
 
+            long Firstlessonid = dao.getLessonIdByCourseId(Integer.parseInt(courseid));
+            
             if (lastLessonId == null || Integer.parseInt(lastLessonId) == 0) {
                 // Nếu không có cookie, bạn có thể đặt giá trị mặc định, ví dụ: bài học đầu tiên
                 //String lessonid = lessonidObj.toString();
-                lastLessonId = lessonid;
+                lastLessonId = String.valueOf(Firstlessonid);
             }
 
             

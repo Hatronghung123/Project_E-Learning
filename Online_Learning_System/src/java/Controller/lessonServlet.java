@@ -274,7 +274,7 @@ public class lessonServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         String parentComentId_str = request.getParameter("parent");
-
+        
         Integer parentCommentId = null;
         if (parentComentId_str != null && !parentComentId_str.isEmpty() && !"null".equals(parentComentId_str)) {
             parentCommentId = Integer.parseInt(parentComentId_str);
@@ -286,10 +286,18 @@ public class lessonServlet extends HttpServlet {
         AccountDTO acc = (AccountDTO) session.getAttribute("account");
 
         String lession_id = request.getParameter("lessonid");
-
+        try {
+        if(Integer.parseInt(lession_id) == 0) {
+            response.sendRedirect("lesson?cid=" + cid + "&lessonid=" + lession_id + "&createBy=" + createBy);
+            return;
+        }
         DisscussionDAO dao = new DisscussionDAO();
         DiscussionLesson discuss = new DiscussionLesson(parentCommentId, acc.getAccount_id(), Integer.parseInt(lession_id), comment, new Timestamp(System.currentTimeMillis()));
         dao.InsertComment(discuss);
+        } catch(Exception ex) {
+              response.sendRedirect("lesson?cid=" + cid + "&lessonid=" + 0 + "&createBy=" + createBy);
+            return;
+        }
         response.sendRedirect("lesson?cid=" + cid + "&lessonid=" + lession_id + "&createBy=" + createBy);
     }
 
