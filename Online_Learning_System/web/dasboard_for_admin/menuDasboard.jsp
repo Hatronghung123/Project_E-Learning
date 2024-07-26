@@ -52,7 +52,6 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Manage Account</h6>
                     <a class="collapse-item" href="managerAccount">Manager account</a>
-                    <a class="collapse-item" href="manageAccount">Mentor account</a>
                 <a class="collapse-item" href="manageAccount?action=addAccount">Add new account</a>
             </div>
         </div>

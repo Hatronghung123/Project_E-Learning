@@ -240,12 +240,12 @@
                                             </c:if>
                                             <br>
 
-
-                                            <!-- Form fields here -->
-                                            <div class="form-group" style="text-align: right;">
-                                                <button type="submit" class="btn btn-outline-primary">Save Change</button>
-                                            </div>
-
+                                            <c:if test="${my_role == 2}">
+                                                <!-- Form fields here -->
+                                                <div class="form-group" style="text-align: right;">
+                                                    <button type="submit" class="btn btn-outline-primary">Save Change</button>
+                                                </div>
+                                            </c:if>
 
                                         </div>
                                     </form>

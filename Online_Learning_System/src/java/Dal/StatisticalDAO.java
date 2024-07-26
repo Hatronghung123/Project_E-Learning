@@ -19,7 +19,7 @@ import java.util.ArrayList;
  *
  * @author Admin
  */
-public class StatisticalDAO {
+public class StatisticalDAO extends DBContext{
 
     Connection con = null; // Kết nối với sql server
     PreparedStatement ps = null; // Ném câu lệnh query sang sql server
@@ -35,25 +35,27 @@ public class StatisticalDAO {
         }
     }
 
-    public ArrayList<Payment> getTotalEarningPerMonth() throws SQLException {
+    public ArrayList<Payment> getTotalEarningPerMonth(int manager_id) throws SQLException {
         ArrayList<Payment> list = new ArrayList<>();
-        String sql = "SELECT \n"
-                + "    DATENAME(MONTH, PaymentDate) AS Month,\n"
-                + "    SUM(Money) AS TotalEarnings\n"
-                + "FROM \n"
-                + "    [Project Online Learning].[dbo].[Payment]\n"
-                + "WHERE \n"
-                + "    YEAR(PaymentDate) = 2024\n"
-                + "GROUP BY \n"
-                + "    DATENAME(MONTH, PaymentDate),\n"
-                + "    DATEPART(MONTH, PaymentDate)\n"
-                + "ORDER BY \n"
-                + "    DATEPART(MONTH, PaymentDate);";
+        String sql = """
+                      SELECT 
+                                              DATENAME(MONTH, PaymentDate) AS Month,
+                                              SUM(Money) AS TotalEarnings
+                                          FROM 
+                                              [Project Online Learning].[dbo].[Payment] p
+                     						 join Course c on p.CourseId = c.CourseId
+                                          WHERE 
+                                              YEAR(PaymentDate) = 2024 and c.CreatedBy = ?
+                                          GROUP BY 
+                                              DATENAME(MONTH, PaymentDate),
+                                              DATEPART(MONTH, PaymentDate)
+                                          ORDER BY 
+                                              DATEPART(MONTH, PaymentDate);""";
 
         try {
             con = new DBContext().getConnection();
             ps = con.prepareStatement(sql);
-
+            ps.setInt(1, manager_id);
             rs = ps.executeQuery();
             while (rs.next()) {
                 String month = rs.getString("Month");

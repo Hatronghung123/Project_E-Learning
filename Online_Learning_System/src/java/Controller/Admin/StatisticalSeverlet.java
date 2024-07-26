@@ -92,7 +92,7 @@ public class StatisticalSeverlet extends HttpServlet {
                 TotalPerYear.setFormattedPrice(formartPrice(TotalPerYear.getAmount()));
                 AccountDTO CountAccStilActive = admin_manage_DAO.CountAccStillActive();
                 Course CountCourseStilActive = admin_manage_DAO.CountCourseStillActive();
-                ArrayList<Payment> TotalEarningPerMonthChart = admin_manage_DAO.getTotalEarningPerMonth();
+                ArrayList<Payment> TotalEarningPerMonthChart = admin_manage_DAO.getTotalEarningPerMonth(acc.getAccount_id());
                 ArrayList<Category> PercentCategory = admin_manage_DAO.getPercentCategory();
 
                 request.setAttribute("TotalPerMonth", TotalPerMonth);
