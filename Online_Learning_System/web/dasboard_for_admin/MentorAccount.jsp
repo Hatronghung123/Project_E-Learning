@@ -206,15 +206,22 @@
 
                         <!-- Page Heading -->
                         <h1 class="h3 mb-2 text-gray-800">Tables</h1>
-                        <div class="container">
-                            <h2>Import Mentor Accounts</h2>
-                            <form action="manageAccount?action=import" method="POST" enctype="multipart/form-data" class="upload-form">
-                                <label for="file-upload" class="custom-file-upload">
-                                    <input type="file" id="file-upload" name="file" accept=".xlsx">
-                                </label>
-                                <input type="submit" value="Import" class="submit-btn">
-                            </form>
-                        </div>
+                        <c:choose>
+                            <c:when test="${sessionScope.account.getAccount_id() == 1}">
+                                <div class="container">
+                                    <h2>Import Mentor Accounts</h2>
+                                    <form action="manageAccount?action=import" method="POST" enctype="multipart/form-data" class="upload-form">
+                                        <label for="file-upload" class="custom-file-upload">
+                                            <input type="file" id="file-upload" name="file" accept=".xlsx">
+                                        </label>
+                                        <input type="submit" value="Import" class="submit-btn">
+                                    </form>
+                                </div>
+
+                            </c:when>
+
+                        </c:choose>   
+
                         <c:if test="${not empty sessionScope.msg}">
                             <script>
                                 document.addEventListener('DOMContentLoaded', function () {

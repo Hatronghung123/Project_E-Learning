@@ -222,7 +222,8 @@ public class ManageAccountMentorByAdminServlet extends HttpServlet {
             response.getWriter().println("Mentor accounts imported and activated successfully.");
 
         } catch (Exception e) {
-            response.getWriter().println("An error occurred while processing the file: " + e.getMessage());
+            //response.getWriter().println("An error occurred while processing the file: " + e.getMessage());
+            session.setAttribute("err", "An error occurred while processing the file: " + e.getMessage());
             e.printStackTrace(response.getWriter());
         }
         session.setAttribute("msg", "Mentor accounts imported and activated successfully.");
@@ -331,7 +332,7 @@ public class ManageAccountMentorByAdminServlet extends HttpServlet {
             throws ServletException, IOException {
         String accountid = request.getParameter("accid");
         AccountDAO accDao = new AccountDAO();
-
+        HttpSession session = request.getSession();
         try {
             if (accDao.CheckActiveOrInActive(Integer.parseInt(accountid))) {
                 accDao.activeOrInactiveAccount(Integer.parseInt(accountid), 0);
@@ -341,7 +342,7 @@ public class ManageAccountMentorByAdminServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        session.setAttribute("msg", "Change account status successfully.");
         response.sendRedirect("manageAccount");
 
     }
