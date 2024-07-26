@@ -30,7 +30,7 @@ public class DBContext {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             String url = "jdbc:sqlserver://localhost:1433;databaseName=Project Online Learning";
             String user = "sa";
-            String password = "123";
+            String password = "12345678";
 
 
             connection = DriverManager.getConnection(url, user, password);
