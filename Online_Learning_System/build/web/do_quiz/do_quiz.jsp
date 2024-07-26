@@ -166,7 +166,7 @@
                 <h7 style="margin-bottom: 0px">${quizDoQuiz.getQuizName()}</h7>
             </div>
             <div class="timer col-5" id="timer">
-                <span id="hours">00</span>:<span id="minutes">25</span>:<span id="seconds">00</span>
+                <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
             </div>
 
             <div class="collapse navbar-collapse" id="navbarCollapse">
