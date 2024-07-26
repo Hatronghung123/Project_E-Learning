@@ -14,6 +14,7 @@ import Dal.QuizDAO;
 import Model.AccountDTO;
 
 import Model.Category;
+import Model.Course;
 import YoutubeAPI.YoutubeDuration;
 import Model.DiscussionLesson;
 import Model.Enrollment;
@@ -87,6 +88,7 @@ public class lessonServlet extends HttpServlet {
         LessonDAO dao = new LessonDAO();
         DisscussionDAO discussDao = new DisscussionDAO();
         QuizDAO quizDao = new QuizDAO();
+        CourseDetailDAO cdtDao = new CourseDetailDAO();
         HttpSession session = request.getSession();
 
         AccountDTO acc = (AccountDTO) session.getAttribute("account");
@@ -139,11 +141,11 @@ public class lessonServlet extends HttpServlet {
 
                 ArrayList<Enrollment> listEnrollment = dao.getEnrollmentByAccountId(acc.getAccount_id());
 
-                
+                Course c = cdtDao.getCourseById(course_id);
                 //Kiểm tra có phải người tạo ra khóa học hay không(Phân Quyền)
                 if(!checkMentorInLesson(acc.getAccount_id(), course_id, dao) && createBy_id != acc.getAccount_id()){
                     //Kiểm tra người dùng nếu chưa mua khóa học mà truy cập đường link thì chuyển về home       
-                    if (!isPaid(course_id, listEnrollment)) {
+                    if (!isPaid(course_id, listEnrollment) && c.getPrice() > 0) {
                         response.sendRedirect("home");
                         return;
                     }

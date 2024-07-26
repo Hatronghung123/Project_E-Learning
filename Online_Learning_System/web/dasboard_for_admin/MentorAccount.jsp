@@ -72,61 +72,68 @@
         <!-- Page Wrapper -->
         <div id="wrapper">
 
-            <!-- Sidebar -->
-            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+            <c:choose>
+                <c:when test="${sessionScope.account.getAccount_id() == 1}">
+                    <jsp:include page="menuDasboard.jsp"></jsp:include>
+                </c:when>
+                <c:otherwise>
+                    <!-- Sidebar -->
+                    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-                <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../home">
-                    <div class="sidebar-brand-icon rotate-n-15">
-                        <i class="fas fa-laugh-wink"></i>
-                    </div>
+                        <!-- Sidebar - Brand -->
+                        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../home">
+                            <div class="sidebar-brand-icon rotate-n-15">
+                                <i class="fas fa-laugh-wink"></i>
+                            </div>
 
-                    <div class="sidebar-brand-text mx-3">OLS Admin <sup>2</sup></div>
+                            <div class="sidebar-brand-text mx-3">OLS Admin <sup>2</sup></div>
 
-                </a>
+                        </a>
 
-                <!-- Divider -->
-                <hr class="sidebar-divider my-0">
+                        <!-- Divider -->
+                        <hr class="sidebar-divider my-0">
 
-                <!-- Nav Item - Dashboard -->
-                <li class="nav-item active">
+                        <!-- Nav Item - Dashboard -->
+                        <li class="nav-item active">
 
-                    <a class="nav-link" href="StatisticalSeverlet">
+                            <a class="nav-link" href="StatisticalSeverlet">
 
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Dashboard</span></a>
-                </li>
+                                <i class="fas fa-fw fa-tachometer-alt"></i>
+                                <span>Dashboard</span></a>
+                        </li>
 
-                <!-- Divider -->
-                <hr class="sidebar-divider">
+                        <!-- Divider -->
+                        <hr class="sidebar-divider">
 
-                <!-- Heading -->
-                <div class="sidebar-heading">
-                    Interface
-                </div>
-
-                <!-- Nav Item - Pages Collapse Menu -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                       aria-expanded="true" aria-controls="collapseTwo">
-                        <i class="fas fa-user fa-fw"></i>
-                        <span>Account</span>
-                    </a>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Manage Account</h6>
-                            <a class="collapse-item" href="manageAccount">Mentor account</a>
+                        <!-- Heading -->
+                        <div class="sidebar-heading">
+                            Interface
                         </div>
-                    </div>
-                </li>
-                <hr class="sidebar-divider d-none d-md-block">
 
-                <!-- Sidebar Toggler (Sidebar) -->
-                <div class="text-center d-none d-md-inline">
-                    <button class="rounded-circle border-0" id="sidebarToggle"></button>
-                </div>
+                        <!-- Nav Item - Pages Collapse Menu -->
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                               aria-expanded="true" aria-controls="collapseTwo">
+                                <i class="fas fa-user fa-fw"></i>
+                                <span>Account</span>
+                            </a>
+                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                                <div class="bg-white py-2 collapse-inner rounded">
+                                    <h6 class="collapse-header">Manage Account</h6>
+                                    <a class="collapse-item" href="manageAccount">Mentor account</a>
+                                </div>
+                            </div>
+                        </li>
+                        <hr class="sidebar-divider d-none d-md-block">
 
-            </ul>
+                        <!-- Sidebar Toggler (Sidebar) -->
+                        <div class="text-center d-none d-md-inline">
+                            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+                        </div>
+
+                    </ul>
+                </c:otherwise>
+            </c:choose>
             <!-- End of Sidebar -->
 
             <!-- Content Wrapper -->
@@ -214,8 +221,8 @@
                                 <h5 class="card-title">All Students List  </h5>
                                 <div>
 
-<!--                                    <a href="manageAccount?action=addAccount" class="btn btn-primary">+ Add new</a>
-                                    <a href="manageAccount?action=import" style="background-color: orangered" class="btn btn-primary">- Delete</a>-->
+                                    <!--                                    <a href="manageAccount?action=addAccount" class="btn btn-primary">+ Add new</a>
+                                                                        <a href="manageAccount?action=import" style="background-color: orangered" class="btn btn-primary">- Delete</a>-->
 
                                 </div>
                             </div>
