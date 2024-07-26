@@ -19,7 +19,7 @@ public class AccountDAO extends DBContext {
     public static void main(String[] args) {
         AccountDAO dao = new AccountDAO();
 //        System.out.println((dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010")).getEmail());
-        System.out.println(dao.checkAccountExist("tuong0505ht@gmail.com"));
+        System.out.println(dao.getAccountIdByEmail("tuong0505ht@gmail.com"));
 //
 ////        dao.insertUser(new AccountDTO("tuongdeptrai@gmail.com", "67676767", 4), new Profile("Pham Cat Tuong", 0));
 //        AccountDTO a = dao.getAccountByEmailPass("tuong0505ht@gmail.com", "10101010");
@@ -605,6 +605,38 @@ public class AccountDAO extends DBContext {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+    
+       //lấy account theo id để admin có thể sửa thông tin tài khoản
+    public AccountDTO getAccountIdByEmail(String Email) {
+
+        connection = getConnection();
+        String sql = """
+                     SELECT [AccountId]
+                             ,[Email]
+                             ,[Password]
+                             ,[Status]
+                             ,[RoleId]
+                         FROM [Project Online Learning].[dbo].[Account]
+                         Where Email = ?""";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, Email);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                int acc_id = resultSet.getInt(1);
+                String email = resultSet.getString(2);
+                String pass = resultSet.getString(3);
+                boolean status = resultSet.getBoolean(4);
+                int role = resultSet.getInt(5);
+
+                return new AccountDTO(acc_id, email, pass, status, role);
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
 }

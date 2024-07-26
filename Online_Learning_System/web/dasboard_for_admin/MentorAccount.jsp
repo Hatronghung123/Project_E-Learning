@@ -22,7 +22,6 @@
         <!-- Custom fonts for this template -->
         <link href="${pageContext.request.contextPath}/static_dasboard/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
-
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
               rel="stylesheet">
 
@@ -32,6 +31,8 @@
 
         <!-- Custom styles for this page -->
         <link href="${pageContext.request.contextPath}/static_dasboard/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
 
         <style>
             .card-header {
@@ -214,6 +215,20 @@
                                 <input type="submit" value="Import" class="submit-btn">
                             </form>
                         </div>
+                        <c:if test="${not empty sessionScope.msg}">
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    toastr.success("${sessionScope.msg}");
+                                });
+                            </script>
+                        </c:if>
+
+                        <% 
+                            if (session.getAttribute("msg") != null) {
+                                session.removeAttribute("msg");
+                            } 
+                        %>
+
 
                         <!-- DataTales Example -->
                         <div class="card shadow mb-4">
@@ -381,7 +396,28 @@
 
         <!-- Page level custom scripts -->
         <script src="${pageContext.request.contextPath}/static_dasboard/js/demo/datatables-demo.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+        <!-- Cấu hình toastr -->
+        <script>
+            toastr.options = {
+                "closeButton": true, // Hiển thị nút đóng
+                "debug": false,
+                "newestOnTop": true, // Hiển thị thông báo mới nhất ở trên cùng
+                "progressBar": true, // Hiển thị thanh tiến trình
+                "positionClass": "toast-top-right", // Vị trí thông báo
+                "preventDuplicates": true, // Ngăn chặn thông báo trùng lặp
+                "onclick": null,
+                "showDuration": "300", // Thời gian hiển thị thông báo
+                "hideDuration": "1000", // Thời gian ẩn thông báo
+                "timeOut": "3000", // Thời gian thông báo tự động biến mất
+                "extendedTimeOut": "1000", // Thời gian thêm khi di chuột qua thông báo
+                "showEasing": "swing", // Hiệu ứng hiển thị
+                "hideEasing": "swing", // Hiệu ứng ẩn
+                "showMethod": "fadeIn", // Phương thức hiển thị
+                "hideMethod": "fadeOut"        // Phương thức ẩn
+            }
+        </script>
     </body>
 
 </html>

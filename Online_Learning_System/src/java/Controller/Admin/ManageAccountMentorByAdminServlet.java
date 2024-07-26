@@ -160,7 +160,7 @@ public class ManageAccountMentorByAdminServlet extends HttpServlet {
     //Lấy dữ liệu từ excel lên database
     private void importMentorFromFileExcel(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        HttpSession session = request.getSession();
         Part filePart = request.getPart("file");
 
         if (filePart == null || filePart.getSize() == 0) {
@@ -184,11 +184,12 @@ public class ManageAccountMentorByAdminServlet extends HttpServlet {
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
                 String email = getCellValue(row.getCell(0));
-                String fullname = getCellValue(row.getCell(1));
-                int manageBy = getCellValueInt(row.getCell(2));
+                String fullName = getCellValue(row.getCell(1));
+                String emailManageBy = getCellValue(row.getCell(2));
+                
 //                Nếu trong excel không có name thì lấy name theo email
-                if (fullname == null || fullname.isEmpty()) {
-                    fullname = getNameFromEmail(email);
+                if (fullName == null || fullName.isEmpty()) {
+                    fullName = getNameFromEmail(email);
                 }
 
                 // Kiểm tra nếu email đã tồn tại
@@ -196,13 +197,16 @@ public class ManageAccountMentorByAdminServlet extends HttpServlet {
                     response.getWriter().println("Email already exists: " + email);
                     continue; // bỏ qua tài khoản này và tiếp tục với tài khoản khác
                 }
-
+                
+                //Lấy tài khoản của manager theo email
+                AccountDTO manager_Account = accDao.getAccountIdByEmail(emailManageBy);
+                
                 // Tạo mật khẩu ngẫu nhiên
                 String password = generateRandomPassword(8);
 
                 // Tạo đối tượng tài khoản và hồ sơ
                 AccountDTO account = new AccountDTO(email, password, 3);
-                ProfileDTO profile = new ProfileDTO(fullname, manageBy);
+                ProfileDTO profile = new ProfileDTO(fullName, manager_Account.getRole_id());
 
                 // Thêm vào database
                 accDao.insertUser(account, profile);
@@ -220,7 +224,7 @@ public class ManageAccountMentorByAdminServlet extends HttpServlet {
             response.getWriter().println("An error occurred while processing the file: " + e.getMessage());
             e.printStackTrace(response.getWriter());
         }
-
+        session.setAttribute("msg", "Mentor accounts imported and activated successfully.");
         response.sendRedirect("manageAccount");
     }
 
