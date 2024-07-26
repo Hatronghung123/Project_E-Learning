@@ -24,6 +24,7 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
+    <c:if test="${sessionScope.account.role_id == 2}">
     <li class="nav-item active">
 
         <a class="nav-link" href="StatisticalSeverlet">
@@ -31,7 +32,7 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
-
+</c:if>
     <!-- Divider -->
     <hr class="sidebar-divider">
 
